@@ -16,7 +16,9 @@
         {
             "name": "linux",
             "includePath": [
-                "/usr/include/c++/13"
+                "/usr/include/c++/13",
+                "/usr/",
+                "/home/solgio/Qt/6.8.1/gcc_64/include/**"
             ],
             "defines": [],
             "compilerPath": "/usr/bin/gcc",
