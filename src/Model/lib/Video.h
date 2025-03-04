@@ -9,21 +9,21 @@
 class Video : public Multimedia {
     private:
         unsigned int quality[1][1]; //Quality of the video (pixels)
-        QString country;       //Country of origin
+        string country;       //Country of origin
         Video *prequel=NULL;
         Video *sequel=NULL;
 
     public:
-        Video(QString _title, QString _subGenre, QString _description, bool _starred, bool _watched, unsigned int _year, QString _producer, 
-            QString _language, QString _country, Content* _inspiration=NULL, Video* _prequel=NULL, Video* _sequel=NULL);
+        Video(string _title, string _subGenre, string _description, bool _starred, bool _watched, unsigned int _year, string _producer, 
+            string _language, string _country, Content* _inspiration=NULL, Video* _prequel=NULL, Video* _sequel=NULL);
         
         unsigned int getQuality();
-        QString getCountry();
+        string getCountry();
         Video* getPrequel();
         Video* getSequel();
         
         void setQuality(unsigned int quality);
-        void setCountry(QString country);
+        void setCountry(string country);
         void setPrequel(Video* prequel);
         void setSequel(Video* sequel);
         virtual ~Video() =0;
