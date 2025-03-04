@@ -7,15 +7,15 @@ using std::string;
 using std::map;
 
 struct subGenre{
-    bool subGenres[21]={false};
+    string subGenres[20]={"Fantasy", "Horror", "Mystery", "Thriller", "Romance", "Drama", "Comedy", "Action", "Adventure", "Documentary",
+         "Biography","History", "Western", "War", "Crime", "Musical", "Animation", "Family", "Sports", "Superhero"};
 };
 
 //Genaral Abstract Class for all content types of the Library
 class Content {
     private:
         string title;
-        //{FANTASY, HORROR, MYSTERY, THRILLER, ROMANCE, DRAMA, COMEDY, ACTION, ADVENTURE, DOCUMENTARY, BIOGRAPHY,HISTORY, WESTERN, WAR, CRIME, MUSICAL, ANIMATION, FAMILY, SPORTS, SUPERHERO, FANFILM};
-        map <const string, bool> genMap;      //mappa di bool che corrisponde ai sottogeneri scelti
+        bool choosenGen[20];      //mappa di bool che corrisponde ai sottogeneri scelti
         string description;
         Content* inspiration=NULL;
         bool starred;
