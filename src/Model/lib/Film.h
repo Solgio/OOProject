@@ -12,7 +12,6 @@ class Film : public Video {
         string scriptwriter;
         unsigned int duration; //in minutes
        
-      
     public:
         Film(string _title, string _subGenre, string _description, bool _starred, bool _watched, unsigned int _year, string _director, 
             string _producer, string _scriptwriter, unsigned int _duration, string _language, string _country, Content* _inspiration=NULL, 

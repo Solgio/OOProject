@@ -1,8 +1,8 @@
 #include "./lib/Comic.h"
 
-Comic::Comic(string _title, string _subGenre, string _description, bool _starred, bool _watched, unsigned int _year, string _author, 
-    string _publisher, unsigned int _pages, unsigned int _volume, string _illustrator, string _series, bool _finished, Content* _inspiration=NULL):
-    Book(_title, _subGenre, _description, _starred, _watched, _year, _author, _publisher, _pages, _volume, _inspiration),
+Comic::Comic(string _title, bool _subGenre[], string _description, bool _starred, bool _watched, unsigned int _year, string _author, 
+    string _publisher, unsigned int _pages, unsigned int _volume, string _illustrator, string _series, bool _finished, string _mainCharacter, Content* _inspiration=NULL):
+    Book(_title, _subGenre, _description, _starred, _watched, _year, _author, _publisher, _pages, _volume, _mainCharacter, _inspiration),
     illustrator(_illustrator), series(_series), finished(_finished){};
 
 

@@ -6,8 +6,17 @@
 #include "Paper.h"
 
 class Book : public Paper {
-    Book(string _title, string _subGenre, string _description, bool _starred, bool _watched, unsigned int _year, string _author, 
-        string _publisher, unsigned int _pages, unsigned int _volume, Content* _inspiration=NULL);
-};
+    private:
+        string mainCharacter;
+
+    public:
+
+    Book(string _title, bool _subGenre[], string _description, bool _starred, bool _watched, unsigned int _year, string _author, 
+        string _publisher, unsigned int _pages, unsigned int _volume, string _mainCharacter, Content* _inspiration=NULL);
+
+        string getMainCharacter() const;
+        void setMainCharacter(const string& mainCharacter);
+        ~Book();
+    };
 
 #endif
