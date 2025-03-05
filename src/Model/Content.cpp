@@ -14,6 +14,8 @@ string Content::getTitle() const{
             return title;
 };
 
+//! This function is not implemented in the definitive version of the project
+//! TO BE DEFINED
 string Content::getSubgenre() const{
     for(int i=0; i<20; i++){
         if(choosenGen[i])
