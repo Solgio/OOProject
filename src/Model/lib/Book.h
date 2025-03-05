@@ -20,3 +20,6 @@ class Book : public Paper {
     };
 
 #endif
+
+
+// Books in this context is to be considered as a class for all NARRATIVE books, given the nature of the library (Sci-fi only).
