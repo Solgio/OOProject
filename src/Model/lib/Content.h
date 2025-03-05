@@ -3,6 +3,7 @@
 #include <QCoreApplication>
 #include <QDebug>
 #include <QTextStream>
+#include <string>
 
 using std::string;
 
