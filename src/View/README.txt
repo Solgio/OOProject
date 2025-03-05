@@ -1,0 +1,1 @@
+QUI CI VA LA PARTE DI Qt
