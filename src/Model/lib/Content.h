@@ -20,9 +20,10 @@ class Content {
         bool starred;
         bool watched;
         unsigned int yearOfRelease; //Year of release, always present in all content types (UNlike year of end)
+        string image; //Image of the content
    
     public:
-        Content(string _title, bool _subGenre[20], string _description, bool _starred, bool _watched, unsigned int _year, Content* _inspiration=NULL);
+        Content(string _title, bool _subGenre[20], string _description, bool _starred, bool _watched, unsigned int _year, string _image, Content* _inspiration=NULL);
         
         string getTitle() const;
         string getSubgenre() const;
@@ -31,6 +32,7 @@ class Content {
         bool getStarred() const;
         bool getWatched() const;
         unsigned int getYear() const;
+        string getImage() const;
 
         void setTitle(const string& title);
         void setSubgenre(const string& subgenre);
@@ -39,6 +41,7 @@ class Content {
         void setStarred(const bool starred);
         void setWatched(const bool watched);
         void setYear(const unsigned int year);
+        void setImage(const string& image);
 
         virtual ~Content() =0;
 
