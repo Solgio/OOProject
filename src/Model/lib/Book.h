@@ -11,7 +11,7 @@ class Book : public Paper {
 
     public:
 
-    Book(string _title, bool _subGenre[], string _description, bool _starred, bool _watched, unsigned int _year, string _author, 
+    Book(string _title, bool _subGenre[20], string _description, bool _starred, bool _watched, unsigned int _year, string _image, string _author, 
         string _publisher, unsigned int _pages, unsigned int _volume, string _mainCharacter, Content* _inspiration=NULL);
 
         string getMainCharacter() const;

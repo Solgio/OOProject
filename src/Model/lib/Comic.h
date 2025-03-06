@@ -13,7 +13,7 @@ class Comic : public Book {
         bool finished;
         
     public:
-        Comic(string _title, bool _subGenre[], string _description, bool _starred, bool _watched, unsigned int _year, string _author, 
+        Comic(string _title, bool _subGenre[20], string _description, bool _starred, bool _watched, unsigned int _year, string _image, string _author, 
             string _publisher, unsigned int _pages, unsigned int _volume, string _illustrator, string _series, bool _finished, string _mainCharacter, 
             Content* _inspiration=NULL);
         

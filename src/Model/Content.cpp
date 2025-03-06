@@ -3,7 +3,7 @@
 static const string subGenres[20]={"Fantasy", "Horror", "Mystery", "Thriller", "Romance", "Drama", "Comedy", "Action", "Adventure", "Documentary", "Biography",
     "History", "Western", "War", "Crime", "Musical", "Animation", "Family", "Sports", "Superhero"};
     
-Content::Content(string _title, bool _subGenre[], string _description, bool _starred, bool _watched, unsigned int _year, string _image, Content* _inspiration=NULL):
+Content::Content(string _title, bool _subGenre[20], string _description, bool _starred, bool _watched, unsigned int _year, string _image, Content* _inspiration=NULL):
         title(_title), description(_description), starred(_starred), watched(_watched), yearOfRelease(_year), inspiration(_inspiration){
             for(int i=0; i<20; i++){
                 choosenGen[i]=_subGenre[i];

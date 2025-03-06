@@ -13,7 +13,7 @@ class Games : public Multimedia {
         unsigned int expectedHours;
     
     public:
-        Games(string _title, string _subGenre, string _description, bool _starred, bool _watched, unsigned int _year, string _producer, 
+        Games(string _title, bool _subGenre[20], string _description, bool _starred, bool _watched, unsigned int _year, string _image, string _producer, 
             string _language, string _gameEngine, unsigned int _expectedHours, QList <string> _platforms, Content* _inspiration=NULL);
         
         string getGameEngine();
