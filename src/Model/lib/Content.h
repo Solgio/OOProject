@@ -38,9 +38,9 @@ class Content {
         void setSubgenre(const string& subgenre);
         void setDescription(const string& description);
         void setInspiration(Content* inspiration);
-        void setStarred(const bool starred);
-        void setWatched(const bool watched);
-        void setYear(const unsigned int year);
+        void setStarred(const bool& starred);
+        void setWatched(const bool& watched);
+        void setYear(const unsigned int& year);
         void setImage(const string& image);
 
         virtual ~Content() =0;

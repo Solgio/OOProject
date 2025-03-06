@@ -52,13 +52,13 @@ void Content::setDescription(const string& ndescription){
 void Content::setInspiration(Content* ninspiration){
     inspiration=ninspiration;
 };
-void Content::setStarred(const bool nstarred){
+void Content::setStarred(const bool& nstarred){
     (!starred)? starred=true : starred=false;
 };
-void Content::setWatched(const bool nwatched){
+void Content::setWatched(const bool& nwatched){
     (!watched)? watched=true : watched=false;
 };
-void Content::setYear(const unsigned int nyear){
+void Content::setYear(const unsigned int& nyear){
     yearOfRelease=nyear;
 };
 void Content::setImage(const string& nimage){
