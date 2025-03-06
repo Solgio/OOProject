@@ -1,16 +1,19 @@
 #ifndef LIBRARY_H
 #define LIBRARY_H
 #include <QCoreApplication>
-#include "./lib/Content.h"
+#include "Content.h"
+#include <vector>
+using std::vector;
 
 class ScienceFiction_Library{
     private:
-        QList<Content*> contentList;
+        std::vector<Content*> contentList;
+
     public:
         void addContent(Content* content);
         void removeContent(Content* content);
-        QList<Content*> getContentList();
-        QList<Content*>& filterContent(string filter);
+        vector<Content*> getContentList();
+        vector<Content*>& filterContent(string filter);
         ~ScienceFiction_Library();
 };
 #endif
