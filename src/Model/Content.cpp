@@ -22,6 +22,9 @@ string Content::getSubgenre() const{
             return subGenres[i];
     }
 };
+bool Content::getSubgenreArray() const{
+    return *choosenGen;
+};
 string Content::getDescription() const{
             return description;
 };

@@ -27,6 +27,7 @@ class Content {
         
         string getTitle() const;
         string getSubgenre() const;
+        bool getSubgenreArray() const;
         string getDescription() const;
         Content* getInspiration() const;
         bool getStarred() const;
