@@ -14,9 +14,11 @@ class ScienceFiction_Library{
         void removeContent(Content* content);
         vector<Content*> getContentList();
         vector<Content*>& filterContent(string& _title);
-        vector<Content*>& filterContent(bool& _watched);
         vector<Content*>& filterContent(unsigned int& _year);
         vector<Content*>& filterContent(bool choosenGen[20]);
+        vector<Content*>& filterContent();
+        vector<Content*>& watchedOrNot(bool& _watched);         //Shows only the watched or not watched content
+        vector<Content*>& starredOrNot(bool& _starred);         //Shows only the starred or not starred content
         ~ScienceFiction_Library();
 };
 #endif
