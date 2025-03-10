@@ -25,3 +25,7 @@ void Film::setScriptwriter(const string& nscriptwriter){
 void Film::setDuration(const unsigned int& nduration){
     duration=nduration;
 };  
+
+void Film::accept(Visitor* visitor){
+    visitor->visit(this);
+};

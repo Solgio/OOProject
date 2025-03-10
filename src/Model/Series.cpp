@@ -49,3 +49,7 @@ void Series::setFinished(bool _finished){
 void Series::setYearOfEnd(unsigned int _yearOfEnd){
     yearOfEnd = _yearOfEnd;
 }
+
+void Series::accept(Visitor* visitor){
+    visitor->visit(this);
+}

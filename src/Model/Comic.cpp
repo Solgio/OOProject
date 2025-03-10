@@ -25,3 +25,7 @@ void Comic::setSeries(const string& nseries){
 void Comic::setFinished(const bool& nfinished){
     (!finished)? finished=true : finished=false;
 };
+
+void Comic::accept(Visitor* visitor){
+    visitor->visit(this);
+};

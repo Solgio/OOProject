@@ -11,3 +11,7 @@ string Book::getMainCharacter() const{
 void Book::setMainCharacter(const string& nmainCharacter){
     mainCharacter=nmainCharacter;
 };
+
+void Book::accept(Visitor* visitor){
+    visitor->visit(this);
+};

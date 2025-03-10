@@ -23,3 +23,7 @@ void VideoGame::setGameEngine(string _gameEngine){
 void VideoGame::setExpectedHours(unsigned int _expectedHours){
     expectedHours = _expectedHours;
 }
+
+void VideoGame::accept(Visitor* visitor){
+    visitor->visit(this);
+}
