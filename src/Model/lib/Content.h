@@ -3,6 +3,12 @@
 #include "../View/Visitor.h"
 #include <string>
 
+//? NON SO SE è MEGLIO METTERLO QUI O NEL .CPP
+#include <QFile> // per accedere/creare file
+#include <QDir> // per gestire la directory
+#include <QJsonObject>
+#include <QJsonDocument>
+
 using std::string;
 
 
@@ -41,6 +47,8 @@ class Content {
         void setWatched(const bool& watched);
         void setYear(const unsigned int& year);
         void setImage(const string& image);
+
+        void toJSon();
 
         virtual ~Content() =0;
         virtual void accept(Visitor* visitor) = 0;

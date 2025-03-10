@@ -6,7 +6,7 @@ static const string subGenres[20]={"Fantasy", "Horror", "Mystery", "Thriller", "
 Content::Content(string _title, bool _subGenre[20], string _description, bool _starred, bool _watched, unsigned int _year, string _image, Content* _inspiration=NULL):
         title(_title), description(_description), starred(_starred), watched(_watched), yearOfRelease(_year), inspiration(_inspiration){
             for(int i=0; i<20; i++){
-                choosenGen[i]=_subGenre[i];
+                choosenGen[i]=_subGenre[i]; // ho dei dubbi su questa parte
             }
         };
 
@@ -66,4 +66,29 @@ void Content::setYear(const unsigned int& nyear){
 };
 void Content::setImage(const string& nimage){
     image=nimage;
+};
+
+
+QJsonObject Content::toJSon(){
+    QString path("JFile/"); //
+    QDir dir; // Initialize to the desired dir if 'path' is relative
+        // By default the program's working directory "." is used.
+
+    // We create the directory if needed
+    if (!dir.exists(path)){ //Partendo da questa cartella, se ./JFile/ NON esiste, creamo la cartella
+        dir.mkpath(path);
+    }
+    
+    QFile LibraryFile(path + "Library.json"); //SE IL FILE NON ESISTE crea uno nuovo, altrimenti apre il file
+    LibraryFile.open(QIODevice::ReadWrite); // o QFile::WriteOnly per scrivere soltanto
+
+    QJsonObject oggettoContent;
+
+    oggettoContent.insert("Title", title);
+    oggettoContent.insert("Title", title);
+    oggettoContent.insert("Title", title);
+    oggettoContent.insert("Title", title);
+    oggettoContent.insert("Title", title);
+
+
 };
