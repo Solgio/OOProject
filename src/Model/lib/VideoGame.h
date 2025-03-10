@@ -5,7 +5,7 @@
 #include <QTextStream>
 #include "Multimedia.h"
 
-class VideoGames : public Multimedia {
+class VideoGame : public Multimedia {
    private:
         string gameEngine;
         // *TODO: se è possibile cambiarlo come Content?
@@ -14,7 +14,7 @@ class VideoGames : public Multimedia {
         unsigned int expectedHours;
     
     public:
-        VideoGames(string _title, bool _subGenre[20], string _description, bool _starred, bool _watched, unsigned int _year, string _image, string _producer, 
+        VideoGame(string _title, bool _subGenre[20], string _description, bool _starred, bool _watched, unsigned int _year, string _image, string _producer, 
             string _language, string _gameEngine, unsigned int _expectedHours, QList <string> _platforms, Content* _inspiration=NULL);
         
         string getGameEngine();
@@ -30,7 +30,7 @@ class VideoGames : public Multimedia {
         // ? void setGameType(string gameType);
 
         void setExpectedHours(unsigned int expectedHours);
-        virtual ~Games(){
+        virtual ~VideoGame(){
             // *TODO: connect(this, this.broadCastDelete(), tutti??, checkDeleteDependency())
         };
 
