@@ -26,6 +26,7 @@ class Multimedia : public Content {
         void setLanguage(string language);
         void setPlatforms(QList <string> platforms);
         virtual ~Multimedia() =0;
+        virtual void accept(Visitor* visitor) override = 0;
 };
 
 #endif

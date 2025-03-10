@@ -37,7 +37,9 @@ class VideoGame : public Multimedia {
         
         //*TODO: private slot: 
         //? checkDeleteDependency(){ if( (*inspiration).isEqual(oggettoRicevuto) delete inspiration;){}  };
-        // Un idea a grande linee
+        // Un idea a grande 
+        
+        virtual void accept(Visitor* visitor) override;
         
 };
 

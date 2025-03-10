@@ -30,6 +30,7 @@ class Series : public Video {
         void setFinished(bool finished);
         void setYearOfEnd(unsigned int yearOfEnd);
         ~Series();
+        virtual void accept(Visitor* visitor) override;
 };
 
 #endif

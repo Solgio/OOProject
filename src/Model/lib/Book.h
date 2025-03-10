@@ -17,6 +17,7 @@ class Book : public Paper {
         string getMainCharacter() const;
         void setMainCharacter(const string& mainCharacter);
         ~Book();
+        virtual void accept(Visitor* visitor) override;
     };
 
 #endif

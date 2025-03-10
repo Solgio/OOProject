@@ -1,8 +1,6 @@
 #ifndef CONTENT_H
 #define CONTENT_H   
-#include <QCoreApplication>
-#include <QDebug>
-#include <QTextStream>
+#include "../View/Visitor.h"
 #include <string>
 
 using std::string;
@@ -45,6 +43,7 @@ class Content {
         void setImage(const string& image);
 
         virtual ~Content() =0;
+        virtual void accept(Visitor* visitor) = 0;
 
 };
 

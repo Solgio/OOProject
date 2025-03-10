@@ -28,6 +28,7 @@ class Film : public Video {
         void setDuration(const unsigned int& duration);
         
         ~Film();
+        virtual void accept(Visitor* visitor) override;
 };
 
 #endif

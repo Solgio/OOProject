@@ -25,6 +25,7 @@ class Comic : public Book {
         void setSeries(const string& series);
         void setFinished(const bool& finished);
         ~Comic();
+        virtual void accept(Visitor* visitor) override;
 };
 
 #endif
