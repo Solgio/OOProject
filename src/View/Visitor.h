@@ -1,3 +1,5 @@
+#ifndef VISITOR_H
+#define VISITOR_H
 #include "../Model/lib/Book.h"
 #include "../Model/lib/Comic.h"
 #include "../Model/lib/Film.h"
@@ -12,3 +14,4 @@ class Visitor{
         virtual void visit(Series *series) = 0;
         virtual void visit(VideoGame *videogame) = 0;
 };
+#endif
