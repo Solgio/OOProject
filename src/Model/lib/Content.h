@@ -9,6 +9,7 @@
 #include <QDir> // per gestire la directory
 #include <QJsonObject>
 #include <QJsonDocument>
+#include <QJsonArray>
 
 using std::string;
 

@@ -82,13 +82,15 @@ QJsonObject Content::toJSon(){
     QFile LibraryFile(path + "Library.json"); //SE IL FILE NON ESISTE crea uno nuovo, altrimenti apre il file
     LibraryFile.open(QIODevice::ReadWrite); // o QFile::WriteOnly per scrivere soltanto
 
-    QJsonObject oggettoContent;
+    QJsonObject oggettoJSon;
 
-    oggettoContent.insert("Title", title);
-    oggettoContent.insert("Title", title);
-    oggettoContent.insert("Title", title);
-    oggettoContent.insert("Title", title);
-    oggettoContent.insert("Title", title);
+    oggettoJSon.insert("Title", title);
+    oggettoJSon.insert("Genres", choosenGen); //! non ho la minima idea se fuziona o no
+    oggettoJSon.insert("Description", description);
+    oggettoJSon.insert("Year of Release", yearOfRelease);
+    oggettoJSon.insert("Image", image); // contiene la image path
+    oggettoJSon.insert("Inspiration", inspiration->getTitle()); // Contiene il titolo dell'inspirazione
 
+    return oggettoJSon;
 
 };
