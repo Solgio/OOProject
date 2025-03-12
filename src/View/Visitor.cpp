@@ -15,4 +15,4 @@ void Visitor::visit(Series *series){
 };
 void Visitor::visit(VideoGame *videogame){
     printf("VideoGame visited\n");
-};
+};  
