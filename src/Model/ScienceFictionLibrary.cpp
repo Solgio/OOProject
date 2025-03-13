@@ -20,6 +20,10 @@ void ScienceFiction_Library::removeContent(Content* content){
     }
 }
 
+vector<Content*> ScienceFiction_Library::getContentList(){
+    return contentList;
+};
+
 vector<Content*>& ScienceFiction_Library::filterContent(string& _title){
     vector<Content*> filteredListbyTitle;
     for(const auto& it : contentList){
