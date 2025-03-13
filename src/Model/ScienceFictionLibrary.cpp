@@ -33,7 +33,7 @@ vector<Content*>& ScienceFiction_Library::filterContent(string& _title){
     }
 };
 
-vector<Content*>& ScienceFiction_Library::filterContent(unsigned int& _year){
+vector<Content*>& ScienceFiction_Library::filterContent(const unsigned int& _year){
     vector<Content*> filteredListbyYear;
     for(const auto& it : contentList){
         if(it->getYear() == _year){
@@ -42,7 +42,7 @@ vector<Content*>& ScienceFiction_Library::filterContent(unsigned int& _year){
     }
 };
 
-vector<Content*>& ScienceFiction_Library::filterContent(bool choosenGen[20]){
+vector<Content*>& ScienceFiction_Library::filterContent(const bool choosenGen[20]){
     vector<Content*> filteredListbyGen;
     for(const auto& it : contentList){
         for(int i=0; i<20; i++){
@@ -64,7 +64,7 @@ vector<Content*>& ScienceFiction_Library::filterGen(unsigned int index){
     }
 };*/
 
-vector<Content*>& ScienceFiction_Library::watchedOrNot(bool& _watched){
+vector<Content*>& ScienceFiction_Library::watchedOrNot(const bool& _watched){
     if(_watched){
         vector<Content*> watchedList;
         for(const auto& it : contentList){
@@ -82,7 +82,7 @@ vector<Content*>& ScienceFiction_Library::watchedOrNot(bool& _watched){
         }
     }
 };
-vector<Content*>& ScienceFiction_Library::starredOrNot(bool& _starred){
+vector<Content*>& ScienceFiction_Library::starredOrNot(const bool& _starred){
     if(_starred){
         vector<Content*> watchedList;
         for(const auto& it : contentList){
