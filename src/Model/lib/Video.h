@@ -5,7 +5,7 @@
 #include <QTextStream>
 #include "Multimedia.h"
 
-//Genaral Abstract Class for all Video types of the Library (implemented: Film, Series)
+//Genaral Abstract Class for all Video types of the Library (implemented: Film, Serie)
 class Video : public Multimedia {
     private:
         unsigned int quality[2]; //Quality of the video (pixels), il primo valore e' la x e il secondo e' la y

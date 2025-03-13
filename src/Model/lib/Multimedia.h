@@ -5,7 +5,7 @@
 #include <QTextStream>
 #include "Content.h"
 
-//Genaral Abstract Class for all MULTIMEDIA types of the Library (implemented: Video(Film & Series), Videogames)
+//Genaral Abstract Class for all MULTIMEDIA types of the Library (implemented: Video(Film & Serie), Videogames)
 class Multimedia : public Content {
     
     private:

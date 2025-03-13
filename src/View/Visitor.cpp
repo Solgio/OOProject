@@ -10,8 +10,8 @@ void Visitor::visit(Comic *comic){
 void Visitor::visit(Film *movie){
     printf("Film visited\n");
 };
-void Visitor::visit(Series *series){
-    printf("Series visited\n");
+void Visitor::visit(Serie *serie){
+    printf("Serie visited\n");
 };
 void Visitor::visit(VideoGame *videogame){
     printf("VideoGame visited\n");
