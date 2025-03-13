@@ -31,7 +31,8 @@ class Video : public Multimedia {
             sequel->setPrequel(prequel);
             delete this;
         }
-        virtual void accept(Visitor* visitor) override = 0;
+        virtual void accept(Visitor* visitor) override;
+        virtual void toXml(xmlVisitor* xvisitor);
 };
 
 #endif

@@ -27,3 +27,6 @@ void VideoGame::setExpectedHours(unsigned int _expectedHours){
 void VideoGame::accept(Visitor* visitor){
     visitor->visit(this);
 }
+void VideoGame::toXml(xmlVisitor* xvisitor){
+    xvisitor->toXml(this);
+}

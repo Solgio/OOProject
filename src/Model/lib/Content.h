@@ -1,6 +1,7 @@
 #ifndef CONTENT_H
 #define CONTENT_H   
 #include "../View/Visitor.h"
+#include "../xml/xmlVisitor.h"
 #include <string>
 
 //? NON SO SE è MEGLIO METTERLO QUI O NEL .CPP
@@ -52,6 +53,7 @@ class Content {
 
         virtual ~Content() =0;
         virtual void accept(Visitor* visitor) = 0;
+        virtual void toXml(xmlVisitor* xvisitor) = 0;
 
 };
 

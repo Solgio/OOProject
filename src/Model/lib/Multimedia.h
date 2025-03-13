@@ -27,6 +27,7 @@ class Multimedia : public Content {
         void setPlatforms(QList <string> platforms);
         virtual ~Multimedia() =0;
         virtual void accept(Visitor* visitor) override = 0;
+        virtual void toXml(xmlVisitor* xvisitor) = 0;
 };
 
 #endif

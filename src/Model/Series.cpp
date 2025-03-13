@@ -53,3 +53,6 @@ void Series::setYearOfEnd(unsigned int _yearOfEnd){
 void Series::accept(Visitor* visitor){
     visitor->visit(this);
 }
+void Series::toXml(xmlVisitor* xvisitor){
+    xvisitor->toXml(this);
+}

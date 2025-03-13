@@ -31,6 +31,7 @@ class Series : public Video {
         void setYearOfEnd(unsigned int yearOfEnd);
         ~Series();
         virtual void accept(Visitor* visitor) override;
+        virtual void toXml(xmlVisitor* xvisitor);
 };
 
 #endif

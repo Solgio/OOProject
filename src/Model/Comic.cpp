@@ -29,3 +29,6 @@ void Comic::setFinished(const bool& nfinished){
 void Comic::accept(Visitor* visitor){
     visitor->visit(this);
 };
+void Comic::toXml(xmlVisitor* xvisitor){
+    xvisitor->toXml(this);
+};

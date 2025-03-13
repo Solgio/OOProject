@@ -40,6 +40,7 @@ class VideoGame : public Multimedia {
         // Un idea a grande 
         
         virtual void accept(Visitor* visitor) override;
+        virtual void toXml(xmlVisitor* xvisitor);
         
 };
 

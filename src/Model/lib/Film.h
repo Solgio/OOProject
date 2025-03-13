@@ -29,6 +29,7 @@ class Film : public Video {
         
         ~Film();
         virtual void accept(Visitor* visitor) override;
+        virtual void toXml(xmlVisitor* xvisitor);
 };
 
 #endif

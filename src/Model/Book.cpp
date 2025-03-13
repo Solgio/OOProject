@@ -15,3 +15,7 @@ void Book::setMainCharacter(const string& nmainCharacter){
 void Book::accept(Visitor* visitor){
     visitor->visit(this);
 };
+
+void Book::toXml(xmlVisitor* xvisitor){
+    xvisitor->toXml(this);
+};

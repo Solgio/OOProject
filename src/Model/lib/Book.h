@@ -18,6 +18,7 @@ class Book : public Paper {
         void setMainCharacter(const string& mainCharacter);
         ~Book();
         virtual void accept(Visitor* visitor) override;
+        virtual void toXml(xmlVisitor* xvisitor);
     };
 
 #endif

@@ -29,3 +29,6 @@ void Film::setDuration(const unsigned int& nduration){
 void Film::accept(Visitor* visitor){
     visitor->visit(this);
 };
+void Film::toXml(xmlVisitor* xvisitor){
+    xvisitor->toXml(this);
+};
