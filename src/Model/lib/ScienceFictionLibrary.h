@@ -21,7 +21,7 @@ class ScienceFiction_Library{
         vector<Content*>& watchedOrNot(bool& _watched);         //Shows only the watched or not watched content
         vector<Content*>& starredOrNot(bool& _starred);         //Shows only the starred or not starred content
         ~ScienceFiction_Library();
-        
+
         ScienceFiction_Library& getInstance(){
             static ScienceFiction_Library instance;
             return instance;
@@ -30,5 +30,7 @@ class ScienceFiction_Library{
         // Delete so it is impossible to copy the singleton
         ScienceFiction_Library(const ScienceFiction_Library&) = delete;
         ScienceFiction_Library& operator=(const ScienceFiction_Library&) = delete;
+        // The only possible instance of the ScienceFIction_Library is the one created with the getInstance() method and 
+        //it can't be copied nor canceled before the end of the programm
 };
 #endif
