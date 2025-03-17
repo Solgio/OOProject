@@ -8,6 +8,7 @@
 class VideoGame : public Multimedia {
    private:
         string gameEngine;
+        unsigned int expectedHours;
         // *TODO: se è possibile cambiarlo come Content?
         // ? enum gameType {FPS, RPG, RTS, MOBA, MMORPG, SIMULATION, SPORTS, PUZZLE, PLATFORMER, RACING, FIGHTING, SURVIVAL, ADVENTURE, ACTION, STRATEGY, 
         // ?  SANDBOX, TOWERDEFENSE, CARDGAME, BOARDGAME, PARTYGAME, EDUCATIONAL, MUSIC, CASUAL, ARCADE, SIMULATOR, VIRTUALREALITY, OTHER};
@@ -15,7 +16,7 @@ class VideoGame : public Multimedia {
     
     public:
         VideoGame(string _title, bool _subGenre[20], string _description, bool _starred, bool _watched, unsigned int _year, string _image, string _producer, 
-            string _language, string _gameEngine, unsigned int _expectedHours, QList <string> _platforms, Content* _inspiration=NULL);
+                  string _platforms, string _gameEngine, unsigned int _expectedHours, Content* _inspiration=NULL);
         
         string getGameEngine();
         

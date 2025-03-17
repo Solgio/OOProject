@@ -1,23 +1,16 @@
 #include "./lib/Video.h"
 
-Video::Video(string _title, bool _subGenre[20], string _description, bool _starred, bool _watched, unsigned int _year, string _image, string _producer, 
-            string _language, QList <string> _platforms, string _country, Content* _inspiration=NULL, Video* _prequel=NULL, Video* _sequel=NULL, unsigned int _quality[2]):
-            Multimedia(_title, _subGenre, _description, _starred, _watched, _year, _image, _producer, 
-            _language, _platforms, _inspiration),
-            prequel(_prequel),
-            sequel(_sequel)
-            {
-                quality[0] = _quality[0];
-                quality[1] = _quality[1];
-            }
+Video:: Video(string _title, bool _subGenre[20], string _description, bool _starred, bool _watched, unsigned int _year, string _image, string _producer, 
+    string _platforms, unsigned int _duration, Content* _inspiration=NULL, Video* _prequel=NULL, Video* _sequel=NULL):
+    Multimedia(_title, _subGenre, _description, _starred, _watched, _year, _image, _producer, _platforms, _inspiration),
+    prequel(_prequel),
+    sequel(_sequel),
+    duration(_duration){};
 
 
-string Video::getQuality(){
-    return (std::to_string(quality[0]), "x", std::to_string(quality[1]));
-}
 
-string Video::getCountry(){
-    return country;
+unsigned int& Video::getDuration(){
+    return duration;
 }
 
 Video* Video::getPrequel(){
@@ -28,13 +21,8 @@ Video* Video::getSequel(){
     return sequel;
 }
 
-void Video::setQuality(unsigned int _quality[2]){
-    quality[0] = _quality[0];
-    quality[1] = _quality[1];
-}
-
-void Video::setCountry(string _country){
-    country = _country;
+void Video::setDuration(unsigned int _duration){
+    duration = _duration;
 }
 
 void Video::setPrequel(Video* _prequel){
