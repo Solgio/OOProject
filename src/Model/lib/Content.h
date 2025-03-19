@@ -1,15 +1,12 @@
 #ifndef CONTENT_H
 #define CONTENT_H   
 #include "../View/Visitor.h"
+#include "../json/visitorJSon.h"
 #include "../xml/xmlVisitor.h"
 #include <string>
 
 //? NON SO SE è MEGLIO METTERLO QUI O NEL .CPP
-#include <QFile> // per accedere/creare file
-#include <QDir> // per gestire la directory
-#include <QJsonObject>
-#include <QJsonDocument>
-#include <QJsonArray>
+
 
 using std::string;
 

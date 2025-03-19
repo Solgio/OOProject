@@ -1,4 +1,9 @@
 #include "Visitor.h"
+#include "../Model/lib/Book.h"
+#include "../Model/lib/Comic.h"
+#include "../Model/lib/Film.h"
+#include "../Model/lib/Serie.h"
+#include "../Model/lib/VideoGame.h"
 
 void Visitor::visit(Book *book){
     printf("Book visited\n");
