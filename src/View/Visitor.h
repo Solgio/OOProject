@@ -1,10 +1,11 @@
 #ifndef VISITOR_H
 #define VISITOR_H
-#include "../Model/lib/Book.h"
-#include "../Model/lib/Comic.h"
-#include "../Model/lib/Film.h"
-#include "../Model/lib/Series.h"
-#include "../Model/lib/VideoGame.h"
+
+class Book;
+class Comic;
+class Film;
+class Series;
+class VideoGame;
 
 class Visitor{
     public:

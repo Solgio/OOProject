@@ -1,6 +1,7 @@
 #ifndef CONTENT_H
 #define CONTENT_H   
 #include "../View/Visitor.h"
+#include "../View/Visitor.h"
 #include "../xml/xmlVisitor.h"
 #include <string>
 
