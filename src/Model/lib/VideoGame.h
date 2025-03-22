@@ -12,7 +12,6 @@ class VideoGame : public Multimedia {
         // *TODO: se è possibile cambiarlo come Content?
         // ? enum gameType {FPS, RPG, RTS, MOBA, MMORPG, SIMULATION, SPORTS, PUZZLE, PLATFORMER, RACING, FIGHTING, SURVIVAL, ADVENTURE, ACTION, STRATEGY, 
         // ?  SANDBOX, TOWERDEFENSE, CARDGAME, BOARDGAME, PARTYGAME, EDUCATIONAL, MUSIC, CASUAL, ARCADE, SIMULATOR, VIRTUALREALITY, OTHER};
-        unsigned int expectedHours;
     
     public:
         VideoGame(string _title, bool _subGenre[20], string _description, bool _starred, bool _watched, unsigned int _year, string _image, string _producer, 
