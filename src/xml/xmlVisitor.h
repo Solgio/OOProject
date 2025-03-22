@@ -1,10 +1,17 @@
 #ifndef XVISITOR_H
 #define XVISITOR_H
-#include "../Model/lib/Book.h"
-#include "../Model/lib/Comic.h"
-#include "../Model/lib/Film.h"
-#include "../Model/lib/Serie.h"
-#include "../Model/lib/VideoGame.h"
+#include <QFile> // per accedere/creare file
+#include <QDir> // per gestire la directory
+#include <QJsonObject>
+#include <QJsonDocument>
+#include <QJsonArray>
+
+class Book;
+class Comic;
+class Serie;
+class Film;
+class VideoGame;
+
 
 class xmlVisitor{
     public:

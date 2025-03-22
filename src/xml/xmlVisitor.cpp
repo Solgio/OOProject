@@ -24,6 +24,7 @@ void xmlVisitor::toXml(Book *book){
     book_content.setAttribute("MainCharacter",QString::fromStdString(book->getMainCharacter()));
     //!CERCARE METODO DA POINTER A STRINGA O QPOINTER
     //book_content.setAttribute("Inspiration",QString::fromStdString(book->getInspiration()));
+    //book_content.setAttribute("Subgenre",QString::fromStdString(book->getSubgenre()));
     document.appendChild(book_content);
 };
 void xmlVisitor::toXml(Comic *comic){
@@ -45,7 +46,7 @@ void xmlVisitor::toXml(Comic *comic){
     comic_content.setAttribute("Finished",QString::number(comic->getFinished()));
     //!CERCARE METODO DA POINTER A STRINGA O QPOINTER
     //comic_content.setAttribute("Inspiration",QString::fromStdString(comic->getInspiration()));
-
+    //comic_content.setAttribute("Subgenre",QString::fromStdString(comic->getSubgenre()));
     document.appendChild(comic_content);
 };
 void xmlVisitor::toXml(Film *film){
@@ -59,12 +60,17 @@ void xmlVisitor::toXml(Film *film){
     film_content.setAttribute("Image",QString::fromStdString(film->getImage()));
     film_content.setAttribute("Director",QString::fromStdString(film->getDirector()));
     film_content.setAttribute("Producer",QString::fromStdString(film->getProducer()));
-    film_content.setAttribute("Scriptwriter",QString::fromStdString(film->getScriptwriter()));
+    film_content.setAttribute("PhtoDirector",QString::fromStdString(film->getPhotoDirector()));
     film_content.setAttribute("Duration",QString::number(film->getDuration()));
+    film_content.setAttribute("Platform",QString::fromStdString(film->getPlatforms()));
+    
     //!CERCARE METODO DA POINTER A STRINGA O QPOINTER
-    //film_content.setAttribute("Inspiration",QString::fromStdString(comic->getInspiration()));
+    //film_content.setAttribute("Prequel",QString::fromStdString(film->getPrequel()));
+    //film_content.setAttribute("Sequel",QString::fromStdString(film->getSequel()));
+    //film_content.setAttribute("Inspiration",QString::fromStdString(film->getInspiration()));
+    //film_content.setAttribute("Subgenre",QString::fromStdString(film->getSubgenre()));
 
-    document.appendChild(film_content); 
+    document.appendChild(film_content);
 };
 void xmlVisitor::toXml(Serie *serie){
     QDomDocument document;
@@ -75,7 +81,33 @@ void xmlVisitor::toXml(Serie *serie){
     serie_content.setAttribute("Watched",QString::number(serie->getWatched()));
     serie_content.setAttribute("Year",QString::number(serie->getYear()));
     serie_content.setAttribute("Image",QString::fromStdString(serie->getImage()));
+    serie_content.setAttribute("Creator",QString::fromStdString(serie->getCreator()));
+    serie_content.setAttribute("Producer",QString::fromStdString(serie->getProducer()));
+    serie_content.setAttribute("Platform",QString::fromStdString(serie->getPlatforms()));
+    serie_content.setAttribute("Duration",QString::number(serie->getDuration()));
+    serie_content.setAttribute("Seasons",QString::number(serie->getSeasons()));
+    serie_content.setAttribute("Episodes",QString::number(serie->getEpisodes()));
+    serie_content.setAttribute("Finished",QString::number(serie->getFinished()));
+    //!CERCARE METODO DA POINTER A STRINGA O QPOINTER
+
+     //serie_content.setAttribute("Inspiration",QString::fromStdString(serie->getInspiration()));
+    //serie_content.setAttribute("Subgenre",QString::fromStdString(serie->getSubgenre()));
 };
 void xmlVisitor::toXml(VideoGame *videogame){
-    //TODO
+    QDomDocument document;
+    QDomElement videogame_content=document.createElement("VideoGame");
+    videogame_content.setAttribute("Title",QString::fromStdString(videogame->getTitle()));
+    videogame_content.setAttribute("Description",QString::fromStdString(videogame->getDescription()));
+    videogame_content.setAttribute("Starred",QString::number(videogame->getStarred()));
+    videogame_content.setAttribute("Watched",QString::number(videogame->getWatched()));
+    videogame_content.setAttribute("Year",QString::number(videogame->getYear()));
+    videogame_content.setAttribute("Image",QString::fromStdString(videogame->getImage()));
+    videogame_content.setAttribute("Producer",QString::fromStdString(videogame->getProducer()));
+    videogame_content.setAttribute("Platform",QString::fromStdString(videogame->getPlatforms()));
+    videogame_content.setAttribute("GameEngine",QString::fromStdString(videogame->getGameEngine()));
+    videogame_content.setAttribute("ExpectedHours",QString::number(videogame->getExpectedHours()));
+    //!CERCARE METODO DA POINTER A STRINGA O QPOINTER
+    //videogame_content.setAttribute("Inspiration",QString::fromStdString(videogame->getInspiration()));
+    //videogame_content.setAttribute("Subgenre",QString::fromStdString(videogame->getSubgenre()));
+    document.appendChild(videogame_content);
 };
