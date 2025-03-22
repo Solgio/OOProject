@@ -1,0 +1,140 @@
+Content
+	- Title
+	- Subgenre
+	- description
+	- inspiration
+	- starred
+	- watched
+	- year
+	- image
+	
+Paper
+	- CONTENT
+		{- Title
+		- Subgenre
+		- description
+		- inspiration
+		- starred
+		- watched
+		- year
+		- image
+		}
+	- author
+	- publisher
+	- pages
+	- volume  *
+Book
+	-PAPER{
+		- Title
+		- Subgenre
+		- description
+		- inspiration
+		- starred
+		- watched
+		- year
+		- image
+		- author
+		- publisher
+		- pages
+		- volume  *}
+	- mainCharacter
+Comic
+	-BOOK{
+		- Title
+		- Subgenre
+		- description
+		- inspiration
+		- starred
+		- watched
+		- year
+		- image
+		- author
+		- publisher
+		- pages
+		- volume  *
+		- mainCharacter}
+	-illustrator
+	-serie   *
+	-finished
+	
+Multimedia
+	-CONTENT{
+		- Title
+		- Subgenre
+		- description
+		- inspiration
+		- starred
+		- watched
+		- year
+		- image}
+	-producer
+	-platforms
+Video
+	-MULTIMEDIA{
+		-Title
+		- Subgenre
+		- description
+		- inspiration
+		- starred
+		- watched
+		- year
+		- image
+		-producer
+		-platforms}
+	-duration
+	-prequel
+	-sequel
+Film
+	VIDEO{
+		-Title
+		- Subgenre
+		- description
+		- inspiration
+		- starred
+		- watched
+		- year
+		- image
+		-producer
+		-platforms
+		-duration
+		-prequel
+		-sequel}
+	-director
+	-photodirector
+
+Serie
+	VIDEO{
+		-Title
+		- Subgenre
+		- description
+		- inspiration
+		- starred
+		- watched
+		- year
+		- image
+		-producer
+		-platforms
+		-duration
+		-prequel
+		-sequel
+		-director
+		-photodirector}
+	-seasons
+	-episodes
+	-creator
+	-finished
+Videogames
+	-MULTIMEDIA{
+		- Title
+		- Subgenre
+		- description
+		- inspiration
+		- starred
+		- watched
+		- year
+		- image
+		-producer
+		-platforms}
+	-gameengine
+	expected hours
+	
