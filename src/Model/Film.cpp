@@ -1,16 +1,19 @@
 #include "./lib/Film.h"
 
+
+Film::Film(string _title, bool _subGenre[20], string _description, bool _starred, bool _watched, unsigned int _year, string _image, string _director, 
+    string _producer, string _platforms, string _photoDirector, unsigned int _duration, Content* _inspiration=NULL, Video* _prequel=NULL,
+    Video* _sequel=NULL):
+    Video(_title, _subGenre, _description, _starred, _watched, _year, _image, _producer, _platforms,  _duration, _inspiration, _prequel, _sequel), 
+    director(_director), 
+    photoDirector(_photoDirector){};
+
+
 string Film::getDirector() const{
     return director;
 };
 string Film::getPhotoDirector()  const{
     return photoDirector;
-};
-string Film::getScriptwriter() const{
-    return scriptwriter;
-};
-unsigned int Film::getDuration() const{
-    return duration;
 };
 
 void Film::setDirector(const string& ndirector){
@@ -18,12 +21,6 @@ void Film::setDirector(const string& ndirector){
 };
 void Film::setPhotoDirector(const string& nPhotoDirector){
     photoDirector=nPhotoDirector;
-};
-void Film::setScriptwriter(const string& nscriptwriter){
-    scriptwriter=nscriptwriter;
-};
-void Film::setDuration(const unsigned int& nduration){
-    duration=nduration;
 };  
 
 void Film::accept(Visitor* visitor){

@@ -12,7 +12,7 @@ class Visitor{
         virtual void visit(Book *book) = 0;
         virtual void visit(Comic *comic) = 0;
         virtual void visit(Film *movie) = 0;
-        virtual void visit(Series *series) = 0;
+        virtual void visit(Serie *serie) = 0;
         virtual void visit(VideoGame *videogame) = 0;
 };
 #endif

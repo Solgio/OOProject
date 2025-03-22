@@ -9,20 +9,20 @@
 class Comic : public Book {
    private:
         string illustrator;
-        string series;  
+        string serie;  
         bool finished;
         
     public:
         Comic(string _title, bool _subGenre[20], string _description, bool _starred, bool _watched, unsigned int _year, string _image, string _author, 
-            string _publisher, unsigned int _pages, unsigned int _volume, string _illustrator, string _series, bool _finished, string _mainCharacter, 
+            string _publisher, unsigned int _pages, unsigned int _volume, string _illustrator, string _serie, bool _finished, string _mainCharacter, 
             Content* _inspiration=NULL);
         
         string getIllustrator() const;
-        string getSeries() const;
+        string getSerie() const;
         bool getFinished() const;
 
         void setIllustrator(const string& illustrator);
-        void setSeries(const string& series);
+        void setSerie(const string& serie);
         void setFinished(const bool& finished);
         ~Comic();
         virtual void accept(Visitor* visitor) override;

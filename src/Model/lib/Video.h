@@ -5,25 +5,22 @@
 #include <QTextStream>
 #include "Multimedia.h"
 
-//Genaral Abstract Class for all Video types of the Library (implemented: Film, Series)
+//Genaral Abstract Class for all Video types of the Library (implemented: Film, Serie)
 class Video : public Multimedia {
     private:
-        unsigned int quality[2]; //Quality of the video (pixels), il primo valore e' la x e il secondo e' la y
-        string country;       //Country of origin
+        unsigned int duration; //in minutes
         Video *prequel=NULL;
         Video *sequel=NULL;
 
     public:
         Video(string _title, bool _subGenre[20], string _description, bool _starred, bool _watched, unsigned int _year, string _image, string _producer, 
-            string _language, QList <string> _platforms, string _country, Content* _inspiration=NULL, Video* _prequel=NULL, Video* _sequel=NULL, unsigned int quality[2]);
+            string _platforms, unsigned int duration, Content* _inspiration=NULL, Video* _prequel=NULL, Video* _sequel=NULL);
         
-        string getQuality();
-        string getCountry();
+        unsigned int & getDuration();
         Video* getPrequel();
         Video* getSequel();
         
-        void setQuality(unsigned int quality[]);
-        void setCountry(string _country);
+        void setDuration(unsigned int quality);
         void setPrequel(Video* _prequel);
         void setSequel(Video* _sequel);
         virtual ~Video(){
