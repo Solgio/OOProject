@@ -15,24 +15,31 @@ class Film;
 class VideoGame;
 
 class VisitorJson{
-    private:
+private:
+    QString fileName;
+    QDir dir; // indirizzamento relativo a partire da "." ,
+    // dir() è di default "."
 
-        QString fileName("libreriaJson.json");
-        QDir dir("Json/"); // indirizzamento relativo a partire da "." , 
-        // dir() è di default "."
+    QFile libreria;
 
+public:
+
+    VisitorJson():fileName("libreriaJson.json"), dir("Json/"), libreria(dir.canonicalPath() + fileName){
         // We create the directory if needed
         if(!dir.exists()){ dir.mkpath(dir.dirName());} //Partendo dalla cartella ".", se ./JFile/ NON esiste, creamo la cartella
+    }
 
-        QFile libreria(dir + fileName);
-    public:
+    void setDirectory(QString _directory);
+    void setFileName(QString _fileName);
+    void setLibreria(QString path);
 
-        void setDirectory(QString directory) = 0;
-        void setFileName(QString fileName) = 0;
-        virtual void toFileJson(Book *book) = 0;
-        virtual void toFileJson(Comic *comic) = 0;
-        virtual void toFileJson(Film *movie) = 0;
-        virtual void toFileJson(Serie *serie) = 0;
-        virtual void toFileJson(VideoGame *videogame) = 0;
+    QDir getDirectory();
+    QString getFileName();
+
+    virtual void toFileJson(Book *book) = 0;
+    virtual void toFileJson(Comic *comic) = 0;
+    virtual void toFileJson(Film *movie) = 0;
+    virtual void toFileJson(Serie *serie) = 0;
+    virtual void toFileJson(VideoGame *videogame) = 0;
 };
 #endif
