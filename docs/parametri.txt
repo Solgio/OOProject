@@ -116,9 +116,7 @@ Serie
 		-platforms
 		-duration
 		-prequel
-		-sequel
-		-director
-		-photodirector}
+		-sequel}
 	-seasons
 	-episodes
 	-creator
