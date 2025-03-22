@@ -2,11 +2,7 @@
 #include "../Model/lib/Book.h"
 #include "../Model/lib/Comic.h"
 #include "../Model/lib/Film.h"
-<<<<<<< HEAD
-#include "../Model/lib/Series.h"
-=======
 #include "../Model/lib/Serie.h"
->>>>>>> 036cb7cefac9b23858c3e367ccbf4260efa69d4a
 #include "../Model/lib/VideoGame.h"
 
 void Visitor::visit(Book *book){

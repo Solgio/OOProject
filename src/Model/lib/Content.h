@@ -1,11 +1,7 @@
 #ifndef CONTENT_H
 #define CONTENT_H   
 #include "../View/Visitor.h"
-<<<<<<< HEAD
-#include "../View/Visitor.h"
-=======
 #include "../json/visitorJSon.h"
->>>>>>> 036cb7cefac9b23858c3e367ccbf4260efa69d4a
 #include "../xml/xmlVisitor.h"
 #include <string>
 
