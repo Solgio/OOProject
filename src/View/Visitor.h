@@ -3,8 +3,13 @@
 
 class Book;
 class Comic;
+<<<<<<< HEAD
 class Film;
 class Series;
+=======
+class Serie;
+class Film;
+>>>>>>> 036cb7cefac9b23858c3e367ccbf4260efa69d4a
 class VideoGame;
 
 class Visitor{

@@ -68,27 +68,3 @@ void Content::setImage(const string& nimage){
     image=nimage;
 };
 
-
-QJsonObject Content::toJSon(){
-    QString path("JFile/"); //
-    QDir dir; // Initialize to the desired dir if 'path' is relative
-        // By default the program's working directory "." is used.
-
-    // We create the directory if needed
-    if (!dir.exists(path)){ //Partendo da questa cartella, se ./JFile/ NON esiste, creamo la cartella
-        dir.mkpath(path);
-    }
-    
-    QFile LibraryFile(path + "Library.json"); //SE IL FILE NON ESISTE crea uno nuovo, altrimenti apre il file
-    LibraryFile.open(QIODevice::ReadWrite); // o QFile::WriteOnly per scrivere soltanto
-
-    QJsonObject oggettoContent;
-
-    oggettoContent.insert("Title", title);
-    oggettoContent.insert("Title", title);
-    oggettoContent.insert("Title", title);
-    oggettoContent.insert("Title", title);
-    oggettoContent.insert("Title", title);
-
-
-};
