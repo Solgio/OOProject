@@ -21,5 +21,5 @@ void Book::toXml(xmlVisitor* xvisitor){
 };
 
 void Book::toJSon(VisitorJson* visitorJson){
-    visitorJson->toFileJson(*this);
+    visitorJson->toFileJson(this);
 };

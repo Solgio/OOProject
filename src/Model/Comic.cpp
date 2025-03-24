@@ -33,5 +33,5 @@ void Comic::toXml(xmlVisitor* xvisitor){
     xvisitor->toXml(this);
 };
 void Comic::toJSon(VisitorJson* visitorJson){
-    visitorJson->toFileJson(*this);
+    visitorJson->toFileJson(this);
 };

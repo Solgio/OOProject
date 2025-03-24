@@ -30,5 +30,5 @@ void Film::toXml(xmlVisitor* xvisitor){
     xvisitor->toXml(this);
 };
 void Film::toJSon(VisitorJson* visitorJson){
-    visitorJson->toFileJson(*this);
+    visitorJson->toFileJson(this);
 };
