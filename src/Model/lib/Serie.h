@@ -31,6 +31,7 @@ class Serie : public Video {
         ~Serie();
         virtual void accept(Visitor* visitor) override;
         virtual void toXml(xmlVisitor* xvisitor);
+        virtual void toJson(VisitorJson* vistitorJson);
 };
 
 #endif

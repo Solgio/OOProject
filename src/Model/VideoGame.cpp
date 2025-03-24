@@ -26,4 +26,7 @@ void VideoGame::accept(Visitor* visitor){
 }
 void VideoGame::toXml(xmlVisitor* xvisitor){
     xvisitor->toXml(this);
-}
+};
+void Videogame::toJSon(VisitorJson* visitorJson){
+    visitorJson->toFileJson(*this);
+};

@@ -41,6 +41,7 @@ class VideoGame : public Multimedia {
         
         virtual void accept(Visitor* visitor) override;
         virtual void toXml(xmlVisitor* xvisitor);
+        virtual void toJson(VisitorJson* vistitorJson);
         
 };
 

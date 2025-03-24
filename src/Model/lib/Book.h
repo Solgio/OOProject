@@ -19,6 +19,7 @@ class Book : public Paper {
         ~Book();
         virtual void accept(Visitor* visitor) override;
         virtual void toXml(xmlVisitor* xvisitor);
+        virtual void toJson(VisitorJson* vistitorJson);
     };
 
 #endif

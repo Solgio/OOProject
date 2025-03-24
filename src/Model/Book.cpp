@@ -19,3 +19,7 @@ void Book::accept(Visitor* visitor){
 void Book::toXml(xmlVisitor* xvisitor){
     xvisitor->toXml(this);
 };
+
+void Book::toJSon(VisitorJson* visitorJson){
+    visitorJson->toFileJson(*this);
+};

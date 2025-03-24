@@ -48,6 +48,7 @@ class Content {
         virtual ~Content() =0;
         virtual void accept(Visitor* visitor) = 0;
         virtual void toXml(xmlVisitor* xvisitor) = 0;
+        virtual void toJson(VisitorJson* vistitorJson) = 0;
 
 };
 
