@@ -1,11 +1,14 @@
 #ifndef CONTENT_H
 #define CONTENT_H   
 #include "../View/Visitor.h"
-#include "../json/visitorJSon.h"
+#include "../json/visitorJson.h"
 #include "../xml/xmlVisitor.h"
 #include <string>
 
-//? NON SO SE è MEGLIO METTERLO QUI O NEL .CPP
+//? lo static è posto nel cpp per rispettare il vincolo di information hiding
+// static const string subGenres[20]={"Fantasy", "Horror", "Mystery", "Thriller", "Romance", "Drama", "Comedy", "Action", "Adventure", "Documentary", "Biography",
+//    "History", "Western", "War", "Crime", "Musical", "Animation", "Family", "Sports", "Superhero"};
+  
 
 
 using std::string;
