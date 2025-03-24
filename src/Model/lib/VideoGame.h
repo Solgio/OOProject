@@ -14,7 +14,7 @@ class VideoGame : public Multimedia {
         // ?  SANDBOX, TOWERDEFENSE, CARDGAME, BOARDGAME, PARTYGAME, EDUCATIONAL, MUSIC, CASUAL, ARCADE, SIMULATOR, VIRTUALREALITY, OTHER};
     
     public:
-        VideoGame(string _title, bool _subGenre[20], string _description, bool _starred, bool _watched, unsigned int _year, string _image, string _producer, 
+        VideoGame(string _title, Subgenre _subGenre, string _description, bool _starred, bool _watched, unsigned int _year, string _image, string _producer, 
                   string _platforms, string _gameEngine, unsigned int _expectedHours, Content* _inspiration=NULL);
         
         string getGameEngine();

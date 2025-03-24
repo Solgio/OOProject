@@ -13,7 +13,7 @@ class Multimedia : public Content {
         string platforms;        
     
     public:
-        Multimedia(string _title, bool _subGenre[20], string _description, bool _starred, bool _watched, unsigned int _year, string _image, string _producer, 
+        Multimedia(string _title, Subgenre _subGenre, string _description, bool _starred, bool _watched, unsigned int _year, string _image, string _producer, 
             string _platforms, Content* _inspiration=NULL);
         
         string getProducer();

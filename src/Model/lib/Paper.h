@@ -14,7 +14,7 @@ class Paper : public Content {
         unsigned int volume;    
             
     public:
-        Paper(string _title, bool _subGenre[20], string _description, bool _starred, bool _watched, unsigned int _year, string _image, string _author, 
+        Paper(string _title, Subgenre _subGenre, string _description, bool _starred, bool _watched, unsigned int _year, string _image, string _author, 
             string _publisher, unsigned int _pages, unsigned int _volume, Content* _inspiration=NULL);
         
         string getAuthor() const;

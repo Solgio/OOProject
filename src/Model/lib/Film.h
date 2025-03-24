@@ -11,7 +11,7 @@ class Film : public Video {
         string photoDirector;
        
     public:
-        Film(string _title, bool _subGenre[20], string _description, bool _starred, bool _watched, unsigned int _year, string _image, string _director, 
+        Film(string _title, Subgenre _subGenre, string _description, bool _starred, bool _watched, unsigned int _year, string _image, string _director, 
             string _producer, string _platforms, string photoDirector, unsigned int _duration, Content* _inspiration=NULL, Video* _prequel=NULL, Video* _sequel=NULL);
             
         string getDirector() const;

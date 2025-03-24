@@ -13,7 +13,7 @@ class Serie : public Video {
         bool finished;
 
     public:
-        Serie(string _title, bool _subGenre[20], string _description, bool _starred, bool _watched, unsigned int _year, string _image, string _producer, 
+        Serie(string _title, Subgenre _subGenre, string _description, bool _starred, bool _watched, unsigned int _year, string _image, string _producer, 
             string _platforms, unsigned int duration, unsigned int _seasons, unsigned int _episodes, string _creator, bool _finished, Content* _inspiration=NULL, Video* _prequel=NULL,
             Video* _sequel=NULL);
         

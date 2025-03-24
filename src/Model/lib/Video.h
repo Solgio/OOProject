@@ -13,7 +13,7 @@ class Video : public Multimedia {
         Video *sequel=NULL;
 
     public:
-        Video(string _title, bool _subGenre[20], string _description, bool _starred, bool _watched, unsigned int _year, string _image, string _producer, 
+        Video(string _title, Subgenre _subGenre, string _description, bool _starred, bool _watched, unsigned int _year, string _image, string _producer, 
             string _platforms, unsigned int duration, Content* _inspiration=NULL, Video* _prequel=NULL, Video* _sequel=NULL);
         
         unsigned int & getDuration();

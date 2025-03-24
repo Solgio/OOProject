@@ -34,7 +34,7 @@ class Content {
         bool watched;
         unsigned int yearOfRelease; //Year of release, always present in all content types (UNlike year of end)
         string image; //Image of the content
-        Content* inspiration; //Inspiration for the content7
+        Content* inspiration; //Inspiration for the content
         
     public:
         Content(string _title, bool _subGenre[20], string _description, bool _starred, bool _watched, unsigned int _year, string _image, Content* _inspiration=NULL);
