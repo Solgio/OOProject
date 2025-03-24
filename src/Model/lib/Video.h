@@ -28,9 +28,9 @@ class Video : public Multimedia {
             sequel->setPrequel(prequel);
             delete this;
         }
-        virtual void accept(Visitor* visitor) override;
-        virtual void toXml(xmlVisitor* xvisitor);
-        virtual void toJson(VisitorJson* vistitorJson);
+        virtual void accept(Visitor* visitor) override =0;
+        virtual void toXml(xmlVisitor* xvisitor) =0;
+        virtual void toJson(VisitorJson* vistitorJson) =0;
 };
 
 #endif

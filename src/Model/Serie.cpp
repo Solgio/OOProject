@@ -43,6 +43,6 @@ void Serie::accept(Visitor* visitor){
 void Serie::toXml(xmlVisitor* xvisitor){
     xvisitor->toXml(this);
 }
-void Serie::toJSon(VisitorJson* visitorJson){
+void Serie::toJson(VisitorJson* visitorJson){
     visitorJson->toFileJson(this);
 };

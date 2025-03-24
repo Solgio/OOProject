@@ -32,6 +32,6 @@ void Comic::accept(Visitor* visitor){
 void Comic::toXml(xmlVisitor* xvisitor){
     xvisitor->toXml(this);
 };
-void Comic::toJSon(VisitorJson* visitorJson){
+void Comic::toJson(VisitorJson* visitorJson){
     visitorJson->toFileJson(this);
 };

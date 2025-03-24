@@ -39,7 +39,3 @@ void Video::setSequel(Video* _sequel){
         _sequel->setPrequel(this);
     }
 }
-
-void Video::toJSon(VisitorJson* visitorJson){
-    visitorJson->toFileJson(this);
-};
