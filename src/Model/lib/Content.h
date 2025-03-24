@@ -1,5 +1,6 @@
 #ifndef CONTENT_H
 #define CONTENT_H   
+#include "subgenre.h"
 #include "../View/Visitor.h"
 #include "../json/visitorJson.h"
 #include "../xml/xmlVisitor.h"
@@ -10,23 +11,23 @@ using std::string;
 //Genaral Abstract Class for all content types of the Library
 class Content {
     private:
-        static const string subGenres[20];  // Static array for Conversion of the subGenre (this is saves the solution of directly saving a 20 elements array of strings) 
-
         string title;
-        bool choosenGen[20];      //array di bool che corrisponde ai sottogeneri scelti
+        Subgenre subgenres; //Bitmasks for the Subgenres
         string description;
-        Content* inspiration=NULL;
         bool starred;
         bool watched;
         unsigned int yearOfRelease; //Year of release, always present in all content types (UNlike year of end)
         string image; //Image of the content
-   
+        Content* inspiration; //Inspiration for the content7
+        
     public:
         Content(string _title, bool _subGenre[20], string _description, bool _starred, bool _watched, unsigned int _year, string _image, Content* _inspiration=NULL);
         
         string getTitle() const;
-        string getSubgenre() const;
-        bool getSubgenreArray() const;
+        Subgenre getSubgenre() const;
+        bool hasSubgenre(Subgenre genre) const;
+        bool hasAnySubgenre(Subgenre genres) const;
+        string getSubgenreString() const;
         string getDescription() const;
         Content* getInspiration() const;
         bool getStarred() const;
@@ -35,7 +36,7 @@ class Content {
         string getImage() const;
 
         void setTitle(const string& title);
-        void setSubgenre(const string& subgenre);
+        void addSubgenre(Subgenre genre);
         void setDescription(const string& description);
         void setInspiration(Content* inspiration);
         void setStarred(const bool& starred);

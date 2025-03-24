@@ -16,7 +16,7 @@ class ScienceFiction_Library{
         vector<Content*> getContentList();
         vector<Content*>& filterContent(string& _title);
         vector<Content*>& filterContent(const unsigned int& _year);
-        vector<Content*>& filterContent(const bool choosenGen[20]);
+        vector<Content*>& filterContent(Subgenre genre);
         vector<Content*>& filterContent();
         vector<Content*>& watchedOrNot(const bool& _watched);         //Shows only the watched or not watched content
         vector<Content*>& starredOrNot(const bool& _starred);         //Shows only the starred or not starred content

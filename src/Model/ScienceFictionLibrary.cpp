@@ -42,15 +42,15 @@ vector<Content*>& ScienceFiction_Library::filterContent(const unsigned int& _yea
     }
 };
 
-vector<Content*>& ScienceFiction_Library::filterContent(const bool choosenGen[20]){
+vector<Content*>& ScienceFiction_Library::filterContent(Subgenre genre){
     vector<Content*> filteredListbyGen;
-    for(const auto& it : contentList){
-        for(int i=0; i<20; i++){
-            if(choosenGen[i] && it->getSubgenreArray()+i){
-                filteredListbyGen.push_back(it);
+    std::vector<Content*> result;
+        for (const auto& it : contentList) {
+            if (it->hasAnySubgenre(genre)) {
+                result.push_back(it);
             }
         }
-    }
+        return result;
 };
 
 /*VERSIONE ALTERNATIVA: Invece che un array viene passato un singolo indice per verificare in O(1) o un array di indici ma nel caso peggiore la coomplessità è la stessa
