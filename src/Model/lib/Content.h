@@ -1,12 +1,28 @@
 #ifndef CONTENT_H
 #define CONTENT_H   
-#include "subgenre.h"
 #include "../View/Visitor.h"
 #include "../json/visitorJson.h"
 #include "../xml/xmlVisitor.h"
 #include <string>
 using std::string;
 
+enum class Subgenre {
+    NONE = 0,
+    ACTION = 1 << 0,
+    COMEDY = 1 << 1,
+    DRAMA = 1 << 2,
+    HORROR = 1 << 3,
+    ROMANCE = 1 << 4,
+    THRILLER = 1 << 4,
+    MYSTERY = 1 << 5,
+    ADVENTURE = 1 << 6,
+    WESTERN = 1 << 7,
+    WAR = 1 << 8,
+    MUSICAL = 1 << 9,
+    FAMILY = 1 << 10,
+    SPORTS = 1 << 11,
+    SUPERHERO = 1 << 12
+};
 
 //Genaral Abstract Class for all content types of the Library
 class Content {
