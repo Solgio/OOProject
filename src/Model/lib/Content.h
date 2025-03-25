@@ -1,8 +1,8 @@
 #ifndef CONTENT_H
 #define CONTENT_H   
-#include "../View/Visitor.h"
-#include "../json/visitorJson.h"
-#include "../xml/xmlVisitor.h"
+#include "../../View/Visitor.h"
+#include "../../json/visitorJson.h"
+#include "../../xml/xmlVisitor.h"
 #include <string>
 using std::string;
 
@@ -37,7 +37,7 @@ class Content {
         Content* inspiration; //Inspiration for the content
         
     public:
-        Content(string _title, bool _subGenre[20], string _description, bool _starred, bool _watched, unsigned int _year, string _image, Content* _inspiration=NULL);
+        Content(string _title, Subgenre _subGenre, string _description, bool _starred, bool _watched, unsigned int _year, string _image, Content* _inspiration=nullptr);
         
         string getTitle() const;
         Subgenre getSubgenre() const;

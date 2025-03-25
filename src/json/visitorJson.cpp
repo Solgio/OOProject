@@ -38,10 +38,7 @@ void VisitorJson::toFileJson(Book *book){
     QJsonDocument doc;
 
     oggettoJSon.insert("Title", QString::fromStdString(book->getTitle()));
-
-    oggettoJSon.insert("Genres", QString::fromStdString(book->getSubgenre()));  //! non ho la minima idea se fuziona o no
-                                                        //! Da fare probabilmente con JsonArray
-
+    oggettoJSon.insert("Genres", int(book->getSubgenre()));  
     oggettoJSon.insert("Description", QString::fromStdString(book->getDescription()));
     oggettoJSon.insert("Year of Release", int(book->getYear())); // Unsigned int da problemi di ambiguità
     oggettoJSon.insert("Image", QString::fromStdString(book->getImage())); // contiene la image path
@@ -63,8 +60,7 @@ void VisitorJson::toFileJson(Comic *comic){
     QJsonDocument doc;
 
     oggettoJSon.insert("Title", QString::fromStdString(comic->getTitle()));
-    oggettoJSon.insert("Genres", QString::fromStdString(comic->getSubgenre()));  //! non ho la minima idea se fuziona o no
-                                                        //! Da fare probabilmente con JsonArray
+    oggettoJSon.insert("Genres", int(comic->getSubgenre())); 
     oggettoJSon.insert("Description", QString::fromStdString(comic->getDescription()));
     oggettoJSon.insert("Year of Release", int(comic->getYear()));
     oggettoJSon.insert("Image", QString::fromStdString(comic->getImage())); // contiene la image path
@@ -88,8 +84,7 @@ void VisitorJson::toFileJson(Film *movie){
     QJsonDocument doc;
 
     oggettoJSon.insert("Title", QString::fromStdString(movie->getTitle()));
-    oggettoJSon.insert("Genres", QString::fromStdString(movie->getSubgenre()));  //! non ho la minima idea se fuziona o no
-                                                        //! Da fare probabilmente con JsonArray
+    oggettoJSon.insert("Genres", int(movie->getSubgenre()));                                                     //! Da fare probabilmente con JsonArray
     oggettoJSon.insert("Description", QString::fromStdString(movie->getDescription()));
     oggettoJSon.insert("Year of Release", int(movie->getYear()));
     oggettoJSon.insert("Image", QString::fromStdString(movie->getImage())); // contiene la image path
@@ -112,8 +107,7 @@ void VisitorJson::toFileJson(Serie *serie){
     QJsonDocument doc;
 
     oggettoJSon.insert("Title", QString::fromStdString(serie->getTitle()));
-    oggettoJSon.insert("Genres", QString::fromStdString(serie->getSubgenre()));  //! non ho la minima idea se fuziona o no
-                                                        //! Da fare probabilmente con JsonArray
+    oggettoJSon.insert("Genres", int(serie->getSubgenre()));                                                     //! Da fare probabilmente con JsonArray
     oggettoJSon.insert("Description", QString::fromStdString(serie->getDescription()));
     oggettoJSon.insert("Year of Release", int(serie->getYear()));
     oggettoJSon.insert("Image", QString::fromStdString(serie->getImage())); // contiene la image path
@@ -139,8 +133,7 @@ void VisitorJson::toFileJson(VideoGame *videogame){
     QJsonDocument doc;
 
     oggettoJSon.insert("Title", QString::fromStdString(videogame->getTitle()));
-    oggettoJSon.insert("Genres", QString::fromStdString(videogame->getSubgenre()));  //! non ho la minima idea se fuziona o no
-                                                        //! Da fare probabilmente con JsonArray
+    oggettoJSon.insert("Genres", int(videogame->getSubgenre()));                                                     //! Da fare probabilmente con JsonArray
     oggettoJSon.insert("Description", QString::fromStdString(videogame->getDescription()));
     oggettoJSon.insert("Year of Release", int(videogame->getYear()));
     oggettoJSon.insert("Image", QString::fromStdString(videogame->getImage())); // contiene la image path
