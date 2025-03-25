@@ -2,6 +2,8 @@
 #include <QtXml>
 #include <QDebug>
 
+//? https://www.youtube.com/watch?v=NzQwJdcdRKE
+
 QDomDocument document;
 
 int main() {
