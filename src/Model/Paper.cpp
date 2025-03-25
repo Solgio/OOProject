@@ -1,6 +1,6 @@
 #include "./lib/Paper.h"
 
-Paper::Paper(string _title, bool _subGenre[20], string _description, bool _starred, bool _watched, unsigned int _year, string _image, string _author, 
+Paper::Paper(string _title, Subgenre _subGenre, string _description, bool _starred, bool _watched, unsigned int _year, string _image, string _author, 
     string _publisher, unsigned int _pages, unsigned int _volume, Content* _inspiration):
     Content(_title, _subGenre, _description, _starred, _watched, _year, _image, _inspiration), author(_author), publisher(_publisher), pages(_pages), volume(_volume){};
 
