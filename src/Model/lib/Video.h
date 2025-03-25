@@ -9,12 +9,12 @@
 class Video : public Multimedia {
     private:
         unsigned int duration; //in minutes
-        Video *prequel=NULL;
-        Video *sequel=NULL;
+        Video *prequel=nullptr;
+        Video *sequel=nullptr;
 
     public:
         Video(string _title, Subgenre _subGenre, string _description, bool _starred, bool _watched, unsigned int _year, string _image, string _producer, 
-            string _platforms, unsigned int duration, Content* _inspiration=NULL, Video* _prequel=NULL, Video* _sequel=NULL);
+            string _platforms, unsigned int duration, Content* _inspiration=nullptr, Video* _prequel=nullptr, Video* _sequel=nullptr);
         
         unsigned int & getDuration();
         Video* getPrequel();

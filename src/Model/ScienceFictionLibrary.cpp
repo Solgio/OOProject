@@ -9,7 +9,7 @@ void ScienceFiction_Library::addContent(Content* content){
 void ScienceFiction_Library::removeContent(Content* content){
     for(auto it = contentList.begin(); it != contentList.end();){
         if((*it)->getInspiration() == content){  //If the content that we want to remove is an inspiration for another content,
-            (*it)->setInspiration(NULL);         //we set the inspiration to NULL
+            (*it)->setInspiration(nullptr);         //we set the inspiration to nullptr
             ++it;
         }
         if (*it == content) {

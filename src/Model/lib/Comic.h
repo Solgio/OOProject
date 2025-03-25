@@ -15,7 +15,7 @@ class Comic : public Book {
     public:
         Comic(string _title, Subgenre _subGenre, string _description, bool _starred, bool _watched, unsigned int _year, string _image, string _author, 
             string _publisher, unsigned int _pages, unsigned int _volume, string _illustrator, string _serie, bool _finished, string _mainCharacter, 
-            Content* _inspiration=NULL);
+            Content* _inspiration=nullptr);
         
         string getIllustrator() const;
         string getSerie() const;
