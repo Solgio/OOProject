@@ -4,10 +4,10 @@
 #include "../Model/lib/Film.h"
 #include "../Model/lib/Serie.h"
 #include "../Model/lib/VideoGame.h"
-
+/*
 void Visitor::visit(Book *book){
     printf("Book visited\n");
-    //! Da inserire la UI personalizzata specifica per ognuno (Ogni content type avrà una UI diversa)
+    ! Da inserire la UI personalizzata specifica per ognuno (Ogni content type avrà una UI diversa)
 };
 void Visitor::visit(Comic *comic){
     printf("Comic visited\n");
@@ -20,4 +20,4 @@ void Visitor::visit(Serie *serie){
 };
 void Visitor::visit(VideoGame *videogame){
     printf("VideoGame visited\n");
-};  
+};  */

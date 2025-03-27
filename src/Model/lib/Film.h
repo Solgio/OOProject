@@ -20,7 +20,7 @@ class Film : public Video {
         void setDirector(const string& director);
         void setPhotoDirector(const string& producer);
         
-        ~Film();
+        //~Film();
         virtual void accept(Visitor* visitor) override;
         virtual void toXml(xmlVisitor* xvisitor);
         virtual void toJson(VisitorJson* vistitorJson);

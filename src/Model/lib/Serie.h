@@ -28,7 +28,7 @@ class Serie : public Video {
         void setCreator(string creator);
         void setFinished(bool finished);
         void setYearOfEnd(unsigned int yearOfEnd);
-        ~Serie();
+        //~Serie();
         virtual void accept(Visitor* visitor) override;
         virtual void toXml(xmlVisitor* xvisitor);
         virtual void toJson(VisitorJson* vistitorJson);

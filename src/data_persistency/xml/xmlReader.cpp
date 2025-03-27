@@ -6,7 +6,7 @@
 
 QDomDocument document;
 
-void ListElements(QDomElement root, QString tagname, QString attribute){
+void ListElements(QDomElement root, QString tagname){
     QDomNodeList items = root.elementsByTagName(tagname);
     for(int i = 0; i < items.count(); i++){
         QDomNode item = items.at(i);
@@ -16,7 +16,7 @@ void ListElements(QDomElement root, QString tagname, QString attribute){
         }
     }
 }
-
+/*
 int main() {
     QFile file("SOMETHING.xml");
     if(!file.open(QIODevice::WriteOnly | QIODevice::Text)){
@@ -38,4 +38,4 @@ int main() {
     qDebug() << "Finished";
     return 0;
 }
- 
+ */
