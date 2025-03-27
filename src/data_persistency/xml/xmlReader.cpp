@@ -6,6 +6,17 @@
 
 QDomDocument document;
 
+void ListElements(QDomElement root, QString tagname, QString attribute){
+    QDomNodeList items = root.elementsByTagName(tagname);
+    for(int i = 0; i < items.count(); i++){
+        QDomNode item = items.at(i);
+        if(item.isElement()){ 
+            QDomElement element = item.toElement();
+            qDebug() << element.tagName() << " : " << element.text();
+        }
+    }
+}
+
 int main() {
     QFile file("SOMETHING.xml");
     if(!file.open(QIODevice::WriteOnly | QIODevice::Text)){
@@ -21,6 +32,8 @@ int main() {
     }
 
     QDomElement root = document.firstChildElement();
+
+
 
     qDebug() << "Finished";
     return 0;

@@ -1,8 +1,8 @@
 #ifndef CONTENT_H
 #define CONTENT_H   
 #include "../../View/Visitor.h"
-#include "../../json/visitorJson.h"
-#include "../../xml/xmlVisitor.h"
+#include "../../data_persistency/json/visitorJson.h"
+#include "../../data_persistency/xml/xmlVisitor.h"
 #include <string>
 using std::string;
 

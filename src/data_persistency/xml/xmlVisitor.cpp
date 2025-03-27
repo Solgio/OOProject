@@ -2,11 +2,11 @@
 #include <QtXml>
 #include <QDebug>
 #include "xmlVisitor.h"
-#include "../Model/lib/Book.h"
-#include "../Model/lib/Comic.h"
-#include "../Model/lib/Film.h"
-#include "../Model/lib/Serie.h"
-#include "../Model/lib/VideoGame.h"
+#include "../../Model/lib/Book.h"
+#include "../../Model/lib/Comic.h"
+#include "../../Model/lib/Film.h"
+#include "../../Model/lib/Serie.h"
+#include "../../Model/lib/VideoGame.h"
 
 void xmlVisitor::toXml(Book *book){
     QDomDocument document;

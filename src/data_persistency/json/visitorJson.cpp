@@ -1,10 +1,10 @@
 #include "visitorJson.h"
 
-#include "../Model/lib/Book.h"
-#include "../Model/lib/Comic.h"
-#include "../Model/lib/Film.h"
-#include "../Model/lib/Serie.h"
-#include "../Model/lib/VideoGame.h"
+#include "../../Model/lib/Book.h"
+#include "../../Model/lib/Comic.h"
+#include "../../Model/lib/Film.h"
+#include "../../Model/lib/Serie.h"
+#include "../../Model/lib/VideoGame.h"
 
 void VisitorJson::setDirectory(QString path){
         dir.setPath(path);
@@ -107,7 +107,7 @@ void VisitorJson::toFileJson(Serie *serie){
     QJsonDocument doc;
 
     oggettoJSon.insert("Title", QString::fromStdString(serie->getTitle()));
-    oggettoJSon.insert("Genres", int(serie->getSubgenre()));                                                     //! Da fare probabilmente con JsonArray
+    oggettoJSon.insert("Genres", int(serie->getSubgenre()));
     oggettoJSon.insert("Description", QString::fromStdString(serie->getDescription()));
     oggettoJSon.insert("Year of Release", int(serie->getYear()));
     oggettoJSon.insert("Image", QString::fromStdString(serie->getImage())); // contiene la image path
@@ -133,7 +133,7 @@ void VisitorJson::toFileJson(VideoGame *videogame){
     QJsonDocument doc;
 
     oggettoJSon.insert("Title", QString::fromStdString(videogame->getTitle()));
-    oggettoJSon.insert("Genres", int(videogame->getSubgenre()));                                                     //! Da fare probabilmente con JsonArray
+    oggettoJSon.insert("Genres", int(videogame->getSubgenre()));
     oggettoJSon.insert("Description", QString::fromStdString(videogame->getDescription()));
     oggettoJSon.insert("Year of Release", int(videogame->getYear()));
     oggettoJSon.insert("Image", QString::fromStdString(videogame->getImage())); // contiene la image path
