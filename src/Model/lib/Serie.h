@@ -21,13 +21,13 @@ class Serie : public Video {
         unsigned int getEpisodes();
         string getCreator();
         bool getFinished();
-        unsigned int getYearOfEnd();
+
 
         void setSeasons(unsigned int seasons);
         void setEpisodes(unsigned int episodes);
         void setCreator(string creator);
         void setFinished(bool finished);
-        void setYearOfEnd(unsigned int yearOfEnd);
+
         //~Serie();
         virtual void accept(Visitor* visitor) override;
         virtual void toXml(xmlVisitor* xvisitor);

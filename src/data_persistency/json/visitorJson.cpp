@@ -118,7 +118,6 @@ void VisitorJson::toFileJson(Serie *serie){
     oggettoJSon.insert("Episodes", int(serie->getEpisodes()));
     oggettoJSon.insert("Creator", QString::fromStdString(serie->getCreator()));
     oggettoJSon.insert("Finished", serie->getFinished());
-    oggettoJSon.insert("Year End", int(serie->getYearOfEnd()));
     //fine
 
     doc.setObject(oggettoJSon);
