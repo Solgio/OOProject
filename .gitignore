@@ -39,3 +39,4 @@ Makefile
 .qmake.stash
 *.pro.user
 *.pro.user.*
+.qtc_clangcd
