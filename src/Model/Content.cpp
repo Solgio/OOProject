@@ -1,4 +1,4 @@
-#include "./lib/Content.h";
+#include "lib/Content.h";
 
 inline Subgenre operator|(Subgenre a, Subgenre b) {
     return static_cast<Subgenre>(static_cast<int>(a) | static_cast<int>(b));
@@ -8,7 +8,7 @@ inline Subgenre operator&(Subgenre a, Subgenre b) {
 }
     
 Content::Content(string _title, Subgenre _subGenre, string _description, bool _starred, bool _watched, unsigned int _year, string _image, Content* _inspiration):
-        title(_title), subgenres(_subGenre), description(_description), starred(_starred), watched(_watched), yearOfRelease(_year), inspiration(_inspiration) {}
+        title(_title), subgenres(_subGenre), description(_description), starred(_starred), watched(_watched), yearOfRelease(_year),image(_image), inspiration(_inspiration) {}
 
 string Content::getTitle() const{
             return title;
@@ -80,10 +80,12 @@ void Content::setInspiration(Content* ninspiration){
     inspiration=ninspiration;
 };
 void Content::setStarred(const bool& nstarred){
-    (!starred)? starred=true : starred=false;
+    starred=nstarred;
+    //(!starred)? starred=true : starred=false;
 };
 void Content::setWatched(const bool& nwatched){
-    (!watched)? watched=true : watched=false;
+    watched=nwatched;
+    //(!watched)? watched=true : watched=false;
 };
 void Content::setYear(const unsigned int& nyear){
     yearOfRelease=nyear;

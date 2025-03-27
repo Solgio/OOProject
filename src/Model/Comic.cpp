@@ -23,7 +23,8 @@ void Comic::setSerie(const string& nserie){
     serie=nserie;
 };
 void Comic::setFinished(const bool& nfinished){
-    (!finished)? finished=true : finished=false;
+    finished=nfinished;
+    //(!finished)? finished=true : finished=false;
 };
 
 void Comic::accept(Visitor* visitor){
