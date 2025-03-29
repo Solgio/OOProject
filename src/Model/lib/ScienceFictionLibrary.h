@@ -7,6 +7,7 @@ using std::vector;
 
 class ScienceFiction_Library{
     private:
+        ScienceFiction_Library* instance;
         vector<Content*> contentList;
         ScienceFiction_Library();   //Singleton
 
@@ -20,7 +21,7 @@ class ScienceFiction_Library{
         vector<Content*>& filterContent();
         vector<Content*>& watchedOrNot(const bool& _watched);         //Shows only the watched or not watched content
         vector<Content*>& starredOrNot(const bool& _starred);         //Shows only the starred or not starred content
-        ~ScienceFiction_Library();
+        void clearLibrary();                //Clear the library
 
         ScienceFiction_Library& getInstance(){
             static ScienceFiction_Library instance;

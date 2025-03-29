@@ -100,3 +100,10 @@ vector<Content*>& ScienceFiction_Library::starredOrNot(const bool& _starred){
         }
     }
 };
+
+void ScienceFiction_Library::clearLibrary(){
+    for(auto& it : contentList){
+        delete it;
+    }
+    contentList.clear();
+}

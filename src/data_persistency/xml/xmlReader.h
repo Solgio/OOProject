@@ -3,15 +3,13 @@
 #include "../IReader.h"
 class xmlReader: public IReader{
     private:
-        Content* readBook(const QDomElement& object) const;
-        Content* readComic(const QDomElement& object) const;
-        Content* readFilm(const QDomElement& object) const;
-        Content* readSerie(const QDomElement& object) const;
-        Content* readVideoGame(const QDomElement& object) const;
+        Book* readBook(const QXmlStreamReader& object) const;
+        Comic* readComic(const QXmlStreamReader& object) const;
+        Film* readFilm(const QXmlStreamReader& object) const;
+        Serie* readSerie(const QXmlStreamReader& object) const;
+        VideoGame* readVideoGame(const QXmlStreamReader& object) const;
     public:
-        
-        xmlReader(/* args */);
-        ~xmlReader();
+        bool fromXml(const string filepath);
 };
 
 #endif
