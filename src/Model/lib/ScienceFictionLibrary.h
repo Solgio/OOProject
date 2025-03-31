@@ -23,7 +23,7 @@ class ScienceFiction_Library{
         vector<Content*>& starredOrNot(const bool& _starred);         //Shows only the starred or not starred content
         void clearLibrary();                //Clear the library
 
-        ScienceFiction_Library& getInstance(){
+        static ScienceFiction_Library& getInstance(){
             static ScienceFiction_Library instance;
             return instance;
         }

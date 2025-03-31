@@ -19,8 +19,8 @@ class Multimedia : public Content {
         string getProducer();
         string getPlatforms();
         
-        void setProducer(string& producer);
-        void setPlatforms(string& platforms);
+        void setProducer(const string& producer);
+        void setPlatforms(const string& platforms);
         virtual ~Multimedia() =0;
         virtual void accept(Visitor* visitor) override = 0;
         virtual void toXml(xmlVisitor* xvisitor) = 0;

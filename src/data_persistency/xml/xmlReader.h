@@ -3,11 +3,16 @@
 #include "../IReader.h"
 class xmlReader: public IReader{
     private:
-        Book* readBook(const QXmlStreamReader& object) const;
-        Comic* readComic(const QXmlStreamReader& object) const;
-        Film* readFilm(const QXmlStreamReader& object) const;
-        Serie* readSerie(const QXmlStreamReader& object) const;
-        VideoGame* readVideoGame(const QXmlStreamReader& object) const;
+        void commonReader(Content* content, QXmlStreamReader& object) const;
+        void paperReader(Paper* content, QXmlStreamReader& object) const;
+        void multimediaReader(Multimedia* content, QXmlStreamReader& object) const;
+        void videoReader(Video* content, QXmlStreamReader& object) const;
+        Book* readBook(QXmlStreamReader& object) const;
+        Comic* readComic(QXmlStreamReader& object) const;
+        Film* readFilm(QXmlStreamReader& object) const;
+        Serie* readSerie(QXmlStreamReader& object) const;
+        VideoGame* readVideoGame(QXmlStreamReader& object) const;
+    //
     public:
         bool fromXml(const string filepath);
 };
