@@ -13,6 +13,7 @@ class Video : public Multimedia {
         Video *sequel=nullptr;
 
     public:
+        Video();
         Video(string _title, Subgenre _subGenre, string _description, bool _starred, bool _watched, unsigned int _year, string _image, string _producer, 
             string _platforms, unsigned int duration, Content* _inspiration=nullptr, Video* _prequel=nullptr, Video* _sequel=nullptr);
         
