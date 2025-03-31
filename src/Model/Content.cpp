@@ -14,8 +14,8 @@ string Content::getTitle() const{
             return title;
 };
 
-Subgenre Content::getSubgenre() const{
-            return subgenres;
+int Content::getSubgenre() const{
+            return static_cast<int>(subgenres);
 };
 // Check if content has any of the subgenres
 bool Content::hasAnySubgenre(Subgenre genres) const {

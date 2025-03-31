@@ -41,7 +41,7 @@ class Content {
         Content(string _title, Subgenre _subGenre, string _description, bool _starred, bool _watched, unsigned int _year, string _image, Content* _inspiration=nullptr);
         
         string getTitle() const;
-        Subgenre getSubgenre() const;
+        int getSubgenre() const;
         bool hasSubgenre(Subgenre genre) const;
         bool hasAnySubgenre(Subgenre genres) const;
         string getSubgenreString() const;

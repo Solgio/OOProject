@@ -12,8 +12,6 @@
 #include "../../Model/lib/VideoGame.h"
 using std::vector, std::string;
 
-//? https://www.youtube.com/watch?v=JTG65RiDbEQ
-
 void xmlReader::commonReader(Content* content, QXmlStreamReader& object) const{
     QXmlStreamReader::TokenType token = object.readNext();
     if (token == QXmlStreamReader::StartElement) {
