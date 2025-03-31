@@ -14,7 +14,7 @@ class xmlReader: public IReader{
         VideoGame* readVideoGame(QXmlStreamReader& object) const;
     //
     public:
-        bool fromXml(const string filepath);
+    ScienceFiction_Library* read(const string& filepath);
 };
 
 #endif

@@ -7,8 +7,8 @@
 class IReader{
     public:
     virtual ~IReader() {};
-    virtual Content* read(const QJsonObject& object) = 0;
-    virtual Content* read(QDomElement& element) = 0;
+    virtual ScienceFiction_Library* read(const QJsonObject& object) = 0;
+    virtual ScienceFiction_Library* read(string& filename) = 0;
 };
 
 #endif

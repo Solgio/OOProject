@@ -174,7 +174,7 @@ VideoGame* xmlReader::readVideoGame(QXmlStreamReader& object) const{
 
 
 
-bool xmlReader::fromXml(const string filepath){
+ScienceFiction_Library* xmlReader::read(const string& filepath){
     
     QFile file(QString::fromStdString(filepath));
 
@@ -182,7 +182,7 @@ bool xmlReader::fromXml(const string filepath){
         qWarning() << "Failed to open file for writing";
         //! Forse qui è meglio un'eccezione   
         file.close();
-        return false;       
+           
     }
 
     // Clear the library before loading new data
@@ -217,9 +217,9 @@ bool xmlReader::fromXml(const string filepath){
     if (xmlreader.hasError()) {
         qWarning() << "XML error:" << xmlreader.errorString();
         //clearLibrary();
-        return false;
+        
     }
 
     file.close();
-    return true;
+    return &library;
  }
