@@ -37,6 +37,7 @@ void VisitorJson::toFileJson(Book *book){
     QJsonObject oggettoJSon;
     QJsonDocument doc;
 
+    oggettoJSon.insert("Type", "Book");
     oggettoJSon.insert("Title", QString::fromStdString(book->getTitle()));
     oggettoJSon.insert("Genres", int(book->getSubgenre()));  
     oggettoJSon.insert("Description", QString::fromStdString(book->getDescription()));
@@ -59,6 +60,7 @@ void VisitorJson::toFileJson(Comic *comic){
     QJsonObject oggettoJSon;
     QJsonDocument doc;
 
+    oggettoJSon.insert("Type", "Comic");
     oggettoJSon.insert("Title", QString::fromStdString(comic->getTitle()));
     oggettoJSon.insert("Genres", int(comic->getSubgenre())); 
     oggettoJSon.insert("Description", QString::fromStdString(comic->getDescription()));
@@ -83,6 +85,7 @@ void VisitorJson::toFileJson(Film *movie){
     QJsonObject oggettoJSon;
     QJsonDocument doc;
 
+    oggettoJSon.insert("Type", "Film");
     oggettoJSon.insert("Title", QString::fromStdString(movie->getTitle()));
     oggettoJSon.insert("Genres", int(movie->getSubgenre()));                                                     //! Da fare probabilmente con JsonArray
     oggettoJSon.insert("Description", QString::fromStdString(movie->getDescription()));
@@ -106,6 +109,7 @@ void VisitorJson::toFileJson(Serie *serie){
     QJsonObject oggettoJSon;
     QJsonDocument doc;
 
+    oggettoJSon.insert("Type", "Serie");
     oggettoJSon.insert("Title", QString::fromStdString(serie->getTitle()));
     oggettoJSon.insert("Genres", int(serie->getSubgenre()));
     oggettoJSon.insert("Description", QString::fromStdString(serie->getDescription()));
@@ -131,6 +135,7 @@ void VisitorJson::toFileJson(VideoGame *videogame){
     QJsonObject oggettoJSon;
     QJsonDocument doc;
 
+    oggettoJSon.insert("Type", "Videogame");
     oggettoJSon.insert("Title", QString::fromStdString(videogame->getTitle()));
     oggettoJSon.insert("Genres", int(videogame->getSubgenre()));
     oggettoJSon.insert("Description", QString::fromStdString(videogame->getDescription()));
