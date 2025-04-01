@@ -70,8 +70,8 @@ string Content::getImage() const{
 void Content::setTitle(const string& ntitle){
     title=ntitle;
 };
-void Content::addSubgenre(Subgenre genre) {
-    subgenres = subgenres | genre;
+void Content::addSubgenre(const int& genre) {
+    subgenres = static_cast<Subgenre>(static_cast<int>(subgenres) | genre);
 }
 void Content::setDescription(const string& ndescription){
     description=ndescription;

@@ -33,10 +33,9 @@ void xmlReader::commonReader(Content* content, QXmlStreamReader& object) const{
         else if (object.name() == "Image") {
             content->setImage((object.readElementText()).toStdString());
         }
-        /*
         else if (object.name() == "Subgenre") {
-            content->addSubgenre(object.readElementText());
-        }*/
+            content->addSubgenre(object.readElementText().toUInt());
+        }
     }
 }
 void xmlReader::paperReader(Paper* content, QXmlStreamReader& object) const{

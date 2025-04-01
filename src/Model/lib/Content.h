@@ -53,7 +53,7 @@ class Content {
         string getImage() const;
 
         void setTitle(const string& title);
-        void addSubgenre(Subgenre genre);
+        void addSubgenre(const int& genre);
         void setDescription(const string& description);
         void setInspiration(Content* inspiration);
         void setStarred(const bool& starred);
