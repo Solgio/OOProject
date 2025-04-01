@@ -4,7 +4,7 @@
 #include <vector>
 #include "xmlReader.h"
 #include "../../Model/lib/ScienceFictionLibrary.h"
-#include "../../Model/lib/Content.h"
+#include "../../Model/lib/Video.h"
 #include "../../Model/lib/Book.h"
 #include "../../Model/lib/Comic.h"
 #include "../../Model/lib/Film.h"

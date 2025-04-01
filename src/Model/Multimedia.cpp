@@ -15,10 +15,9 @@ string Multimedia::getPlatforms(){
     return platforms;
 }
 
-void Multimedia::setProducer(string& _producer){
+void Multimedia::setProducer(const string& _producer){
     producer = _producer;
 }
-
-void Multimedia::setPlatforms(string& _platforms){
+void Multimedia::setPlatforms(const string& _platforms){
     platforms = _platforms;
 }

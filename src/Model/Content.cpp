@@ -1,4 +1,4 @@
-#include "lib/Content.h";
+#include "lib/Content.h"
 
 inline Subgenre operator|(Subgenre a, Subgenre b) {
     return static_cast<Subgenre>(static_cast<int>(a) | static_cast<int>(b));

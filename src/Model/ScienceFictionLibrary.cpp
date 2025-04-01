@@ -24,37 +24,40 @@ vector<Content*> ScienceFiction_Library::getContentList(){
     return contentList;
 };
 
-vector<Content*>& ScienceFiction_Library::filterContent(string& _title){
-    vector<Content*> filteredListbyTitle;
+void ScienceFiction_Library::showAllContent(){
+    for(const auto& it : contentList){
+        shownLibrary->addContent(it);
+    }
+    getShown();
+};
+
+void ScienceFiction_Library::filterContent(string& _title){
     for(const auto& it : contentList){
         if(it->getTitle() == _title){
-            filteredListbyTitle.push_back(it);
+            shownLibrary->addContent(it);
         }
     }
 };
 
-vector<Content*>& ScienceFiction_Library::filterContent(const unsigned int& _year){
-    vector<Content*> filteredListbyYear;
+void ScienceFiction_Library::filterContent(const unsigned int& _year){
     for(const auto& it : contentList){
         if(it->getYear() == _year){
-            filteredListbyYear.push_back(it);
+            shownLibrary->addContent(it);
         }
     }
 };
 
-vector<Content*>& ScienceFiction_Library::filterContent(Subgenre genre){
-    vector<Content*> filteredListbyGen;
-    std::vector<Content*> result;
-        for (const auto& it : contentList) {
-            if (it->hasAnySubgenre(genre)) {
-                result.push_back(it);
-            }
+void ScienceFiction_Library::filterContent(Subgenre genre){
+    vector<Content*> result;
+    for (const auto& it : contentList) {
+        if (it->hasAnySubgenre(genre)) {
+            shownLibrary->addContent(it);
         }
-        return result;
+    }
 };
 
-/*VERSIONE ALTERNATIVA: Invece che un array viene passato un singolo indice per verificare in O(1) o un array di indici ma nel caso peggiore la coomplessità è la stessa
-vector<Content*>& ScienceFiction_Library::filterGen(unsigned int index){
+//VERSIONE ALTERNATIVA: Invece che un array viene passato un singolo indice per verificare in O(1) o un array di indici ma nel caso peggiore la coomplessità è la stessa
+/*vector<Content*>& ScienceFiction_Library::filterGen(unsigned int index){
     vector<Content*> filteredListbyGen;
     for(const auto& it : contentList){
         if(choosenGen[index]){
@@ -64,38 +67,34 @@ vector<Content*>& ScienceFiction_Library::filterGen(unsigned int index){
     }
 };*/
 
-vector<Content*>& ScienceFiction_Library::watchedOrNot(const bool& _watched){
+void ScienceFiction_Library::watchedOrNot(const bool& _watched){
     if(_watched){
-        vector<Content*> watchedList;
         for(const auto& it : contentList){
             if(it->getWatched()){
-                watchedList.push_back(it);
+                shownLibrary->addContent(it);
             }
         }
     }
     else{
-        vector<Content*> notWatchedList;
         for(const auto& it : contentList){
             if(!it->getWatched()){
-                notWatchedList.push_back(it);
+                shownLibrary->addContent(it);
             }
         }
     }
 };
-vector<Content*>& ScienceFiction_Library::starredOrNot(const bool& _starred){
+void ScienceFiction_Library::starredOrNot(const bool& _starred){
     if(_starred){
-        vector<Content*> watchedList;
         for(const auto& it : contentList){
             if(it->getStarred()){
-                watchedList.push_back(it);
+                shownLibrary->addContent(it);
             }
         }
     }
     else{
-        vector<Content*> notWatchedList;
         for(const auto& it : contentList){
             if(!it->getStarred()){
-                notWatchedList.push_back(it);
+                shownLibrary->addContent(it);
             }
         }
     }

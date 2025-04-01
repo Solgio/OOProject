@@ -1,6 +1,10 @@
 #ifndef XREADER_H
 #define XREADER_H
 #include "../IReader.h"
+#include "../../Model/lib/Content.h"
+#include "../../Model/lib/Paper.h"
+#include "../../Model/lib/Multimedia.h"
+#include "../../Model/lib/Video.h"
 class xmlReader: public IReader{
     private:
         void commonReader(Content* content, QXmlStreamReader& object) const;

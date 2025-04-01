@@ -4,6 +4,7 @@
 #include "../../Model/lib/Film.h"
 #include "../../Model/lib/Serie.h"
 #include "../../Model/lib/VideoGame.h"
+#include "../../Model/lib/ScienceFictionLibrary.h"
 
 ScienceFiction_Library* jsonReader::read(const string& filepath){
     

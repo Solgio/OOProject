@@ -3,6 +3,7 @@
 #include <QtXml>
 #include <QJsonObject>
 #include "../Model/lib/Content.h"
+#include "../Model/lib/ScienceFictionLibrary.h"
 
 class IReader{
     public:
