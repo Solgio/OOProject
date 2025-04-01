@@ -12,6 +12,7 @@ void xmlVisitor::toXml(Book *book){
     QDomDocument document;
     QDomElement book_content=document.createElement("Book");
     book_content.setAttribute("Title",QString::fromStdString(book->getTitle()));
+    book_content.setAttribute("Subgenre",QString::number(book->getSubgenre()));
     book_content.setAttribute("Description",QString::fromStdString(book->getDescription()));
     book_content.setAttribute("Starred",QString::number(book->getStarred()));
     book_content.setAttribute("Watched",QString::number(book->getWatched()));
@@ -22,15 +23,16 @@ void xmlVisitor::toXml(Book *book){
     book_content.setAttribute("Pages",QString::number(book->getPages()));
     book_content.setAttribute("Volume",QString::number(book->getVolume()));
     book_content.setAttribute("MainCharacter",QString::fromStdString(book->getMainCharacter()));
-    //!CERCARE METODO DA POINTER A STRINGA O QPOINTER
-    //book_content.setAttribute("Inspiration",QString::fromStdString(book->getInspiration()));
-    book_content.setAttribute("Subgenre",QString::number(book->getSubgenre()));
+    //! DA VERIFICARE CHE SIA LA COSA CHE VOLEVA ANTONIO
+    book_content.setAttribute("Inspiration",QString::fromStdString(book->getInspiration()->getTitle()));
+
     document.appendChild(book_content);
 };
 void xmlVisitor::toXml(Comic *comic){
     QDomDocument document;
     QDomElement comic_content=document.createElement("Comic");
     comic_content.setAttribute("Title",QString::fromStdString(comic->getTitle()));
+    comic_content.setAttribute("Subgenre",QString::number(comic->getSubgenre()));
     comic_content.setAttribute("Description",QString::fromStdString(comic->getDescription()));
     comic_content.setAttribute("Starred",QString::number(comic->getStarred()));
     comic_content.setAttribute("Watched",QString::number(comic->getWatched()));
@@ -44,15 +46,15 @@ void xmlVisitor::toXml(Comic *comic){
     comic_content.setAttribute("Illustrator",QString::fromStdString(comic->getIllustrator()));
     comic_content.setAttribute("Serie",QString::fromStdString(comic->getSerie()));
     comic_content.setAttribute("Finished",QString::number(comic->getFinished()));
-    //!CERCARE METODO DA POINTER A STRINGA O QPOINTER
+   //! DA VERIFICARE CHE SIA LA COSA CHE VOLEVA ANTONIO
     //comic_content.setAttribute("Inspiration",QString::fromStdString(comic->getInspiration()));
-    comic_content.setAttribute("Subgenre",QString::number(comic->getSubgenre()));
     document.appendChild(comic_content);
 };
 void xmlVisitor::toXml(Film *film){
     QDomDocument document;
     QDomElement film_content=document.createElement("Film");
     film_content.setAttribute("Title",QString::fromStdString(film->getTitle()));
+    film_content.setAttribute("Subgenre",QString::number(film->getSubgenre()));
     film_content.setAttribute("Description",QString::fromStdString(film->getDescription()));
     film_content.setAttribute("Starred",QString::number(film->getStarred()));
     film_content.setAttribute("Watched",QString::number(film->getWatched()));
@@ -63,12 +65,11 @@ void xmlVisitor::toXml(Film *film){
     film_content.setAttribute("PhtoDirector",QString::fromStdString(film->getPhotoDirector()));
     film_content.setAttribute("Duration",QString::number(film->getDuration()));
     film_content.setAttribute("Platform",QString::fromStdString(film->getPlatforms()));
-    
     //!CERCARE METODO DA POINTER A STRINGA O QPOINTER
     //film_content.setAttribute("Prequel",QString::fromStdString(film->getPrequel()));
     //film_content.setAttribute("Sequel",QString::fromStdString(film->getSequel()));
-    //film_content.setAttribute("Inspiration",QString::fromStdString(film->getInspiration()));
-    film_content.setAttribute("Subgenre",QString::number(film->getSubgenre()));
+    //! DA VERIFICARE CHE SIA LA COSA CHE VOLEVA ANTONIO
+    film_content.setAttribute("Inspiration",QString::fromStdString(film->getInspiration()->getTitle()));
 
     document.appendChild(film_content);
 };
@@ -76,6 +77,7 @@ void xmlVisitor::toXml(Serie *serie){
     QDomDocument document;
     QDomElement serie_content=document.createElement("Serie");
     serie_content.setAttribute("Title",QString::fromStdString(serie->getTitle()));
+    serie_content.setAttribute("Subgenre",QString::number(serie->getSubgenre()));
     serie_content.setAttribute("Description",QString::fromStdString(serie->getDescription()));
     serie_content.setAttribute("Starred",QString::number(serie->getStarred()));
     serie_content.setAttribute("Watched",QString::number(serie->getWatched()));
@@ -88,15 +90,15 @@ void xmlVisitor::toXml(Serie *serie){
     serie_content.setAttribute("Seasons",QString::number(serie->getSeasons()));
     serie_content.setAttribute("Episodes",QString::number(serie->getEpisodes()));
     serie_content.setAttribute("Finished",QString::number(serie->getFinished()));
-    //!CERCARE METODO DA POINTER A STRINGA O QPOINTER
+   //! DA VERIFICARE CHE SIA LA COSA CHE VOLEVA ANTONIO
+    serie_content.setAttribute("Inspiration",QString::fromStdString(serie->getInspiration()->getTitle()));
 
-     //serie_content.setAttribute("Inspiration",QString::fromStdString(serie->getInspiration()));
-    serie_content.setAttribute("Subgenre",QString::number(serie->getSubgenre()));
 };
 void xmlVisitor::toXml(VideoGame *videogame){
     QDomDocument document;
     QDomElement videogame_content=document.createElement("VideoGame");
     videogame_content.setAttribute("Title",QString::fromStdString(videogame->getTitle()));
+    videogame_content.setAttribute("Subgenre",QString::number(videogame->getSubgenre()));
     videogame_content.setAttribute("Description",QString::fromStdString(videogame->getDescription()));
     videogame_content.setAttribute("Starred",QString::number(videogame->getStarred()));
     videogame_content.setAttribute("Watched",QString::number(videogame->getWatched()));
@@ -106,8 +108,8 @@ void xmlVisitor::toXml(VideoGame *videogame){
     videogame_content.setAttribute("Platform",QString::fromStdString(videogame->getPlatforms()));
     videogame_content.setAttribute("GameEngine",QString::fromStdString(videogame->getGameEngine()));
     videogame_content.setAttribute("ExpectedHours",QString::number(videogame->getExpectedHours()));
-    //!CERCARE METODO DA POINTER A STRINGA O QPOINTER
-    //videogame_content.setAttribute("Inspiration",QString::fromStdString(videogame->getInspiration()));
-    videogame_content.setAttribute("Subgenre",QString::number(videogame->getSubgenre()));
+    //! DA VERIFICARE CHE SIA LA COSA CHE VOLEVA ANTONIO
+    videogame_content.setAttribute("Inspiration",QString::fromStdString(videogame->getInspiration()->getTitle()));
+
     document.appendChild(videogame_content);
 };
