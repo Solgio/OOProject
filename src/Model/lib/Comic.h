@@ -18,6 +18,7 @@ class Comic : public Book {
             string _publisher, unsigned int _pages, unsigned int _volume, string _illustrator, string _serie, bool _finished, string _mainCharacter, 
             Content* _inspiration=nullptr);
         
+        string getType() const;
         string getIllustrator() const;
         string getSerie() const;
         bool getFinished() const;

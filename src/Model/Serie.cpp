@@ -9,6 +9,9 @@ Serie::Serie(string _title, Subgenre _subGenre, string _description, bool _starr
             creator(_creator),
             finished(_finished){}
 
+string Serie::getType() const{
+    return "Serie";
+}
 unsigned int Serie::getSeasons(){
     return seasons;
 }

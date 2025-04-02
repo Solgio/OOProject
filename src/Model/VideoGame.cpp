@@ -7,6 +7,9 @@ VideoGame::VideoGame(string _title, Subgenre _subGenre, string _description, boo
     expectedHours(_expectedHours)
     {}
 
+string VideoGame::getType() const{
+    return "VideoGame";
+}
 string VideoGame::getGameEngine(){
     return gameEngine;
 }

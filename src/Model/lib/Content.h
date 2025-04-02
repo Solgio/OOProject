@@ -39,7 +39,7 @@ class Content {
     public:
         Content();
         Content(string _title, Subgenre _subGenre, string _description, bool _starred, bool _watched, unsigned int _year, string _image, Content* _inspiration=nullptr);
-        
+        string getType() const;
         string getTitle() const;
         int getSubgenre() const;
         bool hasSubgenre(Subgenre genre) const;

@@ -8,14 +8,14 @@ inline Subgenre operator&(Subgenre a, Subgenre b) {
 }
     
 Content::Content(string _title, Subgenre _subGenre, string _description, bool _starred, bool _watched, unsigned int _year, string _image, Content* _inspiration):
-        title(_title), subgenres(_subGenre), description(_description), starred(_starred), watched(_watched), yearOfRelease(_year),image(_image), inspiration(_inspiration) {}
+        title(_title), subgenres(_subGenre), description(_description), starred(_starred), watched(_watched), yearOfRelease(_year),image(_image), inspiration(_inspiration) {};
 
 string Content::getTitle() const{
-            return title;
+    return title;
 };
 
 int Content::getSubgenre() const{
-            return static_cast<int>(subgenres);
+    return static_cast<int>(subgenres);
 };
 // Check if content has any of the subgenres
 bool Content::hasAnySubgenre(Subgenre genres) const {
