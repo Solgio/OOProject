@@ -2,7 +2,7 @@
 
 Serie::Serie(string _title, Subgenre _subGenre, string _description, bool _starred, bool _watched, unsigned int _year, string _image, string _producer, 
             string _platforms, unsigned int _duration, unsigned int _seasons, unsigned int _episodes, string _creator, bool _finished,
-            unsigned int _inspiration, Video* _prequel, Video* _sequel):
+            unsigned int _inspiration, unsigned int  _prequel, unsigned int _sequel):
             Video(_title, _subGenre, _description, _starred, _watched, _year, _image, _producer, _platforms, _duration, _inspiration, _prequel, _sequel),
             seasons(_seasons),
             episodes(_episodes),

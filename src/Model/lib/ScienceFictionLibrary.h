@@ -16,7 +16,7 @@ class ScienceFiction_Library{
     public:
         void incrementId();
         unsigned int getNewId();
-        Content* searchInspiration(const string& _title, const unsigned int& _year, string& _type);
+        Content* searchId(const unsigned int& __id_t);
         void addContent(Content* content);
         void removeContent(Content* content);
         vector<Content*> getContentList();

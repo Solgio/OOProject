@@ -9,11 +9,11 @@ unsigned int ScienceFiction_Library::getNewId(){
     return newId;
 }
 
-Content* ScienceFiction_Library::searchInspiration(const string& _title, const unsigned int& _year, string& _type){
+Content* ScienceFiction_Library::searchId(const unsigned int& id){
     for(const auto& it : contentList){
-        /*if( _title==it->getTitle() && _year==it->getYear() && static_cast<>(it)){
+        if(id==it->getId()){
             return it;
-        }*/
+        }
     }
 }
 

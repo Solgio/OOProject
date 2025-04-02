@@ -9,24 +9,26 @@
 class Video : public Multimedia {
     private:
         unsigned int duration; //in minutes
-        Video *prequel=nullptr;
-        Video *sequel=nullptr;
+        unsigned int prequel=-1;
+        unsigned int sequel=-1;
 
     public:
         Video();
         Video(string _title, Subgenre _subGenre, string _description, bool _starred, bool _watched, unsigned int _year, string _image, string _producer, 
-            string _platforms, unsigned int duration, unsigned int _inspiration, Video* _prequel=nullptr, Video* _sequel=nullptr);
+            string _platforms, unsigned int duration, unsigned int _inspiration, unsigned int  _prequel=-1, unsigned int 
+ sequel=-1);
         
         unsigned int & getDuration();
-        Video* getPrequel();
-        Video* getSequel();
+        unsigned int & getPrequel();
+        unsigned int & getSequel();
         
-        void setDuration(unsigned int quality);
-        void setPrequel(Video* _prequel);
-        void setSequel(Video* _sequel);
+        void setDuration(const unsigned int& quality);
+        void setPrequel(const unsigned int& _prequel);
+        void setSequel(const unsigned int& _sequel);
         virtual ~Video(){
-            prequel->setSequel(sequel);
-            sequel->setPrequel(prequel);
+            unsigned int tp=prequel;
+            prequel=sequel;
+            sequel=tp;
             delete this;
         };
         virtual void accept(Visitor* visitor) override =0;

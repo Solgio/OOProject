@@ -13,7 +13,8 @@ class Film : public Video {
     public:
         Film();
         Film(string _title, Subgenre _subGenre, string _description, bool _starred, bool _watched, unsigned int _year, string _image, string _director, 
-            string _producer, string _platforms, string photoDirector, unsigned int _duration, unsigned int _inspiration, Video* _prequel=nullptr, Video* _sequel=nullptr);
+            string _producer, string _platforms, string photoDirector, unsigned int _duration, unsigned int _inspiration, unsigned int  _prequel=-1, unsigned int 
+ sequel=-1);
         
         string getType() const;
         string getDirector() const;
