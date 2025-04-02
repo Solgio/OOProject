@@ -7,7 +7,7 @@ inline Subgenre operator&(Subgenre a, Subgenre b) {
     return static_cast<Subgenre>(static_cast<int>(a) & static_cast<int>(b));
 }
     
-Content::Content(string _title, Subgenre _subGenre, string _description, bool _starred, bool _watched, unsigned int _year, string _image, Content* _inspiration):
+Content::Content(string _title, Subgenre _subGenre, string _description, bool _starred, bool _watched, unsigned int _year, string _image, unsigned int _inspiration):
         title(_title), subgenres(_subGenre), description(_description), starred(_starred), watched(_watched), yearOfRelease(_year),image(_image), inspiration(_inspiration) {};
 
 string Content::getTitle() const{
@@ -51,7 +51,7 @@ string Content::getSubgenreString() const{
 string Content::getDescription() const{
             return description;
 };
-Content* Content::getInspiration() const{
+unsigned int Content::getInspiration() const{
             return inspiration;
 };
 bool Content::getStarred() const{
@@ -76,7 +76,7 @@ void Content::addSubgenre(const int& genre) {
 void Content::setDescription(const string& ndescription){
     description=ndescription;
 };
-void Content::setInspiration(Content* ninspiration){
+void Content::setInspiration(unsigned int ninspiration){
     inspiration=ninspiration;
 };
 void Content::setStarred(const bool& nstarred){

@@ -15,7 +15,7 @@ class Serie : public Video {
     public:
         Serie();
         Serie(string _title, Subgenre _subGenre, string _description, bool _starred, bool _watched, unsigned int _year, string _image, string _producer, 
-            string _platforms, unsigned int duration, unsigned int _seasons, unsigned int _episodes, string _creator, bool _finished, Content* _inspiration=nullptr, Video* _prequel=nullptr,
+            string _platforms, unsigned int duration, unsigned int _seasons, unsigned int _episodes, string _creator, bool _finished, unsigned int _inspiration, Video* _prequel=nullptr,
             Video* _sequel=nullptr);
         
         string getType() const;

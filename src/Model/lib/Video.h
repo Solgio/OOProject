@@ -15,7 +15,7 @@ class Video : public Multimedia {
     public:
         Video();
         Video(string _title, Subgenre _subGenre, string _description, bool _starred, bool _watched, unsigned int _year, string _image, string _producer, 
-            string _platforms, unsigned int duration, Content* _inspiration=nullptr, Video* _prequel=nullptr, Video* _sequel=nullptr);
+            string _platforms, unsigned int duration, unsigned int _inspiration, Video* _prequel=nullptr, Video* _sequel=nullptr);
         
         unsigned int & getDuration();
         Video* getPrequel();

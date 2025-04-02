@@ -2,7 +2,7 @@
 
 
 Film::Film(string _title, Subgenre _subGenre, string _description, bool _starred, bool _watched, unsigned int _year, string _image, string _director, 
-    string _producer, string _platforms, string _photoDirector, unsigned int _duration, Content* _inspiration, Video* _prequel,
+    string _producer, string _platforms, string _photoDirector, unsigned int _duration, unsigned int _inspiration, Video* _prequel,
     Video* _sequel):
     Video(_title, _subGenre, _description, _starred, _watched, _year, _image, _producer, _platforms,  _duration, _inspiration, _prequel, _sequel), 
     director(_director), photoDirector(_photoDirector){};

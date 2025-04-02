@@ -27,6 +27,7 @@ enum class Subgenre {
 //Genaral Abstract Class for all content types of the Library
 class Content {
     private:
+        unsigned int id; //ID of the content, unique for each content
         string title;
         Subgenre subgenres; //Bitmasks for the Subgenres
         string description;
@@ -34,11 +35,11 @@ class Content {
         bool watched;
         unsigned int yearOfRelease; //Year of release, always present in all content types (UNlike year of end)
         string image; //Image of the content
-        Content* inspiration; //Inspiration for the content
+        unsigned int inspiration; //Inspiration for the content
         
     public:
-        Content();
-        Content(string _title, Subgenre _subGenre, string _description, bool _starred, bool _watched, unsigned int _year, string _image, Content* _inspiration=nullptr);
+        
+        Content(string _title, Subgenre _subGenre, string _description, bool _starred, bool _watched, unsigned int _year, string _image, unsigned int _inspiration=0);
         string getType() const;
         string getTitle() const;
         int getSubgenre() const;
@@ -46,7 +47,7 @@ class Content {
         bool hasAnySubgenre(Subgenre genres) const;
         string getSubgenreString() const;
         string getDescription() const;
-        Content* getInspiration() const;
+        unsigned int getInspiration() const;
         bool getStarred() const;
         bool getWatched() const;
         unsigned int getYear() const;
@@ -55,7 +56,7 @@ class Content {
         void setTitle(const string& title);
         void addSubgenre(const int& genre);
         void setDescription(const string& description);
-        void setInspiration(Content* inspiration);
+        void setInspiration(unsigned int inspiration);
         void setStarred(const bool& starred);
         void setWatched(const bool& watched);
         void setYear(const unsigned int& year);

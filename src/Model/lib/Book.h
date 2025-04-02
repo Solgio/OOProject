@@ -12,7 +12,7 @@ class Book : public Paper {
     public:
     Book();
     Book(string _title, Subgenre _subGenre, string _description, bool _starred, bool _watched, unsigned int _year, string _image, string _author, 
-        string _publisher, unsigned int _pages, unsigned int _volume, string _mainCharacter, Content* _inspiration=nullptr);
+        string _publisher, unsigned int _pages, unsigned int _volume, string _mainCharacter, unsigned int _inspiration);
 
     string getType() const;
     string getMainCharacter() const;
