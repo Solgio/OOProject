@@ -34,10 +34,11 @@ void VisitorJson::setDirectory(QString path){
 void VisitorJson::toFileJson(const Book *book){
 
     libreria.open(QIODevice::ReadWrite); // o QFile::WriteOnly per scrivere soltanto
-    QJsonObject oggettoJSon;
     QJsonDocument doc;
 
-    oggettoJSon.insert("Type", "Book");
+    QJsonObject oggettoJSon;
+
+    
     oggettoJSon.insert("Title", QString::fromStdString(book->getTitle()));
     oggettoJSon.insert("Genres", int(book->getSubgenre()));  
     oggettoJSon.insert("Description", QString::fromStdString(book->getDescription()));
@@ -61,7 +62,10 @@ void VisitorJson::toFileJson(const Book *book){
     oggettoJSon.insert("Main Character", QString::fromStdString(book->getMainCharacter()));
     //fine
 
-    doc.setObject(oggettoJSon);
+    QJsonObject tipo;
+    tipo.insert("Book", oggettoJSon);
+    
+    doc.setObject(tipo);
     libreria.write(doc.toJson());
     libreria.close();
 };
@@ -99,7 +103,10 @@ void VisitorJson::toFileJson(Comic *comic){
     oggettoJSon.insert("Finished", comic->getFinished());
     //fine
 
-    doc.setObject(oggettoJSon);
+    QJsonObject tipo;
+    tipo.insert("Comic", oggettoJSon);
+    
+    doc.setObject(tipo);
     libreria.write(doc.toJson());
     libreria.close();
 };
@@ -134,7 +141,10 @@ void VisitorJson::toFileJson(Film *movie){
     oggettoJSon.insert("Photo Director", QString::fromStdString(movie->getPhotoDirector()));
     //fine
 
-    doc.setObject(oggettoJSon);
+    QJsonObject tipo;
+    tipo.insert("Film", oggettoJSon);
+    
+    doc.setObject(tipo);
     libreria.write(doc.toJson());
     libreria.close();
 };
@@ -171,7 +181,10 @@ void VisitorJson::toFileJson(Serie *serie){
     oggettoJSon.insert("Finished", serie->getFinished());
     //fine
 
-    doc.setObject(oggettoJSon);
+    QJsonObject tipo;
+    tipo.insert("Serie", oggettoJSon);
+    
+    doc.setObject(tipo);
     libreria.write(doc.toJson());
     libreria.close();
 };
@@ -201,7 +214,10 @@ void VisitorJson::toFileJson(VideoGame *videogame){
     oggettoJSon.insert("Expected Hours Of Play", int(videogame->getExpectedHours()));
     //fine
 
-    doc.setObject(oggettoJSon);
+    QJsonObject tipo;
+    tipo.insert("Videogame", oggettoJSon);
+    
+    doc.setObject(tipo);
     libreria.write(doc.toJson());
     libreria.close();
 };
