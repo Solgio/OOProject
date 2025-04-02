@@ -2,6 +2,14 @@
 
 ScienceFiction_Library::ScienceFiction_Library():contentList(){}
 
+Content* ScienceFiction_Library::searchInspiration(const string& _title, const unsigned int& _year, string& _type){
+    for(const auto& it : contentList){
+        /*if( _title==it->getTitle() && _year==it->getYear() && static_cast<>(it)){
+            return it;
+        }*/
+    }
+}
+
 void ScienceFiction_Library::addContent(Content* content){
     contentList.push_back(content);
 }
@@ -31,7 +39,7 @@ void ScienceFiction_Library::showAllContent(){
     getShown();
 };
 
-void ScienceFiction_Library::filterContent(string& _title){
+void ScienceFiction_Library::filterContent(const string& _title){
     for(const auto& it : contentList){
         if(it->getTitle() == _title){
             shownLibrary->addContent(it);

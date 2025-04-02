@@ -14,12 +14,27 @@ using std::vector, std::string;
 
 void xmlReader::commonReader(Content* content, QXmlStreamReader& object) const{
     QXmlStreamReader::TokenType token = object.readNext();
+    unsigned int tempYear;
+    string tempType;
+    ScienceFiction_Library& library = ScienceFiction_Library::getInstance();
     if (token == QXmlStreamReader::StartElement) {
         if (object.name() == "Title") {
             content->setTitle((object.readElementText()).toStdString());
         }
         else if (object.name() == "Description") {
             content->setDescription((object.readElementText()).toStdString());
+        }
+        else if (object.name() == "InspirationYear") {
+            tempYear=(object.readElementText().toUInt());
+        }
+        else if (object.name() == "InspirationType") {
+            tempType=((object.readElementText()).toStdString());
+        }
+        else if(object.name()=="Inspiration"){
+
+            content->setInspiration(
+                library.searchInspiration(object.readElementText().toStdString(), tempYear, tempType)
+            );
         }
         else if (object.name() == "Starred") {
             content->setStarred(object.readElementText().toInt());

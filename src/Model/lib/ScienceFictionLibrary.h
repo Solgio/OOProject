@@ -13,11 +13,12 @@ class ScienceFiction_Library{
         ScienceFiction_Library();   //Singleton
 
     public:
+        Content* searchInspiration(const string& _title, const unsigned int& _year, string& _type);
         void addContent(Content* content);
         void removeContent(Content* content);
         vector<Content*> getContentList();
         void showAllContent();            //Shows all the content in the library
-        void filterContent(string& _title);
+        void filterContent(const string& _title);
         void filterContent(const unsigned int& _year);
         void filterContent(Subgenre genre);
         void watchedOrNot(const bool& _watched);         //Shows only the watched or not watched content
