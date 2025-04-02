@@ -15,8 +15,8 @@ using std::vector, std::string;
 void xmlReader::commonReader(Content* content, QXmlStreamReader& object) const{
     QXmlStreamReader::TokenType token = object.readNext();
     if (token == QXmlStreamReader::StartElement) {
-        if(){
-            
+        if(object.name()=="Id"){
+            content->setId(object.readElementText().toUInt());
         }
         else if (object.name() == "Title") {
             content->setTitle((object.readElementText()).toStdString());

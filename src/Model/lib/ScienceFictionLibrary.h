@@ -7,12 +7,15 @@ using std::vector;
 
 class ScienceFiction_Library{
     private:
+        unsigned int newId;
         ScienceFiction_Library* shownLibrary;
         ScienceFiction_Library* instance;
         vector<Content*> contentList;
         ScienceFiction_Library();   //Singleton
 
     public:
+        void incrementId();
+        unsigned int getNewId();
         Content* searchInspiration(const string& _title, const unsigned int& _year, string& _type);
         void addContent(Content* content);
         void removeContent(Content* content);

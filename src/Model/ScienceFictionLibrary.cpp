@@ -2,6 +2,13 @@
 
 ScienceFiction_Library::ScienceFiction_Library():contentList(){}
 
+void ScienceFiction_Library::incrementId(){
+    newId++;
+}
+unsigned int ScienceFiction_Library::getNewId(){
+    return newId;
+}
+
 Content* ScienceFiction_Library::searchInspiration(const string& _title, const unsigned int& _year, string& _type){
     for(const auto& it : contentList){
         /*if( _title==it->getTitle() && _year==it->getYear() && static_cast<>(it)){
@@ -12,12 +19,13 @@ Content* ScienceFiction_Library::searchInspiration(const string& _title, const u
 
 void ScienceFiction_Library::addContent(Content* content){
     contentList.push_back(content);
+    incrementId();
 }
 
 void ScienceFiction_Library::removeContent(Content* content){
     for(auto it = contentList.begin(); it != contentList.end();){
-        if((*it)->getInspiration() == content){  //If the content that we want to remove is an inspiration for another content,
-            (*it)->setInspiration(nullptr);         //we set the inspiration to nullptr
+        if((*it)->getInspiration() == content->getId()){  //If the content that we want to remove is an inspiration for another content,
+            (*it)->setInspiration(0);         //we set the inspiration to nullptr
             ++it;
         }
         if (*it == content) {
