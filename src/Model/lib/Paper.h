@@ -26,6 +26,7 @@ class Paper : public Content {
         void setPublisher(const string& publisher);
         void setPages(const unsigned int& pages);
         void setVolume(const unsigned int& volume);
+        
         virtual ~Paper() =0;
         virtual void accept(Visitor* visitor) override = 0;
         virtual void toXml(xmlVisitor* xvisitor) = 0;

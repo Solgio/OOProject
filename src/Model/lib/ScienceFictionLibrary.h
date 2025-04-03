@@ -7,9 +7,9 @@ using std::vector;
 class ScienceFiction_Library{
     private:
         unsigned int newId;
-        ScienceFiction_Library* shownLibrary;
         ScienceFiction_Library* instance;
         vector<Content*> contentList;
+        vector<Content*> shownContentList;
         ScienceFiction_Library();   //Singleton
 
     public:
@@ -29,14 +29,8 @@ class ScienceFiction_Library{
         void clearLibrary();                //Clear the library
         void clearShown();
         
-        static ScienceFiction_Library& getShown(){
-            static ScienceFiction_Library shownLibrary;
-            return shownLibrary;
-        }   
-
         static ScienceFiction_Library& getInstance(){
             static ScienceFiction_Library instance;
-            getShown();
             return instance;
         }
 
