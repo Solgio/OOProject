@@ -15,7 +15,7 @@ class ScienceFiction_Library{
     public:
         void incrementId();
         unsigned int getNewId();
-        void testPrint(const ScienceFiction_Library* library)const;
+        void testPrint() const;
         Content* searchId(const unsigned int& __id_t);
         void addContent(Content* content);
         void removeContent(Content* content);
