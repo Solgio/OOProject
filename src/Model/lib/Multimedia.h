@@ -16,8 +16,8 @@ class Multimedia : public Content {
         Multimedia(string _title, Subgenre _subGenre, string _description, bool _starred, bool _watched, unsigned int _year, string _image, string _producer, 
             string _platforms, unsigned int _inspiration);
         
-        string getProducer();
-        string getPlatforms();
+        string getProducer() const;
+        string getPlatforms() const;
         
         void setProducer(const string& producer);
         void setPlatforms(const string& platforms);

@@ -18,9 +18,9 @@ class Video : public Multimedia {
             string _platforms, unsigned int duration, unsigned int _inspiration, unsigned int  _prequel=-1, unsigned int 
  sequel=-1);
         
-        unsigned int & getDuration();
-        unsigned int & getPrequel();
-        unsigned int & getSequel();
+        unsigned int & getDuration() const;
+        unsigned int & getPrequel() const;
+        unsigned int & getSequel() const;
         
         void setDuration(const unsigned int& quality);
         void setPrequel(const unsigned int& _prequel);
