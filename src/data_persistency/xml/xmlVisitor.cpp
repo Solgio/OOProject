@@ -63,8 +63,8 @@ void xmlVisitor::toXml(Film *film){
     film_content.setAttribute("PhtoDirector",QString::fromStdString(film->getPhotoDirector()));
     film_content.setAttribute("Duration",QString::number(film->getDuration()));
     film_content.setAttribute("Platform",QString::fromStdString(film->getPlatforms()));
-    film_content.setAttribute("Prequel",QString::fromStdString(film->getPrequel()->getTitle()));
-    film_content.setAttribute("Sequel",QString::fromStdString(film->getSequel()->getTitle()));
+    film_content.setAttribute("Prequel",QString::number(film->getPrequel()));
+    film_content.setAttribute("Sequel",QString::number(film->getSequel()));
     document.appendChild(film_content);
 };
 void xmlVisitor::toXml(Serie *serie){
