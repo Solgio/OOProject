@@ -10,15 +10,15 @@ Video:: Video(string _title, Subgenre _subGenre, string _description, bool _star
 
 
 
-unsigned int& Video::getDuration(){
+unsigned int Video::getDuration()const{
     return duration;
 }
 
-unsigned int& Video::getPrequel(){
+unsigned int Video::getPrequel()const{
     return prequel;
 }
 
-unsigned int& Video::getSequel(){
+unsigned int Video::getSequel()const{
     return sequel;
 }
 
