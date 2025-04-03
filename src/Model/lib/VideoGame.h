@@ -17,14 +17,12 @@ class VideoGame : public Multimedia {
         string getType() const;
         string getGameEngine() const;
         
-        // *TODO: da finire quando si conferma gameType
         string getGameType() const;
 
         unsigned int getExpectedHours() const;
         
         void setGameEngine(string gameEngine);
 
-        // *TODO: da finire quando si conferma gameType
         void setGameType(gameType tipo);
 
         void setExpectedHours(unsigned int expectedHours);
