@@ -9,14 +9,14 @@
 class Video : public Multimedia {
     private:
         unsigned int duration; //in minutes
-        unsigned int prequel=-1;
-        unsigned int sequel=-1;
+        unsigned int prequel=0;
+        unsigned int sequel=0;
 
     public:
         Video();
         Video(string _title, Subgenre _subGenre, string _description, bool _starred, bool _watched, unsigned int _year, string _image, string _producer, 
-            string _platforms, unsigned int duration, unsigned int _inspiration, unsigned int  _prequel=-1, unsigned int 
- sequel=-1);
+            string _platforms, unsigned int duration, unsigned int _inspiration,=0 unsigned int  _prequel=0, unsigned int 
+ sequel=0);
         
         unsigned int & getDuration() const;
         unsigned int & getPrequel() const;
@@ -29,7 +29,6 @@ class Video : public Multimedia {
             unsigned int tp=prequel;
             prequel=sequel;
             sequel=tp;
-            delete this;
         };
         virtual void accept(Visitor* visitor) override =0;
         virtual void toXml(xmlVisitor* xvisitor) =0;

@@ -7,11 +7,11 @@ Multimedia::Multimedia(string _title, Subgenre _subGenre, string _description, b
             producer(_producer),
             platforms(_platforms){};
 
-string Multimedia::getProducer(){
+string Multimedia::getProducer()const {
     return producer;
 }
 
-string Multimedia::getPlatforms(){
+string Multimedia::getPlatforms()const{
     return platforms;
 }
 

@@ -11,9 +11,9 @@ unsigned int ScienceFiction_Library::getNewId(){
 
 
 void ScienceFiction_Library::testPrint() const{
-    for(const auto& it : shownContentList){
-        //it->printContent();
-    }
+    /*for(const auto& it : shownContentList){
+        it->printContent();
+    }*/
 };
 
 Content* ScienceFiction_Library::searchId(const unsigned int& id){
