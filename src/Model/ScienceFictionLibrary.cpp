@@ -9,6 +9,13 @@ unsigned int ScienceFiction_Library::getNewId(){
     return newId;
 }
 
+
+void ScienceFiction_Library::testPrint(const ScienceFiction_Library* library) const{
+    for(auto it = contentList.begin(); it != contentList.end();){
+        //(*it)->printContent();
+    }
+};
+
 Content* ScienceFiction_Library::searchId(const unsigned int& id){
     for(const auto& it : contentList){
         if(id==it->getId()){
@@ -42,15 +49,15 @@ vector<Content*> ScienceFiction_Library::getContentList(){
 
 void ScienceFiction_Library::showAllContent(){
     for(const auto& it : contentList){
-        shownLibrary->addContent(it);
+        shownContentList.push_back(it);
     }
-    getShown();
+    
 };
 
 void ScienceFiction_Library::filterContent(const string& _title){
     for(const auto& it : contentList){
         if(it->getTitle() == _title){
-            shownLibrary->addContent(it);
+            shownContentList.push_back(it);
         }
     }
 };
@@ -58,7 +65,7 @@ void ScienceFiction_Library::filterContent(const string& _title){
 void ScienceFiction_Library::filterContent(const unsigned int& _year){
     for(const auto& it : contentList){
         if(it->getYear() == _year){
-            shownLibrary->addContent(it);
+            shownContentList.push_back(it);
         }
     }
 };
@@ -67,7 +74,7 @@ void ScienceFiction_Library::filterContent(Subgenre genre){
     vector<Content*> result;
     for (const auto& it : contentList) {
         if (it->hasAnySubgenre(genre)) {
-            shownLibrary->addContent(it);
+            shownContentList.push_back(it);
         }
     }
 };
@@ -87,14 +94,14 @@ void ScienceFiction_Library::watchedOrNot(const bool& _watched){
     if(_watched){
         for(const auto& it : contentList){
             if(it->getWatched()){
-                shownLibrary->addContent(it);
+                shownContentList.push_back(it);
             }
         }
     }
     else{
         for(const auto& it : contentList){
             if(!it->getWatched()){
-                shownLibrary->addContent(it);
+                shownContentList.push_back(it);
             }
         }
     }
@@ -103,14 +110,14 @@ void ScienceFiction_Library::starredOrNot(const bool& _starred){
     if(_starred){
         for(const auto& it : contentList){
             if(it->getStarred()){
-                shownLibrary->addContent(it);
+                shownContentList.push_back(it);
             }
         }
     }
     else{
         for(const auto& it : contentList){
             if(!it->getStarred()){
-                shownLibrary->addContent(it);
+                shownContentList.push_back(it);
             }
         }
     }
