@@ -1,5 +1,8 @@
 #include "lib/Video.h"
 #include "./lib/ScienceFictionLibrary.h" // Ensure the header file for ScienceFiction_Library is included
+#include <iostream>
+using std::cout;
+using std::endl;
 
 Video:: Video(string _title, Subgenre _subGenre, string _description, bool _starred, bool _watched, unsigned int _year, string _image, string _producer, 
     string _platforms, unsigned int _duration, unsigned int _inspiration, unsigned int  _prequel, unsigned int _sequel):
@@ -46,4 +49,10 @@ void Video::setSequel(const unsigned int& _sequelId){
     else{
         qDebug() << "Sequel with this Id not found";
     }
+}
+void Video::printContent() const{
+    Multimedia::printContent();
+    cout << "Duration: " << duration << endl;
+    cout << "Prequel: " << prequel << endl;
+    cout << "Sequel: " << sequel << endl;
 }

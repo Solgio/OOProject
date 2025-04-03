@@ -1,4 +1,7 @@
 #include "./lib/Book.h"
+#include <iostream>
+using std::cout;
+using std::endl;
 
 Book::Book(string _title, Subgenre _subGenre, string _description, bool _starred, bool _watched, unsigned int _year, string _image, string _author, 
     string _publisher, unsigned int _pages, unsigned int _volume, string _mainCharacter, unsigned int _inspiration):
@@ -25,4 +28,9 @@ void Book::toXml(xmlVisitor* xvisitor){
 
 void Book::toJson(VisitorJson* visitorJson){
     visitorJson->toFileJson(this);
+};
+
+void Book::printContent() const{
+    Paper::printContent();
+    cout << "Main Character: " << mainCharacter << endl;
 };

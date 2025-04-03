@@ -1,4 +1,7 @@
 #include "./lib/VideoGame.h"
+#include <iostream>
+using std::cout;
+using std::endl;
 
 VideoGame::VideoGame(string _title, Subgenre _subGenre, string _description, bool _starred, bool _watched, unsigned int _year, string _image, string _producer, 
     string _platforms, string _gameEngine, unsigned int _expectedHours, unsigned int _inspiration):
@@ -33,3 +36,8 @@ void VideoGame::toXml(xmlVisitor* xvisitor){
 void VideoGame::toJson(VisitorJson* visitorJson){
     visitorJson->toFileJson(this);
 };
+void VideoGame::printContent() const{
+    Multimedia::printContent();
+    cout << "Game Engine: " << gameEngine << endl;
+    cout << "Expected Hours: " << expectedHours << endl;
+}

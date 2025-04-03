@@ -1,5 +1,8 @@
 #include "lib/Content.h"
 #include "lib/ScienceFictionLibrary.h"
+#include <iostream>
+using std::cout;
+using std::endl;
 
 inline Subgenre operator|(Subgenre a, Subgenre b) {
     return static_cast<Subgenre>(static_cast<int>(a) | static_cast<int>(b));
@@ -16,6 +19,17 @@ Content::Content(string _title, Subgenre _subGenre, string _description, bool _s
 unsigned int Content::getId() const{
     return id;
 };        
+void Content::printContent() const{
+    cout << "ID: " << id << endl;
+    cout << "Title: " << title << endl;
+    cout << "Subgenres: " << getSubgenreString() << endl;
+    cout << "Description: " << description << endl;
+    cout << "Starred: " << (starred ? "Yes" : "No") << endl;
+    cout << "Watched: " << (watched ? "Yes" : "No") << endl;
+    cout << "Year of Release: " << yearOfRelease << endl;
+    cout << "Image: " << image << endl;
+    cout << "Inspiration: " << (inspiration != 0 ? std::to_string(inspiration) : "None") << endl;
+};
 string Content::getTitle() const{
     return title;
 };

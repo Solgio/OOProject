@@ -41,6 +41,7 @@ class Content {
         
         Content(string _title, Subgenre _subGenre, string _description, bool _starred, bool _watched, unsigned int _year, string _image, unsigned int _inspiration=0);
         unsigned int getId() const;
+        virtual void printContent() const;
         string getType() const;
         string getTitle() const;
         int getSubgenre() const;

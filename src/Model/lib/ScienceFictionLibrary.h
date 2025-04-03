@@ -1,6 +1,5 @@
 #ifndef LIBRARY_H
 #define LIBRARY_H
-#include <QCoreApplication>
 #include "Content.h"
 #include <vector>
 using std::vector;
@@ -16,6 +15,7 @@ class ScienceFiction_Library{
     public:
         void incrementId();
         unsigned int getNewId();
+        void testPrint(const ScienceFiction_Library* library)const;
         Content* searchId(const unsigned int& __id_t);
         void addContent(Content* content);
         void removeContent(Content* content);
@@ -27,6 +27,7 @@ class ScienceFiction_Library{
         void watchedOrNot(const bool& _watched);         //Shows only the watched or not watched content
         void starredOrNot(const bool& _starred);         //Shows only the starred or not starred content
         void clearLibrary();                //Clear the library
+        void clearShown();
         
         static ScienceFiction_Library& getShown(){
             static ScienceFiction_Library shownLibrary;

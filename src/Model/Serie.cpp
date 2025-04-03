@@ -1,4 +1,7 @@
 #include "./lib/Serie.h"
+#include <iostream>
+using std::cout;
+using std::endl;
 
 Serie::Serie(string _title, Subgenre _subGenre, string _description, bool _starred, bool _watched, unsigned int _year, string _image, string _producer, 
             string _platforms, unsigned int _duration, unsigned int _seasons, unsigned int _episodes, string _creator, bool _finished,
@@ -48,4 +51,11 @@ void Serie::toXml(xmlVisitor* xvisitor){
 }
 void Serie::toJson(VisitorJson* visitorJson){
     visitorJson->toFileJson(this);
+};
+void Serie::printContent() const{
+    Video::printContent();
+    cout << "Creator: " << creator << endl;
+    cout << "Seasons: " << seasons << endl;
+    cout << "Episodes: " << episodes << endl;
+    cout << "Finished: " << (finished ? "Yes" : "No") << endl;
 };

@@ -9,6 +9,13 @@ unsigned int ScienceFiction_Library::getNewId(){
     return newId;
 }
 
+
+void ScienceFiction_Library::testPrint(const ScienceFiction_Library* library) const{
+    for(auto it = contentList.begin(); it != contentList.end();){
+        (*it)->printContent();
+    }
+};
+
 Content* ScienceFiction_Library::searchId(const unsigned int& id){
     for(const auto& it : contentList){
         if(id==it->getId()){

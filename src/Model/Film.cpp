@@ -1,4 +1,7 @@
 #include "./lib/Film.h"
+#include <iostream>
+using std::cout;
+using std::endl;
 
 
 Film::Film(string _title, Subgenre _subGenre, string _description, bool _starred, bool _watched, unsigned int _year, string _image, string _director, 
@@ -32,4 +35,9 @@ void Film::toXml(xmlVisitor* xvisitor){
 };
 void Film::toJson(VisitorJson* visitorJson){
     visitorJson->toFileJson(this);
+};
+void Film::printContent() const{
+    Video::printContent();
+    cout << "Director: " << director << endl;
+    cout << "Photo Director: " << photoDirector << endl;
 };

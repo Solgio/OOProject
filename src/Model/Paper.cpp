@@ -1,4 +1,7 @@
 #include "./lib/Paper.h"
+#include <iostream>
+using std::cout;
+using std::endl;
 
 Paper::Paper(string _title, Subgenre _subGenre, string _description, bool _starred, bool _watched, unsigned int _year, string _image, string _author, 
     string _publisher, unsigned int _pages, unsigned int _volume, unsigned int _inspiration):
@@ -28,4 +31,11 @@ void Paper::setPages(const unsigned int& npages){
 };
 void Paper::setVolume(const unsigned int& nvolume){
     volume=nvolume;
+};
+void Paper::printContent() const{
+    Content::printContent();
+    cout << "Author: " << author << endl;
+    cout << "Publisher: " << publisher << endl;
+    cout << "Pages: " << pages << endl;
+    cout << "Volume: " << volume << endl;
 };

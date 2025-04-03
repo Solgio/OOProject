@@ -30,6 +30,7 @@ class Comic : public Book {
         virtual void accept(Visitor* visitor) override;
         virtual void toXml(xmlVisitor* xvisitor);
         virtual void toJson(VisitorJson* vistitorJson);
+        virtual void printContent() const;
 };
 
 #endif

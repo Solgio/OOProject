@@ -19,6 +19,7 @@ class Book : public Paper {
     void setMainCharacter(const string& mainCharacter);
     ~Book();
 
+    virtual void printContent() const;
     virtual void accept(Visitor* visitor) override;
     virtual void toXml(xmlVisitor* xvisitor);
     virtual void toJson(VisitorJson* vistitorJson);

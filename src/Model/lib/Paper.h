@@ -30,6 +30,7 @@ class Paper : public Content {
         virtual void accept(Visitor* visitor) override = 0;
         virtual void toXml(xmlVisitor* xvisitor) = 0;
         virtual void toJson(VisitorJson* vistitorJson) = 0;
+        virtual void printContent() const override = 0;
 };
 
 #endif

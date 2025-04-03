@@ -1,4 +1,7 @@
 #include "./lib/Comic.h"
+#include <iostream>
+using std::cout;
+using std::endl;
 
 Comic::Comic(string _title, Subgenre _subGenre, string _description, bool _starred, bool _watched, unsigned int _year, string _image, string _author, 
     string _publisher, unsigned int _pages, unsigned int _volume, string _illustrator, string _serie, bool _finished, string _mainCharacter, unsigned int _inspiration):
@@ -37,4 +40,10 @@ void Comic::toXml(xmlVisitor* xvisitor){
 };
 void Comic::toJson(VisitorJson* visitorJson){
     visitorJson->toFileJson(this);
+};
+void Comic::printContent() const{
+    Book::printContent();
+    cout << "Illustrator: " << illustrator << endl;
+    cout << "Serie: " << serie << endl;
+    cout << "Finished: " << (finished ? "Yes" : "No") << endl;
 };
