@@ -19,10 +19,10 @@ class Serie : public Video {
             unsigned int _sequel=0);
         
         string getType() const;
-        unsigned int getSeasons();
-        unsigned int getEpisodes();
-        string getCreator();
-        bool getFinished();
+        unsigned int getSeasons() const;
+        unsigned int getEpisodes() const;
+        string getCreator() const;
+        bool getFinished() const;
 
 
         void setSeasons(unsigned int seasons);

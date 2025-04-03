@@ -30,8 +30,7 @@ void VisitorJson::setDirectory(QString path){
 
 
 
-
-void VisitorJson::toFileJson(const Book *book){
+void VisitorJson::toFileJson(const Book* book){
 
     libreria.open(QIODevice::ReadWrite); // o QFile::WriteOnly per scrivere soltanto
 
@@ -52,12 +51,14 @@ void VisitorJson::toFileJson(const Book *book){
     jsonLetto = doc.object();
 
     QJsonArray arrayBook;
-    arrayBook = jsonLetto.value("Book").toArray();
+    if(jsonLetto.contains("Book")){
+        jsonLetto["Book"] = arrayBook;
+    }else{
+        arrayBook = jsonLetto.value("Book").toArray();
+    }
 
     QJsonObject oggettoJSon;
-    
     insertPaper(book, oggettoJSon); //contiene anche insertContent(...);
-
     //specifiche del "Book"
     oggettoJSon.insert("Main Character", QString::fromStdString(book->getMainCharacter()));
     //fine
@@ -70,7 +71,7 @@ void VisitorJson::toFileJson(const Book *book){
 };
 
 
-void VisitorJson::toFileJson(Comic *comic){
+void VisitorJson::toFileJson(const Comic* comic){
     libreria.open(QIODevice::ReadWrite); // o QFile::WriteOnly per scrivere soltanto
 
     QByteArray contentFile;
@@ -86,90 +87,103 @@ void VisitorJson::toFileJson(Comic *comic){
         qDebug() << "Nessun errore";
     }
 
+    QJsonObject jsonLetto;
+    jsonLetto = doc.object();
+
+    QJsonArray arrayBook;
+    if(jsonLetto.contains("Comic")){
+        jsonLetto["Comic"] = arrayBook;
+    }else{
+        arrayBook = jsonLetto.value("Comic").toArray();
+    }
+
     QJsonObject oggettoJSon;
-
     insertPaper(comic, oggettoJSon);
-
     //Book
     oggettoJSon.insert("Main Character", QString::fromStdString(comic->getMainCharacter()));
-
     //specifiche del "Comic"
     oggettoJSon.insert("Illustrator", QString::fromStdString(comic->getIllustrator()));
     oggettoJSon.insert("Series", QString::fromStdString(comic->getSerie()));
     oggettoJSon.insert("Finished", comic->getFinished());
     //fine
 
-    QJsonObject tipo;
-    tipo.insert("Comic", oggettoJSon);
+    arrayBook.append(oggettoJSon);
     
-    doc.setObject(tipo);
+    doc.setObject(jsonLetto);
     libreria.write(doc.toJson());
     libreria.close();
 };
 
 
-void VisitorJson::toFileJson(Film *movie){
+void VisitorJson::toFileJson(const Film* movie){
     libreria.open(QIODevice::ReadWrite); // o QFile::WriteOnly per scrivere soltanto
+    
+    QByteArray contentFile;
+    contentFile = libreria.readAll();
+
+    QJsonParseError errorJ;
+    QJsonDocument doc = QJsonDocument::fromJson(contentFile, &errorJ);
+
+    if(errorJ.error != QJsonParseError::NoError){
+        qDebug() << "Errore nel file : " << errorJ.errorString();
+        return;
+    }else{
+        qDebug() << "Nessun errore";
+    }
+
+    QJsonObject jsonLetto;
+    jsonLetto = doc.object();
+
+    QJsonArray arrayBook;
+    if(jsonLetto.contains("Film")){
+        jsonLetto["Film"] = arrayBook;
+    }else{
+        arrayBook = jsonLetto.value("Film").toArray();
+    }
+
     QJsonObject oggettoJSon;
-    QJsonDocument doc;
-
-    oggettoJSon.insert("Type", "Film");
-    oggettoJSon.insert("Title", QString::fromStdString(movie->getTitle()));
-    oggettoJSon.insert("Genres", int(movie->getSubgenre()));                                                     //! Da fare probabilmente con JsonArray
-    oggettoJSon.insert("Description", QString::fromStdString(movie->getDescription()));
-    oggettoJSon.insert("Year of Release", int(movie->getYear()));
-    oggettoJSon.insert("Image", QString::fromStdString(movie->getImage())); // contiene la image path
-    oggettoJSon.insert("Inspiration", int(movie->getInspiration())); // Contiene il titolo dell'inspirazione
-    oggettoJSon.insert("Watched", movie->getWatched());
-    oggettoJSon.insert("Starred", movie->getStarred());
-
-    //Multimedia
-    oggettoJSon.insert("Producer", QString::fromStdString(movie->getProducer()));
-    oggettoJSon.insert("Platform", QString::fromStdString(movie->getPlatforms()));
-
-    //Video
-    oggettoJSon.insert("Duration", int(movie->getDuration()));
-    oggettoJSon.insert("Prequel", int(movie->getPrequel()));
-    oggettoJSon.insert("Sequel", int(movie->getSequel()));
-
+    insertVideo(movie, oggettoJSon);
     //specifiche del "Film"
     oggettoJSon.insert("Director", QString::fromStdString(movie->getDirector()));
     oggettoJSon.insert("Photo Director", QString::fromStdString(movie->getPhotoDirector()));
     //fine
 
-    QJsonObject tipo;
-    tipo.insert("Film", oggettoJSon);
+    arrayBook.append(oggettoJSon);
     
-    doc.setObject(tipo);
+    doc.setObject(jsonLetto);
     libreria.write(doc.toJson());
     libreria.close();
 };
 
 
-void VisitorJson::toFileJson(Serie *serie){
+void VisitorJson::toFileJson(const Serie* serie){
     libreria.open(QIODevice::ReadWrite); // o QFile::WriteOnly per scrivere soltanto
+    
+    QByteArray contentFile;
+    contentFile = libreria.readAll();
+
+    QJsonParseError errorJ;
+    QJsonDocument doc = QJsonDocument::fromJson(contentFile, &errorJ);
+
+    if(errorJ.error != QJsonParseError::NoError){
+        qDebug() << "Errore nel file : " << errorJ.errorString();
+        return;
+    }else{
+        qDebug() << "Nessun errore";
+    }
+
+    QJsonObject jsonLetto;
+    jsonLetto = doc.object();
+
+    QJsonArray arrayBook;
+    if(jsonLetto.contains("Serie")){
+        jsonLetto["Serie"] = arrayBook;
+    }else{
+        arrayBook = jsonLetto.value("Serie").toArray();
+    }
+
     QJsonObject oggettoJSon;
-    QJsonDocument doc;
-
-    oggettoJSon.insert("Type", "Serie");
-    oggettoJSon.insert("Title", QString::fromStdString(serie->getTitle()));
-    oggettoJSon.insert("Genres", int(serie->getSubgenre()));
-    oggettoJSon.insert("Description", QString::fromStdString(serie->getDescription()));
-    oggettoJSon.insert("Year of Release", int(serie->getYear()));
-    oggettoJSon.insert("Image", QString::fromStdString(serie->getImage())); // contiene la image path
-    oggettoJSon.insert("Inspiration", int(serie->getInspiration())); // Contiene il titolo dell'inspirazione
-    oggettoJSon.insert("Watched", serie->getWatched());
-    oggettoJSon.insert("Starred", serie->getStarred());
-
-    //Multimedia
-    oggettoJSon.insert("Producer", QString::fromStdString(serie->getProducer()));
-    oggettoJSon.insert("Platform", QString::fromStdString(serie->getPlatforms()));
-
-    //Video
-    oggettoJSon.insert("Duration", int(serie->getDuration()));
-    oggettoJSon.insert("Prequel", int(serie->getPrequel()));
-    oggettoJSon.insert("Sequel", int(serie->getSequel()));
-
+    insertVideo(serie, oggettoJSon);
     //specifiche del "Serie"
     oggettoJSon.insert("Seasons", int(serie->getSeasons()));
     oggettoJSon.insert("Episodes", int(serie->getEpisodes()));
@@ -177,43 +191,51 @@ void VisitorJson::toFileJson(Serie *serie){
     oggettoJSon.insert("Finished", serie->getFinished());
     //fine
 
-    QJsonObject tipo;
-    tipo.insert("Serie", oggettoJSon);
+    arrayBook.append(oggettoJSon);
     
-    doc.setObject(tipo);
+    doc.setObject(jsonLetto);
     libreria.write(doc.toJson());
     libreria.close();
 };
 
 
-void VisitorJson::toFileJson(VideoGame *videogame){
+void VisitorJson::toFileJson(const VideoGame *videogame){
     libreria.open(QIODevice::ReadWrite); // o QFile::WriteOnly per scrivere soltanto
+
+    QByteArray contentFile;
+    contentFile = libreria.readAll();
+
+    QJsonParseError errorJ;
+    QJsonDocument doc = QJsonDocument::fromJson(contentFile, &errorJ);
+
+    if(errorJ.error != QJsonParseError::NoError){
+        qDebug() << "Errore nel file : " << errorJ.errorString();
+        return;
+    }else{
+        qDebug() << "Nessun errore";
+    }
+
+    QJsonObject jsonLetto;
+    jsonLetto = doc.object();
+
+    QJsonArray arrayBook;
+    if(jsonLetto.contains("Videogame")){
+        jsonLetto["Videogame"] = arrayBook;
+    }else{
+        arrayBook = jsonLetto.value("Videogame").toArray();
+    }
+    
     QJsonObject oggettoJSon;
-    QJsonDocument doc;
-
-    oggettoJSon.insert("Type", "Videogame");
-    oggettoJSon.insert("Title", QString::fromStdString(videogame->getTitle()));
-    oggettoJSon.insert("Genres", int(videogame->getSubgenre()));
-    oggettoJSon.insert("Description", QString::fromStdString(videogame->getDescription()));
-    oggettoJSon.insert("Year of Release", int(videogame->getYear()));
-    oggettoJSon.insert("Image", QString::fromStdString(videogame->getImage())); // contiene la image path
-    oggettoJSon.insert("Inspiration", int(videogame->getInspiration())); // Contiene il titolo dell'inspirazione
-    oggettoJSon.insert("Watched", videogame->getWatched());
-    oggettoJSon.insert("Starred", videogame->getStarred());
-
-    //Multimedia
-    oggettoJSon.insert("Producer", QString::fromStdString(videogame->getProducer()));
-    oggettoJSon.insert("Platform", QString::fromStdString(videogame->getPlatforms()));
-
+    insertMultimedia(videogame, oggettoJSon);
     //specifiche del "Videogame"
     oggettoJSon.insert("Game Engine", QString::fromStdString(videogame->getGameEngine()));
+    oggettoJSon.insert("Game Genre", QString::fromStdString(videogame->getGameType()));
     oggettoJSon.insert("Expected Hours Of Play", int(videogame->getExpectedHours()));
     //fine
 
-    QJsonObject tipo;
-    tipo.insert("Videogame", oggettoJSon);
+    arrayBook.append(oggettoJSon);
     
-    doc.setObject(tipo);
+    doc.setObject(jsonLetto);
     libreria.write(doc.toJson());
     libreria.close();
 };
