@@ -7,6 +7,11 @@ inline Subgenre operator|(Subgenre a, Subgenre b) {
 inline Subgenre operator&(Subgenre a, Subgenre b) {
     return static_cast<Subgenre>(static_cast<int>(a) & static_cast<int>(b));
 }
+
+Content::Content():
+        title(), subgenres(), description(), starred(), watched(), yearOfRelease(), image(), inspiration(0) { 
+            id = ScienceFiction_Library::getInstance().getNewId()+1;
+        };
     
 Content::Content(string _title, Subgenre _subGenre, string _description, bool _starred, bool _watched, unsigned int _year, string _image, unsigned int _inspiration):
         title(_title), subgenres(_subGenre), description(_description), starred(_starred), watched(_watched), yearOfRelease(_year),image(_image), inspiration(_inspiration) { 

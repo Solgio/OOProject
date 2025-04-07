@@ -1,5 +1,6 @@
 #include "./lib/Film.h"
 
+Film::Film():Video(), director(), photoDirector(){};
 
 Film::Film(string _title, Subgenre _subGenre, string _description, bool _starred, bool _watched, unsigned int _year, string _image, string _director, 
     string _producer, string _platforms, string _photoDirector, unsigned int _duration, unsigned int _inspiration, unsigned int _prequel,

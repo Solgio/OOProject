@@ -9,13 +9,13 @@
 class Video : public Multimedia {
     private:
         unsigned int duration; //in minutes
-        unsigned int prequel=0;
-        unsigned int sequel=0;
+        unsigned int prequel;
+        unsigned int sequel;
 
     public:
         Video();
         Video(string _title, Subgenre _subGenre, string _description, bool _starred, bool _watched, unsigned int _year, string _image, string _producer, 
-            string _platforms, unsigned int _duration, unsigned int _inspiration=0, unsigned int  _prequel=0, unsigned int _sequel=0);
+            string _platforms, unsigned int _duration, unsigned int _inspiration=0, unsigned int _prequel=0, unsigned int _sequel=0);
         
         unsigned int getDuration() const;
         unsigned int getPrequel() const;
