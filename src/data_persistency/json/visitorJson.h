@@ -8,6 +8,10 @@
 #include <QJsonDocument>
 #include <QJsonArray>
 
+class Content;
+class Paper;
+class Multimedia;
+class Video;
 class Book;
 class Comic;
 class Serie;
@@ -16,6 +20,7 @@ class VideoGame;
 
 class VisitorJson{
 private:
+    Q_OBJECT
     QString fileName;
     QDir dir; // indirizzamento relativo a partire da "." ,
     // dir() è di default "."
@@ -41,5 +46,13 @@ public:
     virtual void toFileJson(const Film* movie) = 0;
     virtual void toFileJson(const Serie* serie) = 0;
     virtual void toFileJson(const VideoGame* videogame) = 0;
+
+
+
+
+void insertContent(const Content* _content, QJsonObject& oggettoJSon);
+void insertPaper(const Paper* _paper, QJsonObject& oggettoJSon);
+void insertMultimedia(const Multimedia* _multimedia, QJsonObject& oggettoJSon);
+void insertVideo(const Video* _video, QJsonObject& oggettoJSon);
 };
 #endif

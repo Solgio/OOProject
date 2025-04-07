@@ -242,7 +242,7 @@ void VisitorJson::toFileJson(const VideoGame *videogame){
 
 
 
- void insertContent(const Content* _content, QJsonObject& oggettoJSon){
+ void VisitorJson::insertContent(const Content* _content, QJsonObject& oggettoJSon){
 
     oggettoJSon.insert("Title", QString::fromStdString(_content->getTitle()));
     oggettoJSon.insert("Genres", int(_content->getSubgenre()));  
@@ -256,7 +256,7 @@ void VisitorJson::toFileJson(const VideoGame *videogame){
     //return oggettoJSon;
 }
 
-void insertPaper(const Paper* _paper, QJsonObject& oggettoJSon){
+void VisitorJson::insertPaper(const Paper* _paper, QJsonObject& oggettoJSon){
     insertContent(_paper, oggettoJSon);
 
     oggettoJSon.insert("Author", QString::fromStdString(_paper->getAuthor()));
@@ -266,13 +266,13 @@ void insertPaper(const Paper* _paper, QJsonObject& oggettoJSon){
 
 }
 
-void insertMultimedia(const Multimedia* _multimedia, QJsonObject& oggettoJSon){
+void VisitorJson::insertMultimedia(const Multimedia* _multimedia, QJsonObject& oggettoJSon){
     insertContent(_multimedia, oggettoJSon);
     oggettoJSon.insert("Producer", QString::fromStdString(_multimedia->getProducer()));
     oggettoJSon.insert("Platform", QString::fromStdString(_multimedia->getPlatforms()));
 }
 
-void insertVideo(const Video* _video, QJsonObject& oggettoJSon){
+void VisitorJson::insertVideo(const Video* _video, QJsonObject& oggettoJSon){
     insertMultimedia(_video, oggettoJSon);
     oggettoJSon.insert("Duration", int(_video->getDuration()));
     oggettoJSon.insert("Prequel", int(_video->getPrequel()));
