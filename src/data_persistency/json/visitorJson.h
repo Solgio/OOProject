@@ -20,7 +20,6 @@ class VideoGame;
 
 class VisitorJson{
 private:
-    Q_OBJECT
     QString fileName;
     QDir dir; // indirizzamento relativo a partire da "." ,
     // dir() è di default "."
