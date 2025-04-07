@@ -2,8 +2,8 @@
 #define IREADER_H
 #include <QtXml>
 #include <QJsonObject>
-#include "../Model/lib/Content.h"
-#include "../Model/lib/ScienceFictionLibrary.h"
+
+class ScienceFiction_Library;
 
 class IReader{
     public:
