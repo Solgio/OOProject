@@ -2,7 +2,7 @@
 
 VideoGame::VideoGame():Multimedia(), gameEngine(), expectedHours(), gameGenre(){};
 
-VideoGame::VideoGame(string _title, Subgenre _subGenre, string _description, bool _starred, bool _watched, unsigned int _year, string _image, string _producer, 
+VideoGame::VideoGame(string _title, unsigned int  _subGenre, string _description, bool _starred, bool _watched, unsigned int _year, string _image, string _producer, 
     string _platforms, string _gameEngine, unsigned int _expectedHours, gameType _gameType, unsigned int _inspiration):
     Multimedia(_title, _subGenre, _description, _starred, _watched, _year, _image, _producer, _platforms, _inspiration),
     gameEngine(_gameEngine),

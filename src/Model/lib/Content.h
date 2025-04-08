@@ -39,7 +39,7 @@ class Content {
         
     public:
         Content();
-        Content(string _title, Subgenre _subGenre, string _description, bool _starred, bool _watched, unsigned int _year, string _image, unsigned int _inspiration=0);
+        Content(string _title, unsigned int  _subGenre, string _description, bool _starred, bool _watched, unsigned int _year, string _image, unsigned int _inspiration=0);
         unsigned int getId() const;
         string getType() const;
         string getTitle() const;
@@ -64,9 +64,8 @@ class Content {
         void setYear(const unsigned int& year);
         void setImage(const string& image);
 
-        void toJSon();
 
-        virtual ~Content() =0;
+        virtual ~Content();
         virtual void accept(Visitor* visitor) = 0;
         virtual void toXml(xmlVisitor* xvisitor) = 0;
         virtual void toJson(VisitorJson* vistitorJson) = 0;

@@ -1,7 +1,7 @@
 #include "lib/Content.h"
 #include "lib/ScienceFictionLibrary.h"
 
-inline Subgenre operator|(Subgenre a, Subgenre b) {
+inline   Subgenre operator|(Subgenre a, Subgenre b) {
     return static_cast<Subgenre>(static_cast<int>(a) | static_cast<int>(b));
 }
 inline Subgenre operator&(Subgenre a, Subgenre b) {
@@ -13,9 +13,10 @@ Content::Content():
             id = ScienceFiction_Library::getInstance().getNewId()+1;
         };
     
-Content::Content(string _title, Subgenre _subGenre, string _description, bool _starred, bool _watched, unsigned int _year, string _image, unsigned int _inspiration):
-        title(_title), subgenres(_subGenre), description(_description), starred(_starred), watched(_watched), yearOfRelease(_year),image(_image), inspiration(_inspiration) { 
+Content::Content(string _title, unsigned int _subGenre, string _description, bool _starred, bool _watched, unsigned int _year, string _image, unsigned int _inspiration):
+        title(_title), description(_description), starred(_starred), watched(_watched), yearOfRelease(_year),image(_image), inspiration(_inspiration) { 
             id = ScienceFiction_Library::getInstance().getNewId()+1; //Get the new ID from the library
+            subgenres = static_cast<Subgenre>(_subGenre); //Set the subgenres
         };
 
 unsigned int Content::getId() const{
@@ -33,7 +34,7 @@ bool Content::hasAnySubgenre(Subgenre genres) const {
     return static_cast<int>(subgenres & genres) != 0;
 }
 // Check if content has a specific subgenre
-bool Content::hasSubgenre(Subgenre genre) const {
+bool Content::hasSubgenre(const Subgenre genre) const {
     return (subgenres & genre) == genre;
 }
 string Content::getSubgenreString() const{
@@ -108,3 +109,4 @@ void Content::setImage(const string& nimage){
     image=nimage;
 };
 
+Content::~Content() {}

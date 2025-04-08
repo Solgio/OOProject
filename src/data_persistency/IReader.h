@@ -2,6 +2,9 @@
 #define IREADER_H
 #include <QtXml>
 #include <QJsonObject>
+#include <string>
+
+using std::string;
 
 class ScienceFiction_Library;
 

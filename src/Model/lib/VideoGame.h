@@ -11,7 +11,7 @@ class VideoGame : public Multimedia {
         SANDBOX, TOWERDEFENSE, CARDGAME, PARTYGAME, CASUAL, ARCADE, VIRTUALREALITY};
 
         VideoGame();
-        VideoGame(string _title, Subgenre _subGenre, string _description, bool _starred, bool _watched, unsigned int _year, string _image, string _producer, 
+        VideoGame(string _title, unsigned int  _subGenre, string _description, bool _starred, bool _watched, unsigned int _year, string _image, string _producer, 
                   string _platforms, string _gameEngine, unsigned int _expectedHours, gameType _gameType, unsigned int _inspiration=0);
         
         string getType() const;
@@ -36,7 +36,6 @@ class VideoGame : public Multimedia {
         string gameEngine;
         unsigned int expectedHours;
         gameType gameGenre;
-    
         
 };
 

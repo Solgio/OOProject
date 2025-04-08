@@ -14,7 +14,7 @@ class Video : public Multimedia {
 
     public:
         Video();
-        Video(string _title, Subgenre _subGenre, string _description, bool _starred, bool _watched, unsigned int _year, string _image, string _producer, 
+        Video(string _title, unsigned int  _subGenre, string _description, bool _starred, bool _watched, unsigned int _year, string _image, string _producer, 
             string _platforms, unsigned int _duration, unsigned int _inspiration=0, unsigned int _prequel=0, unsigned int _sequel=0);
         
         unsigned int getDuration() const;
