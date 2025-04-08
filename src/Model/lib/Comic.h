@@ -5,7 +5,6 @@
 #include <QTextStream>
 #include "Book.h"
 
-
 class Comic : public Book {
    private:
         string illustrator;
