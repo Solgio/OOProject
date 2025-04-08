@@ -34,6 +34,8 @@ class ScienceFiction_Library{
             return instance;
         }
 
+        bool saveToFile(const string& filepath)const; //Saves the library to a file
+        bool loadFromFile(const string& filepath); //Loads the library from a file
         // Delete so it is impossible to copy the singleton
         ScienceFiction_Library(const ScienceFiction_Library&) = delete;
         ScienceFiction_Library& operator=(const ScienceFiction_Library&) = delete;

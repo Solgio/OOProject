@@ -12,11 +12,12 @@ class VideoGame;
 
 class xmlVisitor{
     public:
-        virtual void toXml(Book *book) = 0;
-        virtual void toXml(Comic *comic) = 0;
-        virtual void toXml(Film *movie) = 0;
-        virtual void toXml(Serie *serie) = 0;
-        virtual void toXml(VideoGame *videogame) = 0;
+        virtual ~xmlVisitor() = default;
+        virtual void toXml(Book *book, QDomDocument& doc, QDomElement& root);
+        virtual void toXml(Comic *comic, QDomDocument& doc, QDomElement& root);
+        virtual void toXml(Film *movie, QDomDocument& doc, QDomElement& root);
+        virtual void toXml(Serie *serie, QDomDocument& doc, QDomElement& root);
+        virtual void toXml(VideoGame *videogame, QDomDocument& doc, QDomElement& root);
 };
 
 #endif

@@ -38,8 +38,8 @@ void VideoGame::setGameType(gameType tipo){
 void VideoGame::accept(Visitor* visitor){
     visitor->visit(this);
 }
-void VideoGame::toXml(xmlVisitor* xvisitor){
-    xvisitor->toXml(this);
+void VideoGame::toXml(xmlVisitor* xvisitor, QDomDocument& doc, QDomElement& root ){
+    xvisitor->toXml(this, doc, root);
 };
 void VideoGame::toJson(VisitorJson* visitorJson){
     visitorJson->toFileJson(this);

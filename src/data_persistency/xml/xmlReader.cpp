@@ -2,6 +2,7 @@
 #include <QtXml>
 #include <QDebug>
 #include <vector>
+#include <stdexcept>
 #include "xmlReader.h"
 #include "../../Model/lib/ScienceFictionLibrary.h"
 #include "../../Model/lib/Video.h"
@@ -78,18 +79,21 @@ void xmlReader::videoReader(Video* content, QXmlStreamReader& object) const{
     multimediaReader(content, object);
     QXmlStreamReader::TokenType token = object.readNext();
     if (token == QXmlStreamReader::StartElement) {
-        if (object.name() == "Producer") {
+        if (object.name() == "Duration") {
             content->setDuration((object.readElementText()).toUInt());
-        }/*
-        else if(object.name()=="Prequel"){}
-        else if(object.name()=="Prequel"){}*/
-        
+        }
+        else if(object.name()=="Prequel"){
+            content->setPrequel(object.readElementText().toUInt());
+        }
+        else if(object.name()=="Sequel"){
+            content->setSequel(object.readElementText().toUInt());
+        }        
     }
 }
 
-Book* xmlReader::readBook(QXmlStreamReader& object) const{
-    Book* book = new Book();
-    paperReader(book, object);
+unique_ptr<Book> xmlReader::readBook(QXmlStreamReader& object) const{
+    unique_ptr<Book> book = make_unique<Book>();
+    paperReader(book.get(), object);
     while (!(object.isEndElement() && object.name() == "Book")) {
         QXmlStreamReader::TokenType token = object.readNext();
         if (token == QXmlStreamReader::StartElement) {
@@ -100,9 +104,9 @@ Book* xmlReader::readBook(QXmlStreamReader& object) const{
     }
     return book;
 }
-Comic* xmlReader::readComic(QXmlStreamReader& object) const{
-    Comic* comic = new Comic();
-    paperReader(comic, object);
+unique_ptr<Comic> xmlReader::readComic(QXmlStreamReader& object) const{
+    unique_ptr<Comic> comic = make_unique<Comic>();
+    paperReader(comic.get(), object);
     while (!(object.isEndElement() && object.name() == "Comic")) {
         QXmlStreamReader::TokenType token = object.readNext();
         if (token == QXmlStreamReader::StartElement) {
@@ -122,9 +126,9 @@ Comic* xmlReader::readComic(QXmlStreamReader& object) const{
     }
     return comic;
 }
-Film* xmlReader::readFilm(QXmlStreamReader& object) const{
-    Film* movie = new Film();
-    videoReader(movie, object);
+unique_ptr<Film> xmlReader::readFilm(QXmlStreamReader& object) const{
+    unique_ptr<Film> movie = make_unique<Film>();
+    videoReader(movie.get(), object);
     while (!(object.isEndElement() && object.name() == "Film")) {
         QXmlStreamReader::TokenType token = object.readNext();
         if (token == QXmlStreamReader::StartElement) {
@@ -138,9 +142,9 @@ Film* xmlReader::readFilm(QXmlStreamReader& object) const{
     }
     return movie;
 }
-Serie* xmlReader::readSerie(QXmlStreamReader& object) const{
-    Serie* serie = new Serie();
-    videoReader(serie, object);
+unique_ptr<Serie> xmlReader::readSerie(QXmlStreamReader& object) const{
+    unique_ptr<Serie> serie = make_unique<Serie>();
+    videoReader(serie.get(), object);
     while (!(object.isEndElement() && object.name() == "Serie")) {
         QXmlStreamReader::TokenType token = object.readNext();
         if (token == QXmlStreamReader::StartElement) {
@@ -160,9 +164,9 @@ Serie* xmlReader::readSerie(QXmlStreamReader& object) const{
     }
     return serie;
 }
-VideoGame* xmlReader::readVideoGame(QXmlStreamReader& object) const{
-    VideoGame* videogame = new VideoGame();
-    multimediaReader(videogame, object);
+unique_ptr<VideoGame> xmlReader::readVideoGame(QXmlStreamReader& object) const{
+    unique_ptr<VideoGame> videogame = make_unique<VideoGame>();
+    multimediaReader(videogame.get(), object);
     while (!(object.isEndElement() && object.name() == "VideoGame")) {
         QXmlStreamReader::TokenType token = object.readNext();
         if (token == QXmlStreamReader::StartElement) {
@@ -184,45 +188,41 @@ ScienceFiction_Library* xmlReader::read(const string& filepath){
     QFile file(QString::fromStdString(filepath));
 
     if(!file.open(QIODevice::ReadOnly | QIODevice::Text)){
-        qWarning() << "Failed to open file for writing";
-        //! Forse qui è meglio un'eccezione   
-        file.close();
-           
+        throw std::runtime_error("Failed to open file: " + file.errorString().toStdString());
     }
 
     // Clear the library before loading new data
     ScienceFiction_Library& library = ScienceFiction_Library::getInstance();
     
     QXmlStreamReader xmlreader(&file);
-    while (!xmlreader.atEnd() && !xmlreader.hasError()) {
-        QXmlStreamReader::TokenType token = xmlreader.readNext();
-        
-        if (token == QXmlStreamReader::StartElement) {
-            if (xmlreader.name() == "Book") {
-                library.addContent(readBook(xmlreader));
-            }
-            else if (xmlreader.name() == "Comic") {
-                library.addContent(readComic(xmlreader));
-            }
-            else if (xmlreader.name() == "Film") {
-                library.addContent(readFilm(xmlreader));
-            }
-            else if (xmlreader.name() == "Serie") {
-                library.addContent(readSerie(xmlreader));
-            }
-            else if (xmlreader.name() == "VideoGame") {
-                library.addContent(readVideoGame(xmlreader));
-            }
-            else {
-                xmlreader.raiseError(QObject::tr("Not a valid content type"));
+    try{
+        while (!xmlreader.atEnd() && !xmlreader.hasError()) {
+            QXmlStreamReader::TokenType token = xmlreader.readNext();
+            QString xmlName=xmlreader.name().toString();
+            
+            if (token == QXmlStreamReader::StartElement) {
+                if (xmlName == "Book") {
+                    library.addContent(readBook(xmlreader).release());
+                }
+                else if (xmlName == "Comic") {
+                    library.addContent(readComic(xmlreader).release());
+                }
+                else if (xmlName == "Film") {
+                    library.addContent(readFilm(xmlreader).release());
+                }
+                else if (xmlName == "Serie") {
+                    library.addContent(readSerie(xmlreader).release());
+                }
+                else if (xmlName == "VideoGame") {
+                    library.addContent(readVideoGame(xmlreader).release());
+                }
             }
         }
-    }
+    } catch(const std::exception& e) {
+        qWarning() << "XML parsing error:" << e.what();
 
-    if (xmlreader.hasError()) {
-        qWarning() << "XML error:" << xmlreader.errorString();
-        //clearLibrary();
-        
+        file.close();
+        return nullptr;    
     }
 
     file.close();
