@@ -1,7 +1,7 @@
 #ifndef JSONREADER_H
 #define JSONREADER_H
 #include "../IReader.h"
-#include "../Model/lib/ScienceFictionLibrary.h"
+#include "../../Model/lib/ScienceFictionLibrary.h"
 
 class jsonReader: public IReader{
     private:

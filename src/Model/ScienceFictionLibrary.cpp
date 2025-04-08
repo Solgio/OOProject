@@ -179,7 +179,7 @@ bool ScienceFiction_Library::saveToFile(const string& filepath)const{
         doc.save(stream, 4);  // 4 spaces for indentation
         file.close();
         
-        return true;
+        
     }
     else if(extension==".json"){
         unique_ptr<VisitorJson> visitor;
@@ -187,10 +187,13 @@ bool ScienceFiction_Library::saveToFile(const string& filepath)const{
         if(it->getWatched()){
             it->toJson(visitor.get());
         }
+        return true;
+        }
     }
-    }
-
+    return true;
 }
+    
+
 bool ScienceFiction_Library::loadFromFile(const string& filepath){
     clearLibrary();
     std::unique_ptr<IReader> reader;
