@@ -1,4 +1,12 @@
+#include <memory>
 #include "./lib/ScienceFictionLibrary.h"
+#include "../data_persistency/IReader.h"
+#include "../data_persistency/xml/xmlVisitor.h" // Ensure xmlWriter is included
+#include "../data_persistency/json/visitorJson.h"
+#include "../data_persistency/xml/xmlReader.h" // Ensure xmlReader is included
+#include "../data_persistency/json/jsonReader.h"
+using std::unique_ptr;
+using std::make_unique;
 
 ScienceFiction_Library::ScienceFiction_Library():contentList(){}
 
@@ -141,4 +149,67 @@ void ScienceFiction_Library::clearShown(){
         delete it;
     }
     ;shownContentList.clear();
+}
+
+bool ScienceFiction_Library::saveToFile(const string& filepath)const{
+    string extension=filepath.substr(filepath.find_last_of('.'));
+    if(extension==".xml"){
+        QDomDocument doc;
+        QDomProcessingInstruction header = doc.createProcessingInstruction(
+        "xml", "version=\"1.0\" encoding=\"UTF-8\"");
+        doc.appendChild(header);
+    
+        QDomElement root = doc.createElement("ScienceFictionLibrary");
+        doc.appendChild(root);
+
+        xmlVisitor visitor;
+    
+        //Save all contents
+        for (const auto& content : contentList) {
+            content->toXml(&visitor, doc, root);
+        }
+        // Save to file
+        QFile file(QString::fromStdString(filepath));
+        if (!file.open(QIODevice::WriteOnly | QIODevice::Text)) {
+            qWarning() << "Failed to open file for writing:" << file.errorString();
+            return false;
+        }
+    
+        QTextStream stream(&file);
+        doc.save(stream, 4);  // 4 spaces for indentation
+        file.close();
+        
+        return true;
+    }
+    else if(extension==".json"){
+        unique_ptr<VisitorJson> visitor;
+        for(const auto& it : contentList){
+        if(it->getWatched()){
+            it->toJson(visitor.get());
+        }
+    }
+    }
+
+}
+bool ScienceFiction_Library::loadFromFile(const string& filepath){
+    clearLibrary();
+    std::unique_ptr<IReader> reader;
+    string extension=filepath.substr(filepath.find_last_of('.'));
+    if(extension==".xml"){
+        reader=make_unique<xmlReader>();
+    }
+    else if(extension==".json"){
+        reader=make_unique<jsonReader>();
+    }
+    else{
+        return false;
+    }   
+    try {
+        ScienceFiction_Library* result = reader->read(filepath);
+        return (result != nullptr);  // Return true if read was successful
+    } 
+    catch (const std::exception& e) {
+        qCritical() << "Error loading file:" << e.what();
+        return false;
+    }
 }

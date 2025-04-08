@@ -1,5 +1,6 @@
 #ifndef CONTENT_H
 #define CONTENT_H   
+#include <QtXml>
 #include "../../View/Visitor.h"
 #include "../../data_persistency/json/visitorJson.h"
 #include "../../data_persistency/xml/xmlVisitor.h"
@@ -67,7 +68,7 @@ class Content {
 
         virtual ~Content();
         virtual void accept(Visitor* visitor) = 0;
-        virtual void toXml(xmlVisitor* xvisitor) = 0;
+        virtual void toXml(xmlVisitor* xvisitor, QDomDocument& doc, QDomElement& root ) = 0;
         virtual void toJson(VisitorJson* vistitorJson) = 0;
 
 };

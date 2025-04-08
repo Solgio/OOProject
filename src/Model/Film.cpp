@@ -28,8 +28,8 @@ void Film::setPhotoDirector(const string& nPhotoDirector){
 void Film::accept(Visitor* visitor){
     visitor->visit(this);
 };
-void Film::toXml(xmlVisitor* xvisitor){
-    xvisitor->toXml(this);
+void Film::toXml(xmlVisitor* xvisitor, QDomDocument& doc, QDomElement& root ){
+    xvisitor->toXml(this, doc, root);
 };
 void Film::toJson(VisitorJson* visitorJson){
     visitorJson->toFileJson(this);

@@ -29,7 +29,7 @@ class VideoGame : public Multimedia {
         virtual ~VideoGame();
         
         virtual void accept(Visitor* visitor) override;
-        virtual void toXml(xmlVisitor* xvisitor);
+        virtual void toXml(xmlVisitor* xvisitor, QDomDocument& doc, QDomElement& root );
         virtual void toJson(VisitorJson* vistitorJson);
 
     private:

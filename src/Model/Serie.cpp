@@ -45,8 +45,8 @@ void Serie::setFinished(bool _finished){
 void Serie::accept(Visitor* visitor){
     visitor->visit(this);
 }
-void Serie::toXml(xmlVisitor* xvisitor){
-    xvisitor->toXml(this);
+void Serie::toXml(xmlVisitor* xvisitor, QDomDocument& doc, QDomElement& root ){
+    xvisitor->toXml(this, doc, root);
 }
 void Serie::toJson(VisitorJson* visitorJson){
     visitorJson->toFileJson(this);

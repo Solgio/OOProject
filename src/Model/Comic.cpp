@@ -34,8 +34,8 @@ void Comic::setFinished(const bool& nfinished){
 void Comic::accept(Visitor* visitor){
     visitor->visit(this);
 };
-void Comic::toXml(xmlVisitor* xvisitor){
-    xvisitor->toXml(this);
+void Comic::toXml(xmlVisitor* xvisitor, QDomDocument& doc, QDomElement& root ){
+    xvisitor->toXml(this, doc, root);
 };
 void Comic::toJson(VisitorJson* visitorJson){
     visitorJson->toFileJson(this);

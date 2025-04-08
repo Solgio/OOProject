@@ -29,7 +29,7 @@ class Paper : public Content {
         void setVolume(const unsigned int& volume);
         virtual ~Paper() =0;
         virtual void accept(Visitor* visitor) override = 0;
-        virtual void toXml(xmlVisitor* xvisitor) = 0;
+        virtual void toXml(xmlVisitor* xvisitor, QDomDocument& doc, QDomElement& root ) = 0;
         virtual void toJson(VisitorJson* vistitorJson) = 0;
 };
 

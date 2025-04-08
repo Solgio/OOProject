@@ -21,8 +21,8 @@ void Book::accept(Visitor* visitor){
     visitor->visit(this);
 };
 
-void Book::toXml(xmlVisitor* xvisitor){
-    xvisitor->toXml(this);
+void Book::toXml(xmlVisitor* xvisitor, QDomDocument& doc, QDomElement& root ){
+    xvisitor->toXml(this, doc, root);
 };
 
 void Book::toJson(VisitorJson* visitorJson){

@@ -27,7 +27,7 @@ class Comic : public Book {
         void setSerie(const string& serie);
         void setFinished(const bool& finished);
         virtual void accept(Visitor* visitor) override;
-        virtual void toXml(xmlVisitor* xvisitor);
+        virtual void toXml(xmlVisitor* xvisitor, QDomDocument& doc, QDomElement& root );
         virtual void toJson(VisitorJson* vistitorJson);
 };
 
