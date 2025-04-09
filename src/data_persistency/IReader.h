@@ -10,7 +10,7 @@ class ScienceFiction_Library;
 
 class IReader{
     public:
-    virtual ~IReader() {};
+    virtual ~IReader()=default;
     virtual ScienceFiction_Library* read(const string& filename) = 0;
 };
 
