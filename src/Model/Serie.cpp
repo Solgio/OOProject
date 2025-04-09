@@ -11,9 +11,6 @@ Serie::Serie(string _title, unsigned int  _subGenre, string _description, bool _
             creator(_creator),
             finished(_finished){}
 
-string Serie::getType() const{
-    return "Serie";
-}
 unsigned int Serie::getSeasons()const{
     return seasons;
 }

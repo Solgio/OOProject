@@ -18,7 +18,7 @@ class Serie : public Video {
             string _platforms, unsigned int duration, unsigned int _seasons, unsigned int _episodes, string _creator, bool _finished, unsigned int _inspiration=0, unsigned int _prequel=0,
             unsigned int _sequel=0);
         
-        string getType() const;
+      
         unsigned int getSeasons() const;
         unsigned int getEpisodes() const;
         string getCreator() const;

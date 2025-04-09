@@ -14,7 +14,7 @@ class VideoGame : public Multimedia {
         VideoGame(string _title, unsigned int  _subGenre, string _description, bool _starred, bool _watched, unsigned int _year, string _image, string _producer, 
                   string _platforms, string _gameEngine, unsigned int _expectedHours, gameType _gameType, unsigned int _inspiration=0);
         
-        string getType() const;
+      
         string getGameEngine() const;
         
         string getGameType() const;

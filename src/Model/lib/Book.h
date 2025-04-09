@@ -14,7 +14,7 @@ class Book : public Paper {
         Book(string _title, unsigned int  _subGenre, string _description, bool _starred, bool _watched, unsigned int _year, string _image, string _author, 
             string _publisher, unsigned int _pages, unsigned int _volume, string _mainCharacter, unsigned int _inspiration=0);
 
-        string getType() const;
+      
         string getMainCharacter() const;
         void setMainCharacter(const string& mainCharacter);
 

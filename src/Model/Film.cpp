@@ -8,9 +8,6 @@ Film::Film(string _title, unsigned int  _subGenre, string _description, bool _st
     Video(_title, _subGenre, _description, _starred, _watched, _year, _image, _producer, _platforms,  _duration, _inspiration, _prequel, _sequel), 
     director(_director), photoDirector(_photoDirector){};
 
-string Film::getType() const{
-    return "Film";
-};
 string Film::getDirector() const{
     return director;
 };

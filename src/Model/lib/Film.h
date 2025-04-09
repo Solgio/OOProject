@@ -16,7 +16,7 @@ class Film : public Video {
             string _producer, string _platforms, string photoDirector, unsigned int _duration, unsigned int _inspiration=0, unsigned int  _prequel=0, unsigned int 
  sequel=0);
         
-        string getType() const;
+      
         string getDirector() const;
         string getPhotoDirector()  const;
     
