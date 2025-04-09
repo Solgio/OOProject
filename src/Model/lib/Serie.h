@@ -14,8 +14,8 @@ class Serie : public Video {
 
     public:
         Serie();
-        Serie(string _title, unsigned int  _subGenre, string _description, bool _starred, bool _watched, unsigned int _year, string _image, string _producer, 
-            string _platforms, unsigned int duration, unsigned int _seasons, unsigned int _episodes, string _creator, bool _finished, unsigned int _inspiration=0, unsigned int _prequel=0,
+        Serie(string& _title, unsigned int&  _subGenre, string& _description, bool& _starred, bool& _watched, unsigned int& _year, string& _image, string& _producer, 
+            string& _platforms, unsigned int& duration, unsigned int& _seasons, unsigned int& _episodes, string& _creator, bool& _finished, unsigned int _inspiration=0, unsigned int _prequel=0,
             unsigned int _sequel=0);
         
       

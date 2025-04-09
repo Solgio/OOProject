@@ -14,8 +14,8 @@ class Comic : public Book {
         
     public:
         Comic();
-        Comic(string _title, unsigned int  _subGenre, string _description, bool _starred, bool _watched, unsigned int _year, string _image, string _author, 
-            string _publisher, unsigned int _pages, unsigned int _volume, string _illustrator, string _serie, bool _finished, string _mainCharacter, 
+        Comic(string& _title, unsigned int&  _subGenre, string& _description, bool& _starred, bool& _watched, unsigned int& _year, string& _image, string& _author, 
+            string& _publisher, unsigned int& _pages, unsigned int& _volume, string& _illustrator, string& _serie, bool& _finished, string& _mainCharacter, 
             unsigned int _inspiration=0);
         
       
