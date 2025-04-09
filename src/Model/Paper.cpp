@@ -2,8 +2,8 @@
 
 Paper::Paper():Content(), author(), publisher(), pages(), volume(){};
 
-Paper::Paper(string _title, unsigned int  _subGenre, string _description, bool _starred, bool _watched, unsigned int _year, string _image, string _author, 
-    string _publisher, unsigned int _pages, unsigned int _volume, unsigned int _inspiration):
+Paper::Paper(string& _title, unsigned int&  _subGenre, string& _description, bool& _starred, bool& _watched, unsigned int& _year, string& _image, string& _author, 
+    string& _publisher, unsigned int& _pages, unsigned int& _volume, unsigned int _inspiration):
     Content(_title, _subGenre, _description, _starred, _watched, _year, _image, _inspiration), author(_author), publisher(_publisher), pages(_pages), volume(_volume){};
 
 string Paper::getAuthor() const{
