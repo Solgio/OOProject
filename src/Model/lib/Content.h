@@ -40,7 +40,7 @@ class Content {
         
     public:
         Content();
-        Content(string _title, unsigned int  _subGenre, string _description, bool _starred, bool _watched, unsigned int _year, string _image, unsigned int _inspiration=0);
+        Content(string& _title, unsigned int  _subGenre, string _description, bool _starred, bool _watched, unsigned int _year, string _image, unsigned int _inspiration=0);
         unsigned int getId() const;
       
         string getTitle() const;
