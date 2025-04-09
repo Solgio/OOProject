@@ -10,6 +10,11 @@ class jsonReader: public IReader{
         Film* readFilm(const QJsonObject& object) const;
         Serie* readSerie(const QJsonObject& object) const;
         VideoGame* readVideogame(const QJsonObject& object) const;
+
+        void readContent(Content* content, const QJsonObject& object);
+        void readPaper(Paper* paper, const QJsonObject& object);
+        void readMultimedia(Multimedia* mult, const QJsonObject& object);
+        void readVideo(Video* video, const QJsonObject& object);
     public:
         ScienceFiction_Library* read(const string& filepath);
 };

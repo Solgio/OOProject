@@ -32,6 +32,10 @@ void VideoGame::setGameType(gameType tipo){
     gameGenre = tipo;
 }
 
+void VideoGame::setGameType(string& tipo){
+    gameGenre = tipo;
+}
+
 void VideoGame::accept(Visitor* visitor){
     visitor->visit(this);
 }

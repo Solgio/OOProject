@@ -71,8 +71,9 @@ ScienceFiction_Library* jsonReader::read(const string& filepath){
 
 Book* jsonReader::readBook(const QJsonObject& object) const{
     Book *libro = new Book();
+    /*
     libro->setTitle(object.value("Title").toString().toStdString());
-    //libro->hasSubgenre(); //!WTF
+    libro->addSubgenre(object.value("Genres").toInt());
     libro->setDescription(object.value("Description").toString().toStdString());
     libro->setYear(object.value("Year of Release").toInt());
     libro->setImage(object.value("Image").toString().toStdString());
@@ -85,20 +86,84 @@ Book* jsonReader::readBook(const QJsonObject& object) const{
     libro->setPublisher(object.value("Publisher").toString().toStdString());
     libro->setPages(object.value("Pages").toInt());
     libro->setVolume(object.value("Volume").toInt());
+    */
+    readPaper(libro, object);
+    libro->setMainCharacter(object.value("Main Character").toString().toStdString());
+    return libro;
 }
 
 Comic* jsonReader::readComic(const QJsonObject& object) const{
+    Comic *comic = new Comic();
 
+    readPaper(comic, object);
+    comic->setMainCharacter(object.value("Main Character").toString().toStdString());
+    comic->setIllustrator(object.value("Illustrator").toString().toStdString());
+    comic->setSerie(object.value("Series").toString().toStdString());
+    comic->setFinished(object.value("Finished").toBool());
+    return comic;
 }
 
 Film* jsonReader::readFilm(const QJsonObject& object) const{
+    Film *film = new Film();
 
+    readVideo(film, object);
+    film->setDirector(object.value("Director").toString().toStdString());
+    film->setPhotoDirector(object.value("Photo Director").toString().toStdString());
+    return film;
 }
 
 Serie* jsonReader::readSerie(const QJsonObject& object) const{
+    Serie *serie = new Serie();
 
+    readVideo(serie, object);
+    serie->setSeasons(object.value("Seasons").toInt());
+    serie->setEpisodes(object.value("Episodes").toInt());
+    serie->setCreator(object.value("Creator").toString().toStdString());
+    serie->setFinished(object.value("Finished").toBool());
+    return serie;
 }
 
 VideoGame* jsonReader::readVideogame(const QJsonObject& object) const{
+    VideoGame *videogame = new VideoGame();
 
+    readMultimedia(videogame, object);
+    videogame->setGameEngine(object.value("Game Engine").toString().toStdString());
+    //!videogame->setGameType(object.value("Game Genre").toString().toStdString());
+    videogame->setEpisodes(object.value("Episodes").toInt());
+    return videogame;
+}
+
+/*------------------------------------------------------------------*/
+/*------------------------------------------------------------------*/
+
+void jsonReader::readContent(Content* content, QJsonObject& object){
+    content->setTitle(object.value("Title").toString().toStdString());
+    content->addSubgenre(object.value("Genres").toInt());
+    content->setDescription(object.value("Description").toString().toStdString());
+    content->setYear(object.value("Year of Release").toInt());
+    content->setImage(object.value("Image").toString().toStdString());
+    content->setInspiration(object.value("Inspiration").toInt());
+    content->setWatched(object.value("Watched").toBool());
+    content->setStarred(object.value("Starred").toBool());
+}
+
+void jsonReader::readPaper(Paper* paper, QJsonObject& object){
+    readContent(paper, object);
+    libro->setAuthor(object.value("Author").toString().toStdString());
+    libro->setPublisher(object.value("Publisher").toString().toStdString());
+    libro->setPages(object.value("Pages").toInt());
+    libro->setVolume(object.value("Volume").toInt());
+}
+
+void jsonReader::readMultimedia(Multimedia* mult, QJsonObject& object){
+    readContent(mult, object);
+    mult->setProducer(object.value("Producer").toString().toStdString());
+    mult->setPlatforms(object.value("Platform").toString().toStdString());
+}
+
+void jsonReader::readVideo(Video* video, QJsonObject& object){
+    readMultimedia(video, object);
+    video->setDuration(object.value("Duration").toInt());
+    video->setPrequel(object.value("Prequel").toInt());
+    video->setSequel(object.value("Sequel").toInt());
 }
