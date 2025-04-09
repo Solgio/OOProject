@@ -14,9 +14,8 @@ Content::Content():
         };
     
 Content::Content(string _title, unsigned int _subGenre, string _description, bool _starred, bool _watched, unsigned int _year, string _image, unsigned int _inspiration):
-        title(_title), description(_description), starred(_starred), watched(_watched), yearOfRelease(_year),image(_image), inspiration(_inspiration) { 
+        title(_title),subgenres(static_cast<Subgenre>(_subGenre)), description(_description), starred(_starred), watched(_watched), yearOfRelease(_year),image(_image), inspiration(_inspiration) { 
             id = ScienceFiction_Library::getInstance().getNewId()+1; //Get the new ID from the library
-            subgenres = static_cast<Subgenre>(_subGenre); //Set the subgenres
         };
 
 unsigned int Content::getId() const{
