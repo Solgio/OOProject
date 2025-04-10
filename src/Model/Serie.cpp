@@ -32,7 +32,7 @@ void Serie::setSeasons(const unsigned int& nseasons){
 void Serie::setEpisodes(const unsigned int& nepisodes){
     episodes = nepisodes;
 }
-void Serie::setCreator(const string& ncreator){
+void Serie::setCreator(string_view ncreator){
     creator = ncreator;
 }
 void Serie::setFinished(const bool& nfinished){

@@ -23,8 +23,8 @@ class Comic : public Book {
         string getSerie() const;
         bool getFinished() const;
 
-        void setIllustrator(const string& illustrator);
-        void setSerie(const string& serie);
+        void setIllustrator(string_view illustrator);
+        void setSerie(string_view serie);
         void setFinished(const bool& finished);
         virtual void accept(Visitor* visitor) override;
         virtual void toXml(xmlVisitor* xvisitor, QDomDocument& doc, QDomElement& root );

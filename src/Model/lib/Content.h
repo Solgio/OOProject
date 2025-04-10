@@ -5,6 +5,7 @@
 #include "../../data_persistency/json/visitorJson.h"
 #include "../../data_persistency/xml/xmlVisitor.h"
 #include <string>
+using std::string_view;
 using std::string;
 
 enum class Subgenre {
@@ -56,14 +57,14 @@ class Content {
         string getImage() const;
 
         void setId(const unsigned int& id);
-        void setTitle(const string& title);
+        void setTitle(string_view title);
         void addSubgenre(const int& genre);
-        void setDescription(const string& description);
+        void setDescription(string_view description);
         void setInspiration(const unsigned int inspiration);
         void setStarred(const bool& starred);
         void setWatched(const bool& watched);
         void setYear(const unsigned int& year);
-        void setImage(const string& image);
+        void setImage(string_view image);
 
 
         virtual ~Content()=default;

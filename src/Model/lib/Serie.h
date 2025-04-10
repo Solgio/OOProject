@@ -27,7 +27,7 @@ class Serie : public Video {
 
         void setSeasons(const unsigned int& seasons);
         void setEpisodes(const unsigned int& episodes);
-        void setCreator(const string& creator);
+        void setCreator(string_view creator);
         void setFinished(const bool& finished);
 
         virtual void accept(Visitor* visitor) override;

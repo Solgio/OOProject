@@ -17,10 +17,10 @@ bool Comic::getFinished() const{
     return finished;
 };
 
-void Comic::setIllustrator(const string& nillustrator){
+void Comic::setIllustrator(string_view nillustrator){
     illustrator=nillustrator;
 };
-void Comic::setSerie(const string& nserie){
+void Comic::setSerie(string_view nserie){
     serie=nserie;
 };
 void Comic::setFinished(const bool& nfinished){

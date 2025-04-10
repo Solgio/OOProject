@@ -16,9 +16,9 @@ string Multimedia::getPlatforms()const{
     return platforms;
 }
 
-void Multimedia::setProducer(const string& _producer){
+void Multimedia::setProducer(string_view _producer){
     producer = _producer;
 }
-void Multimedia::setPlatforms(const string& _platforms){
+void Multimedia::setPlatforms(string_view _platforms){
     platforms = _platforms;
 }

@@ -20,8 +20,8 @@ class Film : public Video {
         string getDirector() const;
         string getPhotoDirector()  const;
     
-        void setDirector(const string& director);
-        void setPhotoDirector(const string& producer);
+        void setDirector(string_view director);
+        void setPhotoDirector(string_view producer);
         
         virtual void accept(Visitor* visitor) override;
         virtual void toXml(xmlVisitor* xvisitor, QDomDocument& doc, QDomElement& root );

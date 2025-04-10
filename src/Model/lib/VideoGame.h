@@ -11,8 +11,8 @@ class VideoGame : public Multimedia {
         SANDBOX, TOWERDEFENSE, CARDGAME, PARTYGAME, CASUAL, ARCADE, VIRTUALREALITY};
 
         VideoGame();
-        VideoGame(string& _title, unsigned int&  _subGenre, string& _description, bool& _starred, bool& _watched, unsigned int& _year, string& _image, string& _producer, 
-                  string& _platforms, string& _gameEngine, unsigned int& _expectedHours, gameType& _gameType, unsigned int _inspiration=0);
+        VideoGame(const string& _title, const unsigned int&  _subGenre, const string& _description, const bool& _starred, const bool& _watched, const unsigned int& _year, const string& _image, const string& _producer, 
+            const string& _platforms, const string& _gameEngine, const unsigned int& _expectedHours, const gameType& _gameType, unsigned int _inspiration=0);
         
       
         string getGameEngine() const;
@@ -22,11 +22,11 @@ class VideoGame : public Multimedia {
 
         unsigned int getExpectedHours() const;
         
-        void setGameEngine(const string& gameEngine);
+        void setGameEngine(string_view gameEngine);
 
         void setGameType(gameType tipo);
 
-        gameType stringToGametype(const string& tipo) const;
+        gameType stringToGametype(string_view tipo);
 
         void setExpectedHours(const unsigned int& expectedHours);
         virtual ~VideoGame();

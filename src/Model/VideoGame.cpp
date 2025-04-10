@@ -25,7 +25,7 @@ enum VideoGame::gameType VideoGame::getGameTypeEnum() const{
     return gameGenre;
 }
 
-enum VideoGame::gameType VideoGame::stringToGametype(const string& tipo) const{
+enum VideoGame::gameType VideoGame::stringToGametype(string_view tipo){
     if(tipo == "FPS"){ return VideoGame::gameType::FPS;}
     if(tipo == "RPG"){ return VideoGame::gameType::RPG;}
     if(tipo == "RTS"){ return VideoGame::gameType::RTS;}
@@ -51,7 +51,7 @@ enum VideoGame::gameType VideoGame::stringToGametype(const string& tipo) const{
     //throw ERROR_ENUM;
 }
 
-void VideoGame::setGameEngine(const string& _gameEngine){
+void VideoGame::setGameEngine(string_view _gameEngine){
     gameEngine = _gameEngine;
 }
 void VideoGame::setExpectedHours(const unsigned int& _expectedHours){

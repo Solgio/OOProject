@@ -23,8 +23,8 @@ class Paper : public Content {
         unsigned int getPages() const;
         unsigned int getVolume() const;
         
-        void setAuthor(const string& author);
-        void setPublisher(const string& publisher);
+        void setAuthor(string_view author);
+        void setPublisher(string_view publisher);
         void setPages(const unsigned int& pages);
         void setVolume(const unsigned int& volume);
        

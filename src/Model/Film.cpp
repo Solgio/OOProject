@@ -15,10 +15,10 @@ string Film::getPhotoDirector()  const{
     return photoDirector;
 };
 
-void Film::setDirector(const string& ndirector){
+void Film::setDirector(string_view ndirector){
     director=ndirector;
 };
-void Film::setPhotoDirector(const string& nPhotoDirector){
+void Film::setPhotoDirector(string_view nPhotoDirector){
     photoDirector=nPhotoDirector;
 };  
 

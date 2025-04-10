@@ -82,13 +82,13 @@ string Content::getImage() const{
 void Content::setId(const unsigned int& nid){
     id=nid;
 };
-void Content::setTitle(const string& ntitle){
+void Content::setTitle(string_view ntitle){
     title=ntitle;
 };
 void Content::addSubgenre(const int& genre) {
     subgenres = static_cast<Subgenre>(static_cast<underlying_type_t<Subgenre>>(subgenres) | genre);
 }
-void Content::setDescription(const string& ndescription){
+void Content::setDescription(string_view ndescription){
     description=ndescription;
 };
 void Content::setInspiration(const unsigned int ninspiration){
@@ -105,6 +105,6 @@ void Content::setWatched(const bool& nwatched){
 void Content::setYear(const unsigned int& nyear){
     yearOfRelease=nyear;
 };
-void Content::setImage(const string& nimage){
+void Content::setImage(string_view nimage){
     image=nimage;
 };

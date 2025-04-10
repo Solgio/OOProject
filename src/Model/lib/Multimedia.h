@@ -20,8 +20,8 @@ class Multimedia : public Content {
         string getProducer() const;
         string getPlatforms() const;
         
-        void setProducer(const string& producer);
-        void setPlatforms(const string& platforms);
+        void setProducer(string_view producer);
+        void setPlatforms(string_view platforms);
        
         virtual void accept(Visitor* visitor) override = 0;
         virtual void toXml(xmlVisitor* xvisitor, QDomDocument& doc, QDomElement& root ) = 0;

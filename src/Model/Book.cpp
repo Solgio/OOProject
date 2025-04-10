@@ -10,7 +10,7 @@ string Book::getMainCharacter() const{
     return mainCharacter;
 };  
 
-void Book::setMainCharacter(const string& nmainCharacter){
+void Book::setMainCharacter(string_view nmainCharacter){
     mainCharacter=nmainCharacter;
 };
 

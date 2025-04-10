@@ -19,10 +19,10 @@ unsigned int Paper::getVolume() const{
     return volume;
 };
 
-void Paper::setAuthor(const string& nauthor){
+void Paper::setAuthor(string_view nauthor){
     author=nauthor;
 };
-void Paper::setPublisher(const string& npublisher){
+void Paper::setPublisher(string_view npublisher){
     publisher=npublisher;
 };
 void Paper::setPages(const unsigned int& npages){
