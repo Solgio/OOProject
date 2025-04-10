@@ -25,7 +25,7 @@ enum VideoGame::gameType VideoGame::getGameTypeEnum() const{
     return gameGenre;
 }
 
-enum VideoGame::gameType VideoGame::stringToGametype(const string& tipo){
+enum VideoGame::gameType VideoGame::stringToGametype(const string& tipo) const{
     if(tipo == "FPS"){ return VideoGame::gameType::FPS;}
     if(tipo == "RPG"){ return VideoGame::gameType::RPG;}
     if(tipo == "RTS"){ return VideoGame::gameType::RTS;}
