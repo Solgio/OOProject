@@ -53,7 +53,7 @@ void ScienceFiction_Library::removeContent(Content* content){
     }
 };
 
-vector<Content*> ScienceFiction_Library::getContentList(){
+vector<Content*> ScienceFiction_Library::getContentList()const{
     return contentList;
 };
 
@@ -92,16 +92,15 @@ void ScienceFiction_Library::filterContent(Subgenre genre){
     }
 };
 
-//VERSIONE ALTERNATIVA: Invece che un array viene passato un singolo indice per verificare in O(1) o un array di indici ma nel caso peggiore la coomplessità è la stessa
-/*vector<Content*>& ScienceFiction_Library::filterGen(unsigned int index){
-    vector<Content*> filteredListbyGen;
+//! ALTERNATIVA, DA VALUTARE CON QT COSA CONVIENE. PROBABILMENTE QUESTA E' PIU' UTILE
+void ScienceFiction_Library::filteredListbyGen(unsigned int& genre){
+    shownContentList.clear();
     for(const auto& it : contentList){
-        if(choosenGen[index]){
-            filteredListbyGen.push_back(it);
+        if(it->hasAnySubgenre(static_cast<Subgenre>(genre))){
+            shownContentList.push_back(it);
         }
-        
     }
-};*/
+};
 
 void ScienceFiction_Library::watchedOrNot(const bool& _watched){
     shownContentList.clear();
