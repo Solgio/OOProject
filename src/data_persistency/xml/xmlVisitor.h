@@ -1,7 +1,5 @@
 #ifndef XVISITOR_H
 #define XVISITOR_H
-//#include <QFile> // per accedere/creare file
-//#include <QDir> // per gestire la directory
 
 class Book;
 class Comic;

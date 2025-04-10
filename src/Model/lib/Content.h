@@ -61,8 +61,8 @@ class Content {
         void addSubgenre(const int& genre);
         void setDescription(string_view description);
         void setInspiration(const unsigned int inspiration);
-        void setStarred(const bool& starred);
-        void setWatched(const bool& watched);
+        void switchStarred(const bool& starred);
+        void switchWatched(const bool& watched);
         void setYear(const unsigned int& year);
         void setImage(string_view image);
 
