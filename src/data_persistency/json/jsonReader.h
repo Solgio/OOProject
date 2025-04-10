@@ -5,11 +5,11 @@
 
 class jsonReader: public IReader{
     private:
-        Book* readBook(const QJsonObject& object) const;
-        Comic* readComic(const QJsonObject& object) const;
-        Film* readFilm(const QJsonObject& object) const;
-        Serie* readSerie(const QJsonObject& object) const;
-        VideoGame* readVideogame(const QJsonObject& object) const;
+        Book* readBook(const QJsonObject& object);
+        Comic* readComic(const QJsonObject& object);
+        Film* readFilm(const QJsonObject& object);
+        Serie* readSerie(const QJsonObject& object);
+        VideoGame* readVideogame(const QJsonObject& object);
 
         void readContent(Content* content, const QJsonObject& object);
         void readPaper(Paper* paper, const QJsonObject& object);

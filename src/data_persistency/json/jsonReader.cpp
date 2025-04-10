@@ -69,7 +69,7 @@ ScienceFiction_Library* jsonReader::read(const string& filepath){
     }   
 };
 
-Book* jsonReader::readBook(const QJsonObject& object) const{
+Book* jsonReader::readBook(const QJsonObject& object){
     Book *libro = new Book();
     /*
     libro->setTitle(object.value("Title").toString().toStdString());
@@ -92,7 +92,7 @@ Book* jsonReader::readBook(const QJsonObject& object) const{
     return libro;
 }
 
-Comic* jsonReader::readComic(const QJsonObject& object) const{
+Comic* jsonReader::readComic(const QJsonObject& object){
     Comic *comic = new Comic();
 
     readPaper(comic, object);
@@ -103,7 +103,7 @@ Comic* jsonReader::readComic(const QJsonObject& object) const{
     return comic;
 }
 
-Film* jsonReader::readFilm(const QJsonObject& object) const{
+Film* jsonReader::readFilm(const QJsonObject& object){
     Film *film = new Film();
 
     readVideo(film, object);
@@ -112,7 +112,7 @@ Film* jsonReader::readFilm(const QJsonObject& object) const{
     return film;
 }
 
-Serie* jsonReader::readSerie(const QJsonObject& object) const{
+Serie* jsonReader::readSerie(const QJsonObject& object){
     Serie *serie = new Serie();
 
     readVideo(serie, object);
@@ -123,20 +123,20 @@ Serie* jsonReader::readSerie(const QJsonObject& object) const{
     return serie;
 }
 
-VideoGame* jsonReader::readVideogame(const QJsonObject& object) const{
+VideoGame* jsonReader::readVideogame(const QJsonObject& object){
     VideoGame *videogame = new VideoGame();
 
     readMultimedia(videogame, object);
     videogame->setGameEngine(object.value("Game Engine").toString().toStdString());
     //!videogame->setGameType(object.value("Game Genre").toString().toStdString());
-    videogame->setEpisodes(object.value("Episodes").toInt());
+    videogame->setExpectedHours(object.value("Expected Hours Of Play").toInt());
     return videogame;
 }
 
 /*------------------------------------------------------------------*/
 /*------------------------------------------------------------------*/
 
-void jsonReader::readContent(Content* content, QJsonObject& object){
+void jsonReader::readContent(Content* content, const QJsonObject& object){
     content->setTitle(object.value("Title").toString().toStdString());
     content->addSubgenre(object.value("Genres").toInt());
     content->setDescription(object.value("Description").toString().toStdString());
@@ -147,21 +147,21 @@ void jsonReader::readContent(Content* content, QJsonObject& object){
     content->setStarred(object.value("Starred").toBool());
 }
 
-void jsonReader::readPaper(Paper* paper, QJsonObject& object){
+void jsonReader::readPaper(Paper* paper, const QJsonObject& object){
     readContent(paper, object);
-    libro->setAuthor(object.value("Author").toString().toStdString());
-    libro->setPublisher(object.value("Publisher").toString().toStdString());
-    libro->setPages(object.value("Pages").toInt());
-    libro->setVolume(object.value("Volume").toInt());
+    paper->setAuthor(object.value("Author").toString().toStdString());
+    paper->setPublisher(object.value("Publisher").toString().toStdString());
+    paper->setPages(object.value("Pages").toInt());
+    paper->setVolume(object.value("Volume").toInt());
 }
 
-void jsonReader::readMultimedia(Multimedia* mult, QJsonObject& object){
+void jsonReader::readMultimedia(Multimedia* mult, const QJsonObject& object){
     readContent(mult, object);
     mult->setProducer(object.value("Producer").toString().toStdString());
     mult->setPlatforms(object.value("Platform").toString().toStdString());
 }
 
-void jsonReader::readVideo(Video* video, QJsonObject& object){
+void jsonReader::readVideo(Video* video, const QJsonObject& object){
     readMultimedia(video, object);
     video->setDuration(object.value("Duration").toInt());
     video->setPrequel(object.value("Prequel").toInt());
