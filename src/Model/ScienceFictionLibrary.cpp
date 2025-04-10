@@ -27,7 +27,7 @@ void ScienceFiction_Library::testPrint() const{
 Content* ScienceFiction_Library::searchId(const unsigned int& id){
     for(const auto& it : contentList){
         if(id==it->getId()){
-            return it;
+            return it.get();
         }
 
     }
@@ -35,7 +35,7 @@ Content* ScienceFiction_Library::searchId(const unsigned int& id){
 };
 
 void ScienceFiction_Library::addContent(Content* content){
-    contentList.push_back(content);
+    contentList.push_back(make_unique<Content>(*content));
     incrementId();
 };
 
@@ -45,7 +45,7 @@ void ScienceFiction_Library::removeContent(Content* content){
             (*it)->setInspiration(0);         //we set the inspiration to nullptr
             ++it;
         }
-        if (*it == content) {
+        if (*it == make_unique<Content>(*content)) {
             it = contentList.erase(it);
         } else {
             ++it;
@@ -53,7 +53,7 @@ void ScienceFiction_Library::removeContent(Content* content){
     }
 };
 
-vector<Content*> ScienceFiction_Library::getContentList()const{
+vector<unique_ptr<Content>> ScienceFiction_Library::getContentList()const{
     return contentList;
 };
 
@@ -136,7 +136,7 @@ void ScienceFiction_Library::starredOrNot(const bool& _starred){
         }
     }
 };
-
+/*
 void ScienceFiction_Library::clearLibrary(){
     for(auto& it : contentList){
         delete it;
@@ -148,7 +148,7 @@ void ScienceFiction_Library::clearShown(){
         delete it;
     }
     ;shownContentList.clear();
-}
+}*/
 
 bool ScienceFiction_Library::saveToFile(const string& filepath)const{
     string extension=filepath.substr(filepath.find_last_of('.'));

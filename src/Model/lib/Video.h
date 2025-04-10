@@ -21,7 +21,7 @@ class Video : public Multimedia {
         unsigned int getPrequel() const;
         unsigned int getSequel() const;
         
-        void setDuration(const const unsigned int& _duration);
+        void setDuration(const unsigned int& _duration);
         void setPrequel(const unsigned int& _prequel);
         void setSequel(const unsigned int& _sequel);
         virtual ~Video(){

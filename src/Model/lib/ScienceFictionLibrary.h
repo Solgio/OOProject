@@ -21,7 +21,7 @@ class ScienceFiction_Library{
         Content* searchId(const unsigned int& __id_t);
         void addContent(Content* content);
         void removeContent(Content* content);
-        vector<Content*> getContentList()const;
+        vector<unique_ptr<Content>> getContentList()const;
         void showAllContent();            //Shows all the content in the library
         void filterContent(const string& _title);
         void filterContent(const unsigned int& _year);
