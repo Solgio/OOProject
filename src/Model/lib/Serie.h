@@ -31,8 +31,8 @@ class Serie : public Video {
         void setFinished(const bool& finished);
 
         virtual void accept(Visitor* visitor) override;
-        virtual void toXml(xmlVisitor* xvisitor, QDomDocument& doc, QDomElement& root );
-        virtual void toJson(VisitorJson* vistitorJson);
+        virtual void toXml(xmlVisitor* xvisitor, QDomDocument& doc, QDomElement& root ) override;
+        virtual void toJson(VisitorJson* vistitorJson) override;
 };
 
 #endif

@@ -32,8 +32,8 @@ class VideoGame : public Multimedia {
         virtual ~VideoGame();
         
         virtual void accept(Visitor* visitor) override;
-        virtual void toXml(xmlVisitor* xvisitor, QDomDocument& doc, QDomElement& root );
-        virtual void toJson(VisitorJson* vistitorJson);
+        virtual void toXml(xmlVisitor* xvisitor, QDomDocument& doc, QDomElement& root ) override;
+        virtual void toJson(VisitorJson* vistitorJson) override;
 
     private:
         string gameEngine;
