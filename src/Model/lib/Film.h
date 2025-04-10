@@ -23,9 +23,9 @@ class Film : public Video {
         void setDirector(string_view director);
         void setPhotoDirector(string_view producer);
         
-        virtual void accept(Visitor* visitor) override;
-        virtual void toXml(xmlVisitor* xvisitor, QDomDocument& doc, QDomElement& root ) override;
-        virtual void toJson(VisitorJson* vistitorJson) override;
+        void accept(Visitor* visitor) override;
+        void toXml(xmlVisitor* xvisitor, QDomDocument& doc, QDomElement& root ) override;
+        void toJson(VisitorJson* vistitorJson) override;
 };
 
 #endif

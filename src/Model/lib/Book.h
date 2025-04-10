@@ -18,9 +18,9 @@ class Book : public Paper {
         string getMainCharacter() const;
         void setMainCharacter(string_view mainCharacter);
 
-        virtual void accept(Visitor* visitor) override;
-        virtual void toXml(xmlVisitor* xvisitor, QDomDocument& doc, QDomElement& root) override;
-        virtual void toJson(VisitorJson* vistitorJson) override;
+        void accept(Visitor* visitor) override;
+        void toXml(xmlVisitor* xvisitor, QDomDocument& doc, QDomElement& root) override;
+        void toJson(VisitorJson* vistitorJson) override;
     };
 
 #endif

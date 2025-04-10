@@ -28,9 +28,9 @@ class Paper : public Content {
         void setPages(const unsigned int& pages);
         void setVolume(const unsigned int& volume);
        
-        virtual void accept(Visitor* visitor) override = 0;
-        virtual void toXml(xmlVisitor* xvisitor, QDomDocument& doc, QDomElement& root ) = 0;
-        virtual void toJson(VisitorJson* vistitorJson) = 0;
+        void accept(Visitor* visitor) override = 0;
+        void toXml(xmlVisitor* xvisitor, QDomDocument& doc, QDomElement& root )override = 0;
+        void toJson(VisitorJson* vistitorJson) override= 0;
 };
 
 #endif
