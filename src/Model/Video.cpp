@@ -33,7 +33,7 @@ void Video::setPrequel(const unsigned int& _prequelId){
         return;
     }
     // Check if the prequel ID exists in the library and if it is a Video type Content
-    Video* tprequel = dynamic_cast<Video*>(ScienceFiction_Library::getInstance().searchId(_prequelId));
+    auto tprequel = dynamic_cast<Video*>(ScienceFiction_Library::getInstance().searchId(_prequelId));
     if(tprequel){
         prequel = _prequelId;
         tprequel->setSequel(this->getId());
@@ -49,7 +49,7 @@ void Video::setSequel(const unsigned int& _sequelId){
         return;
     }
     // Check if the sequel ID exists in the library and if it is a Video type Content
-    Video* tsequel=dynamic_cast<Video*>(ScienceFiction_Library::getInstance().searchId(_sequelId));
+    auto tsequel=dynamic_cast<Video*>(ScienceFiction_Library::getInstance().searchId(_sequelId));
     if(tsequel){
         sequel = _sequelId;
         tsequel->setPrequel(this->getId());

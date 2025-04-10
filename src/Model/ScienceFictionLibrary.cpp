@@ -83,7 +83,7 @@ void ScienceFiction_Library::filterContent(const unsigned int& _year){
     }
 };
 
-void ScienceFiction_Library::filterContent(Subgenre genre){
+void ScienceFiction_Library::filterContent(const Subgenre& genre){
     shownContentList.clear();
     for (const auto& it : contentList) {
         if (it->hasAnySubgenre(genre)) {
