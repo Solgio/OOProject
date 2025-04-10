@@ -61,16 +61,16 @@ class Content {
         void addSubgenre(const int& genre);
         void setDescription(string_view description);
         void setInspiration(const unsigned int inspiration);
-        void switchStarred(const bool& starred);
-        void switchWatched(const bool& watched);
+        void setStarred(const bool& starred);
+        void setWatched(const bool& watched);
         void setYear(const unsigned int& year);
         void setImage(string_view image);
 
 
         virtual ~Content()=default;
-        virtual void accept(Visitor* visitor) = 0;
-        virtual void toXml(xmlVisitor* xvisitor, QDomDocument& doc, QDomElement& root ) = 0;
-        virtual void toJson(VisitorJson* vistitorJson) = 0;
+        virtual void accept(Visitor* visitor);
+        virtual void toXml(xmlVisitor* xvisitor, QDomDocument& doc, QDomElement& root );
+        virtual void toJson(VisitorJson* vistitorJson);
 
 };
 

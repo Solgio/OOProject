@@ -94,11 +94,11 @@ void Content::setDescription(string_view ndescription){
 void Content::setInspiration(const unsigned int ninspiration){
     inspiration=ninspiration;
 };
-void Content::switchStarred(const bool& nstarred){
-    (!starred)? starred=true : starred=false;
+void Content::setStarred(const bool& nstarred){
+    starred=nstarred;
 };
-void Content::switchWatched(const bool& nwatched){
-    (!watched)? watched=true : watched=false;
+void Content::setWatched(const bool& nwatched){
+    watched=nwatched;
 };
 void Content::setYear(const unsigned int& nyear){
     yearOfRelease=nyear;

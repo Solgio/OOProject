@@ -41,11 +41,11 @@ void ScienceFiction_Library::addContent(Content* content){
 
 void ScienceFiction_Library::removeContent(Content* content){
     for(auto it = contentList.begin(); it != contentList.end();){
-        if((*it)->getInspiration() == content->getId()){  //If the content that we want to remove is an inspiration for another content,
-            (*it)->setInspiration(0);         //we set the inspiration to nullptr
+        if((*it)->getInspiration() == content->getId()){  // If the content that we want to remove is an inspiration for another content,
+            (*it)->setInspiration(0);         // we set the inspiration to 0
             ++it;
         }
-        if (*it == make_unique<Content>(*content)) {
+        else if ((*it)->getId() == content->getId()) {  // Compare by ID instead
             it = contentList.erase(it);
         } else {
             ++it;
@@ -53,14 +53,14 @@ void ScienceFiction_Library::removeContent(Content* content){
     }
 };
 
-vector<unique_ptr<Content>> ScienceFiction_Library::getContentList()const{
+const vector<unique_ptr<Content>>& ScienceFiction_Library::getContentList()const{
     return contentList;
 };
 
 void ScienceFiction_Library::showAllContent(){
     shownContentList.clear();
     for(const auto& it : contentList){
-        shownContentList.push_back(it);
+        shownContentList.push_back(it.get());
     }
     testPrint();
 };
@@ -69,7 +69,7 @@ void ScienceFiction_Library::filterContent(string_view _title){
     shownContentList.clear();
     for(const auto& it : contentList){
         if(it->getTitle() == _title){
-            shownContentList.push_back(it);
+            shownContentList.push_back(it.get());
         }
     }
 };
@@ -78,7 +78,7 @@ void ScienceFiction_Library::filterContent(const unsigned int& _year){
     shownContentList.clear();
     for(const auto& it : contentList){
         if(it->getYear() == _year){
-            shownContentList.push_back(it);
+            shownContentList.push_back(it.get());
         }
     }
 };
@@ -87,7 +87,7 @@ void ScienceFiction_Library::filterContent(const Subgenre& genre){
     shownContentList.clear();
     for (const auto& it : contentList) {
         if (it->hasAnySubgenre(genre)) {
-            shownContentList.push_back(it);
+            shownContentList.push_back(it.get());
         }
     }
 };
@@ -97,7 +97,7 @@ void ScienceFiction_Library::filteredListbyGen(const unsigned int& genre){
     shownContentList.clear();
     for(const auto& it : contentList){
         if(it->hasAnySubgenre(static_cast<Subgenre>(genre))){
-            shownContentList.push_back(it);
+            shownContentList.push_back(it.get());
         }
     }
 };
@@ -107,14 +107,14 @@ void ScienceFiction_Library::watchedOrNot(const bool& _watched){
     if(_watched){
         for(const auto& it : contentList){
             if(it->getWatched()){
-                shownContentList.push_back(it);
+                shownContentList.push_back(it.get());
             }
         }
     }
     else{
         for(const auto& it : contentList){
             if(!it->getWatched()){
-                shownContentList.push_back(it);
+                shownContentList.push_back(it.get());
             }
         }
     }
@@ -124,14 +124,14 @@ void ScienceFiction_Library::starredOrNot(const bool& _starred){
     if(_starred){
         for(const auto& it : contentList){
             if(it->getStarred()){
-                shownContentList.push_back(it);
+                shownContentList.push_back(it.get());
             }
         }
     }
     else{
         for(const auto& it : contentList){
             if(!it->getStarred()){
-                shownContentList.push_back(it);
+                shownContentList.push_back(it.get());
             }
         }
     }

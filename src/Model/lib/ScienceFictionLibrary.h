@@ -11,7 +11,7 @@ class ScienceFiction_Library{
         unsigned int newId;
         ScienceFiction_Library* instance;
         vector<unique_ptr<Content>> contentList;
-        vector<unique_ptr<Content>> shownContentList;
+        vector<Content*> shownContentList;
         ScienceFiction_Library();   //Singleton
 
     public:
@@ -21,7 +21,7 @@ class ScienceFiction_Library{
         Content* searchId(const unsigned int& __id_t);
         void addContent(Content* content);
         void removeContent(Content* content);
-        vector<unique_ptr<Content>> getContentList()const;
+        const vector<unique_ptr<Content>>& getContentList()const;
         void showAllContent();            //Shows all the content in the library
         void filterContent(string_view _title);
         void filterContent(const unsigned int& _year);
