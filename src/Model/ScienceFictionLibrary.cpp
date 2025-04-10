@@ -65,7 +65,7 @@ void ScienceFiction_Library::showAllContent(){
     testPrint();
 };
 
-void ScienceFiction_Library::filterContent(const string& _title){
+void ScienceFiction_Library::filterContent(string_view _title){
     shownContentList.clear();
     for(const auto& it : contentList){
         if(it->getTitle() == _title){
@@ -93,7 +93,7 @@ void ScienceFiction_Library::filterContent(const Subgenre& genre){
 };
 
 //! ALTERNATIVA, DA VALUTARE CON QT COSA CONVIENE. PROBABILMENTE QUESTA E' PIU' UTILE
-void ScienceFiction_Library::filteredListbyGen(unsigned int& genre){
+void ScienceFiction_Library::filteredListbyGen(const unsigned int& genre){
     shownContentList.clear();
     for(const auto& it : contentList){
         if(it->hasAnySubgenre(static_cast<Subgenre>(genre))){

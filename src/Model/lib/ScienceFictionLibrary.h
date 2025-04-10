@@ -23,10 +23,10 @@ class ScienceFiction_Library{
         void removeContent(Content* content);
         vector<unique_ptr<Content>> getContentList()const;
         void showAllContent();            //Shows all the content in the library
-        void filterContent(const string& _title);
+        void filterContent(string_view _title);
         void filterContent(const unsigned int& _year);
         void filterContent(const Subgenre& genre);
-        void filteredListbyGen(unsigned int& genre);
+        void filteredListbyGen(const unsigned int& genre);
         void watchedOrNot(const bool& _watched);         //Shows only the watched or not watched content
         void starredOrNot(const bool& _starred);         //Shows only the starred or not starred content
         void clearLibrary();                //Clear the library
