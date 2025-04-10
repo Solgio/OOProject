@@ -45,8 +45,8 @@ class Content {
       
         string getTitle() const;
         int getSubgenre() const;
-        bool hasSubgenre(Subgenre genre) const;
-        bool hasAnySubgenre(Subgenre genres) const;
+        bool hasSubgenre(const Subgenre genre) const;
+        bool hasAnySubgenre(const Subgenre genres) const;
         string getSubgenreString() const;
         string getDescription() const;
         unsigned int getInspiration() const;
@@ -59,7 +59,7 @@ class Content {
         void setTitle(const string& title);
         void addSubgenre(const int& genre);
         void setDescription(const string& description);
-        void setInspiration(unsigned int inspiration);
+        void setInspiration(const unsigned int inspiration);
         void setStarred(const bool& starred);
         void setWatched(const bool& watched);
         void setYear(const unsigned int& year);

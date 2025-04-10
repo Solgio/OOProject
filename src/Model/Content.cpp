@@ -30,7 +30,7 @@ int Content::getSubgenre() const{
     return static_cast<underlying_type_t<Subgenre>>(subgenres);
 };
 // Check if content has any of the subgenres
-bool Content::hasAnySubgenre(Subgenre genres) const {
+bool Content::hasAnySubgenre(const Subgenre genres) const {
     return static_cast<underlying_type_t<Subgenre>>(subgenres & genres) != 0;
 }
 // Check if content has a specific subgenre
@@ -91,7 +91,7 @@ void Content::addSubgenre(const int& genre) {
 void Content::setDescription(const string& ndescription){
     description=ndescription;
 };
-void Content::setInspiration(unsigned int ninspiration){
+void Content::setInspiration(const unsigned int ninspiration){
     inspiration=ninspiration;
 };
 void Content::setStarred(const bool& nstarred){

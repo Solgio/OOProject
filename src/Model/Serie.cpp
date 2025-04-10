@@ -26,17 +26,17 @@ bool Serie::getFinished()const{
 
 
 
-void Serie::setSeasons(unsigned int _seasons){
-    seasons = _seasons;
+void Serie::setSeasons(const unsigned int& nseasons){
+    seasons = nseasons;
 }
-void Serie::setEpisodes(unsigned int _episodes){
-    episodes = _episodes;
+void Serie::setEpisodes(const unsigned int& nepisodes){
+    episodes = nepisodes;
 }
-void Serie::setCreator(string _creator){
-    creator = _creator;
+void Serie::setCreator(const string& ncreator){
+    creator = ncreator;
 }
-void Serie::setFinished(bool _finished){
-    finished = _finished;
+void Serie::setFinished(const bool& nfinished){
+    finished = nfinished;
 }
 
 void Serie::accept(Visitor* visitor){
