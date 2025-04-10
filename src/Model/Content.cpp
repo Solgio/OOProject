@@ -1,11 +1,12 @@
 #include "lib/Content.h"
 #include "lib/ScienceFictionLibrary.h"
+using std::underlying_type_t;
 
 inline   Subgenre operator|(Subgenre a, Subgenre b) {
-    return static_cast<Subgenre>(static_cast<int>(a) | static_cast<int>(b));
+    return static_cast<Subgenre>(static_cast<underlying_type_t<Subgenre>>(a) | static_cast<underlying_type_t<Subgenre>>(b));
 }
 inline Subgenre operator&(Subgenre a, Subgenre b) {
-    return static_cast<Subgenre>(static_cast<int>(a) & static_cast<int>(b));
+    return static_cast<Subgenre>(static_cast<underlying_type_t<Subgenre>>(a) & static_cast<underlying_type_t<Subgenre>>(b));
 }
 
 Content::Content():
@@ -26,11 +27,11 @@ string Content::getTitle() const{
 };
 
 int Content::getSubgenre() const{
-    return static_cast<int>(subgenres);
+    return static_cast<underlying_type_t<Subgenre>>(subgenres);
 };
 // Check if content has any of the subgenres
 bool Content::hasAnySubgenre(Subgenre genres) const {
-    return static_cast<int>(subgenres & genres) != 0;
+    return static_cast<underlying_type_t<Subgenre>>(subgenres & genres) != 0;
 }
 // Check if content has a specific subgenre
 bool Content::hasSubgenre(const Subgenre genre) const {
@@ -85,7 +86,7 @@ void Content::setTitle(const string& ntitle){
     title=ntitle;
 };
 void Content::addSubgenre(const int& genre) {
-    subgenres = static_cast<Subgenre>(static_cast<int>(subgenres) | genre);
+    subgenres = static_cast<Subgenre>(static_cast<underlying_type_t<Subgenre>>(subgenres) | genre);
 }
 void Content::setDescription(const string& ndescription){
     description=ndescription;
@@ -107,5 +108,3 @@ void Content::setYear(const unsigned int& nyear){
 void Content::setImage(const string& nimage){
     image=nimage;
 };
-
-Content::~Content() {}
