@@ -15,8 +15,8 @@ class Paper : public Content {
             
     public:
         Paper();
-        Paper(string& _title, unsigned int&  _subGenre, string& _description, bool& _starred, bool& _watched, unsigned int& _year, string& _image, string& _author, 
-            string& _publisher, unsigned int& _pages, unsigned int& _volume, unsigned int _inspiration=0);
+        Paper(const string& _title, const unsigned int&  _subGenre, const string& _description, const bool& _starred, const bool& _watched, const unsigned int& _year, const string& _image, const string& _author, 
+            const string& _publisher, const unsigned int& _pages, const unsigned int& _volume, unsigned int _inspiration=0);
         
         string getAuthor() const;
         string getPublisher() const;

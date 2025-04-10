@@ -1,15 +1,17 @@
 #ifndef LIBRARY_H
 #define LIBRARY_H
 #include "Content.h"
+#include <memory>
 #include <vector>
 using std::vector;
+using std::unique_ptr;
 
 class ScienceFiction_Library{
     private:
         unsigned int newId;
         ScienceFiction_Library* instance;
-        vector<Content*> contentList;
-        vector<Content*> shownContentList;
+        vector<unique_ptr<Content>> contentList;
+        vector<unique_ptr<Content>> shownContentList;
         ScienceFiction_Library();   //Singleton
 
     public:

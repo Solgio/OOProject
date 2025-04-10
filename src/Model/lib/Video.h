@@ -14,14 +14,14 @@ class Video : public Multimedia {
 
     public:
         Video();
-        Video(string& _title, unsigned int&  _subGenre, string& _description, bool& _starred, bool& _watched, unsigned int& _year, string& _image, string& _producer, 
-            string& _platforms, unsigned int& _duration, unsigned int _inspiration=0, unsigned int _prequel=0, unsigned int _sequel=0);
+        Video(const string& _title, const unsigned int&  _subGenre, const string& _description, const bool& _starred, const bool& _watched, const unsigned int& _year, const string& _image, const string& _producer, 
+            const string& _platforms, const unsigned int& _duration, unsigned int _inspiration=0, unsigned int _prequel=0, unsigned int _sequel=0);
         
         unsigned int getDuration() const;
         unsigned int getPrequel() const;
         unsigned int getSequel() const;
         
-        void setDuration(const unsigned int& _duration);
+        void setDuration(const const unsigned int& _duration);
         void setPrequel(const unsigned int& _prequel);
         void setSequel(const unsigned int& _sequel);
         virtual ~Video(){

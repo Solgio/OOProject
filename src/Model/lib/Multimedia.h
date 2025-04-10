@@ -14,8 +14,8 @@ class Multimedia : public Content {
     
     public:
         Multimedia();
-        Multimedia(string& _title, unsigned int&  _subGenre, string& _description, bool& _starred, bool& _watched, unsigned int& _year, string& _image, string& _producer, 
-            string& _platforms, unsigned int _inspiration=0);
+        Multimedia(const string& _title, const unsigned int&  _subGenre, const string& _description, const bool& _starred, const bool& _watched, const unsigned int& _year, const string& _image, const string& _producer, 
+            const string& _platforms, unsigned int _inspiration=0);
         
         string getProducer() const;
         string getPlatforms() const;

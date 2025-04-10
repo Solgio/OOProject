@@ -12,8 +12,8 @@ class Film : public Video {
        
     public:
         Film();
-        Film(string& _title, unsigned int&  _subGenre, string& _description, bool& _starred, bool& _watched, unsigned int& _year, string& _image, string& _director, 
-            string& _producer, string& _platforms, string& photoDirector, unsigned int& _duration, unsigned int _inspiration=0, unsigned int  _prequel=0, unsigned int 
+        Film(const string& _title, const unsigned int&  _subGenre, const string& _description, const bool& _starred, const bool& _watched, const unsigned int& _year, const string& _image, const string& _director, 
+            const string& _producer, const string& _platforms, const string& photoDirector, const unsigned int& _duration, unsigned int _inspiration=0, unsigned int  _prequel=0, unsigned int 
         sequel=0);
         
       

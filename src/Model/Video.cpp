@@ -3,8 +3,8 @@
 
 Video::Video():Multimedia(), duration(), prequel(0), sequel(0){};
 
-Video:: Video(string& _title, unsigned int&  _subGenre, string& _description, bool& _starred, bool& _watched, unsigned int& _year, string& _image, string& _producer, 
-    string& _platforms, unsigned int& _duration, unsigned int _inspiration, unsigned int  _prequel, unsigned int _sequel):
+Video:: Video(const string& _title, const unsigned int&  _subGenre, const string& _description, const bool& _starred, const bool& _watched, const unsigned int& _year, const string& _image, const string& _producer, 
+    const string& _platforms, const const unsigned int& _duration, unsigned int _inspiration, unsigned int  _prequel, unsigned int _sequel):
     Multimedia(_title, _subGenre, _description, _starred, _watched, _year, _image, _producer, _platforms, _inspiration),
     duration(_duration),
     prequel(_prequel),
@@ -23,7 +23,7 @@ unsigned int Video::getSequel()const{
     return sequel;
 }
 
-void Video::setDuration(const unsigned int& _duration){
+void Video::setDuration(const const unsigned int& _duration){
     duration = _duration;
 }
 
