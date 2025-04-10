@@ -68,7 +68,7 @@ public:
     void setYear(const unsigned int &year);
     void setImage(string_view image);
 
-    virtual ~Content();
+    virtual ~Content()=default;
     virtual void accept(Visitor *visitor)= 0;
     virtual void toXml(xmlVisitor *xvisitor, QDomDocument &doc, QDomElement &root)= 0;
     virtual void toJson(VisitorJson *vistitorJson)= 0;

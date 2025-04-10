@@ -18,7 +18,6 @@ Content::Content(const string& _title, const unsigned int& _subGenre, const stri
         title(_title),subgenres(static_cast<Subgenre>(_subGenre)), description(_description), starred(_starred), watched(_watched), yearOfRelease(_year),image(_image), inspiration(_inspiration) { 
             id = ScienceFiction_Library::getInstance().getNewId()+1; //Get the new ID from the library
         };
-Content::~Content(){}; 
 
 unsigned int Content::getId() const{
     return id;
