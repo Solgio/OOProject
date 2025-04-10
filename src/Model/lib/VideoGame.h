@@ -29,7 +29,7 @@ class VideoGame : public Multimedia {
         gameType stringToGametype(string_view tipo)const;
 
         void setExpectedHours(const unsigned int& expectedHours);
-        virtual ~VideoGame();
+        virtual ~VideoGame()=default;
         
         void accept(Visitor* visitor) override;
         void toXml(xmlVisitor* xvisitor, QDomDocument& doc, QDomElement& root ) override;

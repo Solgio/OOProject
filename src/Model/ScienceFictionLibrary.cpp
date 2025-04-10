@@ -35,7 +35,7 @@ Content* ScienceFiction_Library::searchId(const unsigned int& id){
 };
 
 void ScienceFiction_Library::addContent(Content* content){
-    contentList.push_back(make_unique<Content>(*content));
+    contentList.push_back(unique_ptr<Content>(content));
     incrementId();
 };
 
@@ -136,19 +136,14 @@ void ScienceFiction_Library::starredOrNot(const bool& _starred){
         }
     }
 };
-/*
+
 void ScienceFiction_Library::clearLibrary(){
-    for(auto& it : contentList){
-        delete it;
-    }
+    shownContentList.clear();
     contentList.clear();
 };
 void ScienceFiction_Library::clearShown(){
-    for(auto& it : shownContentList){
-        delete it;
-    }
-    ;shownContentList.clear();
-}*/
+    shownContentList.clear();
+}
 
 bool ScienceFiction_Library::saveToFile(const string& filepath)const{
     string extension=filepath.substr(filepath.find_last_of('.'));

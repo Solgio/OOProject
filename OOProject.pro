@@ -18,6 +18,7 @@ QT+= widgets core xml
 HEADERS += src/data_persistency/IReader.h \
            src/View/Visitor.h \
            src/data_persistency/json/visitorJson.h \
+           src/data_persistency/json/jsonReader.h \
            src/data_persistency/xml/xmlReader.h \
            src/data_persistency/xml/xmlVisitor.h \
            src/Model/lib/Book.h \
@@ -44,5 +45,6 @@ SOURCES += src/Model/Book.cpp \
            src/Model/VideoGame.cpp \
            src/View/Visitor.cpp \
            src/data_persistency/json/visitorJson.cpp \
+           src/data_persistency/json/jsonReader.cpp \
            src/data_persistency/xml/xmlReader.cpp \
            src/data_persistency/xml/xmlVisitor.cpp
