@@ -26,7 +26,7 @@ class VideoGame : public Multimedia {
 
         void setGameType(gameType tipo);
 
-        gameType stringToGametype(string_view tipo);
+        gameType stringToGametype(string_view tipo)const;
 
         void setExpectedHours(const unsigned int& expectedHours);
         virtual ~VideoGame();
