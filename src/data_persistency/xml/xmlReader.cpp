@@ -92,7 +92,7 @@ void xmlReader::videoReader(Video* content, QXmlStreamReader& object) const{
 }
 
 unique_ptr<Book> xmlReader::readBook(QXmlStreamReader& object) const{
-    unique_ptr<Book> book = make_unique<Book>();
+    auto book = make_unique<Book>();
     paperReader(book.get(), object);
     while (!(object.isEndElement() && object.name() == "Book")) {
         QXmlStreamReader::TokenType token = object.readNext();
@@ -105,7 +105,7 @@ unique_ptr<Book> xmlReader::readBook(QXmlStreamReader& object) const{
     return book;
 }
 unique_ptr<Comic> xmlReader::readComic(QXmlStreamReader& object) const{
-    unique_ptr<Comic> comic = make_unique<Comic>();
+    auto comic = make_unique<Comic>();
     paperReader(comic.get(), object);
     while (!(object.isEndElement() && object.name() == "Comic")) {
         QXmlStreamReader::TokenType token = object.readNext();
@@ -127,7 +127,7 @@ unique_ptr<Comic> xmlReader::readComic(QXmlStreamReader& object) const{
     return comic;
 }
 unique_ptr<Film> xmlReader::readFilm(QXmlStreamReader& object) const{
-    unique_ptr<Film> movie = make_unique<Film>();
+    auto movie = make_unique<Film>();
     videoReader(movie.get(), object);
     while (!(object.isEndElement() && object.name() == "Film")) {
         QXmlStreamReader::TokenType token = object.readNext();
@@ -143,7 +143,7 @@ unique_ptr<Film> xmlReader::readFilm(QXmlStreamReader& object) const{
     return movie;
 }
 unique_ptr<Serie> xmlReader::readSerie(QXmlStreamReader& object) const{
-    unique_ptr<Serie> serie = make_unique<Serie>();
+    auto serie = make_unique<Serie>();
     videoReader(serie.get(), object);
     while (!(object.isEndElement() && object.name() == "Serie")) {
         QXmlStreamReader::TokenType token = object.readNext();
@@ -165,7 +165,7 @@ unique_ptr<Serie> xmlReader::readSerie(QXmlStreamReader& object) const{
     return serie;
 }
 unique_ptr<VideoGame> xmlReader::readVideoGame(QXmlStreamReader& object) const{
-    unique_ptr<VideoGame> videogame = make_unique<VideoGame>();
+    auto videogame = make_unique<VideoGame>();
     multimediaReader(videogame.get(), object);
     while (!(object.isEndElement() && object.name() == "VideoGame")) {
         QXmlStreamReader::TokenType token = object.readNext();

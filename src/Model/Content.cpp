@@ -1,6 +1,6 @@
 #include "lib/Content.h"
 #include "lib/ScienceFictionLibrary.h"
-using std::underlying_type_t;
+using std::underlying_type_t;   //I would use to_underlying but  it is C++23 so I will use this
 
 inline   Subgenre operator|(Subgenre a, Subgenre b) {
     return static_cast<Subgenre>(static_cast<underlying_type_t<Subgenre>>(a) | static_cast<underlying_type_t<Subgenre>>(b));

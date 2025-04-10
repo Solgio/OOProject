@@ -13,7 +13,7 @@ ScienceFiction_Library::ScienceFiction_Library():contentList(){}
 void ScienceFiction_Library::incrementId(){
     newId++;
 };
-unsigned int ScienceFiction_Library::getNewId(){
+unsigned int ScienceFiction_Library::getNewId()const{
     return newId;
 };
 
