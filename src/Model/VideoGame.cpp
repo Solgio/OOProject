@@ -21,10 +21,40 @@ string VideoGame::getGameType() const{
     return std::to_string(gameGenre);
 }
 
-void VideoGame::setGameEngine(string _gameEngine){
+enum VideoGame::gameType VideoGame::getGameTypeEnum() const{
+    return gameGenre;
+}
+
+enum VideoGame::gameType VideoGame::stringToGametype(const string& tipo){
+    if(tipo == "FPS"){ return VideoGame::gameType::FPS;}
+    if(tipo == "RPG"){ return VideoGame::gameType::RPG;}
+    if(tipo == "RTS"){ return VideoGame::gameType::RTS;}
+    if(tipo == "MOBA"){ return VideoGame::gameType::MOBA;}
+    if(tipo == "MMORPG"){ return VideoGame::gameType::MMORPG;}
+    if(tipo == "SIMULATION"){ return VideoGame::gameType::SIMULATION;}
+    if(tipo == "SPORTS"){ return VideoGame::gameType::SPORTS;}
+    if(tipo == "PUZZLE"){ return VideoGame::gameType::PUZZLE;}
+    if(tipo == "PLATFORMER"){ return VideoGame::gameType::PLATFORMER;}
+    if(tipo == "RACING"){ return VideoGame::gameType::RACING;}
+    if(tipo == "FIGHTING"){ return VideoGame::gameType::FIGHTING;}
+    if(tipo == "SURVIVAL"){ return VideoGame::gameType::SURVIVAL;}
+    if(tipo == "ADVENTURE"){ return VideoGame::gameType::ADVENTURE;}
+    if(tipo == "ACTION"){ return VideoGame::gameType::ACTION;}
+    if(tipo == "STRATEGY"){ return VideoGame::gameType::STRATEGY;}
+    if(tipo == "SANDBOX"){ return VideoGame::gameType::SANDBOX;}
+    if(tipo == "TOWERDEFENSE"){ return VideoGame::gameType::TOWERDEFENSE;}
+    if(tipo == "CARDGAME"){ return VideoGame::gameType::CARDGAME;}
+    if(tipo == "PARTYGAME"){ return VideoGame::gameType::PARTYGAME;}
+    if(tipo == "CASUAL"){ return VideoGame::gameType::CASUAL;}
+    if(tipo == "ARCADE"){ return VideoGame::gameType::ARCADE;}
+    if(tipo == "VIRTUALREALITY"){ return VideoGame::gameType::VIRTUALREALITY;}
+    //throw ERROR_ENUM;
+}
+
+void VideoGame::setGameEngine(const string& _gameEngine){
     gameEngine = _gameEngine;
 }
-void VideoGame::setExpectedHours(unsigned int _expectedHours){
+void VideoGame::setExpectedHours(const unsigned int& _expectedHours){
     expectedHours = _expectedHours;
 }
 

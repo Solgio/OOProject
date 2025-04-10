@@ -21,14 +21,14 @@ ScienceFiction_Library* jsonReader::read(const string& filepath){
     
         if(errorJ.error != QJsonParseError::NoError){
             qDebug() << "Errore nel file : " << errorJ.errorString();
-            return;
+            return 0;
         }else{
             qDebug() << "Nessun errore";
         }
 
     }else{
         qWarning() << "Failed to open file";
-        //throw Exception;
+        //!throw Exception;
         return 0;
     }
 
@@ -128,7 +128,7 @@ VideoGame* jsonReader::readVideogame(const QJsonObject& object){
 
     readMultimedia(videogame, object);
     videogame->setGameEngine(object.value("Game Engine").toString().toStdString());
-    //!videogame->setGameType(object.value("Game Genre").toString().toStdString());
+    videogame->setGameType(videogame->stringToGametype(object.value("Game Genre").toString().toStdString()));
     videogame->setExpectedHours(object.value("Expected Hours Of Play").toInt());
     return videogame;
 }
@@ -167,3 +167,4 @@ void jsonReader::readVideo(Video* video, const QJsonObject& object){
     video->setPrequel(object.value("Prequel").toInt());
     video->setSequel(object.value("Sequel").toInt());
 }
+
