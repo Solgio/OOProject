@@ -192,9 +192,14 @@ unique_ptr<VideoGame> xmlReader::readVideoGame(QXmlStreamReader& object) const{
 ScienceFiction_Library* xmlReader::read(const string& filepath){
     
     QFile file(QString::fromStdString(filepath));
-
-    if(!file.open(QIODevice::ReadOnly | QIODevice::Text)){
-        throw std::runtime_error("Failed to open file: " + file.errorString().toStdString());
+    try{
+        if(!file.open(QIODevice::ReadOnly | QIODevice::Text)){
+            throw std::invalid_argument("Failed to open file: " + file.errorString().toStdString());
+        }
+    }
+    catch(const std::invalid_argument& e) {
+        qWarning() << "The provided file cannot be opened" << e.what();
+        return nullptr;
     }
 
     // Clear the library before loading new data
@@ -224,8 +229,8 @@ ScienceFiction_Library* xmlReader::read(const string& filepath){
                 }
             }
         }
-    } catch(const std::exception& e) {
-        qWarning() << "XML parsing error:" << e.what();
+    } catch(const std::invalid_argument& e) {
+        qWarning() << "XML parsing error,:" << e.what()<<"\nCheck that the file only contains approved tags";
 
         file.close();
         return nullptr;    

@@ -39,7 +39,7 @@ void ScienceFiction_Library::addContent(Content* content){
     incrementId();
 };
 
-void ScienceFiction_Library::removeContent(Content* content){
+void ScienceFiction_Library::removeContent(const Content* content){
     for(auto it = contentList.begin(); it != contentList.end();){
         if((*it)->getInspiration() == content->getId()){  // If the content that we want to remove is an inspiration for another content,
             (*it)->setInspiration(0);         // we set the inspiration to 0

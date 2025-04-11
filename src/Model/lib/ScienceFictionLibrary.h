@@ -20,7 +20,7 @@ class ScienceFiction_Library{
         void testPrint()const;
         Content* searchId(const unsigned int& __id_t);
         void addContent(Content* content);
-        void removeContent(Content* content);
+        void removeContent(const Content* content);
         const vector<unique_ptr<Content>>& getContentList()const;
         void showAllContent();            //Shows all the content in the library
         void filterContent(string_view _title);
