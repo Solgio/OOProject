@@ -68,7 +68,7 @@ ScienceFiction_Library* jsonReader::read(const string& filepath){
         }
     }   
 
-    return library;
+    return &library;
 };
 
 Book* jsonReader::readBook(const QJsonObject& object){

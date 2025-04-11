@@ -26,7 +26,7 @@ enum VideoGame::gameType VideoGame::getGameTypeEnum() const{
 }
 
 enum VideoGame::gameType VideoGame::stringToGametype(string_view tipo)const{
-    if(tipo == "FPS"){ retur VideoGanme::gameType::FPS;}
+    if(tipo == "FPS"){ return VideoGame::gameType::FPS;}
     if(tipo == "RPG"){ return VideoGame::gameType::RPG;}
     if(tipo == "RTS"){ return VideoGame::gameType::RTS;}
     if(tipo == "MOBA"){ return VideoGame::gameType::MOBA;}
@@ -49,7 +49,7 @@ enum VideoGame::gameType VideoGame::stringToGametype(string_view tipo)const{
     if(tipo == "ARCADE"){ return VideoGame::gameType::ARCADE;}
     if(tipo == "VIRTUALREALITY"){ return VideoGame::gameType::VIRTUALREALITY;}
     //throw ERROR_ENUM;
-    retur VideoGanme::gameType::FPS;
+    return VideoGame::gameType::FPS;
 }
 
 void VideoGame::setGameEngine(string_view _gameEngine){
