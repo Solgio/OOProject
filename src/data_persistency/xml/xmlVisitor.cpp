@@ -98,6 +98,7 @@ void xmlVisitor::toXml(VideoGame *videogame, QDomDocument& doc, QDomElement& roo
     videogame_content.setAttribute("Producer",QString::fromStdString(videogame->getProducer()));
     videogame_content.setAttribute("Platform",QString::fromStdString(videogame->getPlatforms()));
     videogame_content.setAttribute("GameEngine",QString::fromStdString(videogame->getGameEngine()));
+    videogame_content.setAttribute("GameType",QString::fromStdString(videogame->getGameType()));
     videogame_content.setAttribute("ExpectedHours",QString::number(videogame->getExpectedHours()));
     root.appendChild(videogame_content);
 };

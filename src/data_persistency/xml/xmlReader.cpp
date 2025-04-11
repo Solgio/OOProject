@@ -173,6 +173,12 @@ unique_ptr<VideoGame> xmlReader::readVideoGame(QXmlStreamReader& object) const{
             if (object.name() == "GameEngine") {
                 videogame->setGameEngine((object.readElementText()).toStdString());
             }
+            else if(object.name()=="GameType"){
+                videogame->setGameType(videogame->stringToGametype((object.readElementText()).toStdString()));
+            }
+            else if (object.name() == "Platforms") {
+                videogame->setPlatforms((object.readElementText()).toStdString());
+            }
             else if (object.name() == "ExpectedHours") {
                 videogame->setExpectedHours((object.readElementText()).toUInt());
             }
