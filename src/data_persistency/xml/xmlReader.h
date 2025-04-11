@@ -29,7 +29,7 @@ class xmlReader: public IReader{
         unique_ptr<VideoGame> readVideoGame(QXmlStreamReader& object) const;
     //
     public:
-    ScienceFiction_Library* read(const string& filepath);
+    ScienceFiction_Library* read(const string& filepath)override;
 };
 
 #endif
