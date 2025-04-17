@@ -34,11 +34,11 @@ public:
     QDir getDirectory();
     QString getFileName();
 
-    virtual void toFileJson(const Book* book) = 0;
-    virtual void toFileJson(const Comic* comic) = 0;
-    virtual void toFileJson(const Film* movie) = 0;
-    virtual void toFileJson(const Serie* serie) = 0;
-    virtual void toFileJson(const VideoGame* videogame) = 0;
+    virtual void toFileJson(const Book* book);
+    virtual void toFileJson(const Comic* comic);
+    virtual void toFileJson(const Film* movie);
+    virtual void toFileJson(const Serie* serie);
+    virtual void toFileJson(const VideoGame* videogame);
 
 
 

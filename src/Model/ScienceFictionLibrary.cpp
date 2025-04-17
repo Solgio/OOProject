@@ -191,9 +191,11 @@ bool ScienceFiction_Library::loadFromFile(const string& filepath){
     std::unique_ptr<IReader> reader;
     string extension=filepath.substr(filepath.find_last_of('.'));
     if(extension==".xml"){
+        qDebug() << "XML" ;
         reader=make_unique<xmlReader>();
     }
     else if(extension==".json"){
+        qDebug() << "JSON" ;
         reader=make_unique<jsonReader>();
     }
     else{
