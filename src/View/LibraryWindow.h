@@ -5,12 +5,13 @@
 #include "../Model/lib/ScienceFictionLibrary.h"
 #include <QListWidgetItem>
 #include <QSplitter>
+#include <QToolButton>
 
 class QListWidget;
 class QLabel;
 class QLineEdit;
 class QComboBox;
-
+class QMenu;
 class LibraryWindow : public QMainWindow {
     Q_OBJECT
 
@@ -30,6 +31,8 @@ private:
     void loadContentPreview(Content* content, QListWidgetItem* item);
     QPixmap loadSafePixmap(const QString &path, const QSize &size) const;
     void verifyResources();
+    void createSaveMenu();
+    void createImportButton();
 
     // UI Components
     QToolBar *m_toolBar;
@@ -39,6 +42,9 @@ private:
     QLabel *m_contentDetails;
     QLineEdit *m_searchBar;
     QComboBox *m_filterCombo;
+    QToolButton *m_importButton;
+    QToolButton *m_saveButton;
+    QMenu *m_saveMenu;
 
     const QSize m_previewSize{120, 180};
 };

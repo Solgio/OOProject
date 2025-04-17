@@ -9,12 +9,38 @@
 #include <QLineEdit>
 #include <QComboBox>
 #include <QPushButton>
+#include <QMenu>
 
 LibraryWindow::LibraryWindow(QWidget *parent)
     : QMainWindow(parent) {
     setupUI();
     connectSignals();
     updateContentDisplay();
+}
+void LibraryWindow::createSaveMenu() {
+    m_saveMenu = new QMenu("Save Options", this);
+    
+    QAction *saveXmlAction = m_saveMenu->addAction(QIcon(":assets/icons/w_xml.png"), "Save as XML");
+    saveXmlAction->setToolTip("Export library as XML file");
+    connect(saveXmlAction, &QAction::triggered, [this]() { saveToFile("xml"); });
+    
+    QAction *saveJsonAction = m_saveMenu->addAction(QIcon(":assets/icons/w_json.png"), "Save as JSON");
+    saveJsonAction->setToolTip("Export library as JSON file");
+    connect(saveJsonAction, &QAction::triggered, [this]() { saveToFile("json"); });
+    
+    m_saveButton = new QToolButton();
+    m_saveButton->setText(" Save ");
+    m_saveButton->setIcon(QIcon(":assets/icons/save.png"));
+    m_saveButton->setToolTip("Save library to file");
+    m_saveButton->setPopupMode(QToolButton::MenuButtonPopup);
+    m_saveButton->setMenu(m_saveMenu);
+}
+void LibraryWindow::createImportButton() {
+    m_importButton = new QToolButton();
+    m_importButton->setText(" Import ");
+    m_importButton->setIcon(QIcon(":assets/icons/import.png"));
+    m_importButton->setToolTip("Import content from file. Supported formats: XML, JSON");
+    connect(m_importButton, &QToolButton::clicked, this, &LibraryWindow::importContent);
 }
 
 void LibraryWindow::setupUI() {
@@ -24,10 +50,12 @@ void LibraryWindow::setupUI() {
 
     // Barra strumenti
     m_toolBar = addToolBar("Main Toolbar");
-    m_toolBar->addAction("Import", this, &LibraryWindow::importContent);
-    m_toolBar->addAction("Save XML", [this]() { saveToFile("xml"); });
-    m_toolBar->addAction("Save JSON", [this]() { saveToFile("json"); });
 
+    createImportButton();
+    m_toolBar->addWidget(m_importButton); 
+    // Sostituisci i pulsanti con il menu a discesa
+    createSaveMenu();
+    m_toolBar->addWidget(m_saveButton);
     // Lista contenuti
     m_contentList = new QListWidget();
     m_contentList->setViewMode(QListView::IconMode);
@@ -205,6 +233,7 @@ void LibraryWindow::saveToFile(const QString &extension) {
         }
     }
 }
+//!DEBUG FUNCTION
 void LibraryWindow::verifyResources()
 {
     qDebug() << "Working directory:" << QDir::currentPath();
