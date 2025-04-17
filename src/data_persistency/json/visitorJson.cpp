@@ -28,7 +28,7 @@ VisitorJson::VisitorJson(QString filePath):libreria(filePath){
     if(errorJ.error != QJsonParseError::NoError){
         qDebug() << "Errore nel file : " << errorJ.errorString();
         qDebug() << "Azzero il file json";
-        QFile::resize(libreria);
+        libreria.resize(0);
         QJsonDocument doc;
         libreria.write(doc.toJson());
         qDebug() << "Creo JsonObject vuoto";
