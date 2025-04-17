@@ -1,0 +1,14 @@
+<RCC>
+    <qresource prefix="/new/icons">
+        <file>assets/icons/book-100.png</file>
+        <file>assets/icons/comic-100.png</file>
+        <file>assets/icons/default.png</file>
+        <file>assets/icons/eye_off-100.png</file>
+        <file>assets/icons/eye_on-100.png</file>
+        <file>assets/icons/film-100.png</file>
+        <file>assets/icons/game-100.png</file>
+        <file>assets/icons/like_off-100.png</file>
+        <file>assets/icons/like_on-100.png</file>
+        <file>assets/icons/series-100.png</file>
+    </qresource>
+</RCC>

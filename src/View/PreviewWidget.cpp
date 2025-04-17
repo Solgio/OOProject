@@ -16,11 +16,11 @@ void PreviewWidget::updatePreview(const QSize &size) {
     setText(QString::fromStdString(m_content->getTitle()));
     setData(Qt::UserRole, QVariant(m_content->getId()));
     
-    /*QPixmap pixmap = loadPixmap(
+    QPixmap pixmap = loadPixmap(
         QString::fromStdString(m_content->getImage()),
         size
     );
-    setIcon(QIcon(pixmap));*/
+    setIcon(QIcon(pixmap));
 }
 
 QPixmap PreviewWidget::loadPixmap(const QString &path, const QSize &size) const {
@@ -31,7 +31,7 @@ QPixmap PreviewWidget::loadPixmap(const QString &path, const QSize &size) const 
     }
     
     if (pixmap.isNull()) {
-        pixmap.load(":/icons/default.png");
+        pixmap.load("assets/icons/default.png");
     }
     
     return pixmap.scaled(size, Qt::KeepAspectRatio, Qt::SmoothTransformation);

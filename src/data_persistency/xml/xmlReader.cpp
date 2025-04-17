@@ -27,7 +27,6 @@ void xmlReader::commonReader(Content* content, QXmlStreamReader& object) const{
             }
             else if (object.name() == "Title") {
                 content->setTitle((object.readElementText()).toStdString());
-                qDebug() << "| Title:" << QString::fromStdString(content->getTitle());
             }
             else if (object.name() == "Description") {
                 content->setDescription((object.readElementText()).toStdString());
@@ -67,7 +66,6 @@ void xmlReader::paperReader(Paper* content, QXmlStreamReader& object) const{
         if (token == QXmlStreamReader::StartElement) {
             if (object.name() == "Author") {
                 content->setAuthor((object.readElementText()).toStdString());
-                qDebug() << "| Title:" << QString::fromStdString(content->getTitle());
             }
             else if (object.name() == "Publisher") {
                 content->setPublisher((object.readElementText()).toStdString());
@@ -251,23 +249,18 @@ ScienceFiction_Library* xmlReader::read(const string& filepath){
             
             if (token == QXmlStreamReader::StartElement) {
                 if (xmlName == "Book") {
-                    qDebug() << "BOOK" ;
                     library.addContent(readBook(xmlreader).release());
                 }
                 else if (xmlName == "Comic") {
-                    qDebug() << "COMIC" ;
                     library.addContent(readComic(xmlreader).release());
                 }
                 else if (xmlName == "Film") {
-                    qDebug() << "FILM" ;
                     library.addContent(readFilm(xmlreader).release());
                 }
                 else if (xmlName == "Serie") {
-                    qDebug() << "SERIE" ;
                     library.addContent(readSerie(xmlreader).release());
                 }
                 else if (xmlName == "VideoGame") {
-                    qDebug() << "VIDEO GAME" ;
                     library.addContent(readVideoGame(xmlreader).release());
                 }
             }

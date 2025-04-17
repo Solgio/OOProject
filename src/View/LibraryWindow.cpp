@@ -88,7 +88,7 @@ QPixmap LibraryWindow::loadSafePixmap(const QString &path, const QSize &size) co
     }
     
     if (pixmap.isNull()) {
-        pixmap.load("/home/solgio/Desktop/OOProject/assets/icons/default.png");
+        pixmap.load("assets/icons/default.png");
     }
     
     return pixmap.scaled(size, Qt::KeepAspectRatio, Qt::SmoothTransformation);
@@ -131,7 +131,7 @@ void LibraryWindow::updateContentDisplay() {qDebug() << "Updating content displa
             item->setIcon(QIcon(pixmap.scaled(100, 150, Qt::KeepAspectRatio)));
         } else {
             qWarning() << "Image not found, using default";
-            item->setIcon(QIcon("/home/solgio/Desktop/OOProject/assets/icons/default.png"));
+            item->setIcon(QIcon(":assets/icons/default.png"));
         }
         
         item->setData(Qt::UserRole, QVariant(content->getId()));
@@ -147,7 +147,7 @@ void LibraryWindow::showContentDetails(QListWidgetItem *item) {
             "<div style='margin:10px;'>"
             "<h2>%1</h2>"
             "<div style='float:right; margin-left:20px;'>"
-            "<img src='%2' width='200' onerror=\"this.src='/home/solgio/Desktop/OOProject/assets/icons/default.png'\">"
+            "<img src='%2' width='200' onerror=\":assets/icons/default.png'\">"
             "</div>"
             "<p><b>Year:</b> %3</p>"
             "<p><b>Genre:</b> %4</p>"

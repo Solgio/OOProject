@@ -52,3 +52,6 @@ SOURCES += src/Model/Book.cpp \
            src/data_persistency/json/jsonReader.cpp \
            src/data_persistency/xml/xmlReader.cpp \
            src/data_persistency/xml/xmlVisitor.cpp
+
+RESOURCES += \
+    resources.qrc
