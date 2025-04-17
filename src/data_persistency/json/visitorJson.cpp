@@ -16,7 +16,27 @@ void VisitorJson::setLibreria(QString path){
 
 VisitorJson::VisitorJson(){};
 
-VisitorJson::VisitorJson(QString filePath):libreria(filePath){};
+VisitorJson::VisitorJson(QString filePath):libreria(filePath){
+    libreria.open(QIODevice::WriteOnly);
+
+    QByteArray contentFile;
+    contentFile = libreria.readAll();
+
+    QJsonParseError errorJ;
+    QJsonDocument doc = QJsonDocument::fromJson(contentFile, &errorJ);
+
+    if(errorJ.error != QJsonParseError::NoError){
+        qDebug() << "Errore nel file : " << errorJ.errorString();
+        qDebug() << "Azzero il file json";
+        QFile::resize(libreria);
+        QJsonDocument doc;
+        libreria.write(doc.toJson());
+        qDebug() << "Creo JsonObject vuoto";
+        libreria.close();
+    }else{
+        qDebug() << "Nessun errore";
+    }
+};
 
 
 
