@@ -254,6 +254,7 @@ void VisitorJson::toFileJson(const VideoGame *videogame){
 
  void VisitorJson::insertContent(const Content* _content, QJsonObject& oggettoJSon){
 
+    oggettoJSon.insert("Id", int(_content->getId()));
     oggettoJSon.insert("Title", QString::fromStdString(_content->getTitle()));
     oggettoJSon.insert("Genres", int(_content->getSubgenre()));  
     oggettoJSon.insert("Description", QString::fromStdString(_content->getDescription()));
