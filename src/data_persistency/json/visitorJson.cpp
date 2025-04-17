@@ -6,27 +6,13 @@
 #include "../../Model/lib/Serie.h"
 #include "../../Model/lib/VideoGame.h"
 
-void VisitorJson::setDirectory(QString path){
-        dir.setPath(path);
-    }
-    void VisitorJson::setFileName(QString _fileName){
-        fileName = _fileName;
-    }
 
-    void VisitorJson::setLibreria(QString path){
-        if(libreria.open(QIODevice::ReadOnly)){
-            libreria.close();
-        }
-        libreria.setFileName(path);
+void VisitorJson::setLibreria(QString path){
+    if(libreria.open(QIODevice::ReadOnly)){
+        libreria.close();
     }
-
-    QDir VisitorJson::getDirectory(){
-        return dir;
-    }
-
-    QString VisitorJson::getFileName(){
-        return fileName;
-    }
+    libreria.setFileName(path);
+}
 
 VisitorJson::VisitorJson(){};
 

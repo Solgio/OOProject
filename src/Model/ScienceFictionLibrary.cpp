@@ -176,7 +176,7 @@ bool ScienceFiction_Library::saveToFile(const string& filepath)const{
         
     }
     else if(extension==".json"){
-        unique_ptr<VisitorJson> visitor(filepath);
+        unique_ptr<VisitorJson> visitor(QString(filepath));
         for(const auto& it : contentList){
             it->toJson(visitor.get());
         
