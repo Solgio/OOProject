@@ -14,9 +14,13 @@
 using std::vector, std::string;
 
 void xmlReader::commonReader(Content* content, QXmlStreamReader& object) const{
-    //QXmlStreamReader::TokenType token = object.readNext();
-    while (!(object.isEndElement())) {        
+    while (!object.atEnd() && !object.hasError()) {
         QXmlStreamReader::TokenType token = object.readNext();
+        
+        if (token == QXmlStreamReader::EndElement) {
+            break;
+        }
+
         if (token == QXmlStreamReader::StartElement) {
             if(object.name()=="Id"){
                 content->setId(object.readElementText().toUInt());
@@ -45,54 +49,82 @@ void xmlReader::commonReader(Content* content, QXmlStreamReader& object) const{
             }
             else if (object.name() == "Subgenre") {
                 content->addSubgenre(object.readElementText().toUInt());
+                return;
             }
         }
-}
+    }
 }
 void xmlReader::paperReader(Paper* content, QXmlStreamReader& object) const{
     commonReader(content, object);
-    QXmlStreamReader::TokenType token = object.readNext();
-    if (token == QXmlStreamReader::StartElement) {
-        if (object.name() == "Author") {
-            content->setAuthor((object.readElementText()).toStdString());
-            qDebug() << "| Title:" << QString::fromStdString(content->getTitle());
+    
+    while (!object.atEnd() && !object.hasError()) {
+        QXmlStreamReader::TokenType token = object.readNext();
+        
+        if (token == QXmlStreamReader::EndElement) {
+            break;
         }
-        else if (object.name() == "Publisher") {
-            content->setPublisher((object.readElementText()).toStdString());
-        }
-        else if (object.name() == "Pages") {
-            content->setPages(object.readElementText().toUInt());
-        }
-        else if (object.name() == "Volume") {
-            content->setVolume(object.readElementText().toUInt());
+
+        if (token == QXmlStreamReader::StartElement) {
+            if (object.name() == "Author") {
+                content->setAuthor((object.readElementText()).toStdString());
+                qDebug() << "| Title:" << QString::fromStdString(content->getTitle());
+            }
+            else if (object.name() == "Publisher") {
+                content->setPublisher((object.readElementText()).toStdString());
+            }
+            else if (object.name() == "Pages") {
+                content->setPages(object.readElementText().toUInt());
+            }
+            else if (object.name() == "Volume") {
+                content->setVolume(object.readElementText().toUInt());
+                return;
+            }
         }
     }
 }
 void xmlReader::multimediaReader(Multimedia* content, QXmlStreamReader& object) const{
     commonReader(content, object);
-    QXmlStreamReader::TokenType token = object.readNext();
-    if (token == QXmlStreamReader::StartElement) {
-        if (object.name() == "Producer") {
-            content->setProducer((object.readElementText()).toStdString());
+
+    while (!object.atEnd() && !object.hasError()) {
+        QXmlStreamReader::TokenType token = object.readNext();
+        
+        if (token == QXmlStreamReader::EndElement) {
+            break;
         }
-        else if (object.name() == "Platforms") {
-            content->setPlatforms((object.readElementText()).toStdString());
+
+        if (token == QXmlStreamReader::StartElement) {
+            if (object.name() == "Producer") {
+                content->setProducer((object.readElementText()).toStdString());
+            }
+            else if (object.name() == "Platforms") {
+                content->setPlatforms((object.readElementText()).toStdString());
+                return;
+            }
         }
     }
 }
 void xmlReader::videoReader(Video* content, QXmlStreamReader& object) const{
     multimediaReader(content, object);
-    QXmlStreamReader::TokenType token = object.readNext();
-    if (token == QXmlStreamReader::StartElement) {
-        if (object.name() == "Duration") {
-            content->setDuration((object.readElementText()).toUInt());
+    
+    while (!object.atEnd() && !object.hasError()) {
+        QXmlStreamReader::TokenType token = object.readNext();
+        
+        if (token == QXmlStreamReader::EndElement) {
+            break;
         }
-        else if(object.name()=="Prequel"){
-            content->setPrequel(object.readElementText().toUInt());
+
+        if (token == QXmlStreamReader::StartElement) {
+            if (object.name() == "Duration") {
+                content->setDuration((object.readElementText()).toUInt());
+            }
+            else if(object.name()=="Prequel"){
+                content->setPrequel(object.readElementText().toUInt());
+            }
+            else if(object.name()=="Sequel"){
+                content->setSequel(object.readElementText().toUInt());
+                return;
+            }        
         }
-        else if(object.name()=="Sequel"){
-            content->setSequel(object.readElementText().toUInt());
-        }        
     }
 }
 
