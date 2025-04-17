@@ -20,18 +20,12 @@ class VideoGame;
 
 class VisitorJson{
 private:
-    QString fileName;
-    QDir dir; // indirizzamento relativo a partire da "." ,
-    // dir() è di default "."
-
     QFile libreria;
 
 public:
 
-    VisitorJson():fileName("libreriaJson.json"), dir("Json/"), libreria(dir.canonicalPath() + fileName){
-        // We create the directory if needed
-        if(!dir.exists()){ dir.mkpath(dir.dirName());} //Partendo dalla cartella ".", se ./JFile/ NON esiste, creamo la cartella
-    }
+    VisitorJson();
+    VisitorJson(QString filePath);
 
     void setDirectory(QString _directory);
     void setFileName(QString _fileName);

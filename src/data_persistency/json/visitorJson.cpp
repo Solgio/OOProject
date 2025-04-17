@@ -28,6 +28,10 @@ void VisitorJson::setDirectory(QString path){
         return fileName;
     }
 
+VisitorJson::VisitorJson(){};
+
+VisitorJson::VisitorJson(QString filePath):libreria(filePath){};
+
 
 
 void VisitorJson::toFileJson(const Book* book){
