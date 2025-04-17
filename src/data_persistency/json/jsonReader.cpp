@@ -118,8 +118,8 @@ Serie* jsonReader::readSerie(const QJsonObject& object){
     Serie *serie = new Serie();
 
     readVideo(serie, object);
-    serie->setSeasons(object.value("Seasons").toInt().toUInt());
-    serie->setEpisodes(object.value("Episodes").toInt()).toUInt();
+    serie->setSeasons(object.value("Seasons").toInt());
+    serie->setEpisodes(object.value("Episodes").toInt());
     serie->setCreator(object.value("Creator").toString().toStdString());
     serie->setFinished(object.value("Finished").toBool());
     return serie;
@@ -131,7 +131,7 @@ VideoGame* jsonReader::readVideogame(const QJsonObject& object){
     readMultimedia(videogame, object);
     videogame->setGameEngine(object.value("Game Engine").toString().toStdString());
     videogame->setGameType(videogame->stringToGametype(object.value("Game Genre").toString().toStdString()));
-    videogame->setExpectedHours(object.value("Expected Hours Of Play").toInt().toUInt());
+    videogame->setExpectedHours(object.value("Expected Hours Of Play").toInt());
     return videogame;
 }
 
@@ -139,11 +139,11 @@ VideoGame* jsonReader::readVideogame(const QJsonObject& object){
 /*------------------------------------------------------------------*/
 
 void jsonReader::readContent(Content* content, const QJsonObject& object){
-    content->setId(object.value("Id").toInt().toUInt());
+    content->setId(object.value("Id").toInt());
     content->setTitle(object.value("Title").toString().toStdString());
-    content->addSubgenre(object.value("Genres").toInt().toUInt());
+    content->addSubgenre(object.value("Genres").toInt());
     content->setDescription(object.value("Description").toString().toStdString());
-    content->setYear(object.value("Year of Release").toInt().toUInt());
+    content->setYear(object.value("Year of Release").toInt());
     content->setImage(object.value("Image").toString().toStdString());
     content->setInspiration(object.value("Inspiration").toInt());
     content->setWatched(object.value("Watched").toBool());
@@ -154,8 +154,8 @@ void jsonReader::readPaper(Paper* paper, const QJsonObject& object){
     readContent(paper, object);
     paper->setAuthor(object.value("Author").toString().toStdString());
     paper->setPublisher(object.value("Publisher").toString().toStdString());
-    paper->setPages(object.value("Pages").toInt().toUInt());
-    paper->setVolume(object.value("Volume").toInt()).toUInt();
+    paper->setPages(object.value("Pages").toInt());
+    paper->setVolume(object.value("Volume").toInt());
 }
 
 void jsonReader::readMultimedia(Multimedia* mult, const QJsonObject& object){
@@ -166,8 +166,8 @@ void jsonReader::readMultimedia(Multimedia* mult, const QJsonObject& object){
 
 void jsonReader::readVideo(Video* video, const QJsonObject& object){
     readMultimedia(video, object);
-    video->setDuration(object.value("Duration").toInt().toUInt());
-    video->setPrequel(object.value("Prequel").toInt().toUInt());
-    video->setSequel(object.value("Sequel").toInt().toUInt());
+    video->setDuration(object.value("Duration").toInt());
+    video->setPrequel(object.value("Prequel").toInt());
+    video->setSequel(object.value("Sequel").toInt());
 }
 
