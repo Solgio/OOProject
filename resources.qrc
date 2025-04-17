@@ -10,5 +10,12 @@
         <file>assets/icons/like_off-100.png</file>
         <file>assets/icons/like_on-100.png</file>
         <file>assets/icons/series-100.png</file>
+
+        <file>assets/icons/add.png</file>
+        <file>assets/icons/delete.png</file>
+        <file>assets/icons/json.png</file>
+        <file>assets/icons/xml.png</file>
+        <file>assets/icons/save-full.png</file>
+        <file>assets/icons/save-hollow.png</file>
     </qresource>
 </RCC>
