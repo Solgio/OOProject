@@ -14,36 +14,40 @@
 using std::vector, std::string;
 
 void xmlReader::commonReader(Content* content, QXmlStreamReader& object) const{
-    QXmlStreamReader::TokenType token = object.readNext();
-    if (token == QXmlStreamReader::StartElement) {
-        if(object.name()=="Id"){
-            content->setId(object.readElementText().toUInt());
+    //QXmlStreamReader::TokenType token = object.readNext();
+    while (!(object.isEndElement())) {        
+        QXmlStreamReader::TokenType token = object.readNext();
+        if (token == QXmlStreamReader::StartElement) {
+            if(object.name()=="Id"){
+                content->setId(object.readElementText().toUInt());
+            }
+            else if (object.name() == "Title") {
+                content->setTitle((object.readElementText()).toStdString());
+                qDebug() << "| Title:" << QString::fromStdString(content->getTitle());
+            }
+            else if (object.name() == "Description") {
+                content->setDescription((object.readElementText()).toStdString());
+            }
+            else if(object.name()=="Inspiration"){
+                content->setInspiration(object.readElementText().toInt());
+            }
+            else if (object.name() == "Starred") {
+                content->setStarred(object.readElementText().toInt());
+            }
+            else if (object.name() == "Watched") {
+                content->setWatched(object.readElementText().toInt());
+            }
+            else if (object.name() == "Year") {
+                content->setYear(object.readElementText().toUInt());
+            }
+            else if (object.name() == "Image") {
+                content->setImage((object.readElementText()).toStdString());
+            }
+            else if (object.name() == "Subgenre") {
+                content->addSubgenre(object.readElementText().toUInt());
+            }
         }
-        else if (object.name() == "Title") {
-            content->setTitle((object.readElementText()).toStdString());
-        }
-        else if (object.name() == "Description") {
-            content->setDescription((object.readElementText()).toStdString());
-        }
-        else if(object.name()=="Inspiration"){
-            content->setInspiration(object.readElementText().toInt());
-        }
-        else if (object.name() == "Starred") {
-            content->setStarred(object.readElementText().toInt());
-        }
-        else if (object.name() == "Watched") {
-            content->setWatched(object.readElementText().toInt());
-        }
-        else if (object.name() == "Year") {
-            content->setYear(object.readElementText().toUInt());
-        }
-        else if (object.name() == "Image") {
-            content->setImage((object.readElementText()).toStdString());
-        }
-        else if (object.name() == "Subgenre") {
-            content->addSubgenre(object.readElementText().toUInt());
-        }
-    }
+}
 }
 void xmlReader::paperReader(Paper* content, QXmlStreamReader& object) const{
     commonReader(content, object);
@@ -227,9 +231,11 @@ ScienceFiction_Library* xmlReader::read(const string& filepath){
                     library.addContent(readFilm(xmlreader).release());
                 }
                 else if (xmlName == "Serie") {
+                    qDebug() << "SERIE" ;
                     library.addContent(readSerie(xmlreader).release());
                 }
                 else if (xmlName == "VideoGame") {
+                    qDebug() << "VIDEO GAME" ;
                     library.addContent(readVideoGame(xmlreader).release());
                 }
             }
