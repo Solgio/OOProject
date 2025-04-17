@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ScienceFictionLibrary>
+    <Book>
+        <Id>1</Id>
+        <Title>Dune</Title>
+        <Description>A science fiction novel about a desert planet and its valuable spice.</Description>
+        <Inspiration>1</Inspiration>
+        <Starred>1</Starred>
+        <Watched>1</Watched>
+        <Year>1965</Year>
+        <Image>dune.jpg</Image>
+        <Subgenre>1</Subgenre>
+        <Subgenre>3</Subgenre>
+        <Author>Frank Herbert</Author>
+        <Publisher>Chilton Books</Publisher>
+        <Pages>412</Pages>
+        <MainCharacter>Paul Atreides</MainCharacter>
+    </Book>
+
+    <Comic>
+        <Id>2</Id>
+        <Title>Saga</Title>
+        <Description>A space opera/fantasy comic book series.</Description>
+        <Inspiration>1</Inspiration>
+        <Starred>1</Starred>
+        <Watched>0</Watched>
+        <Year>2012</Year>
+        <Image>saga.jpg</Image>
+        <Subgenre>2</Subgenre>
+        <Author>Brian K. Vaughan</Author>
+        <Publisher>Image Comics</Publisher>
+        <Pages>160</Pages>
+        <Volume>1</Volume>
+        <MainCharacter>Alana</MainCharacter>
+        <Illustrator>Fiona Staples</Illustrator>
+        <Serie>Saga</Serie>
+        <Finished>0</Finished>
+    </Comic>
+
+    <Film>
+        <Id>3</Id>
+        <Title>Blade Runner 2049</Title>
+        <Description>A sequel to the 1982 film Blade Runner.</Description>
+        <Inspiration>1</Inspiration>
+        <Starred>1</Starred>
+        <Watched>1</Watched>
+        <Year>2017</Year>
+        <Image>blade_runner_2049.jpg</Image>
+        <Subgenre>1</Subgenre>
+        <Producer>Columbia Pictures</Producer>
+        <Duration>164</Duration>
+        <Prequel>101</Prequel>
+        <Director>Denis Villeneuve</Director>
+        <PhotoDirector>Roger Deakins</PhotoDirector>
+    </Film>
+
+    <Serie>
+        <Id>4</Id>
+        <Title>The Expanse</Title>
+        <Description>A science fiction television series based on the novels.</Description>
+        <Inspiration>1</Inspiration>
+        <Starred>1</Starred>
+        <Watched>1</Watched>
+        <Year>2015</Year>
+        <Image>the_expanse.jpg</Image>
+        <Subgenre>1</Subgenre>
+        <Subgenre>4</Subgenre>
+        <Producer>Alcon Entertainment</Producer>
+        <Duration>60</Duration>
+        <Seasons>6</Seasons>
+        <Episodes>62</Episodes>
+        <Creator>Mark Fergus</Creator>
+        <Finished>1</Finished>
+    </Serie>
+
+    <VideoGame>
+        <Id>5</Id>
+        <Title>Mass Effect 2</Title>
+        <Description>An action role-playing game set in a science fiction universe.</Description>
+        <Inspiration>1</Inspiration>
+        <Starred>1</Starred>
+        <Watched>1</Watched>
+        <Year>2010</Year>
+        <Image>mass_effect_2.jpg</Image>
+        <Subgenre>5</Subgenre>
+        <Producer>BioWare</Producer>
+        <GameEngine>Unreal Engine 3</GameEngine>
+        <GameType>ActionRPG</GameType>
+        <Platforms>PC, Xbox 360, PlayStation 3</Platforms>
+        <ExpectedHours>35</ExpectedHours>
+    </VideoGame>
+</ScienceFictionLibrary>

@@ -1,56 +1,46 @@
-// LibraryWindow.h
-#ifndef LIBRARY_WINDOW_H
-#define LIBRARY_WINDOW_H
+#ifndef LIBRARYWINDOW_H
+#define LIBRARYWINDOW_H
 
 #include <QMainWindow>
-#include <QToolBar>
-#include <QPushButton>
-#include <QSplitter>
-#include <QListWidget>
-#include <QLineEdit>
-#include <QComboBox>
-#include <QVBoxLayout>
-#include <QHBoxLayout>
-#include <QWidget>
-#include <QAction>
-#include <QFileDialog>
-#include <QMessageBox>
 #include "../Model/lib/ScienceFictionLibrary.h"
+#include <QListWidgetItem>
+#include <QSplitter>
+
+class QListWidget;
+class QLabel;
+class QLineEdit;
+class QComboBox;
 
 class LibraryWindow : public QMainWindow {
     Q_OBJECT
 
 public:
-    LibraryWindow(QWidget *parent = nullptr);
-    ~LibraryWindow();
+    explicit LibraryWindow(QWidget *parent = nullptr);
+    ~LibraryWindow() override = default;
 
 private slots:
     void importContent();
-    void saveAsXml();
-    void saveAsJson();
-    void searchContent(const QString &text);
-    void filterContent(int index);
-    void updateContentList();
+    void saveToFile(const QString &extension);
+    void updateContentDisplay();
+    void showContentDetails(QListWidgetItem *item);
 
 private:
-    void createToolBar();
-    void createSidePanel();
-    void createContentArea();
-    void setupMainLayout();
-    void connectActions();
-    void refreshContentDisplay();
+    void setupUI();
+    void connectSignals();
+    void loadContentPreview(Content* content, QListWidgetItem* item);
+    QPixmap loadSafePixmap(const QString &path, const QSize &size) const;
+    void verifyResources();
 
-    // UI elements
-    QAction *m_importAction;
-    QAction *m_saveXmlAction;
-    QAction *m_saveJsonAction;
-    
-    QWidget *m_sidePanel;
+    // UI Components
+    QToolBar *m_toolBar;
+    QWidget *m_centralWidget;
+    QSplitter *m_splitter;
+    QListWidget *m_contentList;
+    QLabel *m_contentDetails;
     QLineEdit *m_searchBar;
     QComboBox *m_filterCombo;
-    QListWidget *m_contentList;
-    
-    QWidget *m_contentWidget;
-    QLabel *m_contentDetails;
+
+    const QSize m_previewSize{120, 180};
 };
+
 #endif

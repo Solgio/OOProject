@@ -1,235 +1,224 @@
-// LibraryWindow.cpp
 #include "LibraryWindow.h"
-#include <QDebug>
+#include "PreviewWidget.h"
+#include <QFileDialog>
+#include <QMessageBox>
+#include <QToolBar>
+#include <QSplitter>
+#include <QVBoxLayout>
 #include <QLabel>
+#include <QLineEdit>
+#include <QComboBox>
+#include <QPushButton>
 
-LibraryWindow::LibraryWindow(QWidget *parent) 
+LibraryWindow::LibraryWindow(QWidget *parent)
     : QMainWindow(parent) {
-    // Configurazione della finestra principale
-    setWindowTitle("Libreria di Contenuti");
-    resize(800, 600);
-
-    // Inizializzazione della libreria
-    // (eventualmente caricare dati qui)
-
-    // Creazione degli elementi dell'interfaccia
-    createToolBar();
-    createSidePanel();
-    createContentArea();
-    setupMainLayout();
-
-    // Connessioni dei segnali
-    connectActions();
-
-    // Aggiorna la visualizzazione iniziale
-    refreshContentDisplay();
+    setupUI();
+    connectSignals();
+    updateContentDisplay();
 }
 
-LibraryWindow::~LibraryWindow() {
-    // Pulizia se necessaria
-}
+void LibraryWindow::setupUI() {
+    // Configurazione finestra principale
+    setWindowTitle("Science Fiction Library Manager");
+    resize(1024, 768);
 
-void LibraryWindow::createToolBar() {
-    // Barra degli strumenti in alto
-    QToolBar *toolBar = addToolBar("Strumenti");
+    // Barra strumenti
+    m_toolBar = addToolBar("Main Toolbar");
+    m_toolBar->addAction("Import", this, &LibraryWindow::importContent);
+    m_toolBar->addAction("Save XML", [this]() { saveToFile("xml"); });
+    m_toolBar->addAction("Save JSON", [this]() { saveToFile("json"); });
 
-    // Pulsanti per importare file
-    m_importAction = new QAction(QIcon(":/icons/import.png"), "Importa", this);
-    toolBar->addAction(m_importAction);
-
-    // Pulsanti per salvare
-    m_saveXmlAction = new QAction(QIcon(":/icons/xml.png"), "Salva come XML", this);
-    m_saveJsonAction = new QAction(QIcon(":/icons/json.png"), "Salva come JSON", this);
-    
-    toolBar->addSeparator();
-    toolBar->addAction(m_saveXmlAction);
-    toolBar->addAction(m_saveJsonAction);
-}
-
-void LibraryWindow::createSidePanel() {
-    // Pannello laterale sinistro
-    m_sidePanel = new QWidget();
-    QVBoxLayout *sideLayout = new QVBoxLayout(m_sidePanel);
-
-    // Barra di ricerca
-    m_searchBar = new QLineEdit();
-    m_searchBar->setPlaceholderText("Cerca contenuti...");
-    m_searchBar->setClearButtonEnabled(true);
-    sideLayout->addWidget(m_searchBar);
-
-    // Filtri
-    m_filterCombo = new QComboBox();
-    m_filterCombo->addItem("Tutti i contenuti");
-    m_filterCombo->addItem("Visti");
-    m_filterCombo->addItem("Non visti");
-    m_filterCombo->addItem("Preferiti");
-    m_filterCombo->addItem("Film");
-    m_filterCombo->addItem("Serie TV");
-    m_filterCombo->addItem("Libri");
-    sideLayout->addWidget(m_filterCombo);
-
-    // Lista dei contenuti
+    // Lista contenuti
     m_contentList = new QListWidget();
-    m_contentList->setSelectionMode(QAbstractItemView::SingleSelection);
-    sideLayout->addWidget(m_contentList);
+    m_contentList->setViewMode(QListView::IconMode);
+    m_contentList->setIconSize(m_previewSize);
+    m_contentList->setResizeMode(QListView::Adjust);
+    m_contentList->setSpacing(15);
 
-    m_sidePanel->setLayout(sideLayout);
-    m_sidePanel->setMinimumWidth(200);
-}
-
-void LibraryWindow::createContentArea() {
-    // Area principale del contenuto
-    m_contentWidget = new QWidget();
-    QVBoxLayout *contentLayout = new QVBoxLayout(m_contentWidget);
-
-    // Etichetta per i dettagli del contenuto
-    m_contentDetails = new QLabel("Nessun contenuto selezionato");
+    // Dettagli contenuto
+    m_contentDetails = new QLabel("Select an item to view details");
     m_contentDetails->setAlignment(Qt::AlignTop | Qt::AlignLeft);
     m_contentDetails->setWordWrap(true);
-    contentLayout->addWidget(m_contentDetails);
+    m_contentDetails->setTextFormat(Qt::RichText);
 
-    m_contentWidget->setLayout(contentLayout);
-}
+    // Ricerca e filtri
+    m_searchBar = new QLineEdit();
+    m_searchBar->setPlaceholderText("Search content...");
+    m_filterCombo = new QComboBox();
+    m_filterCombo->addItems({"All", "Movies", "Books", "Watched", "Starred"});
 
-void LibraryWindow::setupMainLayout() {
-    // Layout principale con splitter
-    QSplitter *splitter = new QSplitter(Qt::Horizontal);
-    splitter->addWidget(m_sidePanel);
-    splitter->addWidget(m_contentWidget);
+    // Layout principale
+    QWidget *leftPanel = new QWidget();
+    QVBoxLayout *leftLayout = new QVBoxLayout(leftPanel);
+    leftLayout->addWidget(m_searchBar);
+    leftLayout->addWidget(m_filterCombo);
+    leftLayout->addWidget(m_contentList);
 
-    // Imposta le proporzioni iniziali
-    splitter->setStretchFactor(0, 1);
-    splitter->setStretchFactor(1, 3);
+    m_splitter = new QSplitter(Qt::Horizontal);
+    m_splitter->addWidget(leftPanel);
+    m_splitter->addWidget(m_contentDetails);
+    m_splitter->setStretchFactor(1, 2);
 
-    setCentralWidget(splitter);
-}
+    setCentralWidget(m_splitter);
 
-void LibraryWindow::connectActions() {
-    // Connessioni dei pulsanti
-    connect(m_importAction, &QAction::triggered, this, &LibraryWindow::importContent);
-    connect(m_saveXmlAction, &QAction::triggered, this, &LibraryWindow::saveAsXml);
-    connect(m_saveJsonAction, &QAction::triggered, this, &LibraryWindow::saveAsJson);
+    m_contentList->setViewMode(QListView::IconMode);
+    m_contentList->setIconSize(QSize(120, 180));
+    m_contentList->setGridSize(QSize(150, 220));
+    m_contentList->setWordWrap(true);
+    m_contentList->setStyleSheet(
+        "QListView::item { padding: 10px; margin: 5px; border: 1px solid #ddd; }"
+        "QListView::item:hover { background: #f0f0f0; }"
+    );
     
-    // Connessioni per la ricerca e filtri
-    connect(m_searchBar, &QLineEdit::textChanged, this, &LibraryWindow::searchContent);
-    connect(m_filterCombo, QOverload<int>::of(&QComboBox::currentIndexChanged), 
-            this, &LibraryWindow::filterContent);
-    
-    // Connessione per la selezione del contenuto
-    connect(m_contentList, &QListWidget::itemSelectionChanged, 
-            this, &LibraryWindow::updateContentList);
+    // DEBUG: Aggiungi un pulsante di test
+    QPushButton* testBtn = new QPushButton("Test Connection");
+    connect(testBtn, &QPushButton::clicked, this, &LibraryWindow::verifyResources);
+    m_toolBar->addWidget(testBtn);
 }
 
-void LibraryWindow::refreshContentDisplay() {
+void LibraryWindow::connectSignals() {
+    connect(m_contentList, &QListWidget::itemClicked, 
+            this, &LibraryWindow::showContentDetails);
+}
+
+QPixmap LibraryWindow::loadSafePixmap(const QString &path, const QSize &size) const {
+    QPixmap pixmap;
+    if (!path.isEmpty() && QFile::exists(path)) {
+        pixmap.load(path);
+    }
+    
+    if (pixmap.isNull()) {
+        pixmap.load("/home/solgio/Desktop/OOProject/assets/icons/default.png");
+    }
+    
+    return pixmap.scaled(size, Qt::KeepAspectRatio, Qt::SmoothTransformation);
+}
+
+void LibraryWindow::loadContentPreview(Content* content, QListWidgetItem* item) {
+    if (!content) return;
+
+    item->setText(QString::fromStdString(content->getTitle()));
+    item->setData(Qt::UserRole, QVariant(content->getId()));
+    
+    QPixmap pixmap = loadSafePixmap(
+        QString::fromStdString(content->getImage()),
+        m_previewSize
+    );
+    item->setIcon(QIcon(pixmap));
+}
+
+void LibraryWindow::updateContentDisplay() {qDebug() << "Updating content display...";
     m_contentList->clear();
+
+    auto& library = ScienceFiction_Library::getInstance();
+    const auto& contents = library.getContentList();
     
-    // Mostra tutti i contenuti (o quelli filtrati)
-    ScienceFiction_Library::getInstance().showAllContent();
-    const auto& contents = ScienceFiction_Library::getInstance().getContentList();
+    qDebug() << "Library contains" << contents.size() << "items";
     
-    for (const auto& content : contents) {
-        QListWidgetItem *item = new QListWidgetItem(
-            QString::fromStdString(content->getTitle()), 
-            m_contentList
-        );
+    for (const auto& content : contents) 
+    {
+        qDebug() << "Processing item:" << content->getId() << content->getTitle().c_str();
+        
+        QListWidgetItem* item = new QListWidgetItem(m_contentList);
+        item->setText(QString::fromStdString(content->getTitle()));
+        
+        QString imagePath = QString::fromStdString(content->getImage());
+        qDebug() << "Image path:" << imagePath;
+        
+        if(QFile::exists(imagePath)) {
+            qDebug() << "Image found, loading...";
+            QPixmap pixmap(imagePath);
+            item->setIcon(QIcon(pixmap.scaled(100, 150, Qt::KeepAspectRatio)));
+        } else {
+            qWarning() << "Image not found, using default";
+            item->setIcon(QIcon(":/icons/default.png"));
+        }
+        
         item->setData(Qt::UserRole, QVariant(content->getId()));
     }
 }
 
-void LibraryWindow::importContent() {
-    QString fileName = QFileDialog::getOpenFileName(this, "Importa contenuto", 
-                                                    "", "Tutti i file (*.*)");
-    if (!fileName.isEmpty()) {
-        // Qui dovresti creare il contenuto appropriato in base al tipo di file
-        // e aggiungerlo alla libreria con ScienceFiction_Library::getInstance().addContent()
-        QMessageBox::information(this, "Importazione", "Contenuto importato: " + fileName);
-        refreshContentDisplay();
-    }
-}
-
-void LibraryWindow::saveAsXml() {
-    QString fileName = QFileDialog::getSaveFileName(this, "Salva come XML", 
-                                                    "", "File XML (*.xml)");
-    if (!fileName.isEmpty()) {
-        if (ScienceFiction_Library::getInstance().saveToFile(fileName.toStdString())) {
-            QMessageBox::information(this, "Salvataggio", "Libreria salvata come XML: " + fileName);
-        } else {
-            QMessageBox::warning(this, "Errore", "Salvataggio fallito");
-        }
-    }
-}
-
-void LibraryWindow::saveAsJson() {
-    QString fileName = QFileDialog::getSaveFileName(this, "Salva come JSON", 
-                                                    "", "File JSON (*.json)");
-    if (!fileName.isEmpty()) {
-        if (ScienceFiction_Library::getInstance().saveToFile(fileName.toStdString())) {
-            QMessageBox::information(this, "Salvataggio", "Libreria salvata come JSON: " + fileName);
-        } else {
-            QMessageBox::warning(this, "Errore", "Salvataggio fallito");
-        }
-    }
-}
-
-void LibraryWindow::searchContent(const QString &text) {
-    if (text.isEmpty()) {
-        refreshContentDisplay();
-    } else {
-        ScienceFiction_Library::getInstance().filterContent(text.toStdString());
-        refreshContentDisplay();
-    }
-}
-
-void LibraryWindow::filterContent(int index) {
-    switch(index) {
-        case 0: // Tutti i contenuti
-            ScienceFiction_Library::getInstance().showAllContent();
-            break;
-        case 1: // Visti
-            ScienceFiction_Library::getInstance().watchedOrNot(true);
-            break;
-        case 2: // Non visti
-            ScienceFiction_Library::getInstance().watchedOrNot(false);
-            break;
-        case 3: // Preferiti
-            ScienceFiction_Library::getInstance().starredOrNot(true);
-            break;
-        /*case 4: 
-            ScienceFiction_Library::getInstance().filteredListbyGen(static_cast<unsigned int>(Subgenre::Film));
-            break;
-        case 5: 
-            ScienceFiction_Library::getInstance().filteredListbyGen(static_cast<unsigned int>(Subgenre::SerieTV));
-            break;
-        case 6: 
-            ScienceFiction_Library::getInstance().filteredListbyGen(static_cast<unsigned int>(Subgenre::Libri));
-            break;*/
-    }
-    refreshContentDisplay();
-}
-
-void LibraryWindow::updateContentList() {
-    QList<QListWidgetItem*> selectedItems = m_contentList->selectedItems();
-    if (selectedItems.isEmpty()) {
-        m_contentDetails->setText("Nessun contenuto selezionato");
-        return;
-    }
-    
-    QListWidgetItem* selectedItem = selectedItems.first();
-    unsigned int id = selectedItem->data(Qt::UserRole).toUInt();
+void LibraryWindow::showContentDetails(QListWidgetItem *item) {
+    unsigned int id = item->data(Qt::UserRole).toUInt();
     Content* content = ScienceFiction_Library::getInstance().searchId(id);
     
     if (content) {
-        QString details = QString("<b>Titolo:</b> %1<br>"
-                                "<b>Anno:</b> %2<br>"
-                                "<b>Genere:</b> %3<br>"
-                                "<b>Visto:</b> %4<br>"
-                                "<b>Preferito:</b> %5")
-                            .arg(QString::fromStdString(content->getTitle()))
-                            .arg(content->getYear())
-                            .arg(QString::fromStdString(content->getSubgenreString()))
-                            .arg(content->getWatched() ? "Sì" : "No")
-                            .arg(content->getStarred() ? "Sì" : "No");
+        QString html = QString(
+            "<div style='margin:10px;'>"
+            "<h2>%1</h2>"
+            "<div style='float:right; margin-left:20px;'>"
+            "<img src='%2' width='200' onerror=\"this.src=':/icons/default.png'\">"
+            "</div>"
+            "<p><b>Year:</b> %3</p>"
+            "<p><b>Genre:</b> %4</p>"
+            "<p><b>Watched:</b> %5</p>"
+            "<p><b>Starred:</b> %6</p>"
+            "<p><b>Description:</b><br>%7</p>"
+            "</div>"
+        ).arg(
+            QString::fromStdString(content->getTitle()),
+            QString::fromStdString(content->getImage()),
+            QString::number(content->getYear()),
+            QString::fromStdString(content->getSubgenreString()),
+            content->getWatched() ? "Yes" : "No",
+            content->getStarred() ? "Yes" : "No",
+            QString::fromStdString(content->getDescription())
+        );
         
-        m_contentDetails->setText(details);
+        m_contentDetails->setText(html);
+    }
+}
+
+void LibraryWindow::importContent() {
+    QString file = QFileDialog::getOpenFileName(
+        this, 
+        "Import Content", 
+        QDir::homePath(), 
+        "Supported Files (*.xml *.json)"
+    );
+    
+    if (!file.isEmpty()) {
+        bool success = ScienceFiction_Library::getInstance().loadFromFile(file.toStdString());
+        if (success) {
+            updateContentDisplay();
+            QMessageBox::information(this, "Success", "Content imported successfully");
+        } else {
+            QMessageBox::warning(this, "Error", "Failed to import content");
+        }
+    }
+}
+
+void LibraryWindow::saveToFile(const QString &extension) {
+    QString file = QFileDialog::getSaveFileName(
+        this,
+        QString("Save As %1").arg(extension.toUpper()),
+        QDir::homePath(),
+        QString("%1 Files (*.%1)").arg(extension)
+    );
+    
+    if (!file.isEmpty()) {
+        bool success = ScienceFiction_Library::getInstance().saveToFile(file.toStdString());
+        if (success) {
+            QMessageBox::information(this, "Success", "Library saved successfully");
+        } else {
+            QMessageBox::warning(this, "Error", "Failed to save library");
+        }
+    }
+}
+void LibraryWindow::verifyResources()
+{
+    qDebug() << "Working directory:" << QDir::currentPath();
+    
+    // Verifica immagini di default
+    qDebug() << "Default icon exists:" << QFile::exists(":/icons/default.png");
+    
+    // Verifica percorsi dei contenuti
+    auto& library = ScienceFiction_Library::getInstance();
+    for (const auto& content : library.getContentList()) 
+    {
+        QString path = QString::fromStdString(content->getImage());
+        qDebug() << "Content" << content->getId() 
+                 << "| Path:" << path 
+                 << "| Exists:" << QFile::exists(path);
     }
 }
