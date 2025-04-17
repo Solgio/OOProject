@@ -150,7 +150,7 @@ bool ScienceFiction_Library::saveToFile(const string& filepath)const{
     if(extension==".xml"){
         QDomDocument doc;
         QDomProcessingInstruction header = doc.createProcessingInstruction(
-        "xml", "version=\"1.0\" encoding=\"UTF-8\"");
+            "xml", "version=\"1.0\" encoding=\"UTF-8\"");
         doc.appendChild(header);
     
         QDomElement root = doc.createElement("ScienceFictionLibrary");
@@ -158,22 +158,24 @@ bool ScienceFiction_Library::saveToFile(const string& filepath)const{
 
         xmlVisitor visitor;
     
-        //Save all contents
+        // Save all contents
         for (const auto& content : contentList) {
             content->toXml(&visitor, doc, root);
         }
-        // Save to file
+        
+        // Save to file with proper error handling
         QFile file(QString::fromStdString(filepath));
         if (!file.open(QIODevice::WriteOnly | QIODevice::Text)) {
             qWarning() << "Failed to open file for writing:" << file.errorString();
             return false;
         }
-    
+        
         QTextStream stream(&file);
+        stream.setEncoding(QStringConverter::Utf8);
         doc.save(stream, 4);  // 4 spaces for indentation
         file.close();
         
-        
+        return true;
     }
     else if(extension==".json"){
         unique_ptr<VisitorJson> visitor = make_unique<VisitorJson>(QString::fromStdString(filepath));

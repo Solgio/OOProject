@@ -9,31 +9,32 @@
         <Watched>0</Watched>
         <Year>1965</Year>
         <Image>assets/images/dune.jpg</Image>
-        <Subgenre>3</Subgenre>
+        <Subgenre>5</Subgenre>
         <Author>Frank Herbert</Author>
         <Publisher>Chilton Books</Publisher>
         <Pages>412</Pages>
+        <Volume>1</Volume>
         <MainCharacter>Paul Atreides</MainCharacter>
     </Book>
 
     <Comic>
         <Id>2</Id>
-        <Title>Saga</Title>
-        <Description>A space opera/fantasy comic book series.</Description>
+        <Title>Blame!</Title>
+        <Description>A distopic cyberpunk manga with great focus on architecture</Description>
         <Inspiration>1</Inspiration>
         <Starred>1</Starred>
         <Watched>0</Watched>
-        <Year>2012</Year>
-        <Image>assets/images/saga.jpg</Image>
-        <Subgenre>2</Subgenre>
-        <Author>Brian K. Vaughan</Author>
-        <Publisher>Image Comics</Publisher>
+        <Year>1997</Year>
+        <Image>assets/images/blame.jpg</Image>
+        <Subgenre>8</Subgenre>
+        <Author>Tsutomu Nihei</Author>
+        <Publisher>Kōdansha</Publisher>
         <Pages>160</Pages>
-        <Volume>1</Volume>
-        <MainCharacter>Alana</MainCharacter>
-        <Illustrator>Fiona Staples</Illustrator>
-        <Serie>Saga</Serie>
-        <Finished>0</Finished>
+        <Volume>10</Volume>
+        <MainCharacter>Killy</MainCharacter>
+        <Illustrator>Tsutomu Nihei</Illustrator>
+        <Serie>Blame!</Serie>
+        <Finished>1</Finished>
     </Comic>
 
     <Film>
