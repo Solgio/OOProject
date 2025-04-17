@@ -51,6 +51,7 @@ void xmlReader::paperReader(Paper* content, QXmlStreamReader& object) const{
     if (token == QXmlStreamReader::StartElement) {
         if (object.name() == "Author") {
             content->setAuthor((object.readElementText()).toStdString());
+            qDebug() << "| Title:" << QString::fromStdString(content->getTitle());
         }
         else if (object.name() == "Publisher") {
             content->setPublisher((object.readElementText()).toStdString());
@@ -192,6 +193,7 @@ unique_ptr<VideoGame> xmlReader::readVideoGame(QXmlStreamReader& object) const{
 ScienceFiction_Library* xmlReader::read(const string& filepath){
     
     QFile file(QString::fromStdString(filepath));
+    qDebug() << "INSIDE XML::READ" ;
     try{
         if(!file.open(QIODevice::ReadOnly | QIODevice::Text)){
             throw std::invalid_argument("Failed to open file: " + file.errorString().toStdString());
@@ -213,12 +215,15 @@ ScienceFiction_Library* xmlReader::read(const string& filepath){
             
             if (token == QXmlStreamReader::StartElement) {
                 if (xmlName == "Book") {
+                    qDebug() << "BOOK" ;
                     library.addContent(readBook(xmlreader).release());
                 }
                 else if (xmlName == "Comic") {
+                    qDebug() << "COMIC" ;
                     library.addContent(readComic(xmlreader).release());
                 }
                 else if (xmlName == "Film") {
+                    qDebug() << "FILM" ;
                     library.addContent(readFilm(xmlreader).release());
                 }
                 else if (xmlName == "Serie") {

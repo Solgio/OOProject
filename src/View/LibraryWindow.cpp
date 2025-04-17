@@ -131,7 +131,7 @@ void LibraryWindow::updateContentDisplay() {qDebug() << "Updating content displa
             item->setIcon(QIcon(pixmap.scaled(100, 150, Qt::KeepAspectRatio)));
         } else {
             qWarning() << "Image not found, using default";
-            item->setIcon(QIcon(":/icons/default.png"));
+            item->setIcon(QIcon("/home/solgio/Desktop/OOProject/assets/icons/default.png"));
         }
         
         item->setData(Qt::UserRole, QVariant(content->getId()));
@@ -147,7 +147,7 @@ void LibraryWindow::showContentDetails(QListWidgetItem *item) {
             "<div style='margin:10px;'>"
             "<h2>%1</h2>"
             "<div style='float:right; margin-left:20px;'>"
-            "<img src='%2' width='200' onerror=\"this.src=':/icons/default.png'\">"
+            "<img src='%2' width='200' onerror=\"this.src='/home/solgio/Desktop/OOProject/assets/icons/default.png'\">"
             "</div>"
             "<p><b>Year:</b> %3</p>"
             "<p><b>Genre:</b> %4</p>"
@@ -210,7 +210,7 @@ void LibraryWindow::verifyResources()
     qDebug() << "Working directory:" << QDir::currentPath();
     
     // Verifica immagini di default
-    qDebug() << "Default icon exists:" << QFile::exists(":/icons/default.png");
+    qDebug() << "Default icon exists:" << QFile::exists("/home/solgio/Desktop/OOProject/assets/icons/default.png");
     
     // Verifica percorsi dei contenuti
     auto& library = ScienceFiction_Library::getInstance();
@@ -218,7 +218,8 @@ void LibraryWindow::verifyResources()
     {
         QString path = QString::fromStdString(content->getImage());
         qDebug() << "Content" << content->getId() 
+                 << "| Title:" << QString::fromStdString(content->getTitle())
                  << "| Path:" << path 
-                 << "| Exists:" << QFile::exists(path);
+                 << "| Exists Image:" << QFile::exists(path);
     }
 }
