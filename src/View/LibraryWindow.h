@@ -12,6 +12,8 @@ class QLabel;
 class QLineEdit;
 class QComboBox;
 class QMenu;
+class ContentDetailWindow;
+
 class LibraryWindow : public QMainWindow {
     Q_OBJECT
 
@@ -24,6 +26,8 @@ private slots:
     void saveToFile(const QString &extension);
     void updateContentDisplay();
     void showContentDetails(QListWidgetItem *item);
+    void editContent(Content* content = nullptr);
+    void hideDetailView();
 
 private:
     void setupUI();
@@ -39,12 +43,13 @@ private:
     QWidget *m_centralWidget;
     QSplitter *m_splitter;
     QListWidget *m_contentList;
-    QLabel *m_contentDetails;
     QLineEdit *m_searchBar;
     QComboBox *m_filterCombo;
     QToolButton *m_importButton;
     QToolButton *m_saveButton;
     QMenu *m_saveMenu;
+    ContentDetailWindow *m_detailWindow;
+    QWidget *m_rightPanel;
 
     const QSize m_previewSize{120, 180};
 };

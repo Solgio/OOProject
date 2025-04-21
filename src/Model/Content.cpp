@@ -1,5 +1,12 @@
 #include "lib/Content.h"
+#include "lib/Book.h"
+#include "lib/Comic.h"
+#include "lib/Film.h"
+#include "lib/Serie.h"
+#include "lib/VideoGame.h"
 #include "lib/ScienceFictionLibrary.h"
+#include <iostream>
+
 using std::underlying_type_t;   //I would use to_underlying but  it is C++23 so I will use this
 
 inline   Subgenre operator|(Subgenre a, Subgenre b) {
@@ -18,6 +25,25 @@ Content::Content(const string& _title, const unsigned int& _subGenre, const stri
         title(_title),subgenres(static_cast<Subgenre>(_subGenre)), description(_description), starred(_starred), watched(_watched), yearOfRelease(_year),image(_image), inspiration(_inspiration) { 
             id = ScienceFiction_Library::getInstance().getNewId()+1; //Get the new ID from the library
         };
+
+string Content::getTypeString() const{
+    try{
+        if(dynamic_cast<const Book*>(this)) {
+            return "Book";
+        } else if (dynamic_cast<const Comic*>(this)) {
+                return "Comic";
+        } else if (dynamic_cast<const Film*>(this)) {
+            return "Film";
+        } else if (dynamic_cast<const Serie*>(this)) {
+            return "Serie";
+        } else if (dynamic_cast<const VideoGame*>(this)) {
+            return "VideoGame";
+        }
+    } catch (const std::bad_cast& e) {
+        // Handle the case where the dynamic_cast fails
+        std::cerr << "Unknown Type of Content : " << e.what() << std::endl;
+    }
+};
 
 unsigned int Content::getId() const{
     return id;

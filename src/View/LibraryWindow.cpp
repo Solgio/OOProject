@@ -1,5 +1,8 @@
 #include "LibraryWindow.h"
+#include "ContentDetailWindow.h"
 #include "PreviewWidget.h"
+#include "ContentEditWindow.h"
+
 #include <QFileDialog>
 #include <QMessageBox>
 #include <QToolBar>
@@ -10,6 +13,8 @@
 #include <QComboBox>
 #include <QPushButton>
 #include <QMenu>
+#include <QDebug>
+#include <QDir>
 
 LibraryWindow::LibraryWindow(QWidget *parent)
     : QMainWindow(parent) {
@@ -17,6 +22,7 @@ LibraryWindow::LibraryWindow(QWidget *parent)
     connectSignals();
     updateContentDisplay();
 }
+
 void LibraryWindow::createSaveMenu() {
     m_saveMenu = new QMenu("Save Options", this);
     
@@ -35,6 +41,7 @@ void LibraryWindow::createSaveMenu() {
     m_saveButton->setPopupMode(QToolButton::MenuButtonPopup);
     m_saveButton->setMenu(m_saveMenu);
 }
+
 void LibraryWindow::createImportButton() {
     m_importButton = new QToolButton();
     m_importButton->setText(" Import ");
@@ -52,61 +59,79 @@ void LibraryWindow::setupUI() {
     m_toolBar = addToolBar("Main Toolbar");
 
     createImportButton();
-    m_toolBar->addWidget(m_importButton); 
-    // Sostituisci i pulsanti con il menu a discesa
+    m_toolBar->addWidget(m_importButton);
     createSaveMenu();
     m_toolBar->addWidget(m_saveButton);
-    // Lista contenuti
+
+    // DEBUG: Aggiungi un pulsante di test
+    QPushButton* testBtn = new QPushButton("Test Connection");
+    connect(testBtn, &QPushButton::clicked, this, &LibraryWindow::verifyResources);
+    m_toolBar->addWidget(testBtn);
+
     m_contentList = new QListWidget();
-    m_contentList->setViewMode(QListView::IconMode);
+    m_contentList->setViewMode(QListWidget::IconMode);
     m_contentList->setIconSize(m_previewSize);
-    m_contentList->setResizeMode(QListView::Adjust);
-    m_contentList->setSpacing(15);
+    m_contentList->setResizeMode(QListWidget::Adjust);
+    m_contentList->setMovement(QListWidget::Static);
 
-    // Dettagli contenuto
-    m_contentDetails = new QLabel("Select an item to view details");
-    m_contentDetails->setAlignment(Qt::AlignTop | Qt::AlignLeft);
-    m_contentDetails->setWordWrap(true);
-    m_contentDetails->setTextFormat(Qt::RichText);
-
-    // Ricerca e filtri
+    // Filtri e ricerca (pannello sinistro)
     m_searchBar = new QLineEdit();
     m_searchBar->setPlaceholderText("Search content...");
     m_filterCombo = new QComboBox();
     m_filterCombo->addItems({"All", "Movies", "Books", "Watched", "Starred"});
 
-    // Layout principale
-    QWidget *leftPanel = new QWidget();
-    QVBoxLayout *leftLayout = new QVBoxLayout(leftPanel);
-    leftLayout->addWidget(m_searchBar);
-    leftLayout->addWidget(m_filterCombo);
-    leftLayout->addWidget(m_contentList);
 
+        // Pannello sinistro (solo filtri)
+        QWidget *leftPanel = new QWidget();
+        QVBoxLayout *leftLayout = new QVBoxLayout(leftPanel);
+        leftLayout->addWidget(m_searchBar);
+        leftLayout->addWidget(m_filterCombo);
+        leftLayout->addStretch(); // Spazio vuoto sotto i filtri
+    
+
+    // Lista dei contenuti (pannello destro)
+    m_rightPanel = new QWidget();
+    QVBoxLayout *rightLayout = new QVBoxLayout(m_rightPanel);
+    rightLayout->addWidget(new QLabel("Content Preview:"));
+    rightLayout->addWidget(m_contentList);
+
+    // Create overlay container
+    m_detailWindow = new ContentDetailWindow();
+    m_detailWindow->hide();
+    rightLayout->addWidget(m_detailWindow);
+
+    // Configurazione splitter
     m_splitter = new QSplitter(Qt::Horizontal);
     m_splitter->addWidget(leftPanel);
-    m_splitter->addWidget(m_contentDetails);
-    m_splitter->setStretchFactor(1, 2);
+    m_splitter->addWidget(m_rightPanel);
+    m_splitter->setStretchFactor(0, 1);
+    m_splitter->setStretchFactor(1, 3);
 
     setCentralWidget(m_splitter);
-
-    m_contentList->setViewMode(QListView::IconMode);
-    m_contentList->setIconSize(QSize(120, 180));
-    m_contentList->setGridSize(QSize(150, 220));
-    m_contentList->setWordWrap(true);
-    m_contentList->setStyleSheet(
-        "QListView::item { padding: 10px; margin: 5px; border: 1px solid #ddd; }"
-        "QListView::item:hover { background: #f0f0f0; }"
-    );
-    
-    // DEBUG: Aggiungi un pulsante di test
-    QPushButton* testBtn = new QPushButton("Test Connection");
-    connect(testBtn, &QPushButton::clicked, this, &LibraryWindow::verifyResources);
-    m_toolBar->addWidget(testBtn);
 }
 
 void LibraryWindow::connectSignals() {
     connect(m_contentList, &QListWidget::itemClicked, 
             this, &LibraryWindow::showContentDetails);
+    connect(m_detailWindow, &ContentDetailWindow::editRequested,
+            this, &LibraryWindow::editContent);
+    connect(m_detailWindow, &ContentDetailWindow::closeRequested,
+            this, &LibraryWindow::hideDetailView);
+}
+
+void LibraryWindow::showContentDetails(QListWidgetItem *item) {
+    if (!item) return;
+
+    bool ok;
+    unsigned int id = item->data(Qt::UserRole).toUInt(&ok);
+    if (!ok) return;
+
+    Content* content = ScienceFiction_Library::getInstance().searchId(id);
+    if (!content) return;
+
+    m_detailWindow->setContent(content);
+    m_contentList->hide();
+    m_detailWindow->show();
 }
 
 QPixmap LibraryWindow::loadSafePixmap(const QString &path, const QSize &size) const {
@@ -135,7 +160,8 @@ void LibraryWindow::loadContentPreview(Content* content, QListWidgetItem* item) 
     item->setIcon(QIcon(pixmap));
 }
 
-void LibraryWindow::updateContentDisplay() {qDebug() << "Updating content display...";
+void LibraryWindow::updateContentDisplay() {
+    qDebug() << "Updating content display...";
     m_contentList->clear();
 
     auto& library = ScienceFiction_Library::getInstance();
@@ -143,58 +169,31 @@ void LibraryWindow::updateContentDisplay() {qDebug() << "Updating content displa
     
     qDebug() << "Library contains" << contents.size() << "items";
     
-    for (const auto& content : contents) 
-    {
+    for (const auto& content : contents) {
         qDebug() << "Processing item:" << content->getId() << content->getTitle().c_str();
         
         QListWidgetItem* item = new QListWidgetItem(m_contentList);
-        item->setText(QString::fromStdString(content->getTitle()));
-        
-        QString imagePath = QString::fromStdString(content->getImage());
-        qDebug() << "Image path:" << imagePath;
-        
-        if(QFile::exists(imagePath)) {
-            qDebug() << "Image found, loading...";
-            QPixmap pixmap(imagePath);
-            item->setIcon(QIcon(pixmap.scaled(100, 150, Qt::KeepAspectRatio)));
-        } else {
-            qWarning() << "Image not found, using default";
-            item->setIcon(QIcon(":assets/icons/default.png"));
-        }
-        
-        item->setData(Qt::UserRole, QVariant(content->getId()));
+        loadContentPreview(content.get(), item);
     }
 }
 
-void LibraryWindow::showContentDetails(QListWidgetItem *item) {
-    unsigned int id = item->data(Qt::UserRole).toUInt();
-    Content* content = ScienceFiction_Library::getInstance().searchId(id);
-    
-    if (content) {
-        QString html = QString(
-            "<div style='margin:10px;'>"
-            "<h2>%1</h2>"
-            "<div style='float:right; margin-left:20px;'>"
-            "<img src='%2' width='200' onerror=\":assets/icons/default.png'\">"
-            "</div>"
-            "<p><b>Year:</b> %3</p>"
-            "<p><b>Genre:</b> %4</p>"
-            "<p><b>Watched:</b> %5</p>"
-            "<p><b>Starred:</b> %6</p>"
-            "<p><b>Description:</b><br>%7</p>"
-            "</div>"
-        ).arg(
-            QString::fromStdString(content->getTitle()),
-            QString::fromStdString(content->getImage()),
-            QString::number(content->getYear()),
-            QString::fromStdString(content->getSubgenreString()),
-            content->getWatched() ? "Yes" : "No",
-            content->getStarred() ? "Yes" : "No",
-            QString::fromStdString(content->getDescription())
-        );
-        
-        m_contentDetails->setText(html);
+void LibraryWindow::hideDetailView() {
+    m_detailWindow->hide();
+    m_contentList->show();
+}
+
+void LibraryWindow::editContent(Content* content) 
+{
+    if (!content) {
+        qCritical() << "Attempted to edit null content!";
+        return;
     }
+
+    ContentEditWindow *editWindow = new ContentEditWindow(content, this);
+    editWindow->setAttribute(Qt::WA_DeleteOnClose);
+    connect(editWindow, &ContentEditWindow::contentUpdated, 
+            this, &LibraryWindow::updateContentDisplay);
+    editWindow->exec();
 }
 
 void LibraryWindow::importContent() {
@@ -233,9 +232,8 @@ void LibraryWindow::saveToFile(const QString &extension) {
         }
     }
 }
-//!DEBUG FUNCTION
-void LibraryWindow::verifyResources()
-{
+
+void LibraryWindow::verifyResources() {
     qDebug() << "Working directory:" << QDir::currentPath();
     
     // Verifica immagini di default
@@ -243,8 +241,7 @@ void LibraryWindow::verifyResources()
     
     // Verifica percorsi dei contenuti
     auto& library = ScienceFiction_Library::getInstance();
-    for (const auto& content : library.getContentList()) 
-    {
+    for (const auto& content : library.getContentList()) {
         QString path = QString::fromStdString(content->getImage());
         qDebug() << "Content" << content->getId() 
                  << "| Title:" << QString::fromStdString(content->getTitle())
