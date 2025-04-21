@@ -39,9 +39,15 @@ string Content::getTypeString() const{
         } else if (dynamic_cast<const VideoGame*>(this)) {
             return "VideoGame";
         }
+        else {
+            return "Unknown";
+            throw std::bad_cast();
+        }
+
     } catch (const std::bad_cast& e) {
         // Handle the case where the dynamic_cast fails
         std::cerr << "Unknown Type of Content : " << e.what() << std::endl;
+        return "Unknown";
     }
 };
 

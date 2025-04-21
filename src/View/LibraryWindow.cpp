@@ -81,12 +81,12 @@ void LibraryWindow::setupUI() {
     m_filterCombo->addItems({"All", "Movies", "Books", "Watched", "Starred"});
 
 
-        // Pannello sinistro (solo filtri)
-        QWidget *leftPanel = new QWidget();
-        QVBoxLayout *leftLayout = new QVBoxLayout(leftPanel);
-        leftLayout->addWidget(m_searchBar);
-        leftLayout->addWidget(m_filterCombo);
-        leftLayout->addStretch(); // Spazio vuoto sotto i filtri
+    // Pannello sinistro (solo filtri)
+    QWidget *leftPanel = new QWidget();
+    QVBoxLayout *leftLayout = new QVBoxLayout(leftPanel);
+    leftLayout->addWidget(m_searchBar);
+    leftLayout->addWidget(m_filterCombo);
+    leftLayout->addStretch(); // Spazio vuoto sotto i filtri
     
 
     // Lista dei contenuti (pannello destro)

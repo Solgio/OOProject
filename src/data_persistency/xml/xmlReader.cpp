@@ -129,13 +129,11 @@ void xmlReader::videoReader(Video* content, QXmlStreamReader& object) const{
 unique_ptr<Book> xmlReader::readBook(QXmlStreamReader& object) const{
     auto book = make_unique<Book>();
     paperReader(book.get(), object);
-    qDebug() << "Book: " << QString::fromStdString(book->getTitle());
     while (!(object.isEndElement() && object.name() == "Book")) {
         QXmlStreamReader::TokenType token = object.readNext();
         if (token == QXmlStreamReader::StartElement) {
             if (object.name() == "MainCharacter") {
                 book->setMainCharacter((object.readElementText()).toStdString());
-                qDebug() << "MainCharacter: " << QString::fromStdString(book->getMainCharacter());
             }    
         }
     }
@@ -149,7 +147,6 @@ unique_ptr<Comic> xmlReader::readComic(QXmlStreamReader& object) const{
         if (token == QXmlStreamReader::StartElement) {
             if (object.name() == "MainCharacter") {
                 comic->setMainCharacter((object.readElementText()).toStdString());
-                qDebug() << "MainCharacter: " << QString::fromStdString(comic->getMainCharacter());
             }
             else if (object.name() == "Illustrator") {
                 comic->setIllustrator((object.readElementText()).toStdString());
@@ -230,7 +227,6 @@ unique_ptr<VideoGame> xmlReader::readVideoGame(QXmlStreamReader& object) const{
 ScienceFiction_Library* xmlReader::read(const string& filepath){
     
     QFile file(QString::fromStdString(filepath));
-    qDebug() << "INSIDE XML::READ" ;
     try{
         if(!file.open(QIODevice::ReadOnly | QIODevice::Text)){
             throw std::invalid_argument("Failed to open file: " + file.errorString().toStdString());

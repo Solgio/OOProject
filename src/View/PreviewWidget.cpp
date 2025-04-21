@@ -3,7 +3,7 @@
 
 PreviewWidget::PreviewWidget(Content* content, QListWidget *parent)
     : QListWidgetItem(parent), m_content(content) {
-    updatePreview(QSize(100, 150));
+    updatePreview(QSize(2000, 3000));
 }
 
 Content* PreviewWidget::getContent() const {
