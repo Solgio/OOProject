@@ -72,7 +72,9 @@ void ContentDetailWindow::setupUI()
 
     // Edit button at bottom
     QHBoxLayout *buttonLayout = new QHBoxLayout();
-    m_editButton = new QPushButton("Edit");
+    m_editButton = new QPushButton();
+    m_editButton->setIcon(QIcon(":assets/icons/edit.png"));
+    m_editButton->setToolTip("Edit current library content");
     connect(m_editButton, &QPushButton::clicked, this, &ContentDetailWindow::onEditClicked);
     
     buttonLayout->addWidget(m_editButton);
