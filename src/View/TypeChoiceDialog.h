@@ -3,6 +3,7 @@
 
 #include <QDialog>
 #include <functional>
+#include <QButtonGroup>  // Aggiungi questo include
 
 class Content;
 class QGridLayout;
@@ -13,6 +14,7 @@ class TypeChoiceDialog : public QDialog {
 public:
     using ContentFactory = std::function<Content*()>;
     explicit TypeChoiceDialog(QWidget *parent = nullptr);
+    ~TypeChoiceDialog() override;
     
     Content* createSelectedContent() const;
 
@@ -21,6 +23,7 @@ private:
                        const QString &iconPath, ContentFactory factory, int row, int col);
 
     ContentFactory m_selectedFactory;
+    QButtonGroup *m_buttonGroup;  // Aggiungi questo membro
 };
 
 #endif

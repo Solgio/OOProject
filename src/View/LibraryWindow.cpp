@@ -123,6 +123,7 @@ void LibraryWindow::setupUI() {
     m_add->setText("Add Content");
     m_add->setIcon(QIcon(":assets/icons/add.png"));
     m_add->setToolTip("Add new content to the library");
+    m_add->setIconSize(QSize(32, 32));
     connect(m_add, &QToolButton::clicked, this, &LibraryWindow::editContentTriggered);
     
     buttonLayout->addWidget(m_add);
