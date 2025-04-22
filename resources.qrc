@@ -7,15 +7,16 @@
         <file>assets/icons/import.png</file>
         <file>assets/icons/edit.png</file>
 
-        <file>assets/icons/book-100.png</file>
-        <file>assets/icons/comic-100.png</file>
+        <file>assets/icons/book.png</file>
+        <file>assets/icons/comic.png</file>
+        <file>assets/icons/film.png</file>
+        <file>assets/icons/videogame.png</file>
+        <file>assets/icons/serie.png</file>
+     
         <file>assets/icons/default.png</file>
         <file>assets/icons/delete.png</file>
         <file>assets/icons/eye_off-100.png</file>
         <file>assets/icons/eye_on-100.png</file>
-        <file>assets/icons/film-100.png</file>
-        <file>assets/icons/game-100.png</file>
-        <file>assets/icons/series-100.png</file>
         <file>assets/icons/like_off-100.png</file>
         <file>assets/icons/like_on-100.png</file>
 
@@ -23,6 +24,12 @@
         <file>assets/black_icons/save-hollow.png</file>
         <file>assets/black_icons/xml.png</file>
         <file>assets/black_icons/json.png</file>
+
+        <file>assets/black_icons/book-100.png</file>
+        <file>assets/black_icons/comic-100.png</file>
+        <file>assets/black_icons/film-100.png</file>
+        <file>assets/black_icons/game-100.png</file>
+        <file>assets/black_icons/series-100.png</file>
 
     </qresource>
 </RCC>

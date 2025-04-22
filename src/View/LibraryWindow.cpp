@@ -1,6 +1,6 @@
 #include "LibraryWindow.h"
 #include "ContentDetailWindow.h"
-#include "PreviewWidget.h"
+#include "TypeChoiceDialog.h"
 #include "ContentEditWindow.h"
 
 #include <QFileDialog>
@@ -21,6 +21,11 @@ LibraryWindow::LibraryWindow(QWidget *parent)
     setupUI();
     connectSignals();
     updateContentDisplay();
+}
+
+LibraryWindow::~LibraryWindow() {
+    // Pulizia delle risorse
+    delete m_detailWindow;
 }
 
 void LibraryWindow::createSaveMenu() {
@@ -49,59 +54,86 @@ void LibraryWindow::createImportButton() {
     m_importButton->setToolTip("Import content from file. Supported formats: XML, JSON");
     connect(m_importButton, &QToolButton::clicked, this, &LibraryWindow::importContent);
 }
+void LibraryWindow::editContentTriggered(bool checked) {
+    Q_UNUSED(checked);
+    
+    TypeChoiceDialog typeDialog(this);
+    if (typeDialog.exec() == QDialog::Accepted) {
+        Content* newContent = typeDialog.createSelectedContent();
+        if (newContent) {
+            // Assegna un ID e aggiungi alla libreria
+            newContent->setId(ScienceFiction_Library::getInstance().getNewId());
+            ScienceFiction_Library::getInstance().addContent(newContent);
+            editContent(newContent);
+        }
+    }
+}
 
 void LibraryWindow::setupUI() {
-    // Configurazione finestra principale
     setWindowTitle("Science Fiction Library Manager");
     resize(1024, 768);
 
-    // Barra strumenti
+    // Inizializzazione componenti UI
     m_toolBar = addToolBar("Main Toolbar");
+    m_contentList = new QListWidget();
+    m_rightPanel = new QWidget();  // Inizializzazione aggiunta
+    m_splitter = new QSplitter(Qt::Horizontal);
 
+    // Configurazione toolbar
     createImportButton();
     m_toolBar->addWidget(m_importButton);
     createSaveMenu();
     m_toolBar->addWidget(m_saveButton);
 
-    // DEBUG: Aggiungi un pulsante di test
+    // Pulsante di debug
     QPushButton* testBtn = new QPushButton("Test Connection");
     connect(testBtn, &QPushButton::clicked, this, &LibraryWindow::verifyResources);
     m_toolBar->addWidget(testBtn);
 
-    m_contentList = new QListWidget();
+    // Configurazione lista contenuti
     m_contentList->setViewMode(QListWidget::IconMode);
     m_contentList->setIconSize(m_previewSize);
     m_contentList->setResizeMode(QListWidget::Adjust);
     m_contentList->setMovement(QListWidget::Static);
 
-    // Filtri e ricerca (pannello sinistro)
+    // Pannello sinistro (filtri)
     m_searchBar = new QLineEdit();
     m_searchBar->setPlaceholderText("Search content...");
     m_filterCombo = new QComboBox();
     m_filterCombo->addItems({"All", "Movies", "Books", "Watched", "Starred"});
 
-
-    // Pannello sinistro (solo filtri)
     QWidget *leftPanel = new QWidget();
     QVBoxLayout *leftLayout = new QVBoxLayout(leftPanel);
     leftLayout->addWidget(m_searchBar);
     leftLayout->addWidget(m_filterCombo);
-    leftLayout->addStretch(); // Spazio vuoto sotto i filtri
-    
+    leftLayout->addStretch();
 
-    // Lista dei contenuti (pannello destro)
-    m_rightPanel = new QWidget();
+    // Pannello destro (contenuti e pulsante)
     QVBoxLayout *rightLayout = new QVBoxLayout(m_rightPanel);
     rightLayout->addWidget(new QLabel("Content Preview:"));
     rightLayout->addWidget(m_contentList);
 
-    // Create overlay container
+    // Pulsante Add in basso a destra
+    QWidget *buttonContainer = new QWidget();
+    QHBoxLayout *buttonLayout = new QHBoxLayout(buttonContainer);
+    buttonLayout->setContentsMargins(0, 0, 10, 10);
+    buttonLayout->addStretch();
+    
+    m_add = new QToolButton();
+    m_add->setText("Add Content");
+    m_add->setIcon(QIcon(":assets/icons/add.png"));
+    m_add->setToolTip("Add new content to the library");
+    connect(m_add, &QToolButton::clicked, this, &LibraryWindow::editContentTriggered);
+    
+    buttonLayout->addWidget(m_add);
+    rightLayout->addWidget(buttonContainer);
+
+    // Finestra dei dettagli
     m_detailWindow = new ContentDetailWindow();
     m_detailWindow->hide();
     rightLayout->addWidget(m_detailWindow);
 
     // Configurazione splitter
-    m_splitter = new QSplitter(Qt::Horizontal);
     m_splitter->addWidget(leftPanel);
     m_splitter->addWidget(m_rightPanel);
     m_splitter->setStretchFactor(0, 1);
@@ -131,6 +163,7 @@ void LibraryWindow::showContentDetails(QListWidgetItem *item) {
 
     m_detailWindow->setContent(content);
     m_contentList->hide();
+    m_add->hide();
     m_detailWindow->show();
 }
 
@@ -180,11 +213,13 @@ void LibraryWindow::updateContentDisplay() {
 void LibraryWindow::hideDetailView() {
     m_detailWindow->hide();
     m_contentList->show();
+    m_add->show();
 }
 
 void LibraryWindow::editContent(Content* content) 
 {
     if (!content) {
+        
         qCritical() << "Attempted to edit null content!";
         return;
     }

@@ -19,13 +19,14 @@ class LibraryWindow : public QMainWindow {
 
 public:
     explicit LibraryWindow(QWidget *parent = nullptr);
-    ~LibraryWindow() override = default;
+    ~LibraryWindow() override;
 
 private slots:
     void importContent();
     void saveToFile(const QString &extension);
     void updateContentDisplay();
     void showContentDetails(QListWidgetItem *item);
+    void editContentTriggered(bool checked = false);
     void editContent(Content* content = nullptr);
     void hideDetailView();
 
@@ -39,17 +40,18 @@ private:
     void createImportButton();
 
     // UI Components
-    QToolBar *m_toolBar;
-    QWidget *m_centralWidget;
-    QSplitter *m_splitter;
-    QListWidget *m_contentList;
-    QLineEdit *m_searchBar;
-    QComboBox *m_filterCombo;
-    QToolButton *m_importButton;
-    QToolButton *m_saveButton;
-    QMenu *m_saveMenu;
-    ContentDetailWindow *m_detailWindow;
-    QWidget *m_rightPanel;
+    QToolBar *m_toolBar = nullptr;
+    QWidget *m_centralWidget = nullptr;
+    QSplitter *m_splitter = nullptr;
+    QListWidget *m_contentList = nullptr;
+    QLineEdit *m_searchBar = nullptr;
+    QComboBox *m_filterCombo = nullptr;
+    QToolButton *m_importButton = nullptr;
+    QToolButton *m_saveButton = nullptr;
+    QMenu *m_saveMenu = nullptr;
+    ContentDetailWindow *m_detailWindow = nullptr;
+    QWidget *m_rightPanel = nullptr;
+    QToolButton *m_add = nullptr;
 
     const QSize m_previewSize{120, 180};
 };

@@ -21,6 +21,7 @@ HEADERS += src/data_persistency/IReader.h \
            src/View/PreviewWidget.h \
            src/View/ContentDetailWindow.h \
            src/View/ContentEditWindow.h \
+           src/View/TypeChoiceDialog.h \
            src/data_persistency/json/visitorJson.h \
            src/data_persistency/json/jsonReader.h \
            src/data_persistency/xml/xmlReader.h \
@@ -52,6 +53,7 @@ SOURCES += src/Model/Book.cpp \
            src/View/PreviewWidget.cpp \
            src/View/ContentDetailWindow.cpp \
            src/View/ContentEditWindow.cpp \
+           src/View/TypeChoiceDialog.cpp \
            src/data_persistency/json/visitorJson.cpp \
            src/data_persistency/json/jsonReader.cpp \
            src/data_persistency/xml/xmlReader.cpp \
