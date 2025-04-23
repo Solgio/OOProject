@@ -27,8 +27,8 @@ ContentEditWindow::ContentEditWindow(Content* content, QWidget *parent): QDialog
 }
 
 void ContentEditWindow::setupUI() {
-    QVBoxLayout *mainLayout = new QVBoxLayout(this);
-    QFormLayout *formLayout = new QFormLayout();
+    auto *mainLayout = new QVBoxLayout(this);
+    auto *formLayout = new QFormLayout();
 
     // Type (read-only)
     m_typeLabel = new QLabel(QString::fromStdString(m_content->getType())); // Initialize the label
@@ -68,7 +68,7 @@ void ContentEditWindow::setupUI() {
     m_browseButton = new QPushButton("Browse...");
     connect(m_browseButton, &QPushButton::clicked, this, &ContentEditWindow::browseImage);
     
-    QHBoxLayout *imageLayout = new QHBoxLayout();
+    auto *imageLayout = new QHBoxLayout();
     imageLayout->addWidget(m_imagePathEdit);
     imageLayout->addWidget(m_browseButton);
     formLayout->addRow("Image Path:", imageLayout);
@@ -76,7 +76,7 @@ void ContentEditWindow::setupUI() {
     mainLayout->addLayout(formLayout);
 
     // Buttons
-    QHBoxLayout *buttonLayout = new QHBoxLayout();
+    auto *buttonLayout = new QHBoxLayout();
     m_saveButton = new QPushButton("Save Changes");
     connect(m_saveButton, &QPushButton::clicked, this, &ContentEditWindow::saveChanges);
     

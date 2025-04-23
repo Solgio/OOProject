@@ -31,11 +31,11 @@ LibraryWindow::~LibraryWindow() {
 void LibraryWindow::createSaveMenu() {
     m_saveMenu = new QMenu("Save Options", this);
     
-    QAction *saveXmlAction = m_saveMenu->addAction(QIcon(":assets/icons/w_xml.png"), "Save as XML");
+    auto *saveXmlAction = m_saveMenu->addAction(QIcon(":assets/icons/w_xml.png"), "Save as XML");
     saveXmlAction->setToolTip("Export library as XML file");
     connect(saveXmlAction, &QAction::triggered, [this]() { saveToFile("xml"); });
     
-    QAction *saveJsonAction = m_saveMenu->addAction(QIcon(":assets/icons/w_json.png"), "Save as JSON");
+    auto *saveJsonAction = m_saveMenu->addAction(QIcon(":assets/icons/w_json.png"), "Save as JSON");
     saveJsonAction->setToolTip("Export library as JSON file");
     connect(saveJsonAction, &QAction::triggered, [this]() { saveToFile("json"); });
     
@@ -86,7 +86,7 @@ void LibraryWindow::setupUI() {
     m_toolBar->addWidget(m_saveButton);
 
     // Pulsante di debug
-    QPushButton* testBtn = new QPushButton("Test Connection");
+    auto* testBtn = new QPushButton("Test Connection");
     connect(testBtn, &QPushButton::clicked, this, &LibraryWindow::verifyResources);
     m_toolBar->addWidget(testBtn);
 
@@ -103,7 +103,7 @@ void LibraryWindow::setupUI() {
     m_filterCombo->addItems({"All", "Movies", "Books", "Watched", "Starred"});
 
     QWidget *leftPanel = new QWidget();
-    QVBoxLayout *leftLayout = new QVBoxLayout(leftPanel);
+    auto *leftLayout = new QVBoxLayout(leftPanel);
     leftLayout->addWidget(m_searchBar);
     leftLayout->addWidget(m_filterCombo);
     leftLayout->addStretch();
@@ -114,8 +114,8 @@ void LibraryWindow::setupUI() {
     rightLayout->addWidget(m_contentList);
 
     // Pulsante Add in basso a destra
-    QWidget *buttonContainer = new QWidget();
-    QHBoxLayout *buttonLayout = new QHBoxLayout(buttonContainer);
+    auto *buttonContainer = new QWidget();
+    auto *buttonLayout = new QHBoxLayout(buttonContainer);
     buttonLayout->setContentsMargins(0, 0, 10, 10);
     buttonLayout->addStretch();
     
@@ -206,7 +206,7 @@ void LibraryWindow::updateContentDisplay() {
     for (const auto& content : contents) {
         qDebug() << "Processing item:" << content->getId() << content->getTitle().c_str();
         
-        QListWidgetItem* item = new QListWidgetItem(m_contentList);
+        auto* item = new QListWidgetItem(m_contentList);
         loadContentPreview(content.get(), item);
     }
 }

@@ -52,7 +52,7 @@ void ContentDetailWindow::setupUI()
     m_mainLayout->setContentsMargins(0, 0, 0, 0);
 
     // Top bar with close button
-    QHBoxLayout *topBarLayout = new QHBoxLayout();
+    auto *topBarLayout = new QHBoxLayout();
     topBarLayout->addStretch();
     
     m_closeButton = new QPushButton("×");
@@ -71,7 +71,7 @@ void ContentDetailWindow::setupUI()
     m_mainLayout->addWidget(m_contentDetails);
 
     // Edit button at bottom
-    QHBoxLayout *buttonLayout = new QHBoxLayout();
+    auto *buttonLayout = new QHBoxLayout();
     m_editButton = new QPushButton();
     m_editButton->setIcon(QIcon(":assets/icons/edit.png"));
     m_editButton->setToolTip("Edit current library content");
