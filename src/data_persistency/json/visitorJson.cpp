@@ -65,8 +65,6 @@ void VisitorJson::toFileJson(const Book* book){
     QJsonArray arrayBook;
     if(jsonLetto.contains("Book")){
         arrayBook = jsonLetto.value("Book").toArray();
-    }else{
-        jsonLetto["Book"] = arrayBook;
     }
 
     QJsonObject oggettoJSon;
@@ -77,6 +75,8 @@ void VisitorJson::toFileJson(const Book* book){
 
     arrayBook.append(oggettoJSon);
     
+    jsonLetto["Book"] = arrayBook;
+
     doc.setObject(jsonLetto);
     libreria.write(doc.toJson());
     libreria.close();
@@ -103,11 +103,9 @@ void VisitorJson::toFileJson(const Comic* comic){
     QJsonObject jsonLetto;
     jsonLetto = doc.object();
 
-    QJsonArray arrayBook;
+    QJsonArray arrayComic;
     if(jsonLetto.contains("Comic")){
-        arrayBook = jsonLetto.value("Comic").toArray();
-    }else{
-        jsonLetto["Comic"] = arrayBook;
+        arrayComic = jsonLetto.value("Comic").toArray();
     }
 
     QJsonObject oggettoJSon;
@@ -120,7 +118,9 @@ void VisitorJson::toFileJson(const Comic* comic){
     oggettoJSon.insert("Finished", comic->getFinished());
     //fine
 
-    arrayBook.append(oggettoJSon);
+    arrayComic.append(oggettoJSon);
+
+    jsonLetto["Comic"] = arrayComic;
     
     doc.setObject(jsonLetto);
     libreria.write(doc.toJson());
@@ -148,11 +148,9 @@ void VisitorJson::toFileJson(const Film* movie){
     QJsonObject jsonLetto;
     jsonLetto = doc.object();
 
-    QJsonArray arrayBook;
+    QJsonArray arrayFilm;
     if(jsonLetto.contains("Film")){
-        arrayBook = jsonLetto.value("Film").toArray();
-    }else{
-        jsonLetto["Film"] = arrayBook;
+        arrayFilm = jsonLetto.value("Film").toArray();
     }
 
     QJsonObject oggettoJSon;
@@ -162,7 +160,9 @@ void VisitorJson::toFileJson(const Film* movie){
     oggettoJSon.insert("Photo Director", QString::fromStdString(movie->getPhotoDirector()));
     //fine
 
-    arrayBook.append(oggettoJSon);
+    arrayFilm.append(oggettoJSon);
+
+    jsonLetto["Film"] = arrayFilm;
     
     doc.setObject(jsonLetto);
     libreria.write(doc.toJson());
@@ -190,11 +190,9 @@ void VisitorJson::toFileJson(const Serie* serie){
     QJsonObject jsonLetto;
     jsonLetto = doc.object();
 
-    QJsonArray arrayBook;
+    QJsonArray arraySerie;
     if(jsonLetto.contains("Serie")){
-        arrayBook = jsonLetto.value("Serie").toArray();
-    }else{
-        jsonLetto["Serie"] = arrayBook;
+        arraySerie = jsonLetto.value("Serie").toArray();
     }
 
     QJsonObject oggettoJSon;
@@ -206,7 +204,9 @@ void VisitorJson::toFileJson(const Serie* serie){
     oggettoJSon.insert("Finished", serie->getFinished());
     //fine
 
-    arrayBook.append(oggettoJSon);
+    arraySerie.append(oggettoJSon);
+
+    jsonLetto["Serie"] = arraySerie;
     
     doc.setObject(jsonLetto);
     libreria.write(doc.toJson());
@@ -234,11 +234,9 @@ void VisitorJson::toFileJson(const VideoGame *videogame){
     QJsonObject jsonLetto;
     jsonLetto = doc.object();
 
-    QJsonArray arrayBook;
+    QJsonArray arrayVG;
     if(jsonLetto.contains("Videogame")){
-        arrayBook = jsonLetto.value("Videogame").toArray();
-    }else{
-        jsonLetto["Videogame"] = arrayBook;
+        arrayVG = jsonLetto.value("Videogame").toArray();
     }
     
     QJsonObject oggettoJSon;
@@ -249,7 +247,9 @@ void VisitorJson::toFileJson(const VideoGame *videogame){
     oggettoJSon.insert("Expected Hours Of Play", int(videogame->getExpectedHours()));
     //fine
 
-    arrayBook.append(oggettoJSon);
+    arrayVG.append(oggettoJSon);
+
+    jsonLetto["Videogame"] = arrayVG;
     
     doc.setObject(jsonLetto);
     libreria.write(doc.toJson());
