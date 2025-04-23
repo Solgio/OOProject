@@ -57,6 +57,10 @@ const vector<unique_ptr<Content>>& ScienceFiction_Library::getContentList()const
     return contentList;
 };
 
+const vector<Content*>& ScienceFiction_Library::getShownContentList()const{
+    return shownContentList;
+};
+
 void ScienceFiction_Library::showAllContent(){
     shownContentList.clear();
     for(const auto& it : contentList){

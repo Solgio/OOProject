@@ -1,4 +1,5 @@
 #include "ContentEditWindow.h"
+#include "LibraryWindow.h"
 #include "../Model/lib/Content.h"
 #include <QVBoxLayout>
 #include <QFormLayout>

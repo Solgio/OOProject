@@ -29,6 +29,7 @@ private slots:
     void editContentTriggered(bool checked = false);
     void editContent(Content* content = nullptr);
     void hideDetailView();
+    void onFilterChanged(int index);
 
 private:
     void setupUI();

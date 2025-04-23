@@ -100,7 +100,7 @@ void LibraryWindow::setupUI() {
     m_searchBar = new QLineEdit();
     m_searchBar->setPlaceholderText("Search content...");
     m_filterCombo = new QComboBox();
-    m_filterCombo->addItems({"All", "Movies", "Books", "Watched", "Starred"});
+    m_filterCombo->addItems({"All", "Action", "War", "Watched", "Starred"});
 
     auto *leftPanel = new QWidget();
     auto *leftLayout = new QVBoxLayout(leftPanel);
@@ -143,13 +143,46 @@ void LibraryWindow::setupUI() {
     setCentralWidget(m_splitter);
 }
 
-void LibraryWindow::connectSignals() const{
+void LibraryWindow::connectSignals() const {
     connect(m_contentList, &QListWidget::itemClicked, 
             this, &LibraryWindow::showContentDetails);
     connect(m_detailWindow, &ContentDetailWindow::editRequested,
             this, &LibraryWindow::editContent);
     connect(m_detailWindow, &ContentDetailWindow::closeRequested,
             this, &LibraryWindow::hideDetailView);
+    connect(m_filterCombo, QOverload<int>::of(&QComboBox::currentIndexChanged),
+            this, &LibraryWindow::onFilterChanged);
+}
+
+void LibraryWindow::onFilterChanged(int index) {
+    auto& library = ScienceFiction_Library::getInstance();
+    
+    // Clear any existing filters
+    library.clearShown();
+    
+    // Apply the selected filter
+    switch (index) {
+        case 0: // "All"
+            library.showAllContent();
+            break;
+        case 1: // "Movies"
+            library.filteredListbyGen(static_cast<unsigned int>(Subgenre::ACTION));
+            break;
+        case 2: // "Books"
+            library.filteredListbyGen(static_cast<unsigned int>(Subgenre::WAR));
+            break;
+        case 3: // "Watched"
+            library.watchedOrNot(true);
+            break;
+        case 4: // "Starred"
+            library.starredOrNot(true);
+            break;
+        default:
+            break;
+    }
+    
+    // Update the display
+    updateContentDisplay();
 }
 
 void LibraryWindow::showContentDetails(QListWidgetItem *item) {
@@ -193,21 +226,26 @@ void LibraryWindow::loadContentPreview(Content* content, QListWidgetItem* item) 
     );
     item->setIcon(QIcon(pixmap));
 }
-
 void LibraryWindow::updateContentDisplay() {
     qDebug() << "Updating content display...";
     m_contentList->clear();
 
     auto& library = ScienceFiction_Library::getInstance();
-    const auto& contents = library.getContentList();
     
-    qDebug() << "Library contains" << contents.size() << "items";
-    
-    for (const auto& content : contents) {
-        qDebug() << "Processing item:" << content->getId() << content->getTitle().c_str();
-        
-        auto* item = new QListWidgetItem(m_contentList);
-        loadContentPreview(content.get(), item);
+    // Handle filtered content (shownContentList)
+    if (!library.getShownContentList().empty()) {
+        for (Content* content : library.getShownContentList()) {
+            if (!content) continue;
+            auto* item = new QListWidgetItem(m_contentList);
+            loadContentPreview(content, item);
+        }
+    } 
+    // Handle full content (contentList)
+    else {
+        for (const auto& contentPtr : library.getContentList()) {
+            auto* item = new QListWidgetItem(m_contentList);
+            loadContentPreview(contentPtr.get(), item);
+        }
     }
 }
 
