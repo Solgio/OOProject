@@ -31,6 +31,7 @@ class Paper : public Content {
         void accept(Visitor* visitor) override = 0;
         void toXml(xmlVisitor* xvisitor, QDomDocument& doc, QDomElement& root )override = 0;
         void toJson(VisitorJson* vistitorJson) override= 0;
+        string getType() const override= 0;
 };
 
 #endif

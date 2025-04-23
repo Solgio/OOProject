@@ -45,7 +45,6 @@ public:
     Content();
     Content(const string &_title, const unsigned int &_subGenre, const string &_description, const bool &_starred, const bool &_watched, const unsigned int &_year, const string &_image, unsigned int _inspiration = 0);
     unsigned int getId() const;
-    string getTypeString() const;
     string getTitle() const;
     int getSubgenre() const;
     bool hasSubgenre(const Subgenre genre) const;
@@ -72,6 +71,7 @@ public:
     virtual void accept(Visitor *visitor)= 0;
     virtual void toXml(xmlVisitor *xvisitor, QDomDocument &doc, QDomElement &root)= 0;
     virtual void toJson(VisitorJson *vistitorJson)= 0;
+    virtual string getType() const = 0;
 };
 
 #endif

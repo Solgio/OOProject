@@ -7,6 +7,10 @@ Comic::Comic(const string& _title, const unsigned int&  _subGenre, const string&
     Book(_title, _subGenre, _description, _starred, _watched, _year, _image, _author, _publisher, _pages, _volume, _mainCharacter, _inspiration),
     illustrator(_illustrator), serie(_serie), finished(_finished){};
 
+string Comic::getType() const{
+    return "Comic";
+};
+
 string Comic::getIllustrator() const{
     return illustrator;
 };

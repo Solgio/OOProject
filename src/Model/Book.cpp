@@ -6,6 +6,10 @@ Book::Book(const string& _title, const unsigned int&  _subGenre, const string& _
     const string& _publisher, const unsigned int& _pages, const unsigned int& _volume, const string& _mainCharacter, unsigned int _inspiration):
     Paper(_title, _subGenre, _description, _starred, _watched, _year,_image, _author, _publisher, _pages, _volume, _inspiration), mainCharacter(_mainCharacter){};
 
+string Book::getType() const{
+    return "Book";
+};
+
 string Book::getMainCharacter() const{
     return mainCharacter;
 };  

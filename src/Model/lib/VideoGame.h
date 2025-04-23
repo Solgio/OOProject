@@ -34,6 +34,7 @@ class VideoGame : public Multimedia {
         void accept(Visitor* visitor) override;
         void toXml(xmlVisitor* xvisitor, QDomDocument& doc, QDomElement& root ) override;
         void toJson(VisitorJson* vistitorJson) override;
+        string getType() const override;
 
     private:
         string gameEngine;

@@ -41,7 +41,7 @@ void ContentDetailWindow::updateContentDisplay() {
         m_content->getWatched() ? "Yes" : "No",
         m_content->getStarred() ? "Yes" : "No",
         QString::fromStdString(m_content->getDescription()),
-        QString::fromStdString(m_content->getTypeString())
+        QString::fromStdString(m_content->getType())
     );
     m_contentDetails->setText(html);
 }

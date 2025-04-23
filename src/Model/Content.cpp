@@ -26,31 +26,6 @@ Content::Content(const string& _title, const unsigned int& _subGenre, const stri
             id = ScienceFiction_Library::getInstance().getNewId()+1; //Get the new ID from the library
         };
 
-string Content::getTypeString() const{
-    try{
-        if(dynamic_cast<const Book*>(this)) {
-            return "Book";
-        } else if (dynamic_cast<const Comic*>(this)) {
-                return "Comic";
-        } else if (dynamic_cast<const Film*>(this)) {
-            return "Film";
-        } else if (dynamic_cast<const Serie*>(this)) {
-            return "Serie";
-        } else if (dynamic_cast<const VideoGame*>(this)) {
-            return "VideoGame";
-        }
-        else {
-            return "Unknown";
-            throw std::bad_cast();
-        }
-
-    } catch (const std::bad_cast& e) {
-        // Handle the case where the dynamic_cast fails
-        std::cerr << "Unknown Type of Content : " << e.what() << std::endl;
-        return "Unknown";
-    }
-};
-
 unsigned int Content::getId() const{
     return id;
 };        

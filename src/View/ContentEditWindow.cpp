@@ -30,7 +30,7 @@ void ContentEditWindow::setupUI() {
     QFormLayout *formLayout = new QFormLayout();
 
     // Type (read-only)
-    m_typeLabel = new QLabel(QString::fromStdString(m_content->getTypeString())); // Initialize the label
+    m_typeLabel = new QLabel(QString::fromStdString(m_content->getType())); // Initialize the label
     formLayout->addRow("Type:", m_typeLabel);
 
     // Title

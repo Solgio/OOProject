@@ -11,6 +11,10 @@ Serie::Serie(const string& _title, const unsigned int&  _subGenre, const string&
             creator(_creator),
             finished(_finished){}
 
+string Serie::getType() const{
+    return "Serie";
+}
+
 unsigned int Serie::getSeasons()const{
     return seasons;
 }
@@ -23,8 +27,6 @@ string Serie::getCreator()const{
 bool Serie::getFinished()const{
     return finished;
 }
-
-
 
 void Serie::setSeasons(const unsigned int& nseasons){
     seasons = nseasons;
