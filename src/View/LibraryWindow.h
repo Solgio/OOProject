@@ -32,10 +32,10 @@ private slots:
 
 private:
     void setupUI();
-    void connectSignals();
-    void loadContentPreview(Content* content, QListWidgetItem* item);
+    void connectSignals() const;
+    void loadContentPreview(Content* content, QListWidgetItem* item) const;
     QPixmap loadSafePixmap(const QString &path, const QSize &size) const;
-    void verifyResources();
+    void verifyResources() const;
     void createSaveMenu();
     void createImportButton();
 

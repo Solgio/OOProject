@@ -102,14 +102,14 @@ void LibraryWindow::setupUI() {
     m_filterCombo = new QComboBox();
     m_filterCombo->addItems({"All", "Movies", "Books", "Watched", "Starred"});
 
-    QWidget *leftPanel = new QWidget();
+    auto *leftPanel = new QWidget();
     auto *leftLayout = new QVBoxLayout(leftPanel);
     leftLayout->addWidget(m_searchBar);
     leftLayout->addWidget(m_filterCombo);
     leftLayout->addStretch();
 
     // Pannello destro (contenuti e pulsante)
-    QVBoxLayout *rightLayout = new QVBoxLayout(m_rightPanel);
+    auto *rightLayout = new QVBoxLayout(m_rightPanel);
     rightLayout->addWidget(new QLabel("Content Preview:"));
     rightLayout->addWidget(m_contentList);
 
@@ -143,7 +143,7 @@ void LibraryWindow::setupUI() {
     setCentralWidget(m_splitter);
 }
 
-void LibraryWindow::connectSignals() {
+void LibraryWindow::connectSignals() const{
     connect(m_contentList, &QListWidget::itemClicked, 
             this, &LibraryWindow::showContentDetails);
     connect(m_detailWindow, &ContentDetailWindow::editRequested,
@@ -181,7 +181,7 @@ QPixmap LibraryWindow::loadSafePixmap(const QString &path, const QSize &size) co
     return pixmap.scaled(size, Qt::KeepAspectRatio, Qt::SmoothTransformation);
 }
 
-void LibraryWindow::loadContentPreview(Content* content, QListWidgetItem* item) {
+void LibraryWindow::loadContentPreview(Content* content, QListWidgetItem* item) const{
     if (!content) return;
 
     item->setText(QString::fromStdString(content->getTitle()));
@@ -225,7 +225,7 @@ void LibraryWindow::editContent(Content* content)
         return;
     }
 
-    ContentEditWindow *editWindow = new ContentEditWindow(content, this);
+    auto *editWindow = new ContentEditWindow(content, this);
     editWindow->setAttribute(Qt::WA_DeleteOnClose);
     connect(editWindow, &ContentEditWindow::contentUpdated, 
             this, &LibraryWindow::updateContentDisplay);
@@ -269,7 +269,7 @@ void LibraryWindow::saveToFile(const QString &extension) {
     }
 }
 
-void LibraryWindow::verifyResources() {
+void LibraryWindow::verifyResources() const{
     qDebug() << "Working directory:" << QDir::currentPath();
     
     // Verifica immagini di default

@@ -14,7 +14,7 @@ TypeChoiceDialog::TypeChoiceDialog(QWidget *parent)
     setWindowTitle("Select Content Type");
     setFixedSize(500, 400);
 
-    QGridLayout *gridLayout = new QGridLayout();
+    auto *gridLayout = new QGridLayout();
     gridLayout->setSpacing(20);
     gridLayout->setContentsMargins(20, 20, 20, 20);
 
@@ -34,11 +34,11 @@ TypeChoiceDialog::TypeChoiceDialog(QWidget *parent)
     addContentType(gridLayout, "Video Game", ":/assets/icons/videogame.png", 
                   []() { return new VideoGame(); }, 2, 0);
 
-    QVBoxLayout *mainLayout = new QVBoxLayout(this);
+    auto *mainLayout = new QVBoxLayout(this);
     mainLayout->addLayout(gridLayout);
     mainLayout->addStretch();
 
-    QDialogButtonBox *buttonBox = new QDialogButtonBox(QDialogButtonBox::Ok | QDialogButtonBox::Cancel);
+    auto *buttonBox = new QDialogButtonBox(QDialogButtonBox::Ok | QDialogButtonBox::Cancel);
     connect(buttonBox, &QDialogButtonBox::accepted, this, &QDialog::accept);
     connect(buttonBox, &QDialogButtonBox::rejected, this, &QDialog::reject);
     mainLayout->addWidget(buttonBox);
@@ -50,7 +50,7 @@ TypeChoiceDialog::~TypeChoiceDialog() {
 
 void TypeChoiceDialog::addContentType(QGridLayout *layout, const QString &label,
     const QString &iconPath, ContentFactory factory, int row, int col) {
-QPushButton *button = new QPushButton(this);
+auto *button = new QPushButton(this);
 button->setIcon(QIcon(iconPath));
 
 // Dimensioni delle icone
@@ -66,7 +66,7 @@ button->setCheckable(true);
 m_buttonGroup->addButton(button);
 
 // Animazione per il cambio dimensione
-QPropertyAnimation *sizeAnimation = new QPropertyAnimation(button, "iconSize", this);
+auto *sizeAnimation = new QPropertyAnimation(button, "iconSize", this);
 sizeAnimation->setDuration(150);
 sizeAnimation->setEasingCurve(QEasingCurve::OutCubic);
 
