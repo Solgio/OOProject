@@ -1,4 +1,5 @@
 #include "ContentEditWindow.h"
+#include "../Model/lib/Content.h"
 #include <QVBoxLayout>
 #include <QFormLayout>
 #include <QHBoxLayout>
@@ -44,7 +45,11 @@ void ContentEditWindow::setupUI() {
 
     // Subgenre
     m_subgenreCombo = new QComboBox();
-    m_subgenreCombo->addItems({"Cyberpunk", "Space Opera", "Dystopian", "Time Travel"});
+    m_subgenreCombo->addItems({
+        "None", "Action", "Comedy", "Drama", "Horror", "Romance",
+        "Thriller", "Mystery", "Adventure", "Western", "War",
+        "Musical", "Family", "Sports", "Superhero"
+    });
     formLayout->addRow("Subgenre:", m_subgenreCombo);
 
     // Watched/Starred
