@@ -64,9 +64,9 @@ void VisitorJson::toFileJson(const Book* book){
 
     QJsonArray arrayBook;
     if(jsonLetto.contains("Book")){
-        jsonLetto["Book"] = arrayBook;
-    }else{
         arrayBook = jsonLetto.value("Book").toArray();
+    }else{
+        jsonLetto["Book"] = arrayBook;
     }
 
     QJsonObject oggettoJSon;
@@ -105,9 +105,9 @@ void VisitorJson::toFileJson(const Comic* comic){
 
     QJsonArray arrayBook;
     if(jsonLetto.contains("Comic")){
-        jsonLetto["Comic"] = arrayBook;
-    }else{
         arrayBook = jsonLetto.value("Comic").toArray();
+    }else{
+        jsonLetto["Comic"] = arrayBook;
     }
 
     QJsonObject oggettoJSon;
@@ -150,9 +150,9 @@ void VisitorJson::toFileJson(const Film* movie){
 
     QJsonArray arrayBook;
     if(jsonLetto.contains("Film")){
-        jsonLetto["Film"] = arrayBook;
-    }else{
         arrayBook = jsonLetto.value("Film").toArray();
+    }else{
+        jsonLetto["Film"] = arrayBook;
     }
 
     QJsonObject oggettoJSon;
@@ -192,9 +192,9 @@ void VisitorJson::toFileJson(const Serie* serie){
 
     QJsonArray arrayBook;
     if(jsonLetto.contains("Serie")){
-        jsonLetto["Serie"] = arrayBook;
-    }else{
         arrayBook = jsonLetto.value("Serie").toArray();
+    }else{
+        jsonLetto["Serie"] = arrayBook;
     }
 
     QJsonObject oggettoJSon;
@@ -236,9 +236,9 @@ void VisitorJson::toFileJson(const VideoGame *videogame){
 
     QJsonArray arrayBook;
     if(jsonLetto.contains("Videogame")){
-        jsonLetto["Videogame"] = arrayBook;
-    }else{
         arrayBook = jsonLetto.value("Videogame").toArray();
+    }else{
+        jsonLetto["Videogame"] = arrayBook;
     }
     
     QJsonObject oggettoJSon;
