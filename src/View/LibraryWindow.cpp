@@ -243,8 +243,9 @@ void LibraryWindow::updateContentDisplay() {
     // Handle full content (contentList)
     else {
         for (const auto& contentPtr : library.getContentList()) {
-            auto* item = new QListWidgetItem(m_contentList);
-            loadContentPreview(contentPtr.get(), item);
+            QListWidgetItem item;
+            loadContentPreview(contentPtr.get(), &item);
+            m_contentList->addItem(new QListWidgetItem(item));
         }
     }
 }
