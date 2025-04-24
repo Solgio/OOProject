@@ -75,7 +75,7 @@ void VisitorJson::toFileJson(const Book* book){
 
     arrayBook.append(oggettoJSon);
     
-    jsonLetto["Book"] = arrayBook;
+    jsonLetto.insert("Book", arrayBook);
 
     doc.setObject(jsonLetto);
     libreria.write(doc.toJson());
@@ -120,7 +120,7 @@ void VisitorJson::toFileJson(const Comic* comic){
 
     arrayComic.append(oggettoJSon);
 
-    jsonLetto["Comic"] = arrayComic;
+    jsonLetto.insert("Comic", arrayComic);
     
     doc.setObject(jsonLetto);
     libreria.write(doc.toJson());
@@ -162,7 +162,7 @@ void VisitorJson::toFileJson(const Film* movie){
 
     arrayFilm.append(oggettoJSon);
 
-    jsonLetto["Film"] = arrayFilm;
+    jsonLetto.insert("Film", arrayFilm);
     
     doc.setObject(jsonLetto);
     libreria.write(doc.toJson());
@@ -206,7 +206,7 @@ void VisitorJson::toFileJson(const Serie* serie){
 
     arraySerie.append(oggettoJSon);
 
-    jsonLetto["Serie"] = arraySerie;
+    jsonLetto.insert("Serie", arraySerie);
     
     doc.setObject(jsonLetto);
     libreria.write(doc.toJson());
@@ -249,7 +249,7 @@ void VisitorJson::toFileJson(const VideoGame *videogame){
 
     arrayVG.append(oggettoJSon);
 
-    jsonLetto["Videogame"] = arrayVG;
+    jsonLetto.insert("Videogame", arrayVG);
     
     doc.setObject(jsonLetto);
     libreria.write(doc.toJson());
