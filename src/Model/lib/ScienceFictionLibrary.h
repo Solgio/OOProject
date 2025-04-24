@@ -17,12 +17,13 @@ class ScienceFiction_Library{
     public:
         void incrementId();
         unsigned int getNewId()const;
-        void testPrint()const;
         Content* searchId(const unsigned int& __id_t);
         void addContent(Content* content);
         void removeContent(const Content* content);
         const vector<unique_ptr<Content>>& getContentList()const;
         const vector<Content*>& getShownContentList()const;
+
+        //!             --- FILTERS -- 
         void showAllContent();            //Shows all the content in the library
         void filterContent(string_view _title);
         void filterContent(const unsigned int& _year);
@@ -30,8 +31,10 @@ class ScienceFiction_Library{
         void filteredListbyGen(const unsigned int& genre);
         void watchedOrNot(const bool& _watched);         //Shows only the watched or not watched content
         void starredOrNot(const bool& _starred);         //Shows only the starred or not starred content
+
+        bool isFilteredListEmpty() const; //Check if the filtered list is empty
         void clearLibrary();                //Clear the library
-        void clearShown();
+        void clearShown();           //Clear the shown content list
         
         static ScienceFiction_Library& getInstance(){
             static ScienceFiction_Library instance;

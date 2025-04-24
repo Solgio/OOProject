@@ -17,13 +17,6 @@ unsigned int ScienceFiction_Library::getNewId()const{
     return newId;
 };
 
-
-void ScienceFiction_Library::testPrint() const{
-    /*for(const auto& it : shownContentList){
-        it->printContent();
-    }*/
-};
-
 Content* ScienceFiction_Library::searchId(const unsigned int& id){
     for(const auto& it : contentList){
         if(id==it->getId()){
@@ -66,17 +59,20 @@ void ScienceFiction_Library::showAllContent(){
     for(const auto& it : contentList){
         shownContentList.push_back(it.get());
     }
-    testPrint();
 };
 
-void ScienceFiction_Library::filterContent(string_view _title){
+void ScienceFiction_Library::filterContent(string_view _title) {
     shownContentList.clear();
-    for(const auto& it : contentList){
-        if(it->getTitle() == _title){
+    for (const auto& it : contentList) {
+        if (it->getTitle().find(_title) != string::npos) {  // Cerca la sottostringa in qualsiasi posizione
             shownContentList.push_back(it.get());
         }
     }
-};
+}
+
+bool ScienceFiction_Library::isFilteredListEmpty() const {
+    return shownContentList.empty();
+}
 
 void ScienceFiction_Library::filterContent(const unsigned int& _year){
     shownContentList.clear();

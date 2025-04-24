@@ -2,10 +2,13 @@
 #define LIBRARYWINDOW_H
 
 #include <QMainWindow>
-#include "../Model/lib/ScienceFictionLibrary.h"
+#include <QToolButton>
+#include <QLineEdit>
+#include <QStackedWidget>
 #include <QListWidgetItem>
 #include <QSplitter>
-#include <QToolButton>
+#include "../Model/lib/ScienceFictionLibrary.h"
+
 
 class QListWidget;
 class QLabel;
@@ -21,6 +24,8 @@ public:
     explicit LibraryWindow(QWidget *parent = nullptr);
     ~LibraryWindow() override;
 
+    bool isSearchBarEmpty() const { return m_searchBar->text().isEmpty(); }
+
 private slots:
     void importContent();
     void saveToFile(const QString &extension);
@@ -33,26 +38,31 @@ private slots:
 
 private:
     void setupUI();
-    void connectSignals() const;
+    void connectSignals();
+    void createToolbar();
+    void createSaveMenu();
+    void createImportButton();
     void loadContentPreview(Content* content, QListWidgetItem* item) const;
     QPixmap loadSafePixmap(const QString &path, const QSize &size) const;
     void verifyResources() const;
-    void createSaveMenu();
-    void createImportButton();
 
     // UI Components
     QToolBar *m_toolBar = nullptr;
-    QWidget *m_centralWidget = nullptr;
     QSplitter *m_splitter = nullptr;
     QListWidget *m_contentList = nullptr;
     QLineEdit *m_searchBar = nullptr;
     QComboBox *m_filterCombo = nullptr;
     QToolButton *m_importButton = nullptr;
     QToolButton *m_saveButton = nullptr;
+    QToolButton *m_add = nullptr;
     QMenu *m_saveMenu = nullptr;
     ContentDetailWindow *m_detailWindow = nullptr;
-    QWidget *m_rightPanel = nullptr;
-    QToolButton *m_add = nullptr;
+    
+    // Stacked widgets
+    QStackedWidget *m_rightPanel = nullptr;
+    QStackedWidget *m_contentContainer = nullptr;
+    QWidget *m_mainView = nullptr;
+    QLabel *m_noResultsLabel = nullptr;
 
     const QSize m_previewSize{120, 180};
 };
