@@ -166,10 +166,10 @@ void LibraryWindow::onFilterChanged(int index) {
             library.showAllContent();
             break;
         case 1: // "Movies"
-            library.filteredListbyGen(static_cast<unsigned int>(Subgenre::ACTION));
+            library.filteredListbyGen(static_cast<std::underlying_type_t<Subgenre>>(Subgenre::ACTION));
             break;
         case 2: // "Books"
-            library.filteredListbyGen(static_cast<unsigned int>(Subgenre::WAR));
+            library.filteredListbyGen(static_cast<std::underlying_type_t<Subgenre>>(Subgenre::ACTION));
             break;
         case 3: // "Watched"
             library.watchedOrNot(true);

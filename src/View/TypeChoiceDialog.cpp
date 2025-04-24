@@ -44,10 +44,6 @@ TypeChoiceDialog::TypeChoiceDialog(QWidget *parent)
     mainLayout->addWidget(buttonBox);
 }
 
-TypeChoiceDialog::~TypeChoiceDialog() {
-    // Distruttore vuoto
-}
-
 void TypeChoiceDialog::addContentType(QGridLayout *layout, const QString &label,
     const QString &iconPath, ContentFactory factory, int row, int col) {
 auto *button = new QPushButton(this);

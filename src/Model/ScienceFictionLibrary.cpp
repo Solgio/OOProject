@@ -35,7 +35,7 @@ Content* ScienceFiction_Library::searchId(const unsigned int& id){
 };
 
 void ScienceFiction_Library::addContent(Content* content){
-    contentList.push_back(unique_ptr<Content>(content));
+    contentList.push_back(make_unique<Content>(content));
     incrementId();
 };
 
@@ -182,7 +182,7 @@ bool ScienceFiction_Library::saveToFile(const string& filepath)const{
         return true;
     }
     else if(extension==".json"){
-        unique_ptr<VisitorJson> visitor = make_unique<VisitorJson>(QString::fromStdString(filepath));
+        auto visitor = make_unique<VisitorJson>(QString::fromStdString(filepath));
         for(const auto& it : contentList){
             it->toJson(visitor.get());
         }

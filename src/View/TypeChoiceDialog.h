@@ -14,7 +14,7 @@ class TypeChoiceDialog : public QDialog {
 public:
     using ContentFactory = std::function<Content*()>;
     explicit TypeChoiceDialog(QWidget *parent = nullptr);
-    ~TypeChoiceDialog() override;
+    ~TypeChoiceDialog() override = default;
     
     Content* createSelectedContent() const;
 
