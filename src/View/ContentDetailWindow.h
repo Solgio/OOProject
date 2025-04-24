@@ -18,9 +18,11 @@ public:
 signals:
     void editRequested(Content* content);
     void closeRequested();
+    void contentDeleted();
 
 private slots:
     void onEditClicked();
+    void onDeleteClicked();
 
 private:
     void setupUI();
@@ -29,6 +31,7 @@ private:
     Content* m_content;
     QLabel *m_contentDetails;
     QPushButton *m_editButton;
+    QPushButton *m_deleteButton;
     QPushButton *m_closeButton;
     QVBoxLayout *m_mainLayout;
 };

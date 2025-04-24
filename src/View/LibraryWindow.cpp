@@ -267,15 +267,14 @@ void LibraryWindow::editContentTriggered(bool checked) {
 }
 
 void LibraryWindow::connectSignals() {
-    connect(m_contentList, &QListWidget::itemClicked, 
-            this, &LibraryWindow::showContentDetails);
-    connect(m_detailWindow, &ContentDetailWindow::editRequested,
-            this, &LibraryWindow::editContent);
-    connect(m_detailWindow, &ContentDetailWindow::closeRequested,
-            this, &LibraryWindow::hideDetailView);
+    connect(m_contentList, &QListWidget::itemDoubleClicked, this, &LibraryWindow::showContentDetails);
 
-    connect(m_searchBar, &QLineEdit::textChanged,
-            this, [this](const QString &text) {
+    connect(m_detailWindow, &ContentDetailWindow::editRequested, this, &LibraryWindow::editContent);
+
+    connect(m_detailWindow, &ContentDetailWindow::closeRequested, this, &LibraryWindow::hideDetailView);
+
+    connect(m_searchBar, &QLineEdit::textChanged,this, 
+        [this](const QString &text) {
                 auto& library = ScienceFiction_Library::getInstance();
                 if (text.isEmpty()) {
                     library.clearShown();
@@ -285,10 +284,11 @@ void LibraryWindow::connectSignals() {
                 updateContentDisplay();
             });
     
-    connect(m_filterCombo, QOverload<int>::of(&QComboBox::currentIndexChanged),
-            this, &LibraryWindow::onFilterChanged);
+    connect(m_filterCombo, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &LibraryWindow::onFilterChanged);
     
     connect(m_add, &QToolButton::clicked, this, &LibraryWindow::editContentTriggered);
+
+    connect(m_detailWindow, &ContentDetailWindow::contentDeleted, this, &LibraryWindow::updateContentDisplay);
 }
 
 void LibraryWindow::onFilterChanged(int index) {

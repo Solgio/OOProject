@@ -61,6 +61,7 @@ private:
     // Stacked widgets
     QStackedWidget *m_rightPanel = nullptr;
     QStackedWidget *m_contentContainer = nullptr;
+    //QStackedWidget *m_noResultsContainer = nullptr; !DUTURE UPDATE WITH no-results.png icon
     QWidget *m_mainView = nullptr;
     QLabel *m_noResultsLabel = nullptr;
 

@@ -4,6 +4,8 @@
 #include <QHBoxLayout>
 #include <QPushButton>
 #include <QSpacerItem>
+#include "../Model/lib/ScienceFictionLibrary.h"
+#include "LibraryWindow.h"
 
 ContentDetailWindow::ContentDetailWindow(QWidget *parent)
     : QWidget(parent), m_content(nullptr) 
@@ -71,14 +73,26 @@ void ContentDetailWindow::setupUI()
     m_mainLayout->addWidget(m_contentDetails);
 
     // Edit button at bottom
-    auto *buttonLayout = new QHBoxLayout();
+    auto *editButtonLayout = new QHBoxLayout();
     m_editButton = new QPushButton();
     m_editButton->setIcon(QIcon(":assets/icons/edit.png"));
     m_editButton->setToolTip("Edit current library content");
+    m_editButton->setFixedSize(50, 50);
     connect(m_editButton, &QPushButton::clicked, this, &ContentDetailWindow::onEditClicked);
     
-    buttonLayout->addWidget(m_editButton);
-    m_mainLayout->addLayout(buttonLayout);
+    editButtonLayout->addWidget(m_editButton);
+    m_mainLayout->addLayout(editButtonLayout);
+
+    auto *deleteButtonLayout = new QHBoxLayout();
+    m_deleteButton = new QPushButton();
+    m_deleteButton->setIcon(QIcon(":assets/icons/delete.png"));
+    m_deleteButton->setToolTip("Delete current library content");
+    m_deleteButton->setStyleSheet("QPushButton { color: red; }");
+    m_deleteButton->setFixedSize(50, 50);
+    connect(m_deleteButton, &QPushButton::clicked, this, &ContentDetailWindow::onDeleteClicked);
+    
+    deleteButtonLayout->addWidget(m_deleteButton);
+    m_mainLayout->addLayout(deleteButtonLayout);
 
     // Style
     setStyleSheet(
@@ -90,5 +104,14 @@ void ContentDetailWindow::setupUI()
 void ContentDetailWindow::onEditClicked() {
     if (m_content) {
         emit editRequested(m_content);
+    }
+}
+
+void ContentDetailWindow::onDeleteClicked() {
+    if (m_content) {
+        ScienceFiction_Library::getInstance().removeContent(m_content);
+        m_content = nullptr;
+        emit contentDeleted();
+        emit closeRequested();
     }
 }
