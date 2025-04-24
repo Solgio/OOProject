@@ -30,9 +30,14 @@ VisitorJson::VisitorJson(QString filePath):libreria(filePath){
         qDebug() << "Azzero il file json";
         libreria.resize(0);
         QJsonObject emptyObject;
+        emptyObject.insert("Book", QJsonArray());
+        emptyObject.insert("Comic", QJsonArray());
+        emptyObject.insert("Film", QJsonArray());
+        emptyObject.insert("Serie", QJsonArray());
+        emptyObject.insert("Videogame", QJsonArray());
         QJsonDocument emptyDoc(emptyObject);
         libreria.write(emptyDoc.toJson());
-        qDebug() << "Creo JsonObject vuoto";
+        qDebug() << "Inizializzo il file json";
         libreria.close();
     }else{
         qDebug() << "Nessun errore";
