@@ -166,11 +166,15 @@ void LibraryWindow::editContent(Content* content)
 
     auto *editWindow = new ContentEditWindow(content, this);
     editWindow->setAttribute(Qt::WA_DeleteOnClose);
+    
+    // Update both the library view and detail view when content is updated
     connect(editWindow, &ContentEditWindow::contentUpdated, 
             this, &LibraryWindow::updateContentDisplay);
+    connect(editWindow, &ContentEditWindow::contentUpdated,
+            this, [this]() { emit contentDataChanged(); });
+            
     editWindow->exec();
 }
-
 void LibraryWindow::importContent() {
     QString file = QFileDialog::getOpenFileName(
         this, 
@@ -270,6 +274,8 @@ void LibraryWindow::connectSignals() {
     connect(m_contentList, &QListWidget::itemDoubleClicked, this, &LibraryWindow::showContentDetails);
 
     connect(m_detailWindow, &ContentDetailWindow::editRequested, this, &LibraryWindow::editContent);
+    
+    connect(this, &LibraryWindow::contentDataChanged, m_detailWindow, &ContentDetailWindow::refreshContent);
 
     connect(m_detailWindow, &ContentDetailWindow::closeRequested, this, &LibraryWindow::hideDetailView);
 
@@ -343,3 +349,4 @@ void LibraryWindow::loadContentPreview(Content* content, QListWidgetItem* item) 
     );
     item->setIcon(QIcon(pixmap));
 }
+

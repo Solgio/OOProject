@@ -4,8 +4,10 @@
 #include <QHBoxLayout>
 #include <QPushButton>
 #include <QSpacerItem>
+
 #include "../Model/lib/ScienceFictionLibrary.h"
 #include "LibraryWindow.h"
+#include "ContentEditWindow.h"
 
 ContentDetailWindow::ContentDetailWindow(QWidget *parent)
     : QWidget(parent), m_content(nullptr) 
@@ -113,5 +115,11 @@ void ContentDetailWindow::onDeleteClicked() {
         m_content = nullptr;
         emit contentDeleted();
         emit closeRequested();
+    }
+}
+
+void ContentDetailWindow::refreshContent() {
+    if (m_content) {
+        updateContentDisplay();
     }
 }

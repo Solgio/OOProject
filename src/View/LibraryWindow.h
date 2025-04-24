@@ -26,13 +26,18 @@ public:
 
     bool isSearchBarEmpty() const { return m_searchBar->text().isEmpty(); }
 
+signals:
+    void contentDataChanged();
+
 private slots:
     void importContent();
     void saveToFile(const QString &extension);
     void updateContentDisplay();
     void showContentDetails(QListWidgetItem *item);
+
     void editContentTriggered(bool checked = false);
     void editContent(Content* content = nullptr);
+
     void hideDetailView();
     void onFilterChanged(int index);
 

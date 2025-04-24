@@ -24,6 +24,9 @@ private slots:
     void onEditClicked();
     void onDeleteClicked();
 
+public slots:
+    void refreshContent();
+
 private:
     void setupUI();
     void updateContentDisplay();
