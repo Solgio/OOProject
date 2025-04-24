@@ -15,3 +15,5 @@ It offers:
 - Diversified view for different kind of Content
 - Intuitive Buttons
 - Easy to read icons
+
+[![wakatime](https://wakatime.com/badge/user/732d1158-e701-4381-9bb0-df5f6f08b1c0/project/83e7d8a2-a677-400c-85e6-6e1c33e5931a.svg)](https://wakatime.com/badge/user/732d1158-e701-4381-9bb0-df5f6f08b1c0/project/83e7d8a2-a677-400c-85e6-6e1c33e5931a)
