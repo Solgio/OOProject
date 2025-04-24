@@ -35,7 +35,7 @@ Content* ScienceFiction_Library::searchId(const unsigned int& id){
 };
 
 void ScienceFiction_Library::addContent(Content* content){
-    contentList.push_back(make_unique<Content>(content));
+    contentList.push_back(unique_ptr<Content>(content));
     incrementId();
 };
 

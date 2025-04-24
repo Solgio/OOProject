@@ -52,13 +52,13 @@ void VisitorJson::toFileJson(const Book* book){
 
     QByteArray contentFile;
     contentFile = libreria.readAll();
+    libreria.close();
 
     QJsonParseError errorJ;
     QJsonDocument doc = QJsonDocument::fromJson(contentFile, &errorJ);
 
     if(errorJ.error != QJsonParseError::NoError){
         qDebug() << "Errore nel file : " << errorJ.errorString();
-        libreria.close();
         return;
     }else{
         qDebug() << "Nessun errore";
@@ -82,6 +82,7 @@ void VisitorJson::toFileJson(const Book* book){
     
     jsonLetto.insert("Book", arrayBook);
 
+    libreria.open(QIODevice::ReadWrite);
     doc.setObject(jsonLetto);
     libreria.write(doc.toJson());
     libreria.close();
@@ -93,13 +94,13 @@ void VisitorJson::toFileJson(const Comic* comic){
 
     QByteArray contentFile;
     contentFile = libreria.readAll();
+    libreria.close();
 
     QJsonParseError errorJ;
     QJsonDocument doc = QJsonDocument::fromJson(contentFile, &errorJ);
 
     if(errorJ.error != QJsonParseError::NoError){
         qDebug() << "Errore nel file : " << errorJ.errorString();
-        libreria.close();
         return;
     }else{
         qDebug() << "Nessun errore";
@@ -127,6 +128,7 @@ void VisitorJson::toFileJson(const Comic* comic){
 
     jsonLetto.insert("Comic", arrayComic);
     
+    libreria.open(QIODevice::ReadWrite);
     doc.setObject(jsonLetto);
     libreria.write(doc.toJson());
     libreria.close();
@@ -138,13 +140,13 @@ void VisitorJson::toFileJson(const Film* movie){
     
     QByteArray contentFile;
     contentFile = libreria.readAll();
+    libreria.close();
 
     QJsonParseError errorJ;
     QJsonDocument doc = QJsonDocument::fromJson(contentFile, &errorJ);
 
     if(errorJ.error != QJsonParseError::NoError){
         qDebug() << "Errore nel file : " << errorJ.errorString();
-        libreria.close();
         return;
     }else{
         qDebug() << "Nessun errore";
@@ -169,6 +171,7 @@ void VisitorJson::toFileJson(const Film* movie){
 
     jsonLetto.insert("Film", arrayFilm);
     
+    libreria.open(QIODevice::ReadWrite);
     doc.setObject(jsonLetto);
     libreria.write(doc.toJson());
     libreria.close();
@@ -180,13 +183,13 @@ void VisitorJson::toFileJson(const Serie* serie){
     
     QByteArray contentFile;
     contentFile = libreria.readAll();
+    libreria.close();
 
     QJsonParseError errorJ;
     QJsonDocument doc = QJsonDocument::fromJson(contentFile, &errorJ);
 
     if(errorJ.error != QJsonParseError::NoError){
         qDebug() << "Errore nel file : " << errorJ.errorString();
-        libreria.close();
         return;
     }else{
         qDebug() << "Nessun errore";
@@ -213,6 +216,7 @@ void VisitorJson::toFileJson(const Serie* serie){
 
     jsonLetto.insert("Serie", arraySerie);
     
+    libreria.open(QIODevice::ReadWrite);
     doc.setObject(jsonLetto);
     libreria.write(doc.toJson());
     libreria.close();
@@ -224,13 +228,13 @@ void VisitorJson::toFileJson(const VideoGame *videogame){
 
     QByteArray contentFile;
     contentFile = libreria.readAll();
+    libreria.close();
 
     QJsonParseError errorJ;
     QJsonDocument doc = QJsonDocument::fromJson(contentFile, &errorJ);
 
     if(errorJ.error != QJsonParseError::NoError){
         qDebug() << "Errore nel file : " << errorJ.errorString();
-        libreria.close();
         return;
     }else{
         qDebug() << "Nessun errore";
@@ -256,6 +260,7 @@ void VisitorJson::toFileJson(const VideoGame *videogame){
 
     jsonLetto.insert("Videogame", arrayVG);
     
+    libreria.open(QIODevice::ReadWrite);
     doc.setObject(jsonLetto);
     libreria.write(doc.toJson());
     libreria.close();
