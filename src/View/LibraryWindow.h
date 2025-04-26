@@ -7,6 +7,8 @@
 #include <QStackedWidget>
 #include <QListWidgetItem>
 #include <QSplitter>
+#include <QCheckBox>
+#include <QPushButton>
 #include "../Model/lib/ScienceFictionLibrary.h"
 
 
@@ -41,6 +43,9 @@ private slots:
     void hideDetailView();
     void onFilterChanged(int index);
 
+    void applyFilters();
+    void clearFilters();
+
 private:
     void setupUI();
     void connectSignals();
@@ -56,17 +61,33 @@ private:
     QSplitter *m_splitter = nullptr;
     QListWidget *m_contentList = nullptr;
     QLineEdit *m_searchBar = nullptr;
-    QComboBox *m_filterCombo = nullptr;
+    //QComboBox *m_filterCombo = nullptr;
     QToolButton *m_importButton = nullptr;
     QToolButton *m_saveButton = nullptr;
     QToolButton *m_add = nullptr;
     QMenu *m_saveMenu = nullptr;
     ContentDetailWindow *m_detailWindow = nullptr;
+
+    // Filters
+    QWidget* m_filtersSection = nullptr;
+    QToolButton* m_filtersToggleBtn = nullptr;
+    
+    // Filters with multiple selection
+    QListWidget* m_genreFilterList = nullptr;
+    QListWidget* m_statusFilterList = nullptr;
+    QPushButton* m_clearFiltersBtn = nullptr;
+    
+    // New methods
+    void setupFiltersSection();
+    void toggleFiltersSection();
+    QListWidget* createFilterList(const QStringList& options);
+
+
     
     // Stacked widgets
     QStackedWidget *m_rightPanel = nullptr;
     QStackedWidget *m_contentContainer = nullptr;
-    //QStackedWidget *m_noResultsContainer = nullptr; !DUTURE UPDATE WITH no-results.png icon
+    //QStackedWidget *m_noResultsContainer = nullptr; !FUTURE UPDATE WITH no-results.png icon
     QWidget *m_mainView = nullptr;
     QLabel *m_noResultsLabel = nullptr;
 

@@ -54,94 +54,88 @@ const vector<Content*>& ScienceFiction_Library::getShownContentList()const{
     return shownContentList;
 };
 
-void ScienceFiction_Library::showAllContent(){
-    shownContentList.clear();
-    for(const auto& it : contentList){
-        shownContentList.push_back(it.get());
-    }
-};
-
-void ScienceFiction_Library::filterContent(string_view _title) {
+void ScienceFiction_Library::showAllContent() {
+    m_filterActive = false;
     shownContentList.clear();
     for (const auto& it : contentList) {
-        if (it->getTitle().find(_title) != string::npos) {  // Cerca la sottostringa in qualsiasi posizione
-            shownContentList.push_back(it.get());
+        shownContentList.push_back(it.get());
+    }
+}
+
+void ScienceFiction_Library::applyFilter(const std::function<bool(const Content*)>& predicate) {
+    if (!m_filterActive) {
+        // If this is the first filter, start with all content
+        showAllContent();
+        m_filterActive = true;
+    }
+    
+    // Create a temporary list for the filtered results
+    vector<Content*> filteredResults;
+    
+    // Only keep items that match the predicate
+    for (Content* content : shownContentList) {
+        if (predicate(content)) {
+            filteredResults.push_back(content);
         }
     }
+    
+    // Replace shown list with filtered results
+    shownContentList = filteredResults;
+}
+
+void ScienceFiction_Library::clearFilters() {
+    m_filterActive = false;
+    showAllContent();
+}
+
+void ScienceFiction_Library::filterByTitle(string_view title) {
+    applyFilter([title](const Content* content) {
+        return content->getTitle().find(title) != string::npos;
+    });
 }
 
 bool ScienceFiction_Library::isFilteredListEmpty() const {
     return shownContentList.empty();
 }
 
-void ScienceFiction_Library::filterContent(const unsigned int& _year){
-    shownContentList.clear();
-    for(const auto& it : contentList){
-        if(it->getYear() == _year){
-            shownContentList.push_back(it.get());
-        }
-    }
-};
+void ScienceFiction_Library::filterByYear(const unsigned int& year) {
+    applyFilter([year](const Content* content) {
+        return content->getYear() == year;
+    });
+}
 
-void ScienceFiction_Library::filterContent(const Subgenre& genre){
-    shownContentList.clear();
-    for (const auto& it : contentList) {
-        if (it->hasAnySubgenre(genre)) {
-            shownContentList.push_back(it.get());
-        }
-    }
-};
+void ScienceFiction_Library::filterBySubgenre(const Subgenre& genre) {
+    applyFilter([genre](const Content* content) {
+        return content->hasAnySubgenre(genre);
+    });
+}
 
 //! ALTERNATIVA, DA VALUTARE CON QT COSA CONVIENE. PROBABILMENTE QUESTA E' PIU' UTILE
-void ScienceFiction_Library::filteredListbyGen(const unsigned int& genre){
-    shownContentList.clear();
-    for(const auto& it : contentList){
-        if(it->hasAnySubgenre(static_cast<Subgenre>(genre))){
-            shownContentList.push_back(it.get());
-        }
-    }
-};
+void ScienceFiction_Library::filterBySubgenreId(const unsigned int& genreId) {
+    applyFilter([genreId](const Content* content) {
+        return content->hasAnySubgenre(static_cast<Subgenre>(genreId));
+    });
+}
 
-void ScienceFiction_Library::watchedOrNot(const bool& _watched){
-    shownContentList.clear();
-    if(_watched){
-        for(const auto& it : contentList){
-            if(it->getWatched()){
-                shownContentList.push_back(it.get());
-            }
-        }
-    }
-    else{
-        for(const auto& it : contentList){
-            if(!it->getWatched()){
-                shownContentList.push_back(it.get());
-            }
-        }
-    }
-};
-void ScienceFiction_Library::starredOrNot(const bool& _starred){
-    shownContentList.clear();
-    if(_starred){
-        for(const auto& it : contentList){
-            if(it->getStarred()){
-                shownContentList.push_back(it.get());
-            }
-        }
-    }
-    else{
-        for(const auto& it : contentList){
-            if(!it->getStarred()){
-                shownContentList.push_back(it.get());
-            }
-        }
-    }
-};
+void ScienceFiction_Library::filterByWatched(const bool& watched) {
+    applyFilter([watched](const Content* content) {
+        return content->getWatched() == watched;
+    });
+}
+
+void ScienceFiction_Library::filterByStarred(const bool& starred) {
+    applyFilter([starred](const Content* content) {
+        return content->getStarred() == starred;
+    });
+}
 
 void ScienceFiction_Library::clearLibrary(){
     shownContentList.clear();
     contentList.clear();
 };
-void ScienceFiction_Library::clearShown(){
+
+void ScienceFiction_Library::clearShown() {
+    m_filterActive = false;
     shownContentList.clear();
 }
 

@@ -13,6 +13,8 @@ class ScienceFiction_Library{
         vector<unique_ptr<Content>> contentList;
         vector<Content*> shownContentList;
         ScienceFiction_Library();   //Singleton
+        bool m_filterActive = false;  // Tracks if any filter is active
+
 
     public:
         void incrementId();
@@ -24,15 +26,17 @@ class ScienceFiction_Library{
         const vector<Content*>& getShownContentList()const;
 
         //!             --- FILTERS -- 
+        void clearFilters();   
         void showAllContent();            //Shows all the content in the library
-        void filterContent(string_view _title);
-        void filterContent(const unsigned int& _year);
-        void filterContent(const Subgenre& genre);
-        void filteredListbyGen(const unsigned int& genre);
-        void watchedOrNot(const bool& _watched);         //Shows only the watched or not watched content
-        void starredOrNot(const bool& _starred);         //Shows only the starred or not starred content
+        void filterByTitle(string_view _title);
+        void filterByYear(const unsigned int& _year);
+        void filterBySubgenre(const Subgenre& genre);
+        void filterBySubgenreId(const unsigned int& genre);
+        void filterByWatched(const bool& _watched);         //Shows only the watched or not watched content
+        void filterByStarred(const bool& _starred);         //Shows only the starred or not starred content
 
         bool isFilteredListEmpty() const; //Check if the filtered list is empty
+        void applyFilter(const std::function<bool(const Content*)>& predicate);
         void clearLibrary();                //Clear the library
         void clearShown();           //Clear the shown content list
         

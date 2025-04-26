@@ -15,6 +15,8 @@
 #include <QFileDialog>
 #include <QMessageBox>
 #include <QMenu>
+#include <QCheckBox>
+#include <QGroupBox>
 
 
 LibraryWindow::LibraryWindow(QWidget *parent) : QMainWindow(parent) {
@@ -41,11 +43,14 @@ void LibraryWindow::setupUI() {
     
     m_searchBar = new QLineEdit();
     m_searchBar->setPlaceholderText("Search content...");
-    m_filterCombo = new QComboBox();
-    m_filterCombo->addItems({"All", "Action", "War", "Watched", "Starred"});
-    
+    setupFiltersSection();
+   
+    m_clearFiltersBtn = new QPushButton("Clear Filters");
+      
     leftLayout->addWidget(m_searchBar);
-    leftLayout->addWidget(m_filterCombo);
+    leftLayout->addWidget(m_filtersToggleBtn);
+    leftLayout->addWidget(m_filtersSection);
+
     leftLayout->addStretch();
 
     // Right panel - Main stack
@@ -102,6 +107,13 @@ void LibraryWindow::setupUI() {
     // Toolbar
     createToolbar();
 }
+
+void LibraryWindow::toggleFiltersSection() {
+    bool isVisible = !m_filtersSection->isVisible();
+    m_filtersSection->setVisible(isVisible);
+    m_filtersToggleBtn->setText(isVisible ? "Filters ▲" : "Filters ▼");
+}
+
 
 void LibraryWindow::updateContentDisplay() {
     auto& library = ScienceFiction_Library::getInstance();
@@ -279,49 +291,127 @@ void LibraryWindow::connectSignals() {
 
     connect(m_detailWindow, &ContentDetailWindow::closeRequested, this, &LibraryWindow::hideDetailView);
 
-    connect(m_searchBar, &QLineEdit::textChanged,this, 
-        [this](const QString &text) {
-                auto& library = ScienceFiction_Library::getInstance();
-                if (text.isEmpty()) {
-                    library.clearShown();
-                } else {
-                    library.filterContent(text.toStdString());
-                }
-                updateContentDisplay();
+    
+        connect(m_filtersToggleBtn, &QToolButton::clicked, this, &LibraryWindow::toggleFiltersSection);
+    
+
+        connect(m_searchBar, &QLineEdit::textChanged, this, 
+            [this](const QString &text) {
+                Q_UNUSED(text); // The text is handled in applyFilters()
+                applyFilters();
             });
     
-    connect(m_filterCombo, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &LibraryWindow::onFilterChanged);
-    
+            connect(m_genreFilterList, &QListWidget::itemChanged, this, &LibraryWindow::applyFilters);
+            connect(m_statusFilterList, &QListWidget::itemChanged, this, &LibraryWindow::applyFilters);
+            connect(m_clearFiltersBtn, &QPushButton::clicked, this, &LibraryWindow::clearFilters);
+        
     connect(m_add, &QToolButton::clicked, this, &LibraryWindow::editContentTriggered);
 
     connect(m_detailWindow, &ContentDetailWindow::contentDeleted, this, &LibraryWindow::updateContentDisplay);
 }
-
-void LibraryWindow::onFilterChanged(int index) {
+void LibraryWindow::applyFilters() {
     auto& library = ScienceFiction_Library::getInstance();
-    library.clearShown();
     
-    switch (index) {
-        case 0: // "All"
-            library.showAllContent();
-            break;
-        case 1: // "Action"
-            library.filteredListbyGen(static_cast<std::underlying_type_t<Subgenre>>(Subgenre::ACTION));
-            break;
-        case 2: // "War"
-            library.filteredListbyGen(static_cast<std::underlying_type_t<Subgenre>>(Subgenre::WAR));
-            break;
-        case 3: // "Watched"
-            library.watchedOrNot(true);
-            break;
-        case 4: // "Starred"
-            library.starredOrNot(true);
-            break;
-        default:
-            break;
+    // Always start fresh with all content
+    library.clearFilters();
+    
+    // Apply title filter first if there's text in the search bar
+    if (!m_searchBar->text().isEmpty()) {
+        library.filterByTitle(m_searchBar->text().toStdString());
+    }
+    
+    // Check selected genre filters
+    bool hasGenreFilter = false;
+    for (int i = 0; i < m_genreFilterList->count(); i++) {
+        QListWidgetItem* item = m_genreFilterList->item(i);
+        if (item->checkState() == Qt::Checked) {
+            hasGenreFilter = true;
+            
+            // Map text labels to corresponding Subgenre enum values
+            if (item->text() == "Action") {
+                library.filterBySubgenreId(static_cast<std::underlying_type_t<Subgenre>>(Subgenre::ACTION));
+            } 
+            else if (item->text() == "War") {
+                library.filterBySubgenreId(static_cast<std::underlying_type_t<Subgenre>>(Subgenre::WAR));
+            }
+            // Add other genres as needed
+        }
+    }
+    
+    // Check selected status filters
+    bool hasStatusFilter = false;
+    for (int i = 0; i < m_statusFilterList->count(); i++) {
+        QListWidgetItem* item = m_statusFilterList->item(i);
+        if (item->checkState() == Qt::Checked) {
+            hasStatusFilter = true;
+            
+            if (item->text() == "Watched") {
+                library.filterByWatched(true);
+            }
+            else if (item->text() == "Starred") {
+                library.filterByStarred(true);
+            }
+            // Add other statuses as needed
+        }
     }
     
     updateContentDisplay();
+}
+
+void LibraryWindow::clearFilters() {
+    // Reset search text
+    m_searchBar->clear();
+    
+    // Uncheck all genre filter items
+    for (int i = 0; i < m_genreFilterList->count(); i++) {
+        m_genreFilterList->item(i)->setCheckState(Qt::Unchecked);
+    }
+    
+    // Uncheck all status filter items
+    for (int i = 0; i < m_statusFilterList->count(); i++) {
+        m_statusFilterList->item(i)->setCheckState(Qt::Unchecked);
+    }
+    
+    // Clear filters in library
+    ScienceFiction_Library::getInstance().clearFilters();
+    updateContentDisplay();
+}
+
+void LibraryWindow::setupFiltersSection() {
+    // Create the filters dropdown section
+    m_filtersSection = new QWidget();
+    auto* filtersLayout = new QVBoxLayout(m_filtersSection);
+    filtersLayout->setContentsMargins(0, 10, 0, 10);
+    
+    // Genre filter group
+    auto* genreGroupBox = new QGroupBox("Genre Filters");
+    auto* genreLayout = new QVBoxLayout(genreGroupBox);
+    m_genreFilterList = createFilterList({"Action", "War", "Dystopian", "Space Opera", "Cyberpunk"});
+    genreLayout->addWidget(m_genreFilterList);
+    
+    // Status filter group
+    auto* statusGroupBox = new QGroupBox("Status Filters");
+    auto* statusLayout = new QVBoxLayout(statusGroupBox);
+    m_statusFilterList = createFilterList({"Watched", "Starred", "To Watch"});
+    statusLayout->addWidget(m_statusFilterList);
+    
+    // Clear button
+    m_clearFiltersBtn = new QPushButton("Clear All Filters");
+    
+    // Add groups to main filter layout
+    filtersLayout->addWidget(genreGroupBox);
+    filtersLayout->addWidget(statusGroupBox);
+    filtersLayout->addWidget(m_clearFiltersBtn);
+    
+    // Initially hide the filters section
+    m_filtersSection->setVisible(false);
+    
+    // Create toggle button for filters
+    m_filtersToggleBtn = new QToolButton();
+    m_filtersToggleBtn->setText("Filters ▼");
+    m_filtersToggleBtn->setToolButtonStyle(Qt::ToolButtonTextBesideIcon);
+    m_filtersToggleBtn->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Preferred);
+    m_filtersToggleBtn->setCheckable(true);
 }
 
 QPixmap LibraryWindow::loadSafePixmap(const QString &path, const QSize &size) const {
@@ -337,6 +427,19 @@ QPixmap LibraryWindow::loadSafePixmap(const QString &path, const QSize &size) co
     return pixmap.scaled(size, Qt::KeepAspectRatio, Qt::SmoothTransformation);
 }
 
+QListWidget* LibraryWindow::createFilterList(const QStringList& options) {
+    auto* list = new QListWidget();
+    list->setMaximumHeight(120);
+    
+    for (const QString& option : options) {
+        QListWidgetItem* item = new QListWidgetItem(option, list);
+        item->setFlags(item->flags() | Qt::ItemIsUserCheckable);
+        item->setCheckState(Qt::Unchecked);
+    }
+    
+    return list;
+}
+
 void LibraryWindow::loadContentPreview(Content* content, QListWidgetItem* item) const {
     if (!content) return;
 
@@ -350,3 +453,49 @@ void LibraryWindow::loadContentPreview(Content* content, QListWidgetItem* item) 
     item->setIcon(QIcon(pixmap));
 }
 
+// Add this method back to LibraryWindow.cpp
+void LibraryWindow::onFilterChanged(int index) {
+    // Clear all filters first
+    clearFilters();
+    
+    // Set specific filters based on the index
+    switch (index) {
+        case 0: // "All"
+            // Do nothing, already cleared
+            break;
+        case 1: // "Action"
+            for (int i = 0; i < m_genreFilterList->count(); i++) {
+                if (m_genreFilterList->item(i)->text() == "Action") {
+                    m_genreFilterList->item(i)->setCheckState(Qt::Checked);
+                    break;
+                }
+            }
+            break;
+        case 2: // "War"
+            for (int i = 0; i < m_genreFilterList->count(); i++) {
+                if (m_genreFilterList->item(i)->text() == "War") {
+                    m_genreFilterList->item(i)->setCheckState(Qt::Checked);
+                    break;
+                }
+            }
+            break;
+        case 3: // "Watched"
+            for (int i = 0; i < m_statusFilterList->count(); i++) {
+                if (m_statusFilterList->item(i)->text() == "Watched") {
+                    m_statusFilterList->item(i)->setCheckState(Qt::Checked);
+                    break;
+                }
+            }
+            break;
+        case 4: // "Starred"
+            for (int i = 0; i < m_statusFilterList->count(); i++) {
+                if (m_statusFilterList->item(i)->text() == "Starred") {
+                    m_statusFilterList->item(i)->setCheckState(Qt::Checked);
+                    break;
+                }
+            }
+            break;
+        default:
+            break;
+    }
+}
