@@ -36,7 +36,8 @@ private:
     QLabel *m_typeLabel;
     QLineEdit *m_titleEdit;
     QSpinBox *m_yearSpin;
-    QComboBox *m_subgenreCombo;
+    QList<QCheckBox*> m_subgenreCheckboxes;
+    QWidget *m_subgenreContainer;
     QCheckBox *m_watchedCheck;
     QCheckBox *m_starredCheck;
     QTextEdit *m_descEdit;

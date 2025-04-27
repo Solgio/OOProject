@@ -16,15 +16,15 @@ enum class Subgenre
     DRAMA = 1 << 2,
     HORROR = 1 << 3,
     ROMANCE = 1 << 4,
-    THRILLER = 1 << 4,
-    MYSTERY = 1 << 5,
-    ADVENTURE = 1 << 6,
-    WESTERN = 1 << 7,
-    WAR = 1 << 8,
-    MUSICAL = 1 << 9,
-    FAMILY = 1 << 10,
-    SPORTS = 1 << 11,
-    SUPERHERO = 1 << 12
+    THRILLER = 1 << 5,
+    MYSTERY = 1 << 6,
+    ADVENTURE = 1 << 7,
+    WESTERN = 1 << 8,
+    WAR = 1 << 9,
+    MUSICAL = 1 << 10,
+    FAMILY = 1 << 11,
+    SPORTS = 1 << 12,
+    SUPERHERO = 1 << 13
 };
 
 // Genaral Abstract Class for all content types of the Library
@@ -59,7 +59,8 @@ public:
 
     void setId(const unsigned int &id);
     void setTitle(string_view title);
-    void addSubgenre(const int &genre);
+    void addSubgenre(const unsigned int &genre);
+    void setSubgenre(const unsigned int &subgenre);
     void setDescription(string_view description);
     void setInspiration(const unsigned int inspiration);
     void setStarred(const bool &starred);

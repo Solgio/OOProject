@@ -92,9 +92,12 @@ void Content::setId(const unsigned int& nid){
 void Content::setTitle(string_view ntitle){
     title=ntitle;
 };
-void Content::addSubgenre(const int& genre) {
+void Content::addSubgenre(const unsigned int& genre) {
     subgenres = static_cast<Subgenre>(static_cast<underlying_type_t<Subgenre>>(subgenres) | genre);
 }
+void Content::setSubgenre(const unsigned int& nsubgenre){
+    subgenres=static_cast<Subgenre>(nsubgenre);
+};
 void Content::setDescription(string_view ndescription){
     description=ndescription;
 };

@@ -45,13 +45,33 @@ void ContentEditWindow::setupUI() {
     formLayout->addRow("Year:", m_yearSpin);
 
     // Subgenre
-    m_subgenreCombo = new QComboBox();
-    m_subgenreCombo->addItems({
-        "None", "Action", "Comedy", "Drama", "Horror", "Romance",
-        "Thriller", "Mystery", "Adventure", "Western", "War",
-        "Musical", "Family", "Sports", "Superhero"
-    });
-    formLayout->addRow("Subgenre:", m_subgenreCombo);
+    m_subgenreContainer = new QWidget();
+    auto *subgenreLayout = new QVBoxLayout(m_subgenreContainer);
+    
+    // Crea un checkbox per ogni subgenre
+    const QStringList subgenres = {
+        "Action", 
+        "Comedy",
+        "Drama",
+        "Horror",
+        "Romance",
+        "Thriller",
+        "Mystery",
+        "Adventure",
+        "Western",
+        "War",
+        "Musical",
+        "Family",
+        "Sports",
+        "Superhero"
+    };
+    for (const QString &subgenre : subgenres) {
+        auto *checkbox = new QCheckBox(subgenre);
+        m_subgenreCheckboxes.append(checkbox);
+        subgenreLayout->addWidget(checkbox);
+    }
+    
+    formLayout->addRow("Subgenres:", m_subgenreContainer);
 
     // Watched/Starred
     m_watchedCheck = new QCheckBox();
@@ -92,21 +112,40 @@ void ContentEditWindow::setupUI() {
 void ContentEditWindow::loadContentData() {
     m_titleEdit->setText(QString::fromStdString(m_content->getTitle()));
     m_yearSpin->setValue(m_content->getYear());
-    m_subgenreCombo->setCurrentText(QString::fromStdString(m_content->getSubgenreString()));
+    //m_subgenreCombo->setCurrentText(QString::fromStdString(m_content->getSubgenreString()));
     m_watchedCheck->setChecked(m_content->getWatched());
     m_starredCheck->setChecked(m_content->getStarred());
     m_descEdit->setPlainText(QString::fromStdString(m_content->getDescription()));
     m_imagePathEdit->setText(QString::fromStdString(m_content->getImage()));
+
+    int currentSubgenres = m_content->getSubgenre();
+    for (int i = 0; i < m_subgenreCheckboxes.size(); i++) {
+        // Verifica se il bit corrispondente è attivo
+        unsigned int bitValue = 1 << i;
+        m_subgenreCheckboxes[i]->setChecked((currentSubgenres & bitValue) != 0);
+    }
 }
 
 void ContentEditWindow::saveChanges() {
     m_content->setTitle(m_titleEdit->text().toStdString());
     m_content->setYear(m_yearSpin->value());
-    //m_content->setSubgenreFromString(m_subgenreCombo->currentText().toStdString());
     m_content->setWatched(m_watchedCheck->isChecked());
     m_content->setStarred(m_starredCheck->isChecked());
     m_content->setDescription(m_descEdit->toPlainText().toStdString());
     m_content->setImage(m_imagePathEdit->text().toStdString());
+
+    unsigned int newSubgenres = 0;
+    
+    // Usa lo stesso approccio bit a bit usato in loadContentData
+    for (int i = 0; i < m_subgenreCheckboxes.size(); i++) {
+        if (m_subgenreCheckboxes[i]->isChecked()) {
+            unsigned int bitValue = 1 << i;
+            newSubgenres |= bitValue;
+        }
+    }
+    
+    // Imposta il nuovo valore
+    m_content->setSubgenre(newSubgenres);
 
     emit contentUpdated();
     accept();
