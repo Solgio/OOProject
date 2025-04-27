@@ -117,6 +117,14 @@ void ScienceFiction_Library::filterBySubgenreId(const unsigned int& genreId) {
     });
 }
 
+//ToDo COME DIAVOLO FARE
+void ScienceFiction_Library::filterByType(const unsigned int& typeId) {
+   /* ContentType type = static_cast<ContentType>(typeId);
+    applyFilter([type](const Content* content) {
+        return content->isTypeOf(type);
+    });*/
+}
+
 void ScienceFiction_Library::filterByWatched(const bool& watched) {
     applyFilter([watched](const Content* content) {
         return content->getWatched() == watched;

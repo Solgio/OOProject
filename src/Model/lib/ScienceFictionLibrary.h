@@ -32,6 +32,7 @@ class ScienceFiction_Library{
         void filterByYear(const unsigned int& _year);
         void filterBySubgenre(const Subgenre& genre);
         void filterBySubgenreId(const unsigned int& genre);
+        void filterByType(const unsigned int& typeId);                                //Shows only the content of a specific type
         void filterByWatched(const bool& _watched);         //Shows only the watched or not watched content
         void filterByStarred(const bool& _starred);         //Shows only the starred or not starred content
 

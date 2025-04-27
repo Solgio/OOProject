@@ -9,8 +9,8 @@
 #include <QSplitter>
 #include <QCheckBox>
 #include <QPushButton>
+#include <QMap>
 #include "../Model/lib/ScienceFictionLibrary.h"
-
 
 class QListWidget;
 class QLabel;
@@ -18,6 +18,7 @@ class QLineEdit;
 class QComboBox;
 class QMenu;
 class ContentDetailWindow;
+class QTimer;
 
 class LibraryWindow : public QMainWindow {
     Q_OBJECT
@@ -37,61 +38,63 @@ private slots:
     void updateContentDisplay();
     void showContentDetails(QListWidgetItem *item);
 
-    void editContentTriggered(bool checked = false);
+    void showAddContentDialog(bool checked = false);
     void editContent(Content* content = nullptr);
 
     void hideDetailView();
-    void onFilterChanged(int index);
+    void applyQuickFilter(int index);
+    void delayedSearch();
 
     void applyFilters();
     void clearFilters();
+    void clearSearch();
 
 private:
+    // UI Setup
     void setupUI();
+    void setupContentListView();
+    void setupFilterSection();
+    void setupToolbar();
     void connectSignals();
-    void createToolbar();
+    
+    // Helper methods
     void createSaveMenu();
     void createImportButton();
     void loadContentPreview(Content* content, QListWidgetItem* item) const;
     QPixmap loadSafePixmap(const QString &path, const QSize &size) const;
-    void verifyResources() const;
+    QListWidget* createFilterList(const QStringList& options);
+    void toggleFiltersSection();
 
     // UI Components
     QToolBar *m_toolBar = nullptr;
     QSplitter *m_splitter = nullptr;
     QListWidget *m_contentList = nullptr;
     QLineEdit *m_searchBar = nullptr;
-    //QComboBox *m_filterCombo = nullptr;
     QToolButton *m_importButton = nullptr;
     QToolButton *m_saveButton = nullptr;
     QToolButton *m_add = nullptr;
+    QToolButton *m_clearSearchButton = nullptr;
     QMenu *m_saveMenu = nullptr;
     ContentDetailWindow *m_detailWindow = nullptr;
+    QTimer *m_searchTimer = nullptr;
 
     // Filters
     QWidget* m_filtersSection = nullptr;
     QToolButton* m_filtersToggleBtn = nullptr;
-    
-    // Filters with multiple selection
     QListWidget* m_genreFilterList = nullptr;
+    QListWidget* m_typeFilterList = nullptr;
     QListWidget* m_statusFilterList = nullptr;
     QPushButton* m_clearFiltersBtn = nullptr;
-    
-    // New methods
-    void setupFiltersSection();
-    void toggleFiltersSection();
-    QListWidget* createFilterList(const QStringList& options);
+    QLabel* m_filterCounter = nullptr;
 
-
-    
     // Stacked widgets
     QStackedWidget *m_rightPanel = nullptr;
     QStackedWidget *m_contentContainer = nullptr;
-    //QStackedWidget *m_noResultsContainer = nullptr; !FUTURE UPDATE WITH no-results.png icon
     QWidget *m_mainView = nullptr;
     QLabel *m_noResultsLabel = nullptr;
 
-    const QSize m_previewSize{120, 180};
+    const QSize m_previewSize{160, 240};
+    const int SEARCH_DELAY_MS = 350;
 };
 
 #endif
