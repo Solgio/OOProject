@@ -104,6 +104,7 @@ private:
     QListWidget* m_statusFilterList = nullptr;
     QPushButton* m_clearFiltersBtn = nullptr;
     QLabel* m_filterCounter = nullptr;
+    QScrollArea* m_filtersScrollArea = nullptr;
 
     QLayout* m_sortingLayout = nullptr;
 

@@ -114,11 +114,12 @@ void LibraryWindow::setupUI() {
     m_splitter = new QSplitter(Qt::Horizontal);
     m_toolBar = addToolBar("Main Toolbar");
     m_toolBar->setIconSize(QSize(28, 28));
-    
 
-    // Left panel (filters and sorting)
+    // Left panel (now contains search, sorting, and filters)
     auto *leftPanel = new QWidget();
     auto *leftLayout = new QVBoxLayout(leftPanel);
+    leftLayout->setContentsMargins(5, 5, 5, 5);
+    leftLayout->setSpacing(10);
     
     // Search bar with clear button
     auto *searchContainer = new QWidget();
@@ -139,13 +140,21 @@ void LibraryWindow::setupUI() {
     // Setup filter section
     setupFilterSection();
     
-    // Setup sorting controls 
+    // Create scroll area for filters
+    QScrollArea *filtersScrollArea = new QScrollArea();
+    filtersScrollArea->setWidgetResizable(true);
+    filtersScrollArea->setWidget(m_filtersSection);
+    filtersScrollArea->setFrameShape(QFrame::NoFrame);
+    filtersScrollArea->setMinimumHeight(750); // Ensure reasonable minimum height
+    filtersScrollArea->setMaximumHeight(900); // Prevent it from taking too much space
+    
+    // Setup sorting controls
     setupSortingControls();
     
     leftLayout->addWidget(searchContainer);
     leftLayout->addWidget(m_filtersToggleBtn);
-    leftLayout->addWidget(m_filtersSection);
-
+    leftLayout->addWidget(filtersScrollArea); // Add scroll area instead of direct widget
+    
     auto *sortingContainer = new QWidget();
     m_sortingLayout = new QHBoxLayout(sortingContainer);
     leftLayout->addWidget(new QLabel("Sort by:"));
@@ -157,7 +166,6 @@ void LibraryWindow::setupUI() {
     sortDirectionLayout->addStretch();
 
     m_sortingLayout->addWidget(m_sortingComboBox);
-    
     auto *sortDirectionContainer = new QWidget();
     sortDirectionContainer->setLayout(sortDirectionLayout);
     m_sortingLayout->addWidget(sortDirectionContainer);
@@ -207,8 +215,15 @@ void LibraryWindow::setupUI() {
     
     // Toolbar
     setupToolbar();
+    
+    // Initially hide the filters scroll area
+    filtersScrollArea->setVisible(false);
+    // Update the toggle button to control the scroll area visibility
+    connect(m_filtersToggleBtn, &QToolButton::clicked, [filtersScrollArea, this](bool checked) {
+        filtersScrollArea->setVisible(checked);
+        this->toggleFiltersSection();
+    });
 }
-
 void LibraryWindow::setupPreviewWidget() {
     // Create the model and proxy model if not already created
     if (!m_contentModel) {
@@ -331,7 +346,7 @@ void LibraryWindow::setupFilterSection() {
     // Create a compact filters section
     m_filtersSection = new QWidget();
     auto* filtersLayout = new QVBoxLayout(m_filtersSection);
-    filtersLayout->setContentsMargins(0, 0, 0, 0);
+    filtersLayout->setContentsMargins(5, 5, 5, 5);
     filtersLayout->setSpacing(5);
 
     // Define checkbox style for highlighting
@@ -457,12 +472,8 @@ void LibraryWindow::setupFilterSection() {
 }
 
 void LibraryWindow::toggleFiltersSection() {
-    bool visible = !m_filtersSection->isVisible();
-    m_filtersSection->setVisible(visible);
-    m_filtersToggleBtn->setChecked(visible);
-    
     // Apply a highlight border when filter section is visible
-    if (visible) {
+    if (m_filtersToggleBtn->isChecked()) {
         m_filtersSection->setStyleSheet(" padding: 4px;");
     } else {
         m_filtersSection->setStyleSheet("");
@@ -739,8 +750,8 @@ void LibraryWindow::updateContentPreviews() {
     const int columns = 5; // Number of cards per row
     int row = 0, col = 0;
     
-    // When creating new cards, check if any should be selected
-    for (int i = 0; i < count; ++i) {
+     // When creating new cards, check if any should be selected
+     for (int i = 0; i < count; ++i) {
         QModelIndex proxyIndex = m_proxyModel->index(i, 0);
         if (!proxyIndex.isValid()) continue;
         

@@ -1,4 +1,5 @@
 #include "ContentProxyModel.h"
+#include "../Model/lib/Content.h"
 #include <QMetaType>
 
 ContentProxyModel::ContentProxyModel(QObject *parent)
@@ -93,6 +94,7 @@ bool ContentProxyModel::filterAcceptsRow(int sourceRow, const QModelIndex &sourc
     }
     
     // Apply type filter
+    //!Todo TO BE CHANGED, CANNOT USE GETTYPE
     if (!m_typeFilters.isEmpty()) {
         auto type = QString::fromStdString(content->getType());
         if (!m_typeFilters.contains(type))
@@ -102,15 +104,12 @@ bool ContentProxyModel::filterAcceptsRow(int sourceRow, const QModelIndex &sourc
     // Apply subgenre filter
     if (!m_subgenreFilters.isEmpty()) {
         auto subgenre = static_cast<Subgenre>(content->getSubgenre());
-        bool hasMatchingSubgenre = false;
+        // Check if content has ALL selected subgenres (AND condition)
         for (Subgenre filter : m_subgenreFilters) {
-            if (subgenre == filter) {
-                hasMatchingSubgenre = true;
-                break;
+            if (!content->hasSubgenre(filter)){  // Changed from == to !=
+                return false;
             }
         }
-        if (!hasMatchingSubgenre)
-            return false;
     }
     
     // Apply watched filter
