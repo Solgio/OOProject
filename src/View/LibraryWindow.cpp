@@ -64,7 +64,45 @@ bool LibraryWindow::eventFilter(QObject* obj, QEvent* event) {
                 return true;
             }
         }
+    } 
+    else if (event->type() == QEvent::MouseButtonPress) {
+        // Handle single click for selection
+        QWidget* widget = qobject_cast<QWidget*>(obj);
+        if (widget && widget->objectName() == "ContentCard") {
+            Content* content = obj->property("content_ptr").value<Content*>();
+            if (content) {
+                // If this card is already selected, deselect it
+                if (m_selectedCard == widget) {
+                    // Deselect - reset to original style
+                    if (content->getStarred()) {
+                        widget->setStyleSheet("QWidget#ContentCard { border: 2px solid #FFD700; border-radius: 5px; background-color: transparent; }");
+                    } else {
+                        widget->setStyleSheet("QWidget#ContentCard { border: 1px solid #ccc; border-radius: 5px; background-color: transparent; }");
+                    }
+                    m_selectedCard = nullptr;
+                } else {
+                    // Deselect previous card if any
+                    if (m_selectedCard) {
+                        // Find the content of the previously selected card
+                        Content* prevContent = m_selectedCard->property("content_ptr").value<Content*>();
+                        if (prevContent) {
+                            if (prevContent->getStarred()) {
+                                m_selectedCard->setStyleSheet("QWidget#ContentCard { border: 2px solid #FFD700; border-radius: 5px; background-color: transparent; }");
+                            } else {
+                                m_selectedCard->setStyleSheet("QWidget#ContentCard { border: 1px solid #ccc; border-radius: 5px; background-color: transparent; }");
+                            }
+                        }
+                    }
+                    
+                    // Select this card
+                    widget->setStyleSheet("QWidget#ContentCard { border: 2px solid #00FF00; border-radius: 5px; background-color: transparent; }");
+                    m_selectedCard = widget;
+                }
+                return true;
+            }
+        }
     }
+    
     return QMainWindow::eventFilter(obj, event);
 }
 
@@ -669,6 +707,13 @@ void LibraryWindow::clearSearch() {
 }
 
 void LibraryWindow::updateContentPreviews() {
+    // Before clearing the layout, check if we have a selected card and save its content
+    Content* selectedContent = nullptr;
+    if (m_selectedCard) {
+        selectedContent = m_selectedCard->property("content_ptr").value<Content*>();
+        m_selectedCard = nullptr; // Clear the reference as we're about to delete it
+    }
+    
     // Clear existing layout first (except for no results label)
     QLayoutItem* item;
     while ((item = m_previewLayout->takeAt(0)) != nullptr) {
@@ -677,7 +722,6 @@ void LibraryWindow::updateContentPreviews() {
         }
         delete item;
     }
-    
     // Add the no results label back
     m_previewLayout->addWidget(m_noResultsLabel, 0, 0, 1, 6);
     
@@ -695,6 +739,7 @@ void LibraryWindow::updateContentPreviews() {
     const int columns = 5; // Number of cards per row
     int row = 0, col = 0;
     
+    // When creating new cards, check if any should be selected
     for (int i = 0; i < count; ++i) {
         QModelIndex proxyIndex = m_proxyModel->index(i, 0);
         if (!proxyIndex.isValid()) continue;
@@ -705,6 +750,12 @@ void LibraryWindow::updateContentPreviews() {
         if (content) {
             QWidget* card = createContentPreviewCard(content);
             if (card) {
+                // Check if this card should be selected
+                if (selectedContent && content == selectedContent) {
+                    card->setStyleSheet("QWidget#ContentCard { border: 2px solid #00FF00; border-radius: 5px; background-color: transparent; }");
+                    m_selectedCard = card;
+                }
+                
                 m_previewLayout->addWidget(card, row, col);
                 
                 // Update grid position
@@ -724,7 +775,17 @@ QWidget* LibraryWindow::createContentPreviewCard(Content* content) {
     // Create a card widget with a nice border
     auto* card = new QWidget();
     card->setObjectName("ContentCard");
-    card->setStyleSheet("QWidget#ContentCard { border: 1px solid #ccc; border-radius: 5px; background-color: transparent; }");
+    
+    // Apply yellow border for starred content, or check if this card should be selected
+    if (m_selectedCard && m_selectedCard->property("content_ptr").value<Content*>() == content) {
+        // This is the selected card
+        card->setStyleSheet("QWidget#ContentCard { border: 2px solid #00FF00; border-radius: 5px; background-color: transparent; }");
+    } else if (content->getStarred()) {
+        card->setStyleSheet("QWidget#ContentCard { border: 2px solid #FFD700; border-radius: 5px; background-color: transparent; }");
+    } else {
+        card->setStyleSheet("QWidget#ContentCard { border: 1px solid #ccc; border-radius: 5px; background-color: transparent; }");
+    }
+    
     card->setCursor(Qt::PointingHandCursor);
     
     // Create layout for the card

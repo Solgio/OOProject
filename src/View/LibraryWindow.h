@@ -122,6 +122,9 @@ private:
     QWidget *m_mainView = nullptr;
     QLabel *m_noResultsLabel = nullptr;
 
+    // Selected Content
+    QWidget* m_selectedCard = nullptr;
+
     const int SEARCH_DELAY_MS = 350;
 };
 
