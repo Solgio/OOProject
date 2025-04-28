@@ -139,13 +139,13 @@ bool ContentProxyModel::lessThan(const QModelIndex &source_left, const QModelInd
     QVariant rightValue = contentModel->getSortValue(rightContent, m_sortRole);
     
     // Handle special comparisons based on type
-    if (leftValue.type() == QVariant::String && rightValue.type() == QVariant::String) {
+    if (leftValue.typeId() == QVariant::String && rightValue.typeId() == QVariant::String) {
         return QString::localeAwareCompare(leftValue.toString(), rightValue.toString()) < 0;
-    } else if (leftValue.type() == QVariant::Int && rightValue.type() == QVariant::Int) {
+    } else if (leftValue.typeId() == QVariant::Int && rightValue.typeId() == QVariant::Int) {
         return leftValue.toInt() < rightValue.toInt();
-    } else if (leftValue.type() == QVariant::Double && rightValue.type() == QVariant::Double) {
+    } else if (leftValue.typeId() == QVariant::Double && rightValue.typeId() == QVariant::Double) {
         return leftValue.toDouble() < rightValue.toDouble();
-    } else if (leftValue.type() == QVariant::Date && rightValue.type() == QVariant::Date) {
+    } else if (leftValue.typeId() == QVariant::Date && rightValue.typeId() == QVariant::Date) {
         return leftValue.toDate() < rightValue.toDate();
     }
     
