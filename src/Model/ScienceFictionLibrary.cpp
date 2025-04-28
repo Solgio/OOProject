@@ -152,7 +152,7 @@ bool ScienceFiction_Library::saveToFile(const string& filepath)const{
     if(extension==".xml"){
         QDomDocument doc;
         QDomProcessingInstruction header = doc.createProcessingInstruction(
-            "xml", "version=\"1.0\" encoding=\"UTF-8\"");
+            "xml", R"(version="1.0" encoding="UTF-8")");
         doc.appendChild(header);
     
         QDomElement root = doc.createElement("ScienceFictionLibrary");

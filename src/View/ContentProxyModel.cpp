@@ -1,4 +1,5 @@
 #include "ContentProxyModel.h"
+#include <QMetaType>
 
 ContentProxyModel::ContentProxyModel(QObject *parent)
     : QSortFilterProxyModel(parent),
@@ -76,7 +77,7 @@ bool ContentProxyModel::filterAcceptsRow(int sourceRow, const QModelIndex &sourc
     QModelIndex index = sourceModel()->index(sourceRow, 0, sourceParent);
     
     // Get the Content pointer
-    ContentModel* contentModel = qobject_cast<ContentModel*>(sourceModel());
+    auto* contentModel = qobject_cast<ContentModel*>(sourceModel());
     if (!contentModel)
         return false;
         
@@ -86,21 +87,21 @@ bool ContentProxyModel::filterAcceptsRow(int sourceRow, const QModelIndex &sourc
     
     // Apply title filter
     if (!m_titleFilter.isEmpty()) {
-        QString title = QString::fromStdString(content->getTitle());
+        auto title = QString::fromStdString(content->getTitle());
         if (!title.contains(m_titleFilter, Qt::CaseInsensitive))
             return false;
     }
     
     // Apply type filter
     if (!m_typeFilters.isEmpty()) {
-        QString type = QString::fromStdString(content->getType());
+        auto type = QString::fromStdString(content->getType());
         if (!m_typeFilters.contains(type))
             return false;
     }
     
     // Apply subgenre filter
     if (!m_subgenreFilters.isEmpty()) {
-        Subgenre subgenre = static_cast<Subgenre>(content->getSubgenre());
+        auto subgenre = static_cast<Subgenre>(content->getSubgenre());
         bool hasMatchingSubgenre = false;
         for (Subgenre filter : m_subgenreFilters) {
             if (subgenre == filter) {
@@ -141,12 +142,12 @@ bool ContentProxyModel::lessThan(const QModelIndex &source_left, const QModelInd
     // Handle special comparisons based on type
     if (leftValue.typeId() == QVariant::String && rightValue.typeId() == QVariant::String) {
         return QString::localeAwareCompare(leftValue.toString(), rightValue.toString()) < 0;
-    } else if (leftValue.typeId() == QVariant::Int && rightValue.typeId() == QVariant::Int) {
+    } else if (leftValue.typeId() == QMetaType::Int && rightValue.typeId() == QMetaType::Int) {
         return leftValue.toInt() < rightValue.toInt();
-    } else if (leftValue.typeId() == QVariant::Double && rightValue.typeId() == QVariant::Double) {
+    } else if (leftValue.typeId() == QMetaType::Double && rightValue.typeId() == QMetaType::Double) {
         return leftValue.toDouble() < rightValue.toDouble();
-    } else if (leftValue.typeId() == QVariant::Date && rightValue.typeId() == QVariant::Date) {
-        return leftValue.toDate() < rightValue.toDate();
+    } else if (leftValue.typeId() == QMetaType::Int && rightValue.typeId() == QMetaType::Int) {
+        return leftValue.toInt() < rightValue.toInt();
     }
     
     // Default comparison

@@ -476,7 +476,7 @@ void LibraryWindow::createImportButton() {
 }
 
 QListWidget* LibraryWindow::createFilterList(const QStringList& options) {
-    QListWidget* list = new QListWidget();
+    auto* list = new QListWidget();
     list->setSelectionMode(QAbstractItemView::NoSelection);
     
     for (const QString& option : options) {
@@ -653,23 +653,23 @@ QWidget* LibraryWindow::createContentPreviewCard(Content* content) {
     if (!content) return nullptr;
     
     // Create a card widget with a nice border
-    QWidget* card = new QWidget();
+    auto* card = new QWidget();
     card->setObjectName("ContentCard");
     card->setStyleSheet("QWidget#ContentCard { border: 1px solid #ccc; border-radius: 5px; background-color: transparent; }");
     card->setCursor(Qt::PointingHandCursor);
     
     // Create layout for the card
-    QVBoxLayout* cardLayout = new QVBoxLayout(card);
+    auto* cardLayout = new QVBoxLayout(card);
     cardLayout->setContentsMargins(8, 8, 8, 8);
     
     // Add cover image (using a label with colored background as placeholder)
-    QLabel* coverLabel = new QLabel();
+    auto* coverLabel = new QLabel();
     coverLabel->setFixedSize(180, 240);
     coverLabel->setAlignment(Qt::AlignCenter);
     coverLabel->setStyleSheet("background-color: transparent");
     
     // Get cover image path
-    QString coverPath = QString::fromStdString(content->getImage());
+    auto coverPath = QString::fromStdString(content->getImage());
     if (!coverPath.isEmpty() && QFile::exists(coverPath)) {
         coverLabel->setPixmap(QPixmap(coverPath).scaled(180, 240, Qt::KeepAspectRatio, Qt::SmoothTransformation));
     } else {
@@ -680,35 +680,35 @@ QWidget* LibraryWindow::createContentPreviewCard(Content* content) {
     }
     
     // Content details
-    QLabel* titleLabel = new QLabel(QString::fromStdString(content->getTitle()));
+    auto* titleLabel = new QLabel(QString::fromStdString(content->getTitle()));
     titleLabel->setWordWrap(true);
     titleLabel->setAlignment(Qt::AlignCenter);
     titleLabel->setStyleSheet("font-weight: bold; font-size: 14px;");
     
-    QLabel* typeLabel = new QLabel(QString::fromStdString(content->getType()));
+    auto* typeLabel = new QLabel(QString::fromStdString(content->getType()));
     typeLabel->setAlignment(Qt::AlignCenter);
     typeLabel->setStyleSheet("background-color: transparent");
     
-    QLabel* genreLabel = new QLabel(QString::fromStdString(content->getSubgenreString()));
+    auto* genreLabel = new QLabel(QString::fromStdString(content->getSubgenreString()));
     genreLabel->setAlignment(Qt::AlignCenter);
     genreLabel->setStyleSheet("background-color: transparent");
     
     // Add year label
-    QLabel* yearLabel = new QLabel(QString::number(content->getYear()));
+    auto* yearLabel = new QLabel(QString::number(content->getYear()));
     yearLabel->setAlignment(Qt::AlignCenter);
     
     // Watch/Star indicator
-    QHBoxLayout* statusLayout = new QHBoxLayout();
+    auto* statusLayout = new QHBoxLayout();
     statusLayout->setAlignment(Qt::AlignCenter);
     
     if (content->getWatched()) {
-        QLabel* watchedLabel = new QLabel("✓ Watched");
+        auto* watchedLabel = new QLabel("✓ Watched");
         watchedLabel->setStyleSheet("color: green;");
         statusLayout->addWidget(watchedLabel);
     }
     
     if (content->getStarred()) {
-        QLabel* starredLabel = new QLabel("★ Starred");
+        auto* starredLabel = new QLabel("★ Starred");
         starredLabel->setStyleSheet("color: orange;");
         statusLayout->addWidget(starredLabel);
     }

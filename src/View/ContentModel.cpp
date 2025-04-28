@@ -42,32 +42,32 @@ QVariant ContentModel::data(const QModelIndex &index, int role) const {
                 case 2: return QString::fromStdString(content->getSubgenreString());
                 default: return QVariant();
             }
-        case TitleRole: return QString::fromStdString(content->getTitle());
-        case TypeRole: return QString::fromStdString(content->getType());
-        case SubgenreRole: return content->getSubgenre();
-        case WatchedRole: return content->getWatched();
-        case StarredRole: return content->getStarred();
-        case YearRole: return content->getYear();
-        case ContentPtrRole: return QVariant::fromValue(content);
+        case static_cast<int>(Roles::TitleRole): return QString::fromStdString(content->getTitle());
+        case static_cast<int>(Roles::TypeRole): return QString::fromStdString(content->getType());
+        case static_cast<int>(Roles::SubgenreRole): return content->getSubgenre();
+        case static_cast<int>(Roles::WatchedRole): return content->getWatched();
+        case static_cast<int>(Roles::StarredRole): return content->getStarred();
+        case static_cast<int>(Roles::YearRole): return content->getYear();
+        case static_cast<int>(Roles::ContentPtrRole): return QVariant::fromValue(content);
         
         // New roles for preview cards
-        case CoverImageRole: return QString::fromStdString(content->getImage());
-        case CreatorRole: {
+        case static_cast<int>(Roles::CoverImageRole): return QString::fromStdString(content->getImage());
+        case static_cast<int>(Roles::CreatorRole): {
             // Get creator based on content type
-            if (auto* book = dynamic_cast<Book*>(content))
+            if (const auto* book = dynamic_cast<Book*>(content))
                 return QString::fromStdString(book->getAuthor());
-            else if (auto* comic = dynamic_cast<Comic*>(content))
+            else if (const auto* comic = dynamic_cast<Comic*>(content))
                 return QString::fromStdString(comic->getAuthor());
-            else if (auto* film = dynamic_cast<Film*>(content))
+            else if (const auto* film = dynamic_cast<Film*>(content))
                 return QString::fromStdString(film->getDirector());
-            else if (auto* serie = dynamic_cast<Serie*>(content))
+            else if (const auto* serie = dynamic_cast<Serie*>(content))
                 return QString::fromStdString(serie->getCreator());
-            else if (auto* game = dynamic_cast<VideoGame*>(content))
+            else if (const auto* game = dynamic_cast<VideoGame*>(content))
                 return QString::fromStdString(game->getGameEngine());
             else
                 return "Unknown";
         }
-        case ReleaseDateRole: return QDate(content->getYear(), 1, 1);
+        case static_cast<int>(Roles::ReleaseDateRole): return QDate(content->getYear(), 1, 1);
         
         default: return QVariant();
     }
@@ -120,16 +120,16 @@ Content* ContentModel::getContent(int row) const {
 
 QHash<int, QByteArray> ContentModel::roleNames() const {
     QHash<int, QByteArray> roles;
-    roles[TitleRole] = "title";
-    roles[TypeRole] = "type";
-    roles[SubgenreRole] = "subgenre";
-    roles[WatchedRole] = "watched";
-    roles[StarredRole] = "starred";
-    roles[YearRole] = "year";
-    roles[ContentPtrRole] = "content";
-    roles[CoverImageRole] = "coverImage";
-    roles[CreatorRole] = "creator";
-    roles[ReleaseDateRole] = "releaseDate";
+    roles[static_cast<int>(Roles::TitleRole)] = "title";
+    roles[static_cast<int>(Roles::TypeRole)] = "type";
+    roles[static_cast<int>(Roles::SubgenreRole)] = "subgenre";
+    roles[static_cast<int>(Roles::WatchedRole)] = "watched";
+    roles[static_cast<int>(Roles::StarredRole)] = "starred";
+    roles[static_cast<int>(Roles::YearRole)] = "year";
+    roles[static_cast<int>(Roles::ContentPtrRole)] = "content";
+    roles[static_cast<int>(Roles::CoverImageRole)] = "coverImage";
+    roles[static_cast<int>(Roles::CreatorRole)] = "creator";
+    roles[static_cast<int>(Roles::ReleaseDateRole)] = "releaseDate";
     return roles;
 }
 

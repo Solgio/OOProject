@@ -7,7 +7,7 @@
 class ContentModel : public QAbstractTableModel {
     Q_OBJECT
 public:
-    enum Roles {
+    enum class Roles {
         TitleRole = Qt::UserRole + 1,
         TypeRole,
         SubgenreRole,
