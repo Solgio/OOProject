@@ -343,54 +343,74 @@ void LibraryWindow::setupContentTable() {
 }
 
 void LibraryWindow::setupFilterSection() {
-    // Create a compact filters section
     m_filtersSection = new QWidget();
     auto* filtersLayout = new QVBoxLayout(m_filtersSection);
     filtersLayout->setContentsMargins(5, 5, 5, 5);
-    filtersLayout->setSpacing(5);
+    filtersLayout->setSpacing(8);
 
     // Define checkbox style for highlighting
     QString checkboxStyle = 
         "QCheckBox:checked {"
-        "   border: 2px solid rgb(15, 228, 61);"  // Border color
-        "   border-radius: 3px;"         // Rounded corners
-        "   padding: 2px;"               // Some padding
+        "   border: 2px solid rgb(15, 228, 61);"
+        "   border-radius: 3px;"
+        "   padding: 2px;"
         "}"
         "QCheckBox:hover {"
-        "   background-color:rgb(85, 87, 86);"  // Light gray on hover (unchecked)
+        "   background-color:rgb(85, 87, 86);"
         "}"
         "QCheckBox:checked:hover {"
-        "   background-color:rgb(0, 110, 59);"  // Slightly darker green on hover (checked)
+        "   background-color:rgb(0, 110, 59);"
         "}";
 
+    // Create dropdown buttons for each filter type
+    auto createDropdownSection = [this, checkboxStyle](const QString& title, const QStringList& items, const QString& filterType) {
+        auto* dropdownBtn = new QToolButton();
+        dropdownBtn->setText(title);
+        dropdownBtn->setToolButtonStyle(Qt::ToolButtonTextBesideIcon);
+        dropdownBtn->setArrowType(Qt::RightArrow);
+        dropdownBtn->setCheckable(true);
+        dropdownBtn->setChecked(false);
+        dropdownBtn->setStyleSheet("QToolButton {"
+        "   border: none;"
+        "   background: transparent;"
+        "   text-align: left;"
+        "   padding: 5px;"
+        "   color: palette(window-text);"
+        "}"
+        "QToolButton:hover {"
+        "   background: rgba(128, 128, 128, 30);"  // Slight hover effect
+        "}");
+
+        auto* contentWidget = new QWidget();
+        contentWidget->setVisible(false);
+        auto* contentLayout = new QVBoxLayout(contentWidget);
+        contentLayout->setContentsMargins(15, 5, 5, 5);
+        contentLayout->setSpacing(5);
+
+        for (const auto& item : items) {
+            QCheckBox* cb = new QCheckBox(item);
+            cb->setProperty("filterType", filterType);
+            cb->setProperty("filterValue", item);
+            cb->setStyleSheet(checkboxStyle);
+            connect(cb, &QCheckBox::checkStateChanged, this, &LibraryWindow::applyFilters);
+            contentLayout->addWidget(cb);
+        }
+
+        connect(dropdownBtn, &QToolButton::toggled, [dropdownBtn, contentWidget](bool checked) {
+            contentWidget->setVisible(checked);
+            dropdownBtn->setArrowType(checked ? Qt::DownArrow : Qt::RightArrow);
+        });
+
+        return std::make_pair(dropdownBtn, contentWidget);
+    };
+
     // Type filter section
-    auto* typeGroup = new QGroupBox("Content Types");
-    typeGroup->setFlat(true);
-    typeGroup->setStyleSheet("QGroupBox { border: 1px solid gray; border-radius: 3px; margin-top: 6px; }");
-    
-    auto* typeLayout = new QVBoxLayout(typeGroup);
-    typeLayout->setContentsMargins(5, 15, 5, 5);
-    
-    QStringList types = {"Book", "Comic", "Film", "Serie", "VideoGame"};
-    for (const QString& type : types) {
-        QCheckBox* cb = new QCheckBox(type);
-        cb->setProperty("filterType", "type");
-        cb->setProperty("filterValue", type);
-        cb->setStyleSheet(checkboxStyle);
-        connect(cb, &QCheckBox::checkStateChanged, this, &LibraryWindow::applyFilters);
-        typeLayout->addWidget(cb);
-    }
-    filtersLayout->addWidget(typeGroup);
+    auto [typeBtn, typeContent] = createDropdownSection("Content Types", 
+        {"Book", "Comic", "Film", "Serie", "VideoGame"}, "type");
+    filtersLayout->addWidget(typeBtn);
+    filtersLayout->addWidget(typeContent);
 
     // Genre filter section
-    auto* genreGroup = new QGroupBox("Genres");
-    genreGroup->setFlat(true);
-    genreGroup->setStyleSheet("QGroupBox { border: 1px solid gray; border-radius: 3px; margin-top: 6px; }");
-    
-    auto* genreLayout = new QVBoxLayout(genreGroup);
-    genreLayout->setContentsMargins(5, 15, 5, 5);
-    
-    // Get all available subgenres from the Content enum
     QMap<int, QString> genreMap;
     genreMap[static_cast<int>(Subgenre::NONE)] = "None";
     genreMap[static_cast<int>(Subgenre::ACTION)] = "Action";
@@ -407,25 +427,39 @@ void LibraryWindow::setupFilterSection() {
     genreMap[static_cast<int>(Subgenre::FAMILY)] = "Family";
     genreMap[static_cast<int>(Subgenre::SPORTS)] = "Sports";
     genreMap[static_cast<int>(Subgenre::SUPERHERO)] = "Superhero";
-    
+    QStringList genres;
     for (auto it = genreMap.begin(); it != genreMap.end(); ++it) {
-        QCheckBox* cb = new QCheckBox(it.value());
-        cb->setProperty("filterType", "genre");
-        cb->setProperty("filterValue", it.key());
-        cb->setStyleSheet(checkboxStyle);
-        connect(cb, &QCheckBox::checkStateChanged, this, &LibraryWindow::applyFilters);
-        genreLayout->addWidget(cb);
+        genres << it.value();
     }
-    filtersLayout->addWidget(genreGroup);
 
-    // Status filters (Watched/Starred)
-    auto* statusGroup = new QGroupBox("Status");
-    statusGroup->setFlat(true);
-    statusGroup->setStyleSheet("QGroupBox { border: 1px solid gray; border-radius: 3px; margin-top: 6px; }");
-    
-    auto* statusLayout = new QVBoxLayout(statusGroup);
-    statusLayout->setContentsMargins(5, 15, 5, 5);
-    
+    auto [genreBtn, genreContent] = createDropdownSection("Genres", genres, "genre");
+    filtersLayout->addWidget(genreBtn);
+    filtersLayout->addWidget(genreContent);
+
+    // Status filters
+    auto* statusBtn = new QToolButton();
+    statusBtn->setText("Status");
+    statusBtn->setToolButtonStyle(Qt::ToolButtonTextBesideIcon);
+    statusBtn->setArrowType(Qt::RightArrow);
+    statusBtn->setCheckable(true);
+    statusBtn->setChecked(false);
+    statusBtn->setStyleSheet(        "QToolButton {"
+        "   border: none;"
+        "   background: transparent;"
+        "   text-align: left;"
+        "   padding: 5px;"
+        "   color: palette(window-text);"
+        "}"
+        "QToolButton:hover {"
+        "   background: rgba(128, 128, 128, 30);"  // Slight hover effect
+        "}");
+
+    auto* statusContent = new QWidget();
+    statusContent->setVisible(false);
+    auto* statusLayout = new QVBoxLayout(statusContent);
+    statusLayout->setContentsMargins(15, 5, 5, 5);
+    statusLayout->setSpacing(5);
+
     QCheckBox* watchedCb = new QCheckBox("Watched Only");
     watchedCb->setProperty("filterType", "watched");
     watchedCb->setStyleSheet(checkboxStyle);
@@ -437,7 +471,7 @@ void LibraryWindow::setupFilterSection() {
             updateFilterToggleButtonState();
         });
     statusLayout->addWidget(watchedCb);
-    
+
     QCheckBox* starredCb = new QCheckBox("Starred Only");
     starredCb->setProperty("filterType", "starred");
     starredCb->setStyleSheet(checkboxStyle);
@@ -449,10 +483,16 @@ void LibraryWindow::setupFilterSection() {
             updateFilterToggleButtonState();
         });
     statusLayout->addWidget(starredCb);
-    
-    filtersLayout->addWidget(statusGroup);
 
-    // Clear button and counter in one row
+    connect(statusBtn, &QToolButton::toggled, [statusBtn, statusContent](bool checked) {
+        statusContent->setVisible(checked);
+        statusBtn->setArrowType(checked ? Qt::DownArrow : Qt::RightArrow);
+    });
+
+    filtersLayout->addWidget(statusBtn);
+    filtersLayout->addWidget(statusContent);
+
+    // Clear button and counter
     auto* bottomRow = new QWidget();
     auto* bottomLayout = new QHBoxLayout(bottomRow);
     bottomLayout->setContentsMargins(0, 0, 0, 0);
@@ -466,9 +506,7 @@ void LibraryWindow::setupFilterSection() {
     bottomLayout->addStretch();
     
     filtersLayout->addWidget(bottomRow);
-
-    // Initially hide the filters section
-    m_filtersSection->setVisible(false);
+    filtersLayout->addStretch();
 }
 
 void LibraryWindow::toggleFiltersSection() {
