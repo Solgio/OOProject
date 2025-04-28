@@ -32,8 +32,6 @@ class LibraryWindow : public QMainWindow {
 public:
     explicit LibraryWindow(QWidget *parent = nullptr);
     ~LibraryWindow() override;
-
-    bool isSearchBarEmpty() const { return m_searchBar->text().isEmpty(); }
     bool eventFilter(QObject* obj, QEvent* event) override;
 
 signals:
@@ -49,7 +47,6 @@ private slots:
     void editContent(Content* content = nullptr);
 
     void hideDetailView();
-    void applyQuickFilter(int index);
     void applySearchFilter(const QString &text);
 
     void applyFilters();
@@ -73,7 +70,6 @@ private:
     // Helper methods
     void createSaveMenu();
     void createImportButton();
-    QListWidget* createFilterList(const QStringList& options);
     void toggleFiltersSection();
     void updateContentPreviews();
     QWidget* createContentPreviewCard(Content* content);
@@ -99,10 +95,7 @@ private:
     // Filters
     QWidget* m_filtersSection = nullptr;
     QToolButton* m_filtersToggleBtn = nullptr;
-    QListWidget* m_genreFilterList = nullptr;
-    QListWidget* m_typeFilterList = nullptr;
-    QListWidget* m_statusFilterList = nullptr;
-    QPushButton* m_clearFiltersBtn = nullptr;
+   QPushButton* m_clearFiltersBtn = nullptr;
     QLabel* m_filterCounter = nullptr;
     QScrollArea* m_filtersScrollArea = nullptr;
 

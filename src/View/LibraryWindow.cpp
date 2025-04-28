@@ -629,19 +629,6 @@ void LibraryWindow::createImportButton() {
     m_importButton->setToolTip("Import content from file");
 }
 
-QListWidget* LibraryWindow::createFilterList(const QStringList& options) {
-    auto* list = new QListWidget();
-    list->setSelectionMode(QAbstractItemView::NoSelection);
-    
-    for (const QString& option : options) {
-        QListWidgetItem* item = new QListWidgetItem(option, list);
-        item->setFlags(item->flags() | Qt::ItemIsUserCheckable);
-        item->setCheckState(Qt::Unchecked);
-    }
-    
-    return list;
-}
-
 void LibraryWindow::updateContentDisplay() {
     m_contentModel->refreshData();
     updateContentPreviews();
@@ -725,10 +712,6 @@ void LibraryWindow::editContent(Content* content) {
     }
 }
 
-void LibraryWindow::applyQuickFilter(int index) {
-    // Quick filter from combo box or similar
-    // Implement if needed
-}
 
 void LibraryWindow::applySearchFilter(const QString &text) {
     if (m_proxyModel) {
