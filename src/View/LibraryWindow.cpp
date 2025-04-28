@@ -55,7 +55,16 @@ LibraryWindow::~LibraryWindow() {
 }
 
 bool LibraryWindow::eventFilter(QObject* obj, QEvent* event) {
-    // Event filter for custom widgets if needed
+    if (event->type() == QEvent::MouseButtonDblClick) {
+        if (obj->property("content_ptr").isValid()) {
+            Content* content = obj->property("content_ptr").value<Content*>();
+            if (content) {
+                m_detailWindow->setContent(content);
+                m_rightPanel->setCurrentIndex(1); // Show detail view
+                return true;
+            }
+        }
+    }
     return QMainWindow::eventFilter(obj, event);
 }
 
@@ -200,8 +209,6 @@ void LibraryWindow::setupPreviewWidget() {
 
 void LibraryWindow::setupSortingControls() {
     // Create sorting combo box
-
-
     m_sortingComboBox = new QComboBox();
     m_sortingComboBox->setToolTip("Sort by");
     m_sortingComboBox->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed);
@@ -289,6 +296,20 @@ void LibraryWindow::setupFilterSection() {
     filtersLayout->setContentsMargins(0, 0, 0, 0);
     filtersLayout->setSpacing(5);
 
+    // Define checkbox style for highlighting
+    QString checkboxStyle = 
+        "QCheckBox:checked {"
+        "   border: 2px solid rgb(15, 228, 61);"  // Border color
+        "   border-radius: 3px;"         // Rounded corners
+        "   padding: 2px;"               // Some padding
+        "}"
+        "QCheckBox:hover {"
+        "   background-color:rgb(85, 87, 86);"  // Light gray on hover (unchecked)
+        "}"
+        "QCheckBox:checked:hover {"
+        "   background-color:rgb(0, 110, 59);"  // Slightly darker green on hover (checked)
+        "}";
+
     // Type filter section
     auto* typeGroup = new QGroupBox("Content Types");
     typeGroup->setFlat(true);
@@ -302,7 +323,8 @@ void LibraryWindow::setupFilterSection() {
         QCheckBox* cb = new QCheckBox(type);
         cb->setProperty("filterType", "type");
         cb->setProperty("filterValue", type);
-        connect(cb, &QCheckBox::stateChanged, this, &LibraryWindow::applyFilters);
+        cb->setStyleSheet(checkboxStyle);
+        connect(cb, &QCheckBox::checkStateChanged, this, &LibraryWindow::applyFilters);
         typeLayout->addWidget(cb);
     }
     filtersLayout->addWidget(typeGroup);
@@ -337,7 +359,8 @@ void LibraryWindow::setupFilterSection() {
         QCheckBox* cb = new QCheckBox(it.value());
         cb->setProperty("filterType", "genre");
         cb->setProperty("filterValue", it.key());
-        connect(cb, &QCheckBox::stateChanged, this, &LibraryWindow::applyFilters);
+        cb->setStyleSheet(checkboxStyle);
+        connect(cb, &QCheckBox::checkStateChanged, this, &LibraryWindow::applyFilters);
         genreLayout->addWidget(cb);
     }
     filtersLayout->addWidget(genreGroup);
@@ -352,21 +375,25 @@ void LibraryWindow::setupFilterSection() {
     
     QCheckBox* watchedCb = new QCheckBox("Watched Only");
     watchedCb->setProperty("filterType", "watched");
-    connect(watchedCb, &QCheckBox::stateChanged, 
+    watchedCb->setStyleSheet(checkboxStyle);
+    connect(watchedCb, &QCheckBox::checkStateChanged, 
         [this](int state) {
             m_proxyModel->setWatchedFilter(state == Qt::Checked);
             updateFilterCounter();
             updateContentPreviews();
+            updateFilterToggleButtonState();
         });
     statusLayout->addWidget(watchedCb);
     
     QCheckBox* starredCb = new QCheckBox("Starred Only");
     starredCb->setProperty("filterType", "starred");
-    connect(starredCb, &QCheckBox::stateChanged, 
+    starredCb->setStyleSheet(checkboxStyle);
+    connect(starredCb, &QCheckBox::checkStateChanged, 
         [this](int state) {
             m_proxyModel->setStarredFilter(state == Qt::Checked);
             updateFilterCounter();
             updateContentPreviews();
+            updateFilterToggleButtonState();
         });
     statusLayout->addWidget(starredCb);
     
@@ -392,8 +419,16 @@ void LibraryWindow::setupFilterSection() {
 }
 
 void LibraryWindow::toggleFiltersSection() {
-    m_filtersSection->setVisible(!m_filtersSection->isVisible());
-    m_filtersToggleBtn->setChecked(m_filtersSection->isVisible());
+    bool visible = !m_filtersSection->isVisible();
+    m_filtersSection->setVisible(visible);
+    m_filtersToggleBtn->setChecked(visible);
+    
+    // Apply a highlight border when filter section is visible
+    if (visible) {
+        m_filtersSection->setStyleSheet(" padding: 4px;");
+    } else {
+        m_filtersSection->setStyleSheet("");
+    }
 }
 
 void LibraryWindow::setupToolbar() {
@@ -422,6 +457,7 @@ void LibraryWindow::connectSignals() {
     connect(m_searchBar, &QLineEdit::textChanged, this, &LibraryWindow::delayedSearch);
     connect(m_searchTimer, &QTimer::timeout, this, [this]() {
         applySearchFilter(m_searchBar->text());
+        updateFilterToggleButtonState();
     });
     connect(m_clearSearchButton, &QToolButton::clicked, this, &LibraryWindow::clearSearch);
 
@@ -435,6 +471,36 @@ void LibraryWindow::connectSignals() {
 
     // Import/Save actions
     connect(m_importButton, &QToolButton::clicked, this, &LibraryWindow::importContent);
+}
+
+void LibraryWindow::updateFilterToggleButtonState() {
+    // Check if there are any active filters
+    bool hasActiveFilters = false;
+    
+    // Check search filter
+    if (!m_searchBar->text().isEmpty()) {
+        hasActiveFilters = true;
+    }
+    
+    // Check checkboxes
+    if (!hasActiveFilters) {
+        auto checkboxes = m_filtersSection->findChildren<QCheckBox*>();
+        for (QCheckBox* cb : checkboxes) {
+            if (cb->isChecked()) {
+                hasActiveFilters = true;
+                break;
+            }
+        }
+    }
+    
+    // Update the filter toggle button appearance
+    if (hasActiveFilters) {
+        m_filtersToggleBtn->setText("Filters (Active)");
+        m_filtersToggleBtn->setStyleSheet("QToolButton { background-color:rgb(119, 6, 34); border: 1px solid rgb(15, 228, 61); }");
+    } else {
+        m_filtersToggleBtn->setText("Filters");
+        m_filtersToggleBtn->setStyleSheet("");
+    }
 }
 
 void LibraryWindow::createSaveMenu() {
@@ -468,6 +534,7 @@ void LibraryWindow::createSaveMenu() {
     // Ensure the button's icon is also 28px
     m_saveButton->setIconSize(QSize(28, 28));
 }
+
 void LibraryWindow::createImportButton() {
     m_importButton = new QToolButton();
     m_importButton->setText("Import");
@@ -492,6 +559,7 @@ void LibraryWindow::updateContentDisplay() {
     m_contentModel->refreshData();
     updateContentPreviews();
     updateFilterCounter();
+    updateFilterToggleButtonState();
 }
 
 void LibraryWindow::showContentDetails(const QModelIndex &index) {
@@ -597,6 +665,7 @@ void LibraryWindow::clearSearch() {
     m_searchBar->clear();
     m_clearSearchButton->hide();
     applySearchFilter("");
+    updateFilterToggleButtonState();
 }
 
 void LibraryWindow::updateContentPreviews() {
@@ -751,24 +820,29 @@ void LibraryWindow::clearFilters() {
     // Reset proxy model filters
     m_proxyModel->clearFilters();
     
+    // Reset the filter toggle button
+    m_filtersToggleBtn->setText("Filters");
+    m_filtersToggleBtn->setStyleSheet("");
+    
     // Update UI
     updateContentPreviews();
     updateFilterCounter();
 }
 
 void LibraryWindow::applyFilters() {
-    if (!m_proxyModel) return;
-    
-    // First clear current filters
-    m_proxyModel->clearFilters();
-    
-    // Apply search filter (keep it)
-    if (!m_searchBar->text().isEmpty()) {
-        m_proxyModel->setTitleFilter(m_searchBar->text());
-    }
-    
-    // Find all checked filters
-    auto checkboxes = m_filtersSection->findChildren<QCheckBox*>();
+        if (!m_proxyModel) return;
+        
+        // First clear current filters
+        m_proxyModel->clearFilters();
+        
+        // Apply search filter (keep it)
+        if (!m_searchBar->text().isEmpty()) {
+            m_proxyModel->setTitleFilter(m_searchBar->text());
+        }
+        
+        // Find all checked filters
+        auto checkboxes = m_filtersSection->findChildren<QCheckBox*>();
+        bool hasActiveFilters = false;
     for (QCheckBox* cb : checkboxes) {
         if (cb->isChecked()) {
             QString filterType = cb->property("filterType").toString();
@@ -788,6 +862,15 @@ void LibraryWindow::applyFilters() {
             }
         }
     }
+
+    if (hasActiveFilters) {
+        m_filtersToggleBtn->setText("Filters (Active)");
+        m_filtersToggleBtn->setStyleSheet("QToolButton { background-color: #e0f0ff; border: 1px solid #99ccff; }");
+    } else {
+        m_filtersToggleBtn->setText("Filters");
+        m_filtersToggleBtn->setStyleSheet("");
+    }
+   
     
     // Update display
     updateContentPreviews();

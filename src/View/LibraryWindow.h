@@ -77,6 +77,7 @@ private:
     void toggleFiltersSection();
     void updateContentPreviews();
     QWidget* createContentPreviewCard(Content* content);
+    void updateFilterToggleButtonState();
 
     // UI Components
     QToolBar *m_toolBar = nullptr;
