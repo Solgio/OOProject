@@ -10,6 +10,10 @@
 #include <QCheckBox>
 #include <QPushButton>
 #include <QMap>
+#include <QTableView>
+#include <QGridLayout>
+#include <QScrollArea>
+#include <QComboBox>
 #include "../Model/lib/ScienceFictionLibrary.h"
 
 class QListWidget;
@@ -19,6 +23,8 @@ class QComboBox;
 class QMenu;
 class ContentDetailWindow;
 class QTimer;
+class ContentModel;
+class ContentProxyModel;
 
 class LibraryWindow : public QMainWindow {
     Q_OBJECT
@@ -28,6 +34,7 @@ public:
     ~LibraryWindow() override;
 
     bool isSearchBarEmpty() const { return m_searchBar->text().isEmpty(); }
+    bool eventFilter(QObject* obj, QEvent* event) override;
 
 signals:
     void contentDataChanged();
@@ -36,39 +43,45 @@ private slots:
     void importContent();
     void saveToFile(const QString &extension);
     void updateContentDisplay();
-    void showContentDetails(QListWidgetItem *item);
+    void showContentDetails(const QModelIndex &index);
 
     void showAddContentDialog(bool checked = false);
     void editContent(Content* content = nullptr);
 
     void hideDetailView();
     void applyQuickFilter(int index);
-    void delayedSearch();
+    void applySearchFilter(const QString &text);
 
     void applyFilters();
     void clearFilters();
     void clearSearch();
+    
+    void delayedSearch();
+    void updateFilterCounter();
+    void changeSortDirection();
 
 private:
     // UI Setup
     void setupUI();
-    void setupContentListView();
+    void setupContentTable();
     void setupFilterSection();
     void setupToolbar();
+    void setupPreviewWidget();
+    void setupSortingControls();
     void connectSignals();
     
     // Helper methods
     void createSaveMenu();
     void createImportButton();
-    void loadContentPreview(Content* content, QListWidgetItem* item) const;
-    QPixmap loadSafePixmap(const QString &path, const QSize &size) const;
     QListWidget* createFilterList(const QStringList& options);
     void toggleFiltersSection();
+    void updateContentPreviews();
+    QWidget* createContentPreviewCard(Content* content);
 
     // UI Components
     QToolBar *m_toolBar = nullptr;
     QSplitter *m_splitter = nullptr;
-    QListWidget *m_contentList = nullptr;
+    QTableView *m_contentTable = nullptr;
     QLineEdit *m_searchBar = nullptr;
     QToolButton *m_importButton = nullptr;
     QToolButton *m_saveButton = nullptr;
@@ -78,6 +91,10 @@ private:
     ContentDetailWindow *m_detailWindow = nullptr;
     QTimer *m_searchTimer = nullptr;
 
+    // Models
+    ContentModel *m_contentModel = nullptr;
+    ContentProxyModel *m_proxyModel = nullptr;
+    
     // Filters
     QWidget* m_filtersSection = nullptr;
     QToolButton* m_filtersToggleBtn = nullptr;
@@ -87,14 +104,24 @@ private:
     QPushButton* m_clearFiltersBtn = nullptr;
     QLabel* m_filterCounter = nullptr;
 
+    QLayout* m_sortingLayout = nullptr;
+
+    // Sorting controls
+    QComboBox* m_sortingComboBox = nullptr;
+    QToolButton* m_sortDirectionButton = nullptr;
+
+    // Content preview widgets
+    QWidget* m_previewWidget = nullptr;
+    QScrollArea* m_previewScrollArea = nullptr;
+    QGridLayout* m_previewLayout = nullptr;
+
     // Stacked widgets
     QStackedWidget *m_rightPanel = nullptr;
     QStackedWidget *m_contentContainer = nullptr;
     QWidget *m_mainView = nullptr;
     QLabel *m_noResultsLabel = nullptr;
 
-    const QSize m_previewSize{160, 240};
     const int SEARCH_DELAY_MS = 350;
 };
 
-#endif
+#endif // LIBRARYWINDOW_H

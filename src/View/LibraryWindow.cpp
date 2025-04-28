@@ -2,8 +2,16 @@
 #include "ContentDetailWindow.h"
 #include "TypeChoiceDialog.h"
 #include "ContentEditWindow.h"
+#include "ContentModel.h"
+#include "ContentProxyModel.h"
+
 #include "../Model/lib/ScienceFictionLibrary.h"
 #include "../Model/lib/Content.h"
+#include "../Model/lib/Book.h"
+#include "../Model/lib/Comic.h"
+#include "../Model/lib/Film.h"
+#include "../Model/lib/Serie.h"
+#include "../Model/lib/VideoGame.h"
 
 #include <QLabel>
 #include <QToolButton>
@@ -20,8 +28,22 @@
 #include <QTimer>
 #include <QHBoxLayout>
 #include <QStyle>
+#include <QHeaderView>
+#include <QListWidget>
+#include <QEvent>
 
 LibraryWindow::LibraryWindow(QWidget *parent) : QMainWindow(parent) {
+    // Initialize search timer
+    m_searchTimer = new QTimer(this);
+    m_searchTimer->setSingleShot(true);
+    m_searchTimer->setInterval(SEARCH_DELAY_MS);
+    
+    // Initialize filter toggle button
+    m_filtersToggleBtn = new QToolButton();
+    m_filtersToggleBtn->setText("Filters");
+    m_filtersToggleBtn->setCheckable(true);
+    m_filtersToggleBtn->setToolTip("Show/Hide filters");
+    
     setupUI();
     connectSignals();
     updateContentDisplay();
@@ -32,6 +54,11 @@ LibraryWindow::~LibraryWindow() {
     delete m_searchTimer;
 }
 
+bool LibraryWindow::eventFilter(QObject* obj, QEvent* event) {
+    // Event filter for custom widgets if needed
+    return QMainWindow::eventFilter(obj, event);
+}
+
 void LibraryWindow::setupUI() {
     setWindowTitle("Science Fiction Library Manager");
     resize(1920, 1080);
@@ -39,8 +66,10 @@ void LibraryWindow::setupUI() {
     // Main structure
     m_splitter = new QSplitter(Qt::Horizontal);
     m_toolBar = addToolBar("Main Toolbar");
+    m_toolBar->setIconSize(QSize(28, 28));
+    
 
-    // Left panel (filters)
+    // Left panel (filters and sorting)
     auto *leftPanel = new QWidget();
     auto *leftLayout = new QVBoxLayout(leftPanel);
     
@@ -60,21 +89,46 @@ void LibraryWindow::setupUI() {
     searchLayout->addWidget(m_searchBar);
     searchLayout->addWidget(m_clearSearchButton);
     
+    // Setup filter section
     setupFilterSection();
-      
+    
+    // Setup sorting controls 
+    setupSortingControls();
+    
     leftLayout->addWidget(searchContainer);
     leftLayout->addWidget(m_filtersToggleBtn);
     leftLayout->addWidget(m_filtersSection);
+
+    auto *sortingContainer = new QWidget();
+    m_sortingLayout = new QHBoxLayout(sortingContainer);
+    leftLayout->addWidget(new QLabel("Sort by:"));
+    leftLayout->addWidget(m_sortingComboBox);
+    
+    auto *sortDirectionLayout = new QHBoxLayout();
+    sortDirectionLayout->addWidget(new QLabel("Direction:"));
+    sortDirectionLayout->addWidget(m_sortDirectionButton);
+    sortDirectionLayout->addStretch();
+
+    m_sortingLayout->addWidget(m_sortingComboBox);
+    
+    auto *sortDirectionContainer = new QWidget();
+    sortDirectionContainer->setLayout(sortDirectionLayout);
+    m_sortingLayout->addWidget(sortDirectionContainer);
+    leftLayout->addWidget(sortingContainer);
     leftLayout->addStretch();
+
+    // Setup content table
+    setupContentTable();
 
     // Right panel - Main stack
     m_rightPanel = new QStackedWidget();
     m_mainView = new QWidget();
     auto *rightLayout = new QVBoxLayout(m_mainView);
     
-    setupContentListView();
-    rightLayout->addWidget(new QLabel("Content Preview:"));
-    rightLayout->addWidget(m_contentContainer);
+    // Setup content preview widget
+    setupPreviewWidget();
+    rightLayout->addWidget(new QLabel("Content Library:"));
+    rightLayout->addWidget(m_previewScrollArea);
     
     // Add button
     auto *addButtonContainer = new QWidget();
@@ -100,93 +154,246 @@ void LibraryWindow::setupUI() {
     // Final setup
     m_splitter->addWidget(leftPanel);
     m_splitter->addWidget(m_rightPanel);
+    m_splitter->setStretchFactor(0, 1);  // Left panel gets minimal space
+    m_splitter->setStretchFactor(1, 4);  // Right panel gets 4x more space
     setCentralWidget(m_splitter);
     
     // Toolbar
     setupToolbar();
 }
 
-void LibraryWindow::setupContentListView() {
-    m_contentContainer = new QStackedWidget();
-    m_contentList = new QListWidget();
-    m_contentList->setViewMode(QListWidget::IconMode);
-    m_contentList->setIconSize(m_previewSize);
-    m_contentList->setResizeMode(QListWidget::Adjust);
-    m_contentList->setMovement(QListWidget::Static);
+void LibraryWindow::setupPreviewWidget() {
+    // Create the model and proxy model if not already created
+    if (!m_contentModel) {
+        m_contentModel = new ContentModel(this);
+    }
     
+    if (!m_proxyModel) {
+        m_proxyModel = new ContentProxyModel(this);
+        m_proxyModel->setSourceModel(m_contentModel);
+    }
+    
+    // Create scroll area
+    m_previewScrollArea = new QScrollArea();
+    m_previewScrollArea->setWidgetResizable(true);
+    m_previewScrollArea->setHorizontalScrollBarPolicy(Qt::ScrollBarAsNeeded);
+    m_previewScrollArea->setFrameShape(QFrame::NoFrame);
+    
+    // Create the preview widget with a grid layout
+    m_previewWidget = new QWidget();
+    m_previewLayout = new QGridLayout(m_previewWidget);
+    m_previewLayout->setAlignment(Qt::AlignTop | Qt::AlignLeft);
+    m_previewLayout->setSpacing(10); // Reduced spacing
+    m_previewLayout->setContentsMargins(5, 5, 5, 5);
+    
+    // Add no results label
     m_noResultsLabel = new QLabel();
+    m_noResultsLabel->setPixmap(QPixmap(":assets/icons/no-results.png"));
     m_noResultsLabel->setAlignment(Qt::AlignCenter);
-    m_noResultsLabel->setText("<center><h2 style='color:gray;'>No results found</h2>"
-                            "<p style='color:gray;'>Try different search terms</p></center>");
+    m_noResultsLabel->setText("<center><h2 style='color:gray;'>No results found</h2></center>");
     m_noResultsLabel->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
+    m_noResultsLabel->hide();
     
-    m_contentContainer->addWidget(m_contentList);
+    m_previewLayout->addWidget(m_noResultsLabel, 0, 0, 1, 6); // Span all columns
+    m_previewScrollArea->setWidget(m_previewWidget);
+}
+
+void LibraryWindow::setupSortingControls() {
+    // Create sorting combo box
+
+
+    m_sortingComboBox = new QComboBox();
+    m_sortingComboBox->setToolTip("Sort by");
+    m_sortingComboBox->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed);
+    m_sortingComboBox->setMinimumWidth(120);
+    m_sortingComboBox->addItem("Title", static_cast<int>(ContentModel::SortRole::Title));
+    m_sortingComboBox->addItem("Release Date", static_cast<int>(ContentModel::SortRole::ReleaseDate));
+    m_sortingComboBox->addItem("Rating", static_cast<int>(ContentModel::SortRole::Rating));
+    m_sortingComboBox->addItem("Creator", static_cast<int>(ContentModel::SortRole::Creator));
+    m_sortingComboBox->addItem("Type", static_cast<int>(ContentModel::SortRole::Type));
+    
+    // Create sort direction button
+    m_sortDirectionButton = new QToolButton();
+    m_sortDirectionButton->setIcon(QIcon(":assets/icons/ord-cresc.png"));
+    m_sortDirectionButton->setIconSize(QSize(28, 28));
+    m_sortDirectionButton->setCheckable(true);
+    m_sortDirectionButton->setToolTip("Sort Ascending/Descending");
+
+    // Connect signals
+    connect(m_sortingComboBox, QOverload<int>::of(&QComboBox::currentIndexChanged), 
+        [this](int index) {
+            int role = m_sortingComboBox->itemData(index).toInt();
+            m_proxyModel->setSortRole(static_cast<ContentModel::SortRole>(role));
+            updateContentPreviews();
+        });
+    
+    connect(m_sortDirectionButton, &QToolButton::clicked, this, &LibraryWindow::changeSortDirection);
+}
+
+void LibraryWindow::changeSortDirection() {
+    bool isAscending = !m_sortDirectionButton->isChecked();
+    
+    // Update the button icon
+    m_sortDirectionButton->setIcon(QIcon(isAscending ? 
+        ":assets/icons/ord-cresc.png" : 
+        ":assets/icons/ord-decresc.png"));
+    
+    
+    // Update the sort order in the proxy model
+    m_proxyModel->sort(0, isAscending ? Qt::AscendingOrder : Qt::DescendingOrder);
+    
+    // Refresh the content previews
+    updateContentPreviews();
+}
+
+void LibraryWindow::setupContentTable() {
+    m_contentContainer = new QStackedWidget();
+    
+    // Create the model and proxy model if they don't exist yet
+    if (!m_contentModel) {
+        m_contentModel = new ContentModel(this);
+    }
+    
+    if (!m_proxyModel) {
+        m_proxyModel = new ContentProxyModel(this);
+        m_proxyModel->setSourceModel(m_contentModel);
+    }
+    
+    // Create the table view
+    m_contentTable = new QTableView();
+    m_contentTable->setModel(m_proxyModel);
+    m_contentTable->setSelectionBehavior(QAbstractItemView::SelectRows);
+    m_contentTable->setSelectionMode(QAbstractItemView::SingleSelection);
+    m_contentTable->setSortingEnabled(true);
+    m_contentTable->horizontalHeader()->setSectionResizeMode(QHeaderView::Stretch);
+    m_contentTable->verticalHeader()->setVisible(false);
+    m_contentTable->setAlternatingRowColors(true);
+    
+    // No results label (using the one already defined)
+    if (!m_noResultsLabel) {
+        m_noResultsLabel = new QLabel();
+        m_noResultsLabel->setAlignment(Qt::AlignCenter);
+        m_noResultsLabel->setText("<center><h2 style='color:gray;'>No results found</h2>"
+                                 "<p style='color:gray;'>Try different search terms</p></center>");
+        m_noResultsLabel->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
+    }
+    
+    m_contentContainer->addWidget(m_contentTable);
     m_contentContainer->addWidget(m_noResultsLabel);
 }
 
 void LibraryWindow::setupFilterSection() {
-    // Create the filters dropdown section
+    // Create a compact filters section
     m_filtersSection = new QWidget();
     auto* filtersLayout = new QVBoxLayout(m_filtersSection);
-    filtersLayout->setContentsMargins(0, 10, 0, 10);
-    
-    // Genre filter group
-    auto* genreGroupBox = new QGroupBox("Genre Filters");
-    auto* genreLayout = new QVBoxLayout(genreGroupBox);
-    m_genreFilterList = createFilterList({
-        "Action",
-        "Comedy",
-        "Drama",
-        "Horror",
-        "Romance",
-        "Thriller",
-        "Mystery",
-        "Adventure",
-        "Western",
-        "War",
-        "Musical",
-        "Family",
-        "Sports",
-        "Superhero"    
-    });
-    genreLayout->addWidget(m_genreFilterList);
-    
-    // Type filter group
-    auto* typeGroupBox = new QGroupBox("Type Filters");
-    auto* typeLayout = new QVBoxLayout(typeGroupBox);
-    m_typeFilterList = createFilterList({"Book", "Comic", "Film", "Serie", "VideoGame"});
-    typeLayout->addWidget(m_typeFilterList);
-    
+    filtersLayout->setContentsMargins(0, 0, 0, 0);
+    filtersLayout->setSpacing(5);
 
-    // Status filter group
-    auto* statusGroupBox = new QGroupBox("Status Filters");
-    auto* statusLayout = new QVBoxLayout(statusGroupBox);
-    m_statusFilterList = createFilterList({"Watched", "Starred"});
-    statusLayout->addWidget(m_statusFilterList);
+    // Type filter section
+    auto* typeGroup = new QGroupBox("Content Types");
+    typeGroup->setFlat(true);
+    typeGroup->setStyleSheet("QGroupBox { border: 1px solid gray; border-radius: 3px; margin-top: 6px; }");
     
-    // Clear button and counter
-    auto* filterFooter = new QWidget();
-    auto* footerLayout = new QHBoxLayout(filterFooter);
-    m_clearFiltersBtn = new QPushButton("Clear All Filters");
+    auto* typeLayout = new QVBoxLayout(typeGroup);
+    typeLayout->setContentsMargins(5, 15, 5, 5);
+    
+    QStringList types = {"Book", "Comic", "Film", "Serie", "VideoGame"};
+    for (const QString& type : types) {
+        QCheckBox* cb = new QCheckBox(type);
+        cb->setProperty("filterType", "type");
+        cb->setProperty("filterValue", type);
+        connect(cb, &QCheckBox::stateChanged, this, &LibraryWindow::applyFilters);
+        typeLayout->addWidget(cb);
+    }
+    filtersLayout->addWidget(typeGroup);
+
+    // Genre filter section
+    auto* genreGroup = new QGroupBox("Genres");
+    genreGroup->setFlat(true);
+    genreGroup->setStyleSheet("QGroupBox { border: 1px solid gray; border-radius: 3px; margin-top: 6px; }");
+    
+    auto* genreLayout = new QVBoxLayout(genreGroup);
+    genreLayout->setContentsMargins(5, 15, 5, 5);
+    
+    // Get all available subgenres from the Content enum
+    QMap<int, QString> genreMap;
+    genreMap[static_cast<int>(Subgenre::NONE)] = "None";
+    genreMap[static_cast<int>(Subgenre::ACTION)] = "Action";
+    genreMap[static_cast<int>(Subgenre::ADVENTURE)] = "Adventure";
+    genreMap[static_cast<int>(Subgenre::COMEDY)] = "Comedy";
+    genreMap[static_cast<int>(Subgenre::DRAMA)] = "Drama";
+    genreMap[static_cast<int>(Subgenre::HORROR)] = "Horror";
+    genreMap[static_cast<int>(Subgenre::ROMANCE)] = "Romance";
+    genreMap[static_cast<int>(Subgenre::THRILLER)] = "Thriller";
+    genreMap[static_cast<int>(Subgenre::MYSTERY)] = "Mystery";
+    genreMap[static_cast<int>(Subgenre::WESTERN)] = "Western";
+    genreMap[static_cast<int>(Subgenre::WAR)] = "War";
+    genreMap[static_cast<int>(Subgenre::MUSICAL)] = "Musical";
+    genreMap[static_cast<int>(Subgenre::FAMILY)] = "Family";
+    genreMap[static_cast<int>(Subgenre::SPORTS)] = "Sports";
+    genreMap[static_cast<int>(Subgenre::SUPERHERO)] = "Superhero";
+    
+    for (auto it = genreMap.begin(); it != genreMap.end(); ++it) {
+        QCheckBox* cb = new QCheckBox(it.value());
+        cb->setProperty("filterType", "genre");
+        cb->setProperty("filterValue", it.key());
+        connect(cb, &QCheckBox::stateChanged, this, &LibraryWindow::applyFilters);
+        genreLayout->addWidget(cb);
+    }
+    filtersLayout->addWidget(genreGroup);
+
+    // Status filters (Watched/Starred)
+    auto* statusGroup = new QGroupBox("Status");
+    statusGroup->setFlat(true);
+    statusGroup->setStyleSheet("QGroupBox { border: 1px solid gray; border-radius: 3px; margin-top: 6px; }");
+    
+    auto* statusLayout = new QVBoxLayout(statusGroup);
+    statusLayout->setContentsMargins(5, 15, 5, 5);
+    
+    QCheckBox* watchedCb = new QCheckBox("Watched Only");
+    watchedCb->setProperty("filterType", "watched");
+    connect(watchedCb, &QCheckBox::stateChanged, 
+        [this](int state) {
+            m_proxyModel->setWatchedFilter(state == Qt::Checked);
+            updateFilterCounter();
+            updateContentPreviews();
+        });
+    statusLayout->addWidget(watchedCb);
+    
+    QCheckBox* starredCb = new QCheckBox("Starred Only");
+    starredCb->setProperty("filterType", "starred");
+    connect(starredCb, &QCheckBox::stateChanged, 
+        [this](int state) {
+            m_proxyModel->setStarredFilter(state == Qt::Checked);
+            updateFilterCounter();
+            updateContentPreviews();
+        });
+    statusLayout->addWidget(starredCb);
+    
+    filtersLayout->addWidget(statusGroup);
+
+    // Clear button and counter in one row
+    auto* bottomRow = new QWidget();
+    auto* bottomLayout = new QHBoxLayout(bottomRow);
+    bottomLayout->setContentsMargins(0, 0, 0, 0);
+    
+    m_clearFiltersBtn = new QPushButton("Clear All");
+    m_clearFiltersBtn->setMaximumWidth(80);
+    bottomLayout->addWidget(m_clearFiltersBtn);
+    
     m_filterCounter = new QLabel("0 items");
-    footerLayout->addWidget(m_clearFiltersBtn);
-    footerLayout->addWidget(m_filterCounter);
+    bottomLayout->addWidget(m_filterCounter);
+    bottomLayout->addStretch();
     
-    // Add groups to main filter layout
-    filtersLayout->addWidget(typeGroupBox);
-    filtersLayout->addWidget(genreGroupBox);
-    filtersLayout->addWidget(statusGroupBox);
-    filtersLayout->addWidget(filterFooter);
-    
+    filtersLayout->addWidget(bottomRow);
+
     // Initially hide the filters section
     m_filtersSection->setVisible(false);
-    
-    // Create toggle button for filters
-    m_filtersToggleBtn = new QToolButton();
-    m_filtersToggleBtn->setText("Filters ▼");
-    m_filtersToggleBtn->setToolButtonStyle(Qt::ToolButtonTextBesideIcon);
-    m_filtersToggleBtn->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Preferred);
-    m_filtersToggleBtn->setCheckable(true);
+}
+
+void LibraryWindow::toggleFiltersSection() {
+    m_filtersSection->setVisible(!m_filtersSection->isVisible());
+    m_filtersToggleBtn->setChecked(m_filtersSection->isVisible());
 }
 
 void LibraryWindow::setupToolbar() {
@@ -198,8 +405,8 @@ void LibraryWindow::setupToolbar() {
 }
 
 void LibraryWindow::connectSignals() {
-    // Content list interactions
-    connect(m_contentList, &QListWidget::itemDoubleClicked, this, &LibraryWindow::showContentDetails);
+    // Content table interactions
+    connect(m_contentTable, &QTableView::doubleClicked, this, &LibraryWindow::showContentDetails);
 
     // Detail window signals
     connect(m_detailWindow, &ContentDetailWindow::editRequested, this, &LibraryWindow::editContent);
@@ -209,97 +416,100 @@ void LibraryWindow::connectSignals() {
 
     // Filter signals
     connect(m_filtersToggleBtn, &QToolButton::clicked, this, &LibraryWindow::toggleFiltersSection);
-    connect(m_genreFilterList, &QListWidget::itemChanged, this, &LibraryWindow::applyFilters);
-    connect(m_typeFilterList, &QListWidget::itemChanged, this, &LibraryWindow::applyFilters);
-    connect(m_statusFilterList, &QListWidget::itemChanged, this, &LibraryWindow::applyFilters);
     connect(m_clearFiltersBtn, &QPushButton::clicked, this, &LibraryWindow::clearFilters);
 
     // Search signals
-    m_searchTimer = new QTimer(this);
-    m_searchTimer->setSingleShot(true);
-    connect(m_searchTimer, &QTimer::timeout, this, &LibraryWindow::delayedSearch);
-
-    connect(m_searchBar, &QLineEdit::textChanged, [this]() {
-        m_clearSearchButton->setVisible(!m_searchBar->text().isEmpty());
-        m_searchTimer->start(SEARCH_DELAY_MS);
+    connect(m_searchBar, &QLineEdit::textChanged, this, &LibraryWindow::delayedSearch);
+    connect(m_searchTimer, &QTimer::timeout, this, [this]() {
+        applySearchFilter(m_searchBar->text());
     });
     connect(m_clearSearchButton, &QToolButton::clicked, this, &LibraryWindow::clearSearch);
 
-    // Add content
+    // Visibility of clear search button
+    connect(m_searchBar, &QLineEdit::textChanged, this, [this](const QString &text) {
+        m_clearSearchButton->setVisible(!text.isEmpty());
+    });
+
+    // Add button
     connect(m_add, &QToolButton::clicked, this, &LibraryWindow::showAddContentDialog);
+
+    // Import/Save actions
+    connect(m_importButton, &QToolButton::clicked, this, &LibraryWindow::importContent);
 }
 
-void LibraryWindow::delayedSearch() {
-    applyFilters();
+void LibraryWindow::createSaveMenu() {
+    m_saveMenu = new QMenu(this);
+    // Remove the existing style sheet and set icon size directly
+    m_saveMenu->setStyleSheet("QMenu::item { padding: 5px 10px; }");
+
+    // Create actions with 28px icons
+    auto* saveJson = new QAction(QIcon(":assets/icons/w_json.png"), "Save as JSON", this);
+    saveJson->setIconText("Save as JSON");  // Ensure text is preserved
+    saveJson->setToolTip("Export library as JSON file");
+    connect(saveJson, &QAction::triggered, this, [this]() { saveToFile("json"); });
+    
+    auto* saveXml = new QAction(QIcon(":assets/icons/w_xml.png"), "Save as XML", this);
+    saveXml->setIconText("Save as XML");    // Ensure text is preserved
+    saveXml->setToolTip("Export library as XML file");
+    connect(saveXml, &QAction::triggered, this, [this]() { saveToFile("xml"); });
+    
+    // Add actions to menu
+    m_saveMenu->addAction(saveJson);
+    m_saveMenu->addAction(saveXml);
+    
+    // Create the save button
+    m_saveButton = new QToolButton();
+    m_saveButton->setText("Save");
+    m_saveButton->setIcon(QIcon(":assets/icons/save.png"));
+    m_saveButton->setToolTip("Save library to file. Supported formats: JSON, XML");
+    m_saveButton->setMenu(m_saveMenu);
+    m_saveButton->setPopupMode(QToolButton::InstantPopup);
+    
+    // Ensure the button's icon is also 28px
+    m_saveButton->setIconSize(QSize(28, 28));
+}
+void LibraryWindow::createImportButton() {
+    m_importButton = new QToolButton();
+    m_importButton->setText("Import");
+    m_importButton->setIcon(QIcon(":assets/icons/import.png"));
+    m_importButton->setToolTip("Import content from file");
 }
 
-void LibraryWindow::clearSearch() {
-    m_searchBar->clear();
-    applyFilters();
+QListWidget* LibraryWindow::createFilterList(const QStringList& options) {
+    QListWidget* list = new QListWidget();
+    list->setSelectionMode(QAbstractItemView::NoSelection);
+    
+    for (const QString& option : options) {
+        QListWidgetItem* item = new QListWidgetItem(option, list);
+        item->setFlags(item->flags() | Qt::ItemIsUserCheckable);
+        item->setCheckState(Qt::Unchecked);
+    }
+    
+    return list;
 }
 
 void LibraryWindow::updateContentDisplay() {
-    auto& library = ScienceFiction_Library::getInstance();
-    m_contentList->clear();
-    
-    std::vector<Content*> contentList;
-    if (library.getShownContentList().empty() && m_searchBar->text().isEmpty()) {
-        for (const auto& content : library.getContentList()) {
-            contentList.push_back(content.get());
-        }
-    } else {
-        for (const auto& content : library.getShownContentList()) {
-            contentList.push_back(content);
-        }
-    }
-    
-    if (!contentList.empty()) {
-        for (const auto& content : contentList) {
-            auto* item = new QListWidgetItem();
-            loadContentPreview(content, item);
-            m_contentList->addItem(item);
-        }
-        m_contentContainer->setCurrentIndex(0);
-    } else {
-        m_contentContainer->setCurrentIndex(1);
-    }
-    
-    // Update filter counter
-    m_filterCounter->setText(QString("%1 items").arg(contentList.size()));
+    m_contentModel->refreshData();
+    updateContentPreviews();
+    updateFilterCounter();
 }
 
-void LibraryWindow::showContentDetails(QListWidgetItem *item) {
-    if (!item) return;
-
-    bool ok;
-    unsigned int id = item->data(Qt::UserRole).toUInt(&ok);
-    Content* content = ScienceFiction_Library::getInstance().searchId(id);
+void LibraryWindow::showContentDetails(const QModelIndex &index) {
+    if (!index.isValid())
+        return;
     
-    if (ok && content) {
+    // Get the content using the proxy model
+    QModelIndex sourceIndex = m_proxyModel->mapToSource(index);
+    Content* content = m_contentModel->getContent(sourceIndex.row());
+    
+    if (content) {
         m_detailWindow->setContent(content);
-        m_rightPanel->setCurrentIndex(1);
+        m_rightPanel->setCurrentIndex(1); // Show detail view
     }
 }
 
 void LibraryWindow::hideDetailView() {
-    m_rightPanel->setCurrentIndex(0);
-}
-
-void LibraryWindow::editContent(Content* content) {
-    if (!content) {
-        qCritical() << "Attempted to edit null content!";
-        return;
-    }
-
-    auto *editWindow = new ContentEditWindow(content, this);
-    editWindow->setAttribute(Qt::WA_DeleteOnClose);
-    
-    connect(editWindow, &ContentEditWindow::contentUpdated, 
-            this, &LibraryWindow::updateContentDisplay);
-    connect(editWindow, &ContentEditWindow::contentUpdated,
-            this, [this]() { emit contentDataChanged(); });
-            
-    editWindow->exec();
+    m_rightPanel->setCurrentIndex(0); // Show main view
 }
 
 void LibraryWindow::showAddContentDialog(bool checked) {
@@ -314,6 +524,274 @@ void LibraryWindow::showAddContentDialog(bool checked) {
             editContent(newContent);
         }
     }
+}
+
+void LibraryWindow::editContent(Content* content) {
+    if (!content)
+        return;
+    
+    ContentEditWindow editWindow(content, this);
+    
+    if (editWindow.exec() == QDialog::Accepted) {
+        // After editing, update if it's a new content or existing
+        auto& library = ScienceFiction_Library::getInstance();
+        
+        // Check if this is a new content or existing one
+        bool isNew = true;
+        for (const auto& existingContent : library.getContentList()) {
+            if (existingContent.get() == content) {
+                isNew = false;
+                break;
+            }
+        }
+        
+        if (isNew) {
+            // This is a new content, add it to the library
+            library.addContent(content);
+        }
+        
+        // Update the UI
+        updateContentDisplay();
+        emit contentDataChanged();
+    } else if (content) {
+        // If it's a new content that was canceled, we need to delete it
+        bool isNew = true;
+        auto& library = ScienceFiction_Library::getInstance();
+        for (const auto& existingContent : library.getContentList()) {
+            if (existingContent.get() == content) {
+                isNew = false;
+                break;
+            }
+        }
+        
+        if (isNew) {
+            delete content;
+        }
+    }
+}
+
+void LibraryWindow::applyQuickFilter(int index) {
+    // Quick filter from combo box or similar
+    // Implement if needed
+}
+
+void LibraryWindow::applySearchFilter(const QString &text) {
+    if (m_proxyModel) {
+        m_proxyModel->setTitleFilter(text);
+        updateContentPreviews();
+        updateFilterCounter();
+    }
+}
+
+void LibraryWindow::delayedSearch() {
+    // Reset the timer each time text changes
+    m_searchTimer->start();
+}
+
+void LibraryWindow::updateFilterCounter() {
+    int count = m_proxyModel->rowCount();
+    m_filterCounter->setText(QString("%1 item%2").arg(count).arg(count == 1 ? "" : "s"));
+}
+
+void LibraryWindow::clearSearch() {
+    m_searchBar->clear();
+    m_clearSearchButton->hide();
+    applySearchFilter("");
+}
+
+void LibraryWindow::updateContentPreviews() {
+    // Clear existing layout first (except for no results label)
+    QLayoutItem* item;
+    while ((item = m_previewLayout->takeAt(0)) != nullptr) {
+        if (item->widget() != m_noResultsLabel) {
+            delete item->widget();
+        }
+        delete item;
+    }
+    
+    // Add the no results label back
+    m_previewLayout->addWidget(m_noResultsLabel, 0, 0, 1, 6);
+    
+    // Get filtered content count
+    int count = m_proxyModel->rowCount();
+    
+    // Show or hide the no results label
+    m_noResultsLabel->setVisible(count == 0);
+    
+    if (count == 0) {
+        return; // No need to create cards
+    }
+    
+    // Create cards for visible content
+    const int columns = 5; // Number of cards per row
+    int row = 0, col = 0;
+    
+    for (int i = 0; i < count; ++i) {
+        QModelIndex proxyIndex = m_proxyModel->index(i, 0);
+        if (!proxyIndex.isValid()) continue;
+        
+        QModelIndex sourceIndex = m_proxyModel->mapToSource(proxyIndex);
+        Content* content = m_contentModel->getContent(sourceIndex.row());
+        
+        if (content) {
+            QWidget* card = createContentPreviewCard(content);
+            if (card) {
+                m_previewLayout->addWidget(card, row, col);
+                
+                // Update grid position
+                col++;
+                if (col >= columns) {
+                    col = 0;
+                    row++;
+                }
+            }
+        }
+    }
+}
+
+QWidget* LibraryWindow::createContentPreviewCard(Content* content) {
+    if (!content) return nullptr;
+    
+    // Create a card widget with a nice border
+    QWidget* card = new QWidget();
+    card->setObjectName("ContentCard");
+    card->setStyleSheet("QWidget#ContentCard { border: 1px solid #ccc; border-radius: 5px; background-color: transparent; }");
+    card->setCursor(Qt::PointingHandCursor);
+    
+    // Create layout for the card
+    QVBoxLayout* cardLayout = new QVBoxLayout(card);
+    cardLayout->setContentsMargins(8, 8, 8, 8);
+    
+    // Add cover image (using a label with colored background as placeholder)
+    QLabel* coverLabel = new QLabel();
+    coverLabel->setFixedSize(180, 240);
+    coverLabel->setAlignment(Qt::AlignCenter);
+    coverLabel->setStyleSheet("background-color: transparent");
+    
+    // Get cover image path
+    QString coverPath = QString::fromStdString(content->getImage());
+    if (!coverPath.isEmpty() && QFile::exists(coverPath)) {
+        coverLabel->setPixmap(QPixmap(coverPath).scaled(180, 240, Qt::KeepAspectRatio, Qt::SmoothTransformation));
+    } else {
+        // Display placeholder with title text
+        coverLabel->setPixmap(QPixmap(
+            ":assets/icons/no-image.png"
+        ));
+    }
+    
+    // Content details
+    QLabel* titleLabel = new QLabel(QString::fromStdString(content->getTitle()));
+    titleLabel->setWordWrap(true);
+    titleLabel->setAlignment(Qt::AlignCenter);
+    titleLabel->setStyleSheet("font-weight: bold; font-size: 14px;");
+    
+    QLabel* typeLabel = new QLabel(QString::fromStdString(content->getType()));
+    typeLabel->setAlignment(Qt::AlignCenter);
+    typeLabel->setStyleSheet("background-color: transparent");
+    
+    QLabel* genreLabel = new QLabel(QString::fromStdString(content->getSubgenreString()));
+    genreLabel->setAlignment(Qt::AlignCenter);
+    genreLabel->setStyleSheet("background-color: transparent");
+    
+    // Add year label
+    QLabel* yearLabel = new QLabel(QString::number(content->getYear()));
+    yearLabel->setAlignment(Qt::AlignCenter);
+    
+    // Watch/Star indicator
+    QHBoxLayout* statusLayout = new QHBoxLayout();
+    statusLayout->setAlignment(Qt::AlignCenter);
+    
+    if (content->getWatched()) {
+        QLabel* watchedLabel = new QLabel("✓ Watched");
+        watchedLabel->setStyleSheet("color: green;");
+        statusLayout->addWidget(watchedLabel);
+    }
+    
+    if (content->getStarred()) {
+        QLabel* starredLabel = new QLabel("★ Starred");
+        starredLabel->setStyleSheet("color: orange;");
+        statusLayout->addWidget(starredLabel);
+    }
+    
+    // Add all elements to card
+    cardLayout->addWidget(coverLabel);
+    cardLayout->addWidget(titleLabel);
+    cardLayout->addWidget(typeLabel);
+    cardLayout->addWidget(genreLabel);
+    cardLayout->addWidget(yearLabel);
+    cardLayout->addLayout(statusLayout);
+    
+    // Add click handler to the card
+    card->installEventFilter(this);
+    card->setProperty("content_ptr", QVariant::fromValue(content));
+    
+    // Connect to click handler
+   /* connect(card, &QWidget::mouseDoubleClickEvent, [this, content](QMouseEvent*) {
+        if (content) {
+            m_detailWindow->setContent(content);
+            m_rightPanel->setCurrentIndex(1); // Show detail view
+        }
+    });*/
+    
+    return card;
+}
+
+void LibraryWindow::clearFilters() {
+    // Clear search bar
+    m_searchBar->clear();
+    
+    // Clear all checkboxes in the filters section
+    auto checkboxes = m_filtersSection->findChildren<QCheckBox*>();
+    for (QCheckBox* cb : checkboxes) {
+        cb->blockSignals(true);
+        cb->setChecked(false);
+        cb->blockSignals(false);
+    }
+    
+    // Reset proxy model filters
+    m_proxyModel->clearFilters();
+    
+    // Update UI
+    updateContentPreviews();
+    updateFilterCounter();
+}
+
+void LibraryWindow::applyFilters() {
+    if (!m_proxyModel) return;
+    
+    // First clear current filters
+    m_proxyModel->clearFilters();
+    
+    // Apply search filter (keep it)
+    if (!m_searchBar->text().isEmpty()) {
+        m_proxyModel->setTitleFilter(m_searchBar->text());
+    }
+    
+    // Find all checked filters
+    auto checkboxes = m_filtersSection->findChildren<QCheckBox*>();
+    for (QCheckBox* cb : checkboxes) {
+        if (cb->isChecked()) {
+            QString filterType = cb->property("filterType").toString();
+            
+            if (filterType == "type") {
+                m_proxyModel->setTypeFilter(cb->text());
+            } 
+            else if (filterType == "genre") {
+                int genreValue = cb->property("filterValue").toInt();
+                m_proxyModel->setSubgenreFilter(static_cast<Subgenre>(genreValue));
+            }
+            else if (filterType == "watched") {
+                m_proxyModel->setWatchedFilter(true);
+            }
+            else if (filterType == "starred") {
+                m_proxyModel->setStarredFilter(true);
+            }
+        }
+    }
+    
+    // Update display
+    updateContentPreviews();
+    updateFilterCounter();
 }
 
 void LibraryWindow::importContent() {
@@ -351,200 +829,4 @@ void LibraryWindow::saveToFile(const QString &extension) {
             QMessageBox::warning(this, "Error", "Failed to save library");
         }
     }
-}
-
-void LibraryWindow::createSaveMenu() {
-    m_saveMenu = new QMenu("Save Options", this);
-    
-    auto *saveXmlAction = m_saveMenu->addAction(QIcon(":assets/icons/w_xml.png"), "Save as XML");
-    saveXmlAction->setToolTip("Export library as XML file");
-    connect(saveXmlAction, &QAction::triggered, [this]() { saveToFile("xml"); });
-    
-    auto *saveJsonAction = m_saveMenu->addAction(QIcon(":assets/icons/w_json.png"), "Save as JSON");
-    saveJsonAction->setToolTip("Export library as JSON file");
-    connect(saveJsonAction, &QAction::triggered, [this]() { saveToFile("json"); });
-    
-    m_saveButton = new QToolButton();
-    m_saveButton->setText(" Save ");
-    m_saveButton->setIcon(QIcon(":assets/icons/save.png"));
-    m_saveButton->setToolTip("Save library to file");
-    m_saveButton->setPopupMode(QToolButton::MenuButtonPopup);
-    m_saveButton->setMenu(m_saveMenu);
-}
-
-void LibraryWindow::createImportButton() {
-    m_importButton = new QToolButton();
-    m_importButton->setText(" Import ");
-    m_importButton->setIcon(QIcon(":assets/icons/import.png"));
-    m_importButton->setToolTip("Import content from file. Supported formats: XML, JSON");
-    connect(m_importButton, &QToolButton::clicked, this, &LibraryWindow::importContent);
-}
-
-void LibraryWindow::applyQuickFilter(int index) {
-    clearFilters();
-    
-    static const QMap<int, std::pair<QListWidget*, QString>> filterMap = {
-        {1, {m_genreFilterList, "Action"}},
-        {2, {m_genreFilterList, "Comedy"}},
-        {3, {m_genreFilterList, "Drama"}},
-        {4, {m_genreFilterList, "Horror"}},
-        {5, {m_genreFilterList, "Romance"}},
-        {6, {m_genreFilterList, "Thriller"}},
-        {7, {m_genreFilterList, "Mystery"}},
-        {8, {m_genreFilterList, "Adventure"}},
-        {9, {m_genreFilterList, "Western"}},
-        {10, {m_genreFilterList, "War"}},
-        {11, {m_genreFilterList, "Musical"}},
-        {12, {m_genreFilterList, "Family"}},
-        {13, {m_genreFilterList, "Sports"}},
-        {14, {m_genreFilterList, "Superhero"}},
-
-        {1, {m_typeFilterList, "Book"}},
-        {2, {m_typeFilterList, "Comic"}},
-        {3, {m_typeFilterList, "Film"}},
-        {4, {m_typeFilterList, "Serie"}},
-        {5, {m_typeFilterList, "VideoGame"}},
-
-        {1, {m_statusFilterList, "Watched"}},
-        {2, {m_statusFilterList, "Unwatched"}},
-
-     
-    };
-    
-    if (filterMap.contains(index)) {
-        auto [list, text] = filterMap[index];
-        for (int i = 0; i < list->count(); i++) {
-            if (list->item(i)->text() == text) {
-                list->item(i)->setCheckState(Qt::Checked);
-                break;
-            }
-        }
-    }
-    applyFilters();
-}
-
-void LibraryWindow::applyFilters() {
-    auto& library = ScienceFiction_Library::getInstance();
-    library.clearFilters();
-    
-    // Apply title filter
-    if (!m_searchBar->text().isEmpty()) {
-        library.filterByTitle(m_searchBar->text().toStdString());
-    }
-    
-    // Apply type filters
-    for (int i = 0; i < m_typeFilterList->count(); i++) {
-        /*QListWidgetItem* item = m_typeFilterList->item(i);
-        if (item->checkState() == Qt::Checked) {
-            if (item->text() == "Book") {
-                library.filterByType(static_cast<std::underlying_type_t<ContentType>>(ContentType::BOOK));
-            } 
-            else if (item->text() == "Comic") {
-                library.filterByType(static_cast<std::underlying_type_t<ContentType>>(ContentType::COMIC));
-            } 
-            else if (item->text() == "Film") {
-                library.filterByType(static_cast<std::underlying_type_t<ContentType>>(ContentType::FILM));
-            } 
-            else if (item->text() == "Serie") {
-                library.filterByType(static_cast<std::underlying_type_t<ContentType>>(ContentType::SERIE));
-            } 
-            else if (item->text() == "VideoGame") {
-                library.filterByType(static_cast<std::underlying_type_t<ContentType>>(ContentType::VIDEO_GAME));
-            }
-        }*/
-    }
-
-    // Apply genre filters
-    for (int i = 0; i < m_genreFilterList->count(); i++) {
-        QListWidgetItem* item = m_genreFilterList->item(i);
-        if (item->checkState() == Qt::Checked) {
-            if (item->text() == "Action") {
-                library.filterBySubgenreId(static_cast<std::underlying_type_t<Subgenre>>(Subgenre::ACTION));
-            } 
-            else if (item->text() == "War") {
-                library.filterBySubgenreId(static_cast<std::underlying_type_t<Subgenre>>(Subgenre::WAR));
-            }
-            // Add other genres as needed
-        }
-    }
-    
-
-    // Apply status filters
-    for (int i = 0; i < m_statusFilterList->count(); i++) {
-        QListWidgetItem* item = m_statusFilterList->item(i);
-        if (item->checkState() == Qt::Checked) {
-            if (item->text() == "Watched") {
-                library.filterByWatched(true);
-            }
-            else if (item->text() == "Starred") {
-                library.filterByStarred(true);
-            }
-        }
-    }
-    
-    updateContentDisplay();
-}
-
-void LibraryWindow::clearFilters() {
-    m_searchBar->clear();
-
-    for (int i = 0; i < m_typeFilterList->count(); i++) {
-        m_genreFilterList->item(i)->setCheckState(Qt::Unchecked);
-    }
-    
-    for (int i = 0; i < m_genreFilterList->count(); i++) {
-        m_genreFilterList->item(i)->setCheckState(Qt::Unchecked);
-    }
-    
-    for (int i = 0; i < m_statusFilterList->count(); i++) {
-        m_statusFilterList->item(i)->setCheckState(Qt::Unchecked);
-    }
-    
-    ScienceFiction_Library::getInstance().clearFilters();
-    updateContentDisplay();
-}
-
-void LibraryWindow::toggleFiltersSection() {
-    bool isVisible = !m_filtersSection->isVisible();
-    m_filtersSection->setVisible(isVisible);
-    m_filtersToggleBtn->setText(isVisible ? "Filters ▲" : "Filters ▼");
-}
-
-QPixmap LibraryWindow::loadSafePixmap(const QString &path, const QSize &size) const {
-    QPixmap pixmap;
-    if (!path.isEmpty() && QFile::exists(path)) {
-        pixmap.load(path);
-    }
-    
-    if (pixmap.isNull()) {
-        pixmap.load("assets/icons/default.png");
-    }
-    
-    return pixmap.scaled(size, Qt::KeepAspectRatio, Qt::SmoothTransformation);
-}
-
-QListWidget* LibraryWindow::createFilterList(const QStringList& options) {
-    auto* list = new QListWidget();
-    list->setMaximumHeight(120);
-    
-    for (const QString& option : options) {
-        QListWidgetItem* item = new QListWidgetItem(option, list);
-        item->setFlags(item->flags() | Qt::ItemIsUserCheckable);
-        item->setCheckState(Qt::Unchecked);
-    }
-    
-    return list;
-}
-
-void LibraryWindow::loadContentPreview(Content* content, QListWidgetItem* item) const {
-    if (!content) return;
-
-    item->setText(QString::fromStdString(content->getTitle()));
-    item->setData(Qt::UserRole, QVariant(content->getId()));
-    
-    QPixmap pixmap = loadSafePixmap(
-        QString::fromStdString(content->getImage()),
-        m_previewSize
-    );
-    item->setIcon(QIcon(pixmap));
 }
