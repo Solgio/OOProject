@@ -101,7 +101,7 @@ bool ContentProxyModel::filterAcceptsRow(int sourceRow, const QModelIndex &sourc
             return false;
     }
     
-    // Apply subgenre filter
+    // Apply subgenre filter    
     if (!m_subgenreFilters.isEmpty()) {
         auto subgenre = static_cast<Subgenre>(content->getSubgenre());
         // Check if content has ALL selected subgenres (AND condition)
@@ -111,7 +111,7 @@ bool ContentProxyModel::filterAcceptsRow(int sourceRow, const QModelIndex &sourc
             }
         }
     }
-    
+
     // Apply watched filter
     if (m_filterWatched && !content->getWatched())
         return false;

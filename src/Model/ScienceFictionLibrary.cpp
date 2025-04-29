@@ -5,8 +5,7 @@
 #include "../data_persistency/json/visitorJson.h"
 #include "../data_persistency/xml/xmlReader.h" // Ensure xmlReader is included
 #include "../data_persistency/json/jsonReader.h"
-using std::unique_ptr;
-using std::make_unique;
+using std::unique_ptr, std::make_unique;
 
 ScienceFiction_Library::ScienceFiction_Library():contentList(){}
 

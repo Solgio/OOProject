@@ -31,8 +31,6 @@
 #include <QHeaderView>
 #include <QListWidget>
 #include <QEvent>
-using std::underlying_type_t;
-using SortRole = ContentModel::SortRole;
 
 LibraryWindow::LibraryWindow(QWidget *parent) : QMainWindow(parent) {
     // Initialize search timer
@@ -116,12 +114,11 @@ void LibraryWindow::setupUI() {
     m_splitter = new QSplitter(Qt::Horizontal);
     m_toolBar = addToolBar("Main Toolbar");
     m_toolBar->setIconSize(QSize(28, 28));
+    
 
-    // Left panel (now contains search, sorting, and filters)
+    // Left panel (filters and sorting)
     auto *leftPanel = new QWidget();
     auto *leftLayout = new QVBoxLayout(leftPanel);
-    leftLayout->setContentsMargins(5, 5, 5, 5);
-    leftLayout->setSpacing(10);
     
     // Search bar with clear button
     auto *searchContainer = new QWidget();
@@ -142,21 +139,13 @@ void LibraryWindow::setupUI() {
     // Setup filter section
     setupFilterSection();
     
-    // Create scroll area for filters
-    auto* filtersScrollArea = new QScrollArea();
-    filtersScrollArea->setWidgetResizable(true);
-    filtersScrollArea->setWidget(m_filtersSection);
-    filtersScrollArea->setFrameShape(QFrame::NoFrame);
-    filtersScrollArea->setMinimumHeight(750); // Ensure reasonable minimum height
-    filtersScrollArea->setMaximumHeight(900); // Prevent it from taking too much space
-    
-    // Setup sorting controls
+    // Setup sorting controls 
     setupSortingControls();
     
     leftLayout->addWidget(searchContainer);
     leftLayout->addWidget(m_filtersToggleBtn);
-    leftLayout->addWidget(filtersScrollArea); // Add scroll area instead of direct widget
-    
+    leftLayout->addWidget(m_filtersSection);
+
     auto *sortingContainer = new QWidget();
     m_sortingLayout = new QHBoxLayout(sortingContainer);
     leftLayout->addWidget(new QLabel("Sort by:"));
@@ -168,6 +157,7 @@ void LibraryWindow::setupUI() {
     sortDirectionLayout->addStretch();
 
     m_sortingLayout->addWidget(m_sortingComboBox);
+    
     auto *sortDirectionContainer = new QWidget();
     sortDirectionContainer->setLayout(sortDirectionLayout);
     m_sortingLayout->addWidget(sortDirectionContainer);
@@ -217,15 +207,8 @@ void LibraryWindow::setupUI() {
     
     // Toolbar
     setupToolbar();
-    
-    // Initially hide the filters scroll area
-    filtersScrollArea->setVisible(false);
-    // Update the toggle button to control the scroll area visibility
-    connect(m_filtersToggleBtn, &QToolButton::clicked, [filtersScrollArea, this](bool checked) {
-        filtersScrollArea->setVisible(checked);
-        this->toggleFiltersSection();
-    });
 }
+
 void LibraryWindow::setupPreviewWidget() {
     // Create the model and proxy model if not already created
     if (!m_contentModel) {
@@ -268,11 +251,11 @@ void LibraryWindow::setupSortingControls() {
     m_sortingComboBox->setToolTip("Sort by");
     m_sortingComboBox->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed);
     m_sortingComboBox->setMinimumWidth(120);
-    m_sortingComboBox->addItem("Title", static_cast<underlying_type_t<SortRole>>(SortRole::Title));
-    m_sortingComboBox->addItem("Release Date", static_cast<underlying_type_t<SortRole>>(SortRole::ReleaseDate));
-    m_sortingComboBox->addItem("Rating", static_cast<underlying_type_t<SortRole>>(SortRole::Rating));
-    m_sortingComboBox->addItem("Creator", static_cast<underlying_type_t<SortRole>>(SortRole::Creator));
-    m_sortingComboBox->addItem("Type", static_cast<underlying_type_t<SortRole>>(SortRole::Type));
+    m_sortingComboBox->addItem("Title", static_cast<int>(ContentModel::SortRole::Title));
+    m_sortingComboBox->addItem("Release Date", static_cast<int>(ContentModel::SortRole::ReleaseDate));
+    m_sortingComboBox->addItem("Rating", static_cast<int>(ContentModel::SortRole::Rating));
+    m_sortingComboBox->addItem("Creator", static_cast<int>(ContentModel::SortRole::Creator));
+    m_sortingComboBox->addItem("Type", static_cast<int>(ContentModel::SortRole::Type));
     
     // Create sort direction button
     m_sortDirectionButton = new QToolButton();
@@ -345,124 +328,90 @@ void LibraryWindow::setupContentTable() {
 }
 
 void LibraryWindow::setupFilterSection() {
+    // Create a compact filters section
     m_filtersSection = new QWidget();
     auto* filtersLayout = new QVBoxLayout(m_filtersSection);
-    filtersLayout->setContentsMargins(5, 5, 5, 5);
-    filtersLayout->setSpacing(8);
+    filtersLayout->setContentsMargins(0, 0, 0, 0);
+    filtersLayout->setSpacing(5);
 
     // Define checkbox style for highlighting
     QString checkboxStyle = 
         "QCheckBox:checked {"
-        "   border: 2px solid rgb(15, 228, 61);"
-        "   border-radius: 3px;"
-        "   padding: 2px;"
+        "   border: 2px solid rgb(15, 228, 61);"  // Border color
+        "   border-radius: 3px;"         // Rounded corners
+        "   padding: 2px;"               // Some padding
         "}"
         "QCheckBox:hover {"
-        "   background-color:rgb(85, 87, 86);"
+        "   background-color:rgb(85, 87, 86);"  // Light gray on hover (unchecked)
         "}"
         "QCheckBox:checked:hover {"
-        "   background-color:rgb(0, 110, 59);"
+        "   background-color:rgb(0, 110, 59);"  // Slightly darker green on hover (checked)
         "}";
 
-    // Create dropdown buttons for each filter type
-    auto createDropdownSection = [this, checkboxStyle](const QString& title, const QStringList& items, const QString& filterType) {
-        auto* dropdownBtn = new QToolButton();
-        dropdownBtn->setText(title);
-        dropdownBtn->setToolButtonStyle(Qt::ToolButtonTextBesideIcon);
-        dropdownBtn->setArrowType(Qt::RightArrow);
-        dropdownBtn->setCheckable(true);
-        dropdownBtn->setChecked(false);
-        dropdownBtn->setStyleSheet("QToolButton {"
-        "   border: none;"
-        "   background: transparent;"
-        "   text-align: left;"
-        "   padding: 5px;"
-        "   color: palette(window-text);"
-        "}"
-        "QToolButton:hover {"
-        "   background: rgba(128, 128, 128, 30);"  // Slight hover effect
-        "}");
-
-        auto* contentWidget = new QWidget();
-        contentWidget->setVisible(false);
-        auto* contentLayout = new QVBoxLayout(contentWidget);
-        contentLayout->setContentsMargins(15, 5, 5, 5);
-        contentLayout->setSpacing(5);
-
-        for (const auto& item : items) {
-            auto* cb = new QCheckBox(item);
-            cb->setProperty("filterType", filterType);
-            cb->setProperty("filterValue", item);
-            cb->setStyleSheet(checkboxStyle);
-            connect(cb, &QCheckBox::checkStateChanged, this, &LibraryWindow::applyFilters);
-            contentLayout->addWidget(cb);
-        }
-
-        connect(dropdownBtn, &QToolButton::toggled, [dropdownBtn, contentWidget](bool checked) {
-            contentWidget->setVisible(checked);
-            dropdownBtn->setArrowType(checked ? Qt::DownArrow : Qt::RightArrow);
-        });
-
-        return std::make_pair(dropdownBtn, contentWidget);
-    };
-
     // Type filter section
-    auto [typeBtn, typeContent] = createDropdownSection("Content Types", 
-        {"Book", "Comic", "Film", "Serie", "VideoGame"}, "type");
-    filtersLayout->addWidget(typeBtn);
-    filtersLayout->addWidget(typeContent);
+    auto* typeGroup = new QGroupBox("Content Types");
+    typeGroup->setFlat(true);
+    typeGroup->setStyleSheet("QGroupBox { border: 1px solid gray; border-radius: 3px; margin-top: 6px; }");
+    
+    auto* typeLayout = new QVBoxLayout(typeGroup);
+    typeLayout->setContentsMargins(5, 15, 5, 5);
+    
+    QStringList types = {"Book", "Comic", "Film", "Serie", "VideoGame"};
+    for (const QString& type : types) {
+        QCheckBox* cb = new QCheckBox(type);
+        cb->setProperty("filterType", "type");
+        cb->setProperty("filterValue", type);
+        cb->setStyleSheet(checkboxStyle);
+        connect(cb, &QCheckBox::checkStateChanged, this, &LibraryWindow::applyFilters);
+        typeLayout->addWidget(cb);
+    }
+    filtersLayout->addWidget(typeGroup);
 
     // Genre filter section
+    auto* genreGroup = new QGroupBox("Genres");
+    genreGroup->setFlat(true);
+    genreGroup->setStyleSheet("QGroupBox { border: 1px solid gray; border-radius: 3px; margin-top: 6px; }");
+    
+    auto* genreLayout = new QVBoxLayout(genreGroup);
+    genreLayout->setContentsMargins(5, 15, 5, 5);
+    
+    // Get all available subgenres from the Content enum
     QMap<int, QString> genreMap;
-    genreMap[static_cast<underlying_type_t<Subgenre>>(Subgenre::NONE)] = "None";
-    genreMap[static_cast<underlying_type_t<Subgenre>>(Subgenre::ACTION)] = "Action";
-    genreMap[static_cast<underlying_type_t<Subgenre>>(Subgenre::ADVENTURE)] = "Adventure";
-    genreMap[static_cast<underlying_type_t<Subgenre>>(Subgenre::COMEDY)] = "Comedy";
-    genreMap[static_cast<underlying_type_t<Subgenre>>(Subgenre::DRAMA)] = "Drama";
-    genreMap[static_cast<underlying_type_t<Subgenre>>(Subgenre::HORROR)] = "Horror";
-    genreMap[static_cast<underlying_type_t<Subgenre>>(Subgenre::ROMANCE)] = "Romance";
-    genreMap[static_cast<underlying_type_t<Subgenre>>(Subgenre::THRILLER)] = "Thriller";
-    genreMap[static_cast<underlying_type_t<Subgenre>>(Subgenre::MYSTERY)] = "Mystery";
-    genreMap[static_cast<underlying_type_t<Subgenre>>(Subgenre::WESTERN)] = "Western";
-    genreMap[static_cast<underlying_type_t<Subgenre>>(Subgenre::WAR)] = "War";
-    genreMap[static_cast<underlying_type_t<Subgenre>>(Subgenre::MUSICAL)] = "Musical";
-    genreMap[static_cast<underlying_type_t<Subgenre>>(Subgenre::FAMILY)] = "Family";
-    genreMap[static_cast<underlying_type_t<Subgenre>>(Subgenre::SPORTS)] = "Sports";
-    genreMap[static_cast<underlying_type_t<Subgenre>>(Subgenre::SUPERHERO)] = "Superhero";
-    QStringList genres;
+    genreMap[static_cast<int>(Subgenre::NONE)] = "None";
+    genreMap[static_cast<int>(Subgenre::ACTION)] = "Action";
+    genreMap[static_cast<int>(Subgenre::ADVENTURE)] = "Adventure";
+    genreMap[static_cast<int>(Subgenre::COMEDY)] = "Comedy";
+    genreMap[static_cast<int>(Subgenre::DRAMA)] = "Drama";
+    genreMap[static_cast<int>(Subgenre::HORROR)] = "Horror";
+    genreMap[static_cast<int>(Subgenre::ROMANCE)] = "Romance";
+    genreMap[static_cast<int>(Subgenre::THRILLER)] = "Thriller";
+    genreMap[static_cast<int>(Subgenre::MYSTERY)] = "Mystery";
+    genreMap[static_cast<int>(Subgenre::WESTERN)] = "Western";
+    genreMap[static_cast<int>(Subgenre::WAR)] = "War";
+    genreMap[static_cast<int>(Subgenre::MUSICAL)] = "Musical";
+    genreMap[static_cast<int>(Subgenre::FAMILY)] = "Family";
+    genreMap[static_cast<int>(Subgenre::SPORTS)] = "Sports";
+    genreMap[static_cast<int>(Subgenre::SUPERHERO)] = "Superhero";
+    
     for (auto it = genreMap.begin(); it != genreMap.end(); ++it) {
-        genres << it.value();
+        QCheckBox* cb = new QCheckBox(it.value());
+        cb->setProperty("filterType", "genre");
+        cb->setProperty("filterValue", it.key());
+        cb->setStyleSheet(checkboxStyle);
+        connect(cb, &QCheckBox::checkStateChanged, this, &LibraryWindow::applyFilters);
+        genreLayout->addWidget(cb);
     }
+    filtersLayout->addWidget(genreGroup);
 
-    auto [genreBtn, genreContent] = createDropdownSection("Genres", genres, "genre");
-    filtersLayout->addWidget(genreBtn);
-    filtersLayout->addWidget(genreContent);
-
-    // Status filters
-    auto* statusBtn = new QToolButton();
-    statusBtn->setText("Status");
-    statusBtn->setToolButtonStyle(Qt::ToolButtonTextBesideIcon);
-    statusBtn->setArrowType(Qt::RightArrow);
-    statusBtn->setCheckable(true);
-    statusBtn->setChecked(false);
-    statusBtn->setStyleSheet(        "QToolButton {"
-        "   border: none;"
-        "   background: transparent;"
-        "   text-align: left;"
-        "   padding: 5px;"
-        "   color: palette(window-text);"
-        "}"
-        "QToolButton:hover {"
-        "   background: rgba(128, 128, 128, 30);"  // Slight hover effect
-        "}");
-
-    auto* statusContent = new QWidget();
-    statusContent->setVisible(false);
-    auto* statusLayout = new QVBoxLayout(statusContent);
-    statusLayout->setContentsMargins(15, 5, 5, 5);
-    statusLayout->setSpacing(5);
-
-    auto* watchedCb = new QCheckBox("Watched Only");
+    // Status filters (Watched/Starred)
+    auto* statusGroup = new QGroupBox("Status");
+    statusGroup->setFlat(true);
+    statusGroup->setStyleSheet("QGroupBox { border: 1px solid gray; border-radius: 3px; margin-top: 6px; }");
+    
+    auto* statusLayout = new QVBoxLayout(statusGroup);
+    statusLayout->setContentsMargins(5, 15, 5, 5);
+    
+    QCheckBox* watchedCb = new QCheckBox("Watched Only");
     watchedCb->setProperty("filterType", "watched");
     watchedCb->setStyleSheet(checkboxStyle);
     connect(watchedCb, &QCheckBox::checkStateChanged, 
@@ -473,8 +422,8 @@ void LibraryWindow::setupFilterSection() {
             updateFilterToggleButtonState();
         });
     statusLayout->addWidget(watchedCb);
-
-    auto* starredCb = new QCheckBox("Starred Only");
+    
+    QCheckBox* starredCb = new QCheckBox("Starred Only");
     starredCb->setProperty("filterType", "starred");
     starredCb->setStyleSheet(checkboxStyle);
     connect(starredCb, &QCheckBox::checkStateChanged, 
@@ -485,16 +434,10 @@ void LibraryWindow::setupFilterSection() {
             updateFilterToggleButtonState();
         });
     statusLayout->addWidget(starredCb);
+    
+    filtersLayout->addWidget(statusGroup);
 
-    connect(statusBtn, &QToolButton::toggled, [statusBtn, statusContent](bool checked) {
-        statusContent->setVisible(checked);
-        statusBtn->setArrowType(checked ? Qt::DownArrow : Qt::RightArrow);
-    });
-
-    filtersLayout->addWidget(statusBtn);
-    filtersLayout->addWidget(statusContent);
-
-    // Clear button and counter
+    // Clear button and counter in one row
     auto* bottomRow = new QWidget();
     auto* bottomLayout = new QHBoxLayout(bottomRow);
     bottomLayout->setContentsMargins(0, 0, 0, 0);
@@ -508,12 +451,18 @@ void LibraryWindow::setupFilterSection() {
     bottomLayout->addStretch();
     
     filtersLayout->addWidget(bottomRow);
-    filtersLayout->addStretch();
+
+    // Initially hide the filters section
+    m_filtersSection->setVisible(false);
 }
 
 void LibraryWindow::toggleFiltersSection() {
+    bool visible = !m_filtersSection->isVisible();
+    m_filtersSection->setVisible(visible);
+    m_filtersToggleBtn->setChecked(visible);
+    
     // Apply a highlight border when filter section is visible
-    if (m_filtersToggleBtn->isChecked()) {
+    if (visible) {
         m_filtersSection->setStyleSheet(" padding: 4px;");
     } else {
         m_filtersSection->setStyleSheet("");
@@ -714,7 +663,6 @@ void LibraryWindow::editContent(Content* content) {
     }
 }
 
-
 void LibraryWindow::applySearchFilter(const QString &text) {
     if (m_proxyModel) {
         m_proxyModel->setTitleFilter(text);
@@ -773,8 +721,8 @@ void LibraryWindow::updateContentPreviews() {
     const int columns = 5; // Number of cards per row
     int row = 0, col = 0;
     
-     // When creating new cards, check if any should be selected
-     for (int i = 0; i < count; ++i) {
+    // When creating new cards, check if any should be selected
+    for (int i = 0; i < count; ++i) {
         QModelIndex proxyIndex = m_proxyModel->index(i, 0);
         if (!proxyIndex.isValid()) continue;
         
