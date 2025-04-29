@@ -144,7 +144,7 @@ void LibraryWindow::setupUI() {
     
     leftLayout->addWidget(searchContainer);
     leftLayout->addWidget(m_filtersToggleBtn);
-    leftLayout->addWidget(m_filtersSection);
+    leftLayout->addWidget(m_filtersScrollArea);
 
     auto *sortingContainer = new QWidget();
     m_sortingLayout = new QHBoxLayout(sortingContainer);
@@ -162,7 +162,7 @@ void LibraryWindow::setupUI() {
     sortDirectionContainer->setLayout(sortDirectionLayout);
     m_sortingLayout->addWidget(sortDirectionContainer);
     leftLayout->addWidget(sortingContainer);
-    leftLayout->addStretch();
+    //leftLayout->addStretch();
 
     // Setup content table
     setupContentTable();
@@ -452,21 +452,21 @@ void LibraryWindow::setupFilterSection() {
     
     filtersLayout->addWidget(bottomRow);
 
-    // Initially hide the filters section
-    m_filtersSection->setVisible(false);
+    m_filtersScrollArea = new QScrollArea();
+    m_filtersScrollArea->setWidgetResizable(true);
+    m_filtersScrollArea->setWidget(m_filtersSection);
+    //m_filtersScrollArea->setMaximumHeight(800); // Your desired max height
+    m_filtersSection->setSizePolicy(QSizePolicy::Preferred, QSizePolicy::Expanding);
+    m_filtersScrollArea->setSizePolicy(QSizePolicy::Preferred, QSizePolicy::Expanding);
+    m_filtersScrollArea->setFrameShape(QFrame::NoFrame);
+    m_filtersScrollArea->setVisible(false);
+
 }
 
 void LibraryWindow::toggleFiltersSection() {
-    bool visible = !m_filtersSection->isVisible();
-    m_filtersSection->setVisible(visible);
+    bool visible = !m_filtersScrollArea->isVisible();
+    m_filtersScrollArea->setVisible(visible);
     m_filtersToggleBtn->setChecked(visible);
-    
-    // Apply a highlight border when filter section is visible
-    if (visible) {
-        m_filtersSection->setStyleSheet(" padding: 4px;");
-    } else {
-        m_filtersSection->setStyleSheet("");
-    }
 }
 
 void LibraryWindow::setupToolbar() {

@@ -66,6 +66,8 @@ private:
     void setupPreviewWidget();
     void setupSortingControls();
 
+    // New method to create compact filter widget
+    QWidget* createCompactFilterWidget();
     
     void connectSignals();
     
@@ -97,9 +99,14 @@ private:
     // Filters
     QWidget* m_filtersSection = nullptr;
     QToolButton* m_filtersToggleBtn = nullptr;
-   QPushButton* m_clearFiltersBtn = nullptr;
+    QPushButton* m_clearFiltersBtn = nullptr;
     QLabel* m_filterCounter = nullptr;
     QScrollArea* m_filtersScrollArea = nullptr;
+    
+    // New filter-related members
+    QWidget* m_compactFiltersWidget = nullptr;
+    QStackedWidget* m_filtersStackedWidget = nullptr;
+    bool m_filtersExpanded = false;
 
     QLayout* m_sortingLayout = nullptr;
 
