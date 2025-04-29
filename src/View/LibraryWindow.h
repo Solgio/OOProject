@@ -66,6 +66,8 @@ private:
     void setupPreviewWidget();
     void setupSortingControls();
 
+    void resizeEvent(QResizeEvent* event) override;
+
     // New method to create compact filter widget
     QWidget* createCompactFilterWidget();
     

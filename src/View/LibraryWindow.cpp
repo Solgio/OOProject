@@ -55,6 +55,19 @@ LibraryWindow::~LibraryWindow() {
 }
 
 bool LibraryWindow::eventFilter(QObject* obj, QEvent* event) {
+    if (event->type() == QEvent::MouseButtonPress) {
+        if (obj->property("isCompactFilterWidget").toBool()) {
+            // Toggle to expanded view when clicking on compact widget
+            m_filtersExpanded = true;
+            m_filtersStackedWidget->setCurrentIndex(1);
+            m_filtersToggleBtn->setChecked(true);
+            QTimer::singleShot(100, this, &LibraryWindow::updateContentPreviews);
+            return true;
+
+        }
+    }
+    
+    // Handle existing event filtering for content cards
     if (event->type() == QEvent::MouseButtonDblClick) {
         if (obj->property("content_ptr").isValid()) {
             Content* content = obj->property("content_ptr").value<Content*>();
@@ -144,7 +157,7 @@ void LibraryWindow::setupUI() {
     
     leftLayout->addWidget(searchContainer);
     leftLayout->addWidget(m_filtersToggleBtn);
-    leftLayout->addWidget(m_filtersScrollArea);
+    leftLayout->addWidget(m_filtersStackedWidget);
 
     auto *sortingContainer = new QWidget();
     m_sortingLayout = new QHBoxLayout(sortingContainer);
@@ -328,7 +341,13 @@ void LibraryWindow::setupContentTable() {
 }
 
 void LibraryWindow::setupFilterSection() {
-    // Create a compact filters section
+    // Create a stacked widget to handle compact/expanded states
+    m_filtersStackedWidget = new QStackedWidget();
+    
+    // Create the compact filters widget (minimal view when collapsed)
+    m_compactFiltersWidget = createCompactFilterWidget();
+    
+    // Create the expanded filters section (your existing code)
     m_filtersSection = new QWidget();
     auto* filtersLayout = new QVBoxLayout(m_filtersSection);
     filtersLayout->setContentsMargins(0, 0, 0, 0);
@@ -452,21 +471,59 @@ void LibraryWindow::setupFilterSection() {
     
     filtersLayout->addWidget(bottomRow);
 
+    // Create a scroll area for the expanded filters section
     m_filtersScrollArea = new QScrollArea();
     m_filtersScrollArea->setWidgetResizable(true);
     m_filtersScrollArea->setWidget(m_filtersSection);
-    //m_filtersScrollArea->setMaximumHeight(800); // Your desired max height
     m_filtersSection->setSizePolicy(QSizePolicy::Preferred, QSizePolicy::Expanding);
     m_filtersScrollArea->setSizePolicy(QSizePolicy::Preferred, QSizePolicy::Expanding);
     m_filtersScrollArea->setFrameShape(QFrame::NoFrame);
-    m_filtersScrollArea->setVisible(false);
+    
+    // Add both widgets to the stacked widget
+    m_filtersStackedWidget->addWidget(m_compactFiltersWidget);  // Index 0 - Compact
+    m_filtersStackedWidget->addWidget(m_filtersScrollArea);     // Index 1 - Expanded
+    
+    // Start with compact view
+    m_filtersStackedWidget->setCurrentIndex(0);
+    m_filtersExpanded = false;
+}
 
+QWidget* LibraryWindow::createCompactFilterWidget() {
+    QWidget* compactWidget = new QWidget();
+    compactWidget->setMaximumHeight(40);
+    
+    QHBoxLayout* layout = new QHBoxLayout(compactWidget);
+    layout->setContentsMargins(5, 5, 5, 5);
+    
+    
+    // Create a filter summary label
+    m_filterCounter = new QLabel("0 items");
+    m_filterCounter->setAlignment(Qt::AlignRight);
+    
+    layout->addStretch();
+    layout->addWidget(m_filterCounter);
+    
+    // Make the entire widget clickable to expand filters
+    compactWidget->setCursor(Qt::PointingHandCursor);
+    compactWidget->installEventFilter(this);
+    compactWidget->setProperty("isCompactFilterWidget", true);
+    
+    return compactWidget;
 }
 
 void LibraryWindow::toggleFiltersSection() {
-    bool visible = !m_filtersScrollArea->isVisible();
-    m_filtersScrollArea->setVisible(visible);
-    m_filtersToggleBtn->setChecked(visible);
+    m_filtersExpanded = !m_filtersExpanded;
+    
+    if (m_filtersExpanded) {
+        m_filtersStackedWidget->setCurrentIndex(1);
+        m_filtersToggleBtn->setChecked(true);
+    } else {
+        m_filtersStackedWidget->setCurrentIndex(0);
+        m_filtersToggleBtn->setChecked(false);
+    }
+    
+    // Add this line to update the card layout after changing filter visibility
+    QTimer::singleShot(100, this, &LibraryWindow::updateContentPreviews);
 }
 
 void LibraryWindow::setupToolbar() {
@@ -502,6 +559,10 @@ void LibraryWindow::connectSignals() {
     // Visibility of clear search button
     connect(m_searchBar, &QLineEdit::textChanged, this, [this](const QString &text) {
         m_clearSearchButton->setVisible(!text.isEmpty());
+    });
+
+    connect(m_filtersStackedWidget, &QStackedWidget::currentChanged, this, [this](int) {
+        QTimer::singleShot(100, this, &LibraryWindow::updateContentPreviews);
     });
 
     // Add button
@@ -717,8 +778,17 @@ void LibraryWindow::updateContentPreviews() {
         return; // No need to create cards
     }
     
+    // Calculate number of columns based on available width
+    const int CARD_WIDTH = 200; // Fixed card width (including margins)
+    const int LAYOUT_SPACING = 10; // Layout spacing between cards
+    
+    // Get the width of the preview widget's parent (right panel)
+    int availableWidth = m_previewScrollArea->width() - 20; // Subtract some padding
+    
+    // Calculate how many cards fit in a row
+    int columns = std::max(1, availableWidth / CARD_WIDTH);
+    
     // Create cards for visible content
-    const int columns = 5; // Number of cards per row
     int row = 0, col = 0;
     
     // When creating new cards, check if any should be selected
@@ -758,6 +828,9 @@ QWidget* LibraryWindow::createContentPreviewCard(Content* content) {
     auto* card = new QWidget();
     card->setObjectName("ContentCard");
     
+    // Set fixed width for the card (height will adjust based on content)
+    card->setFixedWidth(180);
+    
     // Apply yellow border for starred content, or check if this card should be selected
     if (m_selectedCard && m_selectedCard->property("content_ptr").value<Content*>() == content) {
         // This is the selected card
@@ -776,14 +849,14 @@ QWidget* LibraryWindow::createContentPreviewCard(Content* content) {
     
     // Add cover image (using a label with colored background as placeholder)
     auto* coverLabel = new QLabel();
-    coverLabel->setFixedSize(180, 240);
+    coverLabel->setFixedSize(164, 240); // Adjusted to fit within card width
     coverLabel->setAlignment(Qt::AlignCenter);
     coverLabel->setStyleSheet("background-color: transparent");
     
     // Get cover image path
     auto coverPath = QString::fromStdString(content->getImage());
     if (!coverPath.isEmpty() && QFile::exists(coverPath)) {
-        coverLabel->setPixmap(QPixmap(coverPath).scaled(180, 240, Qt::KeepAspectRatio, Qt::SmoothTransformation));
+        coverLabel->setPixmap(QPixmap(coverPath).scaled(164, 240, Qt::KeepAspectRatio, Qt::SmoothTransformation));
     } else {
         // Display placeholder with title text
         coverLabel->setPixmap(QPixmap(
@@ -836,14 +909,6 @@ QWidget* LibraryWindow::createContentPreviewCard(Content* content) {
     // Add click handler to the card
     card->installEventFilter(this);
     card->setProperty("content_ptr", QVariant::fromValue(content));
-    
-    // Connect to click handler
-   /* connect(card, &QWidget::mouseDoubleClickEvent, [this, content](QMouseEvent*) {
-        if (content) {
-            m_detailWindow->setContent(content);
-            m_rightPanel->setCurrentIndex(1); // Show detail view
-        }
-    });*/
     
     return card;
 }
@@ -955,4 +1020,19 @@ void LibraryWindow::saveToFile(const QString &extension) {
             QMessageBox::warning(this, "Error", "Failed to save library");
         }
     }
+}
+
+void LibraryWindow::resizeEvent(QResizeEvent* event) {
+    QMainWindow::resizeEvent(event);
+    
+    // Update the card layout when the window is resized
+    // Using a small delay to avoid too many updates during active resizing
+    static QTimer* resizeTimer = nullptr;
+    if (!resizeTimer) {
+        resizeTimer = new QTimer(this);
+        resizeTimer->setSingleShot(true);
+        connect(resizeTimer, &QTimer::timeout, this, &LibraryWindow::updateContentPreviews);
+    }
+    
+    resizeTimer->start(100); // 100ms delay
 }
