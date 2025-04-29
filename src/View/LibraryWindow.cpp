@@ -31,6 +31,8 @@
 #include <QHeaderView>
 #include <QListWidget>
 #include <QEvent>
+using std::underlying_type_t;
+using SortRole = ContentModel::SortRole;
 
 LibraryWindow::LibraryWindow(QWidget *parent) : QMainWindow(parent) {
     // Initialize search timer
@@ -141,7 +143,7 @@ void LibraryWindow::setupUI() {
     setupFilterSection();
     
     // Create scroll area for filters
-    QScrollArea *filtersScrollArea = new QScrollArea();
+    auto* filtersScrollArea = new QScrollArea();
     filtersScrollArea->setWidgetResizable(true);
     filtersScrollArea->setWidget(m_filtersSection);
     filtersScrollArea->setFrameShape(QFrame::NoFrame);
@@ -266,11 +268,11 @@ void LibraryWindow::setupSortingControls() {
     m_sortingComboBox->setToolTip("Sort by");
     m_sortingComboBox->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed);
     m_sortingComboBox->setMinimumWidth(120);
-    m_sortingComboBox->addItem("Title", static_cast<int>(ContentModel::SortRole::Title));
-    m_sortingComboBox->addItem("Release Date", static_cast<int>(ContentModel::SortRole::ReleaseDate));
-    m_sortingComboBox->addItem("Rating", static_cast<int>(ContentModel::SortRole::Rating));
-    m_sortingComboBox->addItem("Creator", static_cast<int>(ContentModel::SortRole::Creator));
-    m_sortingComboBox->addItem("Type", static_cast<int>(ContentModel::SortRole::Type));
+    m_sortingComboBox->addItem("Title", static_cast<underlying_type_t<SortRole>>(SortRole::Title));
+    m_sortingComboBox->addItem("Release Date", static_cast<underlying_type_t<SortRole>>(SortRole::ReleaseDate));
+    m_sortingComboBox->addItem("Rating", static_cast<underlying_type_t<SortRole>>(SortRole::Rating));
+    m_sortingComboBox->addItem("Creator", static_cast<underlying_type_t<SortRole>>(SortRole::Creator));
+    m_sortingComboBox->addItem("Type", static_cast<underlying_type_t<SortRole>>(SortRole::Type));
     
     // Create sort direction button
     m_sortDirectionButton = new QToolButton();

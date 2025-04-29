@@ -42,17 +42,17 @@ QVariant ContentModel::data(const QModelIndex &index, int role) const {
                 case 2: return QString::fromStdString(content->getSubgenreString());
                 default: return QVariant();
             }
-        case static_cast<int>(Roles::TitleRole): return QString::fromStdString(content->getTitle());
-        case static_cast<int>(Roles::TypeRole): return QString::fromStdString(content->getType());
-        case static_cast<int>(Roles::SubgenreRole): return content->getSubgenre();
-        case static_cast<int>(Roles::WatchedRole): return content->getWatched();
-        case static_cast<int>(Roles::StarredRole): return content->getStarred();
-        case static_cast<int>(Roles::YearRole): return content->getYear();
-        case static_cast<int>(Roles::ContentPtrRole): return QVariant::fromValue(content);
+        case static_cast<std::underlying_type_t<Roles>>(Roles::TitleRole): return QString::fromStdString(content->getTitle());
+        case static_cast<std::underlying_type_t<Roles>>(Roles::TypeRole): return QString::fromStdString(content->getType());
+        case static_cast<std::underlying_type_t<Roles>>(Roles::SubgenreRole): return content->getSubgenre();
+        case static_cast<std::underlying_type_t<Roles>>(Roles::WatchedRole): return content->getWatched();
+        case static_cast<std::underlying_type_t<Roles>>(Roles::StarredRole): return content->getStarred();
+        case static_cast<std::underlying_type_t<Roles>>(Roles::YearRole): return content->getYear();
+        case static_cast<std::underlying_type_t<Roles>>(Roles::ContentPtrRole): return QVariant::fromValue(content);
         
         // New roles for preview cards
-        case static_cast<int>(Roles::CoverImageRole): return QString::fromStdString(content->getImage());
-        case static_cast<int>(Roles::CreatorRole): {
+        case static_cast<std::underlying_type_t<Roles>>(Roles::CoverImageRole): return QString::fromStdString(content->getImage());
+        case static_cast<std::underlying_type_t<Roles>>(Roles::CreatorRole): {
             // Get creator based on content type
             if (const auto* book = dynamic_cast<Book*>(content))
                 return QString::fromStdString(book->getAuthor());
@@ -120,16 +120,16 @@ Content* ContentModel::getContent(int row) const {
 
 QHash<int, QByteArray> ContentModel::roleNames() const {
     QHash<int, QByteArray> roles;
-    roles[static_cast<int>(Roles::TitleRole)] = "title";
-    roles[static_cast<int>(Roles::TypeRole)] = "type";
-    roles[static_cast<int>(Roles::SubgenreRole)] = "subgenre";
-    roles[static_cast<int>(Roles::WatchedRole)] = "watched";
-    roles[static_cast<int>(Roles::StarredRole)] = "starred";
-    roles[static_cast<int>(Roles::YearRole)] = "year";
-    roles[static_cast<int>(Roles::ContentPtrRole)] = "content";
-    roles[static_cast<int>(Roles::CoverImageRole)] = "coverImage";
-    roles[static_cast<int>(Roles::CreatorRole)] = "creator";
-    roles[static_cast<int>(Roles::ReleaseDateRole)] = "releaseDate";
+    roles[static_cast<std::underlying_type_t<Roles>>(Roles::TitleRole)] = "title";
+    roles[static_cast<std::underlying_type_t<Roles>>(Roles::TypeRole)] = "type";
+    roles[static_cast<std::underlying_type_t<Roles>>(Roles::SubgenreRole)] = "subgenre";
+    roles[static_cast<std::underlying_type_t<Roles>>(Roles::WatchedRole)] = "watched";
+    roles[static_cast<std::underlying_type_t<Roles>>(Roles::StarredRole)] = "starred";
+    roles[static_cast<std::underlying_type_t<Roles>>(Roles::YearRole)] = "year";
+    roles[static_cast<std::underlying_type_t<Roles>>(Roles::ContentPtrRole)] = "content";
+    roles[static_cast<std::underlying_type_t<Roles>>(Roles::CoverImageRole)] = "coverImage";
+    roles[static_cast<std::underlying_type_t<Roles>>(Roles::CreatorRole)] = "creator";
+    roles[static_cast<std::underlying_type_t<Roles>>(Roles::ReleaseDateRole)] = "releaseDate";
     return roles;
 }
 

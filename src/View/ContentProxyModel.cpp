@@ -139,7 +139,7 @@ bool ContentProxyModel::lessThan(const QModelIndex &source_left, const QModelInd
     QVariant rightValue = contentModel->getSortValue(rightContent, m_sortRole);
     
     // Handle special comparisons based on type
-    if (leftValue.typeId() == QVariant::String && rightValue.typeId() == QVariant::String) {
+    if (leftValue.typeId() == QMetaType::QString && rightValue.typeId() == QMetaType::QString) {
         return QString::localeAwareCompare(leftValue.toString(), rightValue.toString()) < 0;
     } else if (leftValue.typeId() == QMetaType::Int && rightValue.typeId() == QMetaType::Int) {
         return leftValue.toInt() < rightValue.toInt();

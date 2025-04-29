@@ -58,13 +58,15 @@ private slots:
     void changeSortDirection();
 
 private:
-    // UI Setup
+    //              ==== UI Setup ====
     void setupUI();
     void setupContentTable();
     void setupFilterSection();
     void setupToolbar();
     void setupPreviewWidget();
     void setupSortingControls();
+
+    
     void connectSignals();
     
     // Helper methods
