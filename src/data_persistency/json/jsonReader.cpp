@@ -72,7 +72,7 @@ ScienceFiction_Library* jsonReader::read(const string& filepath){
 };
 
 Book* jsonReader::readBook(const QJsonObject& object){
-    Book *libro = new Book();
+    auto *libro = new Book();
     /*
     libro->setTitle(object.value("Title").toString().toStdString());
     libro->addSubgenre(object.value("Genres").toInt());
@@ -95,7 +95,7 @@ Book* jsonReader::readBook(const QJsonObject& object){
 }
 
 Comic* jsonReader::readComic(const QJsonObject& object){
-    Comic *comic = new Comic();
+    auto *comic = new Comic();
 
     readPaper(comic, object);
     comic->setMainCharacter(object.value("Main Character").toString().toStdString());
@@ -106,7 +106,7 @@ Comic* jsonReader::readComic(const QJsonObject& object){
 }
 
 Film* jsonReader::readFilm(const QJsonObject& object){
-    Film *film = new Film();
+    auto *film = new Film();
 
     readVideo(film, object);
     film->setDirector(object.value("Director").toString().toStdString());
@@ -115,7 +115,7 @@ Film* jsonReader::readFilm(const QJsonObject& object){
 }
 
 Serie* jsonReader::readSerie(const QJsonObject& object){
-    Serie *serie = new Serie();
+    auto *serie = new Serie();
 
     readVideo(serie, object);
     serie->setSeasons(object.value("Seasons").toInt());
@@ -126,7 +126,7 @@ Serie* jsonReader::readSerie(const QJsonObject& object){
 }
 
 VideoGame* jsonReader::readVideogame(const QJsonObject& object){
-    VideoGame *videogame = new VideoGame();
+    auto *videogame = new VideoGame();
 
     readMultimedia(videogame, object);
     videogame->setGameEngine(object.value("Game Engine").toString().toStdString());

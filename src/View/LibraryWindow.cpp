@@ -390,7 +390,7 @@ void LibraryWindow::setupFilterSection() {
         contentLayout->setSpacing(5);
 
         for (const auto& item : items) {
-            QCheckBox* cb = new QCheckBox(item);
+            auto* cb = new QCheckBox(item);
             cb->setProperty("filterType", filterType);
             cb->setProperty("filterValue", item);
             cb->setStyleSheet(checkboxStyle);
@@ -414,21 +414,21 @@ void LibraryWindow::setupFilterSection() {
 
     // Genre filter section
     QMap<int, QString> genreMap;
-    genreMap[static_cast<int>(Subgenre::NONE)] = "None";
-    genreMap[static_cast<int>(Subgenre::ACTION)] = "Action";
-    genreMap[static_cast<int>(Subgenre::ADVENTURE)] = "Adventure";
-    genreMap[static_cast<int>(Subgenre::COMEDY)] = "Comedy";
-    genreMap[static_cast<int>(Subgenre::DRAMA)] = "Drama";
-    genreMap[static_cast<int>(Subgenre::HORROR)] = "Horror";
-    genreMap[static_cast<int>(Subgenre::ROMANCE)] = "Romance";
-    genreMap[static_cast<int>(Subgenre::THRILLER)] = "Thriller";
-    genreMap[static_cast<int>(Subgenre::MYSTERY)] = "Mystery";
-    genreMap[static_cast<int>(Subgenre::WESTERN)] = "Western";
-    genreMap[static_cast<int>(Subgenre::WAR)] = "War";
-    genreMap[static_cast<int>(Subgenre::MUSICAL)] = "Musical";
-    genreMap[static_cast<int>(Subgenre::FAMILY)] = "Family";
-    genreMap[static_cast<int>(Subgenre::SPORTS)] = "Sports";
-    genreMap[static_cast<int>(Subgenre::SUPERHERO)] = "Superhero";
+    genreMap[static_cast<underlying_type_t<Subgenre>>(Subgenre::NONE)] = "None";
+    genreMap[static_cast<underlying_type_t<Subgenre>>(Subgenre::ACTION)] = "Action";
+    genreMap[static_cast<underlying_type_t<Subgenre>>(Subgenre::ADVENTURE)] = "Adventure";
+    genreMap[static_cast<underlying_type_t<Subgenre>>(Subgenre::COMEDY)] = "Comedy";
+    genreMap[static_cast<underlying_type_t<Subgenre>>(Subgenre::DRAMA)] = "Drama";
+    genreMap[static_cast<underlying_type_t<Subgenre>>(Subgenre::HORROR)] = "Horror";
+    genreMap[static_cast<underlying_type_t<Subgenre>>(Subgenre::ROMANCE)] = "Romance";
+    genreMap[static_cast<underlying_type_t<Subgenre>>(Subgenre::THRILLER)] = "Thriller";
+    genreMap[static_cast<underlying_type_t<Subgenre>>(Subgenre::MYSTERY)] = "Mystery";
+    genreMap[static_cast<underlying_type_t<Subgenre>>(Subgenre::WESTERN)] = "Western";
+    genreMap[static_cast<underlying_type_t<Subgenre>>(Subgenre::WAR)] = "War";
+    genreMap[static_cast<underlying_type_t<Subgenre>>(Subgenre::MUSICAL)] = "Musical";
+    genreMap[static_cast<underlying_type_t<Subgenre>>(Subgenre::FAMILY)] = "Family";
+    genreMap[static_cast<underlying_type_t<Subgenre>>(Subgenre::SPORTS)] = "Sports";
+    genreMap[static_cast<underlying_type_t<Subgenre>>(Subgenre::SUPERHERO)] = "Superhero";
     QStringList genres;
     for (auto it = genreMap.begin(); it != genreMap.end(); ++it) {
         genres << it.value();
@@ -462,7 +462,7 @@ void LibraryWindow::setupFilterSection() {
     statusLayout->setContentsMargins(15, 5, 5, 5);
     statusLayout->setSpacing(5);
 
-    QCheckBox* watchedCb = new QCheckBox("Watched Only");
+    auto* watchedCb = new QCheckBox("Watched Only");
     watchedCb->setProperty("filterType", "watched");
     watchedCb->setStyleSheet(checkboxStyle);
     connect(watchedCb, &QCheckBox::checkStateChanged, 
@@ -474,7 +474,7 @@ void LibraryWindow::setupFilterSection() {
         });
     statusLayout->addWidget(watchedCb);
 
-    QCheckBox* starredCb = new QCheckBox("Starred Only");
+    auto* starredCb = new QCheckBox("Starred Only");
     starredCb->setProperty("filterType", "starred");
     starredCb->setStyleSheet(checkboxStyle);
     connect(starredCb, &QCheckBox::checkStateChanged, 
