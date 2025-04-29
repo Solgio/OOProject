@@ -56,7 +56,6 @@ private slots:
     void delayedSearch();
     void updateFilterCounter();
     void changeSortDirection();
-
 private:
     //              ==== UI Setup ====
     void setupUI();

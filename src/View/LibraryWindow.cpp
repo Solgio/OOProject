@@ -522,8 +522,9 @@ void LibraryWindow::toggleFiltersSection() {
         m_filtersToggleBtn->setChecked(false);
     }
     
-    // Add this line to update the card layout after changing filter visibility
-    QTimer::singleShot(100, this, &LibraryWindow::updateContentPreviews);
+    // Update the content previews after filters visibility change
+    // This is now direct rather than using a timer
+    updateContentPreviews();
 }
 
 void LibraryWindow::setupToolbar() {
@@ -535,7 +536,6 @@ void LibraryWindow::setupToolbar() {
 }
 
 void LibraryWindow::connectSignals() {
-    // Content table interactions
     connect(m_contentTable, &QTableView::doubleClicked, this, &LibraryWindow::showContentDetails);
 
     // Detail window signals
@@ -561,15 +561,23 @@ void LibraryWindow::connectSignals() {
         m_clearSearchButton->setVisible(!text.isEmpty());
     });
 
-    connect(m_filtersStackedWidget, &QStackedWidget::currentChanged, this, [this](int) {
-        QTimer::singleShot(100, this, &LibraryWindow::updateContentPreviews);
-    });
-
     // Add button
     connect(m_add, &QToolButton::clicked, this, &LibraryWindow::showAddContentDialog);
 
     // Import/Save actions
     connect(m_importButton, &QToolButton::clicked, this, &LibraryWindow::importContent);
+    
+    // NEW: Add connection for splitter movement
+    connect(m_splitter, &QSplitter::splitterMoved, this, [this]() {
+        // Use a delayed update to prevent constant recalculation during drag
+        static QTimer* splitterTimer = nullptr;
+        if (!splitterTimer) {
+            splitterTimer = new QTimer(this);
+            splitterTimer->setSingleShot(true);
+            connect(splitterTimer, &QTimer::timeout, this, &LibraryWindow::updateContentPreviews);
+        }
+        splitterTimer->start(200); // 200ms delay before updating
+    });
 }
 
 void LibraryWindow::updateFilterToggleButtonState() {
@@ -780,12 +788,11 @@ void LibraryWindow::updateContentPreviews() {
     
     // Calculate number of columns based on available width
     const int CARD_WIDTH = 200; // Fixed card width (including margins)
-    const int LAYOUT_SPACING = 10; // Layout spacing between cards
     
-    // Get the width of the preview widget's parent (right panel)
-    int availableWidth = m_previewScrollArea->width() - 20; // Subtract some padding
+    // Get the actual width available for cards
+    int availableWidth = m_previewScrollArea->viewport()->width() - 20; // Use viewport width for more accuracy
     
-    // Calculate how many cards fit in a row
+    // Calculate how many cards fit in a row, with at least 1 column
     int columns = std::max(1, availableWidth / CARD_WIDTH);
     
     // Create cards for visible content
@@ -1026,7 +1033,7 @@ void LibraryWindow::resizeEvent(QResizeEvent* event) {
     QMainWindow::resizeEvent(event);
     
     // Update the card layout when the window is resized
-    // Using a small delay to avoid too many updates during active resizing
+    // Using a static timer to avoid too many updates during active resizing
     static QTimer* resizeTimer = nullptr;
     if (!resizeTimer) {
         resizeTimer = new QTimer(this);
@@ -1034,5 +1041,5 @@ void LibraryWindow::resizeEvent(QResizeEvent* event) {
         connect(resizeTimer, &QTimer::timeout, this, &LibraryWindow::updateContentPreviews);
     }
     
-    resizeTimer->start(100); // 100ms delay
+    resizeTimer->start(150); // 150ms delay - slightly longer than before
 }
