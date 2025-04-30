@@ -177,9 +177,6 @@ void LibraryWindow::setupUI() {
     leftLayout->addWidget(sortingContainer);
     //leftLayout->addStretch();
 
-    // Setup content table
-    setupContentTable();
-
     // Right panel - Main stack
     m_rightPanel = new QStackedWidget();
     m_mainView = new QWidget();
@@ -302,42 +299,6 @@ void LibraryWindow::changeSortDirection() {
     
     // Refresh the content previews
     updateContentPreviews();
-}
-
-void LibraryWindow::setupContentTable() {
-    m_contentContainer = new QStackedWidget();
-    
-    // Create the model and proxy model if they don't exist yet
-    if (!m_contentModel) {
-        m_contentModel = new ContentModel(this);
-    }
-    
-    if (!m_proxyModel) {
-        m_proxyModel = new ContentProxyModel(this);
-        m_proxyModel->setSourceModel(m_contentModel);
-    }
-    
-    // Create the table view
-    m_contentTable = new QTableView();
-    m_contentTable->setModel(m_proxyModel);
-    m_contentTable->setSelectionBehavior(QAbstractItemView::SelectRows);
-    m_contentTable->setSelectionMode(QAbstractItemView::SingleSelection);
-    m_contentTable->setSortingEnabled(true);
-    m_contentTable->horizontalHeader()->setSectionResizeMode(QHeaderView::Stretch);
-    m_contentTable->verticalHeader()->setVisible(false);
-    m_contentTable->setAlternatingRowColors(true);
-    
-    // No results label (using the one already defined)
-    if (!m_noResultsLabel) {
-        m_noResultsLabel = new QLabel();
-        m_noResultsLabel->setAlignment(Qt::AlignCenter);
-        m_noResultsLabel->setText("<center><h2 style='color:gray;'>No results found</h2>"
-                                 "<p style='color:gray;'>Try different search terms</p></center>");
-        m_noResultsLabel->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
-    }
-    
-    m_contentContainer->addWidget(m_contentTable);
-    m_contentContainer->addWidget(m_noResultsLabel);
 }
 
 void LibraryWindow::setupFilterSection() {
@@ -536,7 +497,6 @@ void LibraryWindow::setupToolbar() {
 }
 
 void LibraryWindow::connectSignals() {
-    connect(m_contentTable, &QTableView::doubleClicked, this, &LibraryWindow::showContentDetails);
 
     // Detail window signals
     connect(m_detailWindow, &ContentDetailWindow::editRequested, this, &LibraryWindow::editContent);
@@ -654,20 +614,6 @@ void LibraryWindow::updateContentDisplay() {
     updateContentPreviews();
     updateFilterCounter();
     updateFilterToggleButtonState();
-}
-
-void LibraryWindow::showContentDetails(const QModelIndex &index) {
-    if (!index.isValid())
-        return;
-    
-    // Get the content using the proxy model
-    QModelIndex sourceIndex = m_proxyModel->mapToSource(index);
-    Content* content = m_contentModel->getContent(sourceIndex.row());
-    
-    if (content) {
-        m_detailWindow->setContent(content);
-        m_rightPanel->setCurrentIndex(1); // Show detail view
-    }
 }
 
 void LibraryWindow::hideDetailView() {

@@ -41,7 +41,6 @@ private slots:
     void importContent();
     void saveToFile(const QString &extension);
     void updateContentDisplay();
-    void showContentDetails(const QModelIndex &index);
 
     void showAddContentDialog(bool checked = false);
     void editContent(Content* content = nullptr);
@@ -59,7 +58,6 @@ private slots:
 private:
     //              ==== UI Setup ====
     void setupUI();
-    void setupContentTable();
     void setupFilterSection();
     void setupToolbar();
     void setupPreviewWidget();
@@ -83,7 +81,6 @@ private:
     // UI Components
     QToolBar *m_toolBar = nullptr;
     QSplitter *m_splitter = nullptr;
-    QTableView *m_contentTable = nullptr;
     QLineEdit *m_searchBar = nullptr;
     QToolButton *m_importButton = nullptr;
     QToolButton *m_saveButton = nullptr;
@@ -122,7 +119,6 @@ private:
 
     // Stacked widgets
     QStackedWidget *m_rightPanel = nullptr;
-    QStackedWidget *m_contentContainer = nullptr;
     QWidget *m_mainView = nullptr;
     QLabel *m_noResultsLabel = nullptr;
 
