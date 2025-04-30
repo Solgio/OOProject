@@ -2,7 +2,7 @@
 #define BOOKDISPLAYWINDOW_H
 
 #include "AttributeDisplayWindow.h"
-#include "../Model/lib/Book.h"
+#include "../../Model/lib/Book.h"
 
 class BookDisplayWindow: public AttributeDisplayWindow{
 

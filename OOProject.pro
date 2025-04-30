@@ -24,6 +24,14 @@ HEADERS += src/data_persistency/IReader.h \
            src/View/TypeChoiceDialog.h \
            src/View/ContentModel.h \
            src/View/ContentProxyModel.h \
+           src/View/DisplayWindows/AttributeDisplayWindow.h \
+           src/View/DisplayWindows/BookDisplayWindow.h \
+           src/View/DisplayWindows/ComicDisplayWindow.h \
+           src/View/DisplayWindows/FilmDisplayWindow.h \
+           src/View/DisplayWindows/MultimediaDisplayWindow.h \
+           src/View/DisplayWindows/SerieDisplayWindow.h \
+           src/View/DisplayWindows/VideoDisplayWindow.h \
+           src/View/DisplayWindows/VideogameDisplayWindow.h \
            src/data_persistency/json/visitorJson.h \
            src/data_persistency/json/jsonReader.h \
            src/data_persistency/xml/xmlReader.h \
@@ -58,6 +66,14 @@ SOURCES += src/Model/Book.cpp \
            src/View/TypeChoiceDialog.cpp \
            src/View/ContentModel.cpp \
            src/View/ContentProxyModel.cpp \
+           src/View/DisplayWindows/AttributeDisplayWindow.cpp \
+           src/View/DisplayWindows/BookDisplayWindow.cpp \
+           src/View/DisplayWindows/ComicDisplayWindow.cpp \
+           src/View/DisplayWindows/FilmDisplayWindow.cpp \
+           src/View/DisplayWindows/MultimediaDisplayWindow.cpp \
+           src/View/DisplayWindows/SerieDisplayWindow.cpp \
+           src/View/DisplayWindows/VideoDisplayWindow.cpp \
+           src/View/DisplayWindows/VideogameDisplayWindow.cpp \
            src/data_persistency/json/visitorJson.cpp \
            src/data_persistency/json/jsonReader.cpp \
            src/data_persistency/xml/xmlReader.cpp \

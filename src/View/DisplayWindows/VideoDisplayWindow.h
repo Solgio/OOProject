@@ -2,7 +2,7 @@
 #define VIDEODISPLAYWINDOW_H
 
 #include "MultimediaDisplayWindow.h"
-#include "../Model/lib/Video.h"
+#include "../../Model/lib/Video.h"
 
 class VideoDisplayWindow: public MultimediaDisplayWindow{
 

@@ -2,7 +2,7 @@
 #define FILMDISPLAYWINDOW_H
 
 #include "VideoDisplayWindow.h"
-#include "../Model/lib/Film.h"
+#include "../../Model/lib/Film.h"
 
 class FilmDisplayWindow:public VideoDisplayWindow{
 

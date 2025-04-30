@@ -2,7 +2,7 @@
 #define COMICDISPLAYWINDOW_H
 
 #include "BookDisplayWindow.h"
-#include "../Model/lib/Comic.h"
+#include "../../Model/lib/Comic.h"
 
 class ComicDisplayWindow: public BookDisplayWindow{
 

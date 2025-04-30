@@ -2,7 +2,7 @@
 #define SERIEDISPLAYWINDOW_H
 
 #include "VideoDisplayWindow.h"
-#include "../Model/lib/Serie.h"
+#include "../../Model/lib/Serie.h"
 
 class SerieDisplayWindow:public VideoDisplayWindow{
 

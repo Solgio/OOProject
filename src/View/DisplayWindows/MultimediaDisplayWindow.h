@@ -2,7 +2,7 @@
 #define MULTIMEDIADISPLAYWINDOW_H
 
 #include "AttributeDisplayWindow.h"
-#include "../Model/lib/Multimedia.h"
+#include "../../Model/lib/Multimedia.h"
 
 class MultimediaDisplayWindow: public AttributeDisplayWindow{
 

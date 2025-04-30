@@ -3,7 +3,7 @@
 
 #include <QWidget>
 #include <QLabel>
-#include "../Model/lib/Content.h"
+#include "../../Model/lib/Content.h"
 //#include "ContentDetailWindow.h"
 
 class AttributeDisplayWindow: public QWidget{

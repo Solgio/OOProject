@@ -1,8 +1,8 @@
 #ifndef VIDEOGAMEDISPLAYWINDOW_H
 #define VIDEOGAMEDISPLAYWINDOW_H
 
-#include "src/View/MultimediaDisplayWindow.h"
-#include "../Model/lib/VideoGame.h"
+#include "MultimediaDisplayWindow.h"
+#include "../../Model/lib/VideoGame.h"
 
 class VideogameDisplayWindow:public MultimediaDisplayWindow{
 
