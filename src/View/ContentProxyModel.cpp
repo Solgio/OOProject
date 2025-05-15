@@ -99,18 +99,21 @@ bool ContentProxyModel::filterAcceptsRow(int sourceRow, const QModelIndex &sourc
     }
     
     // Apply type filter
-    //!Todo TO BE CHANGED, CANNOT USE GETTYPE
+    bool typeFilterApplied = false;
     if (!m_typeFilter.isEmpty()) {
         if (m_typeFilter == "Book") {
-            return (dynamic_cast<Book*>(content) && !dynamic_cast<Comic*>(content));
+            typeFilterApplied = (dynamic_cast<Book*>(content)!=nullptr && !dynamic_cast<Comic*>(content));
         } else if (m_typeFilter == "Comic") {
-            return dynamic_cast<Comic*>(content);
+            typeFilterApplied = (dynamic_cast<Comic*>(content)!=nullptr);
         } else if (m_typeFilter == "Film") {
-           return dynamic_cast<Film*>(content);
+           typeFilterApplied = (dynamic_cast<Film*>(content)!=nullptr);
         } else if (m_typeFilter == "Serie") {
-            return dynamic_cast<Serie*>(content);
+            typeFilterApplied = (dynamic_cast<Serie*>(content)!=nullptr);
         } else if (m_typeFilter == "VideoGame") {
-           return dynamic_cast<VideoGame*>(content);
+           typeFilterApplied = (dynamic_cast<VideoGame*>(content)!=nullptr);
+        }
+        if(!typeFilterApplied){
+            return false;
         }
     }
     
