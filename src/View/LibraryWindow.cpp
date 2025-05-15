@@ -32,6 +32,7 @@
 #include <QHeaderView>
 #include <QListWidget>
 #include <QEvent>
+#include <QShortcut>
 
 LibraryWindow::LibraryWindow(QWidget *parent) : QMainWindow(parent) {
     // Initialize search timer
@@ -47,6 +48,7 @@ LibraryWindow::LibraryWindow(QWidget *parent) : QMainWindow(parent) {
     
     setupUI();
     connectSignals();
+    shortcutActions();
     updateContentDisplay();
 }
 
@@ -553,7 +555,6 @@ void LibraryWindow::connectSignals() {
     // Import/Save actions
     connect(m_importButton, &QToolButton::clicked, this, &LibraryWindow::importContent);
     
-    // NEW: Add connection for splitter movement
     connect(m_splitter, &QSplitter::splitterMoved, this, [this]() {
         // Use a delayed update to prevent constant recalculation during drag
         static QTimer* splitterTimer = nullptr;
@@ -564,6 +565,54 @@ void LibraryWindow::connectSignals() {
         }
         splitterTimer->start(200); // 200ms delay before updating
     });
+}
+
+void LibraryWindow::shortcutActions() {
+    // Add content shortcut (Ctrl+N)
+    QShortcut* addShortcut = new QShortcut(QKeySequence(Qt::CTRL | Qt::Key_N), this);
+    connect(addShortcut, &QShortcut::activated, this, &LibraryWindow::showAddContentDialog);
+    
+    // Import content shortcut (Ctrl+I)
+    QShortcut* importShortcut = new QShortcut(QKeySequence(Qt::CTRL | Qt::Key_I), this);
+    connect(importShortcut, &QShortcut::activated, this, &LibraryWindow::importContent);
+    
+    // Save JSON shortcut (Ctrl+S)
+    QShortcut* saveJsonShortcut = new QShortcut(QKeySequence(Qt::CTRL | Qt::Key_S), this);
+    connect(saveJsonShortcut, &QShortcut::activated, this, [this]() { saveToFile("json"); });
+    
+    // Save XML shortcut (Ctrl+Shift+S)
+    QShortcut* saveXmlShortcut = new QShortcut(QKeySequence(Qt::CTRL | Qt::SHIFT | Qt::Key_S), this);
+    connect(saveXmlShortcut, &QShortcut::activated, this, [this]() { saveToFile("xml"); });
+    
+    // Toggle filters shortcut (Ctrl+F)
+    QShortcut* toggleFiltersShortcut = new QShortcut(QKeySequence(Qt::CTRL | Qt::Key_F), this);
+    connect(toggleFiltersShortcut, &QShortcut::activated, this, &LibraryWindow::toggleFiltersSection);
+    
+    // Focus search bar shortcut (Ctrl+K or Alt+S)
+    QShortcut* focusSearchShortcut1 = new QShortcut(QKeySequence(Qt::CTRL | Qt::Key_K), this);
+    QShortcut* focusSearchShortcut2 = new QShortcut(QKeySequence(Qt::ALT | Qt::Key_S), this);
+    connect(focusSearchShortcut1, &QShortcut::activated, m_searchBar, QOverload<>::of(&QLineEdit::setFocus));
+    connect(focusSearchShortcut2, &QShortcut::activated, m_searchBar, QOverload<>::of(&QLineEdit::setFocus));
+    
+    // Clear search shortcut (Esc when search has focus)
+    QShortcut* clearSearchShortcut = new QShortcut(QKeySequence(Qt::Key_Escape), m_searchBar);
+    connect(clearSearchShortcut, &QShortcut::activated, this, &LibraryWindow::clearSearch);
+    
+    // Clear all filters shortcut (Ctrl+Shift+F)
+    QShortcut* clearFiltersShortcut = new QShortcut(QKeySequence(Qt::CTRL | Qt::SHIFT | Qt::Key_F), this);
+    connect(clearFiltersShortcut, &QShortcut::activated, this, &LibraryWindow::clearFilters);
+    
+    // Return to main view from detail view (Esc)
+    QShortcut* backToMainShortcut = new QShortcut(QKeySequence(Qt::Key_Escape), m_detailWindow);
+    connect(backToMainShortcut, &QShortcut::activated, this, &LibraryWindow::hideDetailView);
+    
+    // Change sort direction shortcut (Ctrl+D)
+    QShortcut* sortDirectionShortcut = new QShortcut(QKeySequence(Qt::CTRL | Qt::Key_D), this);
+    connect(sortDirectionShortcut, &QShortcut::activated, this, &LibraryWindow::changeSortDirection);
+    
+    // Refresh/update content display (F5)
+    QShortcut* refreshShortcut = new QShortcut(QKeySequence(Qt::Key_F5), this);
+    connect(refreshShortcut, &QShortcut::activated, this, &LibraryWindow::updateContentDisplay);
 }
 
 void LibraryWindow::updateFilterToggleButtonState() {
@@ -646,9 +695,8 @@ void LibraryWindow::hideDetailView() {
     m_rightPanel->setCurrentIndex(0); // Show main view
 }
 
-void LibraryWindow::showAddContentDialog(bool checked) {
-    Q_UNUSED(checked);
-    
+void LibraryWindow::showAddContentDialog() {
+
     TypeChoiceDialog typeDialog(this);
     if (typeDialog.exec() == QDialog::Accepted) {
         Content* newContent = typeDialog.createSelectedContent();

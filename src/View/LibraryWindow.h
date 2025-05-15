@@ -42,7 +42,7 @@ private slots:
     void saveToFile(const QString &extension);
     void updateContentDisplay();
 
-    void showAddContentDialog(bool checked = false);
+    void showAddContentDialog();
     void editContent(Content* content = nullptr);
 
     void hideDetailView();
@@ -69,6 +69,7 @@ private:
     QWidget* createCompactFilterWidget();
     
     void connectSignals();
+    void shortcutActions();
     
     // Helper methods
     void createSaveMenu();

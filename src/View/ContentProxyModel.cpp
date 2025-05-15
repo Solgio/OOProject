@@ -119,7 +119,7 @@ bool ContentProxyModel::filterAcceptsRow(int sourceRow, const QModelIndex &sourc
     
     // Apply subgenre filter    
     if (!m_subgenreFilters.isEmpty()) {
-        auto subgenre = static_cast<Subgenre>(content->getSubgenre());
+        //auto subgenre = static_cast<Subgenre>(content->getSubgenre());
         // Check if content has ALL selected subgenres (AND condition)
         for (Subgenre filter : m_subgenreFilters) {
             if (!content->hasSubgenre(filter)){  
