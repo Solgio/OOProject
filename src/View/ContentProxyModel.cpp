@@ -1,5 +1,11 @@
 #include "ContentProxyModel.h"
 #include "../Model/lib/Content.h"
+#include "../Model/lib/Book.h" // Include the definition of the Book class
+#include "../Model/lib/Comic.h" // Include the definition of the Comic class
+#include "../Model/lib/Film.h" // Include the definition of the ContentModel class
+#include "../Model/lib/Serie.h" // Include the definition of the Serie class
+#include "../Model/lib/VideoGame.h" // Include the definition of the VideoGame class
+
 #include <QMetaType>
 
 ContentProxyModel::ContentProxyModel(QObject *parent)
@@ -34,13 +40,6 @@ void ContentProxyModel::clearTypeFilter() {
 }
 
 
-/*void ContentProxyModel::removeTypeFilter(const QString &type) {
-    if (m_typeFilters.contains(type)) {
-        m_typeFilters.removeAll(type);
-        invalidateFilter();
-    }
-}
-*/
 void ContentProxyModel::setSubgenreFilter(Subgenre subgenre) {
     if (!m_subgenreFilters.contains(subgenre)) {
         m_subgenreFilters.append(subgenre);
@@ -102,9 +101,17 @@ bool ContentProxyModel::filterAcceptsRow(int sourceRow, const QModelIndex &sourc
     // Apply type filter
     //!Todo TO BE CHANGED, CANNOT USE GETTYPE
     if (!m_typeFilter.isEmpty()) {
-        auto type = QString::fromStdString(content->getType());
-        if (type != m_typeFilter) 
-            return false;
+        if (m_typeFilter == "Book") {
+            return (dynamic_cast<Book*>(content) && !dynamic_cast<Comic*>(content));
+        } else if (m_typeFilter == "Comic") {
+            return dynamic_cast<Comic*>(content);
+        } else if (m_typeFilter == "Film") {
+           return dynamic_cast<Film*>(content);
+        } else if (m_typeFilter == "Serie") {
+            return dynamic_cast<Serie*>(content);
+        } else if (m_typeFilter == "VideoGame") {
+           return dynamic_cast<VideoGame*>(content);
+        }
     }
     
     // Apply subgenre filter    
