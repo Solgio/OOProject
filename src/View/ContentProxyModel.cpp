@@ -22,19 +22,25 @@ void ContentProxyModel::setTitleFilter(const QString &title) {
 }
 
 void ContentProxyModel::setTypeFilter(const QString &type) {
-    if (!m_typeFilters.contains(type)) {
-        m_typeFilters.append(type);
+    if (m_typeFilter != type) {
+        m_typeFilter = type;
         invalidateFilter();
     }
 }
 
-void ContentProxyModel::removeTypeFilter(const QString &type) {
+void ContentProxyModel::clearTypeFilter() {
+    m_typeFilter.clear();
+    invalidateFilter();
+}
+
+
+/*void ContentProxyModel::removeTypeFilter(const QString &type) {
     if (m_typeFilters.contains(type)) {
         m_typeFilters.removeAll(type);
         invalidateFilter();
     }
 }
-
+*/
 void ContentProxyModel::setSubgenreFilter(Subgenre subgenre) {
     if (!m_subgenreFilters.contains(subgenre)) {
         m_subgenreFilters.append(subgenre);
@@ -61,7 +67,7 @@ void ContentProxyModel::setStarredFilter(bool starred) {
 
 void ContentProxyModel::clearFilters() {
     m_titleFilter.clear();
-    m_typeFilters.clear();
+    clearTypeFilter();
     m_subgenreFilters.clear();
     m_filterWatched = false;
     m_filterStarred = false;
@@ -95,9 +101,9 @@ bool ContentProxyModel::filterAcceptsRow(int sourceRow, const QModelIndex &sourc
     
     // Apply type filter
     //!Todo TO BE CHANGED, CANNOT USE GETTYPE
-    if (!m_typeFilters.isEmpty()) {
+    if (!m_typeFilter.isEmpty()) {
         auto type = QString::fromStdString(content->getType());
-        if (!m_typeFilters.contains(type))
+        if (type != m_typeFilter) 
             return false;
     }
     
@@ -106,7 +112,7 @@ bool ContentProxyModel::filterAcceptsRow(int sourceRow, const QModelIndex &sourc
         auto subgenre = static_cast<Subgenre>(content->getSubgenre());
         // Check if content has ALL selected subgenres (AND condition)
         for (Subgenre filter : m_subgenreFilters) {
-            if (!content->hasSubgenre(filter)){  // Changed from == to !=
+            if (!content->hasSubgenre(filter)){  
                 return false;
             }
         }

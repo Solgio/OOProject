@@ -13,7 +13,8 @@ public:
     
     void setTitleFilter(const QString &title);
     void setTypeFilter(const QString &type);
-    void removeTypeFilter(const QString &type);
+    void clearTypeFilter();
+    //void removeTypeFilter(const QString &type);
     void setSubgenreFilter(Subgenre subgenre);
     void removeSubgenreFilter(Subgenre subgenre); 
     void setWatchedFilter(bool watched);
@@ -24,7 +25,7 @@ public:
     void setSortRole(ContentModel::SortRole role);
     
     // Getters for current filters
-    QStringList getTypeFilters() const { return m_typeFilters; }
+    QString getTypeFilter() const { return m_typeFilter; }
     QList<Subgenre> getSubgenreFilters() const { return m_subgenreFilters; }
     bool getWatchedFilter() const { return m_filterWatched; }
     bool getStarredFilter() const { return m_filterStarred; }
@@ -35,7 +36,7 @@ protected:
     
 private:
     QString m_titleFilter;
-    QStringList m_typeFilters;
+    QString m_typeFilter;
     QList<Subgenre> m_subgenreFilters;
     bool m_filterWatched;
     bool m_filterStarred;

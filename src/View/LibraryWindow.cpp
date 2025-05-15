@@ -24,6 +24,7 @@
 #include <QMessageBox>
 #include <QMenu>
 #include <QCheckBox>
+#include <QRadioButton>
 #include <QGroupBox>
 #include <QTimer>
 #include <QHBoxLayout>
@@ -263,7 +264,6 @@ void LibraryWindow::setupSortingControls() {
     m_sortingComboBox->setMinimumWidth(120);
     m_sortingComboBox->addItem("Title", static_cast<int>(ContentModel::SortRole::Title));
     m_sortingComboBox->addItem("Release Date", static_cast<int>(ContentModel::SortRole::ReleaseDate));
-    m_sortingComboBox->addItem("Rating", static_cast<int>(ContentModel::SortRole::Rating));
     m_sortingComboBox->addItem("Creator", static_cast<int>(ContentModel::SortRole::Creator));
     m_sortingComboBox->addItem("Type", static_cast<int>(ContentModel::SortRole::Type));
     
@@ -327,6 +327,18 @@ void LibraryWindow::setupFilterSection() {
         "QCheckBox:checked:hover {"
         "   background-color:rgb(0, 110, 59);"  // Slightly darker green on hover (checked)
         "}";
+    QString radioButtonStyle = 
+        "QRadioButton:checked {"
+        "   border: 2px solid rgb(15, 228, 61);"  // Border color
+        "   border-radius: 3px;"         // Rounded corners
+        "   padding: 2px;"               // Some padding
+        "}"
+        "QRadioButton:hover {"
+        "   background-color:rgb(85, 87, 86);"  // Light gray on hover (unchecked)
+        "}"
+        "QRadioButton:checked:hover {"
+        "   background-color:rgb(0, 110, 59);"  // Slightly darker green on hover (checked)
+        "}";
 
     // Type filter section
     auto* typeGroup = new QGroupBox("Content Types");
@@ -338,12 +350,26 @@ void LibraryWindow::setupFilterSection() {
     
     QStringList types = {"Book", "Comic", "Film", "Serie", "VideoGame"};
     for (const QString& type : types) {
-        QCheckBox* cb = new QCheckBox(type);
-        cb->setProperty("filterType", "type");
-        cb->setProperty("filterValue", type);
-        cb->setStyleSheet(checkboxStyle);
-        connect(cb, &QCheckBox::checkStateChanged, this, &LibraryWindow::applyFilters);
-        typeLayout->addWidget(cb);
+        QRadioButton* rb = new QRadioButton(type);
+        rb->setProperty("filterType", "type");
+        rb->setProperty("filterValue", type);
+        rb->setStyleSheet(radioButtonStyle);
+        connect(rb, &QRadioButton::clicked, this, [this, rb]() {
+        // Get the current type filter from the proxy model
+        QString currentFilter = m_proxyModel->getTypeFilter();
+        
+        if (currentFilter == rb->text()) {
+            rb->setAutoExclusive(false);  // Temporarily disable auto-exclusive behavior
+            rb->setChecked(false);        // Uncheck the button
+            rb->setAutoExclusive(true);   // Re-enable auto-exclusive behavior
+            m_proxyModel->clearTypeFilter();
+        } else {
+            m_proxyModel->setTypeFilter(rb->text());
+        }
+        
+        applyFilters();
+    });
+        typeLayout->addWidget(rb);
     }
     filtersLayout->addWidget(typeGroup);
 
@@ -903,15 +929,19 @@ void LibraryWindow::applyFilters() {
         
         // Find all checked filters
         auto checkboxes = m_filtersSection->findChildren<QCheckBox*>();
+        auto radioButtons = m_filtersSection->findChildren<QRadioButton*>();
+        for (QRadioButton* rb : radioButtons) {
+        if (rb->isChecked()) {
+            m_proxyModel->setTypeFilter(rb->text());
+            break;
+        }
+    }
         bool hasActiveFilters = false;
     for (QCheckBox* cb : checkboxes) {
         if (cb->isChecked()) {
             QString filterType = cb->property("filterType").toString();
-            
-            if (filterType == "type") {
-                m_proxyModel->setTypeFilter(cb->text());
-            } 
-            else if (filterType == "genre") {
+
+            if (filterType == "genre") {
                 int genreValue = cb->property("filterValue").toInt();
                 m_proxyModel->setSubgenreFilter(static_cast<Subgenre>(genreValue));
             }
@@ -955,6 +985,8 @@ void LibraryWindow::importContent() {
             QMessageBox::warning(this, "Error", "Failed to import content");
         }
     }
+    updateContentPreviews();
+    updateFilterCounter();
 }
 
 void LibraryWindow::saveToFile(const QString &extension) {
