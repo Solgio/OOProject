@@ -33,6 +33,7 @@
 #include <QListWidget>
 #include <QEvent>
 #include <QShortcut>
+using std::underlying_type_t;
 
 LibraryWindow::LibraryWindow(QWidget *parent) : QMainWindow(parent) {
     // Initialize search timer
@@ -264,10 +265,10 @@ void LibraryWindow::setupSortingControls() {
     m_sortingComboBox->setToolTip("Sort by");
     m_sortingComboBox->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed);
     m_sortingComboBox->setMinimumWidth(120);
-    m_sortingComboBox->addItem("Title", static_cast<int>(ContentModel::SortRole::Title));
-    m_sortingComboBox->addItem("Release Date", static_cast<int>(ContentModel::SortRole::ReleaseDate));
-    m_sortingComboBox->addItem("Creator", static_cast<int>(ContentModel::SortRole::Creator));
-    m_sortingComboBox->addItem("Type", static_cast<int>(ContentModel::SortRole::Type));
+    m_sortingComboBox->addItem("Title", static_cast<underlying_type_t<ContentModel::SortRole>>(ContentModel::SortRole::Title));
+    m_sortingComboBox->addItem("Release Date", static_cast<underlying_type_t<ContentModel::SortRole>>(ContentModel::SortRole::ReleaseDate));
+    m_sortingComboBox->addItem("Creator", static_cast<underlying_type_t<ContentModel::SortRole>>(ContentModel::SortRole::Creator));
+    m_sortingComboBox->addItem("Type", static_cast<underlying_type_t<ContentModel::SortRole>>(ContentModel::SortRole::Type));
     
     // Create sort direction button
     m_sortDirectionButton = new QToolButton();
@@ -385,24 +386,24 @@ void LibraryWindow::setupFilterSection() {
     
     // Get all available subgenres from the Content enum
     QMap<int, QString> genreMap;
-    genreMap[static_cast<int>(Subgenre::NONE)] = "None";
-    genreMap[static_cast<int>(Subgenre::ACTION)] = "Action";
-    genreMap[static_cast<int>(Subgenre::ADVENTURE)] = "Adventure";
-    genreMap[static_cast<int>(Subgenre::COMEDY)] = "Comedy";
-    genreMap[static_cast<int>(Subgenre::DRAMA)] = "Drama";
-    genreMap[static_cast<int>(Subgenre::HORROR)] = "Horror";
-    genreMap[static_cast<int>(Subgenre::ROMANCE)] = "Romance";
-    genreMap[static_cast<int>(Subgenre::THRILLER)] = "Thriller";
-    genreMap[static_cast<int>(Subgenre::MYSTERY)] = "Mystery";
-    genreMap[static_cast<int>(Subgenre::WESTERN)] = "Western";
-    genreMap[static_cast<int>(Subgenre::WAR)] = "War";
-    genreMap[static_cast<int>(Subgenre::MUSICAL)] = "Musical";
-    genreMap[static_cast<int>(Subgenre::FAMILY)] = "Family";
-    genreMap[static_cast<int>(Subgenre::SPORTS)] = "Sports";
-    genreMap[static_cast<int>(Subgenre::SUPERHERO)] = "Superhero";
+    genreMap[static_cast<underlying_type_t<Subgenre>>(Subgenre::NONE)] = "None";
+    genreMap[static_cast<underlying_type_t<Subgenre>>(Subgenre::ACTION)] = "Action";
+    genreMap[static_cast<underlying_type_t<Subgenre>>(Subgenre::ADVENTURE)] = "Adventure";
+    genreMap[static_cast<underlying_type_t<Subgenre>>(Subgenre::COMEDY)] = "Comedy";
+    genreMap[static_cast<underlying_type_t<Subgenre>>(Subgenre::DRAMA)] = "Drama";
+    genreMap[static_cast<underlying_type_t<Subgenre>>(Subgenre::HORROR)] = "Horror";
+    genreMap[static_cast<underlying_type_t<Subgenre>>(Subgenre::ROMANCE)] = "Romance";
+    genreMap[static_cast<underlying_type_t<Subgenre>>(Subgenre::THRILLER)] = "Thriller";
+    genreMap[static_cast<underlying_type_t<Subgenre>>(Subgenre::MYSTERY)] = "Mystery";
+    genreMap[static_cast<underlying_type_t<Subgenre>>(Subgenre::WESTERN)] = "Western";
+    genreMap[static_cast<underlying_type_t<Subgenre>>(Subgenre::WAR)] = "War";
+    genreMap[static_cast<underlying_type_t<Subgenre>>(Subgenre::MUSICAL)] = "Musical";
+    genreMap[static_cast<underlying_type_t<Subgenre>>(Subgenre::FAMILY)] = "Family";
+    genreMap[static_cast<underlying_type_t<Subgenre>>(Subgenre::SPORTS)] = "Sports";
+    genreMap[static_cast<underlying_type_t<Subgenre>>(Subgenre::SUPERHERO)] = "Superhero";
     
     for (auto it = genreMap.begin(); it != genreMap.end(); ++it) {
-        QCheckBox* cb = new QCheckBox(it.value());
+        auto* cb = new QCheckBox(it.value());
         cb->setProperty("filterType", "genre");
         cb->setProperty("filterValue", it.key());
         cb->setStyleSheet(checkboxStyle);
@@ -419,7 +420,7 @@ void LibraryWindow::setupFilterSection() {
     auto* statusLayout = new QVBoxLayout(statusGroup);
     statusLayout->setContentsMargins(5, 15, 5, 5);
     
-    QCheckBox* watchedCb = new QCheckBox("Watched Only");
+    auto* watchedCb = new QCheckBox("Watched Only");
     watchedCb->setProperty("filterType", "watched");
     watchedCb->setStyleSheet(checkboxStyle);
     connect(watchedCb, &QCheckBox::checkStateChanged, 
@@ -431,7 +432,7 @@ void LibraryWindow::setupFilterSection() {
         });
     statusLayout->addWidget(watchedCb);
     
-    QCheckBox* starredCb = new QCheckBox("Starred Only");
+    auto* starredCb = new QCheckBox("Starred Only");
     starredCb->setProperty("filterType", "starred");
     starredCb->setStyleSheet(checkboxStyle);
     connect(starredCb, &QCheckBox::checkStateChanged, 
@@ -478,10 +479,10 @@ void LibraryWindow::setupFilterSection() {
 }
 
 QWidget* LibraryWindow::createCompactFilterWidget() {
-    QWidget* compactWidget = new QWidget();
+    auto* compactWidget = new QWidget();
     compactWidget->setMaximumHeight(40);
     
-    QHBoxLayout* layout = new QHBoxLayout(compactWidget);
+    auto* layout = new QHBoxLayout(compactWidget);
     layout->setContentsMargins(5, 5, 5, 5);
     
     
@@ -569,49 +570,49 @@ void LibraryWindow::connectSignals() {
 
 void LibraryWindow::shortcutActions() {
     // Add content shortcut (Ctrl+N)
-    QShortcut* addShortcut = new QShortcut(QKeySequence(Qt::CTRL | Qt::Key_N), this);
+    auto* addShortcut = new QShortcut(QKeySequence(Qt::CTRL | Qt::Key_N), this);
     connect(addShortcut, &QShortcut::activated, this, &LibraryWindow::showAddContentDialog);
     
     // Import content shortcut (Ctrl+I)
-    QShortcut* importShortcut = new QShortcut(QKeySequence(Qt::CTRL | Qt::Key_I), this);
+    auto* importShortcut = new QShortcut(QKeySequence(Qt::CTRL | Qt::Key_I), this);
     connect(importShortcut, &QShortcut::activated, this, &LibraryWindow::importContent);
     
     // Save JSON shortcut (Ctrl+S)
-    QShortcut* saveJsonShortcut = new QShortcut(QKeySequence(Qt::CTRL | Qt::Key_S), this);
+    auto* saveJsonShortcut = new QShortcut(QKeySequence(Qt::CTRL | Qt::Key_S), this);
     connect(saveJsonShortcut, &QShortcut::activated, this, [this]() { saveToFile("json"); });
     
     // Save XML shortcut (Ctrl+Shift+S)
-    QShortcut* saveXmlShortcut = new QShortcut(QKeySequence(Qt::CTRL | Qt::SHIFT | Qt::Key_S), this);
+    auto* saveXmlShortcut = new QShortcut(QKeySequence(Qt::CTRL | Qt::SHIFT | Qt::Key_S), this);
     connect(saveXmlShortcut, &QShortcut::activated, this, [this]() { saveToFile("xml"); });
     
     // Toggle filters shortcut (Ctrl+F)
-    QShortcut* toggleFiltersShortcut = new QShortcut(QKeySequence(Qt::CTRL | Qt::Key_F), this);
+    auto* toggleFiltersShortcut = new QShortcut(QKeySequence(Qt::CTRL | Qt::Key_F), this);
     connect(toggleFiltersShortcut, &QShortcut::activated, this, &LibraryWindow::toggleFiltersSection);
     
     // Focus search bar shortcut (Ctrl+K or Alt+S)
-    QShortcut* focusSearchShortcut1 = new QShortcut(QKeySequence(Qt::CTRL | Qt::Key_K), this);
-    QShortcut* focusSearchShortcut2 = new QShortcut(QKeySequence(Qt::ALT | Qt::Key_S), this);
+    auto* focusSearchShortcut1 = new QShortcut(QKeySequence(Qt::CTRL | Qt::Key_K), this);
+    auto* focusSearchShortcut2 = new QShortcut(QKeySequence(Qt::ALT | Qt::Key_S), this);
     connect(focusSearchShortcut1, &QShortcut::activated, m_searchBar, QOverload<>::of(&QLineEdit::setFocus));
     connect(focusSearchShortcut2, &QShortcut::activated, m_searchBar, QOverload<>::of(&QLineEdit::setFocus));
     
     // Clear search shortcut (Esc when search has focus)
-    QShortcut* clearSearchShortcut = new QShortcut(QKeySequence(Qt::Key_Escape), m_searchBar);
+    auto* clearSearchShortcut = new QShortcut(QKeySequence(Qt::Key_Escape), m_searchBar);
     connect(clearSearchShortcut, &QShortcut::activated, this, &LibraryWindow::clearSearch);
     
     // Clear all filters shortcut (Ctrl+Shift+F)
-    QShortcut* clearFiltersShortcut = new QShortcut(QKeySequence(Qt::CTRL | Qt::SHIFT | Qt::Key_F), this);
+    auto* clearFiltersShortcut = new QShortcut(QKeySequence(Qt::CTRL | Qt::SHIFT | Qt::Key_F), this);
     connect(clearFiltersShortcut, &QShortcut::activated, this, &LibraryWindow::clearFilters);
     
     // Return to main view from detail view (Esc)
-    QShortcut* backToMainShortcut = new QShortcut(QKeySequence(Qt::Key_Escape), m_detailWindow);
+    auto* backToMainShortcut = new QShortcut(QKeySequence(Qt::Key_Escape), m_detailWindow);
     connect(backToMainShortcut, &QShortcut::activated, this, &LibraryWindow::hideDetailView);
     
     // Change sort direction shortcut (Ctrl+D)
-    QShortcut* sortDirectionShortcut = new QShortcut(QKeySequence(Qt::CTRL | Qt::Key_D), this);
+    auto* sortDirectionShortcut = new QShortcut(QKeySequence(Qt::CTRL | Qt::Key_D), this);
     connect(sortDirectionShortcut, &QShortcut::activated, this, &LibraryWindow::changeSortDirection);
     
     // Refresh/update content display (F5)
-    QShortcut* refreshShortcut = new QShortcut(QKeySequence(Qt::Key_F5), this);
+    auto* refreshShortcut = new QShortcut(QKeySequence(Qt::Key_F5), this);
     connect(refreshShortcut, &QShortcut::activated, this, &LibraryWindow::updateContentDisplay);
 }
 
