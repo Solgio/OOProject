@@ -353,7 +353,7 @@ void LibraryWindow::setupFilterSection() {
     
     QStringList types = {"Book", "Comic", "Film", "Serie", "VideoGame"};
     for (const QString& type : types) {
-        QRadioButton* rb = new QRadioButton(type);
+        auto* rb = new QRadioButton(type);
         rb->setProperty("filterType", "type");
         rb->setProperty("filterValue", type);
         rb->setStyleSheet(radioButtonStyle);
@@ -570,49 +570,49 @@ void LibraryWindow::connectSignals() {
 
 void LibraryWindow::shortcutActions() {
     // Add content shortcut (Ctrl+N)
-    auto* addShortcut = new QShortcut(QKeySequence(Qt::CTRL | Qt::Key_N), this);
+    const auto* addShortcut = new QShortcut(QKeySequence(Qt::CTRL | Qt::Key_N), this);
     connect(addShortcut, &QShortcut::activated, this, &LibraryWindow::showAddContentDialog);
     
     // Import content shortcut (Ctrl+I)
-    auto* importShortcut = new QShortcut(QKeySequence(Qt::CTRL | Qt::Key_I), this);
+    const auto* importShortcut = new QShortcut(QKeySequence(Qt::CTRL | Qt::Key_I), this);
     connect(importShortcut, &QShortcut::activated, this, &LibraryWindow::importContent);
     
     // Save JSON shortcut (Ctrl+S)
-    auto* saveJsonShortcut = new QShortcut(QKeySequence(Qt::CTRL | Qt::Key_S), this);
+    const auto* saveJsonShortcut = new QShortcut(QKeySequence(Qt::CTRL | Qt::Key_S), this);
     connect(saveJsonShortcut, &QShortcut::activated, this, [this]() { saveToFile("json"); });
     
     // Save XML shortcut (Ctrl+Shift+S)
-    auto* saveXmlShortcut = new QShortcut(QKeySequence(Qt::CTRL | Qt::SHIFT | Qt::Key_S), this);
+    const auto* saveXmlShortcut = new QShortcut(QKeySequence(Qt::CTRL | Qt::SHIFT | Qt::Key_S), this);
     connect(saveXmlShortcut, &QShortcut::activated, this, [this]() { saveToFile("xml"); });
     
     // Toggle filters shortcut (Ctrl+F)
-    auto* toggleFiltersShortcut = new QShortcut(QKeySequence(Qt::CTRL | Qt::Key_F), this);
+    const auto* toggleFiltersShortcut = new QShortcut(QKeySequence(Qt::CTRL | Qt::Key_F), this);
     connect(toggleFiltersShortcut, &QShortcut::activated, this, &LibraryWindow::toggleFiltersSection);
     
     // Focus search bar shortcut (Ctrl+K or Alt+S)
-    auto* focusSearchShortcut1 = new QShortcut(QKeySequence(Qt::CTRL | Qt::Key_K), this);
-    auto* focusSearchShortcut2 = new QShortcut(QKeySequence(Qt::ALT | Qt::Key_S), this);
+    const auto* focusSearchShortcut1 = new QShortcut(QKeySequence(Qt::CTRL | Qt::Key_K), this);
+    const auto* focusSearchShortcut2 = new QShortcut(QKeySequence(Qt::ALT | Qt::Key_S), this);
     connect(focusSearchShortcut1, &QShortcut::activated, m_searchBar, QOverload<>::of(&QLineEdit::setFocus));
     connect(focusSearchShortcut2, &QShortcut::activated, m_searchBar, QOverload<>::of(&QLineEdit::setFocus));
     
     // Clear search shortcut (Esc when search has focus)
-    auto* clearSearchShortcut = new QShortcut(QKeySequence(Qt::Key_Escape), m_searchBar);
+    const auto* clearSearchShortcut = new QShortcut(QKeySequence(Qt::Key_Escape), m_searchBar);
     connect(clearSearchShortcut, &QShortcut::activated, this, &LibraryWindow::clearSearch);
     
     // Clear all filters shortcut (Ctrl+Shift+F)
-    auto* clearFiltersShortcut = new QShortcut(QKeySequence(Qt::CTRL | Qt::SHIFT | Qt::Key_F), this);
+    const auto* clearFiltersShortcut = new QShortcut(QKeySequence(Qt::CTRL | Qt::SHIFT | Qt::Key_F), this);
     connect(clearFiltersShortcut, &QShortcut::activated, this, &LibraryWindow::clearFilters);
     
     // Return to main view from detail view (Esc)
-    auto* backToMainShortcut = new QShortcut(QKeySequence(Qt::Key_Escape), m_detailWindow);
+    const auto* backToMainShortcut = new QShortcut(QKeySequence(Qt::Key_Escape), m_detailWindow);
     connect(backToMainShortcut, &QShortcut::activated, this, &LibraryWindow::hideDetailView);
     
     // Change sort direction shortcut (Ctrl+D)
-    auto* sortDirectionShortcut = new QShortcut(QKeySequence(Qt::CTRL | Qt::Key_D), this);
+    const auto* sortDirectionShortcut = new QShortcut(QKeySequence(Qt::CTRL | Qt::Key_D), this);
     connect(sortDirectionShortcut, &QShortcut::activated, this, &LibraryWindow::changeSortDirection);
     
     // Refresh/update content display (F5)
-    auto* refreshShortcut = new QShortcut(QKeySequence(Qt::Key_F5), this);
+    const auto* refreshShortcut = new QShortcut(QKeySequence(Qt::Key_F5), this);
     connect(refreshShortcut, &QShortcut::activated, this, &LibraryWindow::updateContentDisplay);
 }
 
@@ -979,14 +979,14 @@ void LibraryWindow::applyFilters() {
         // Find all checked filters
         auto checkboxes = m_filtersSection->findChildren<QCheckBox*>();
         auto radioButtons = m_filtersSection->findChildren<QRadioButton*>();
-        for (QRadioButton* rb : radioButtons) {
-        if (rb->isChecked()) {
-            m_proxyModel->setTypeFilter(rb->text());
-            break;
-        }
+        for (const QRadioButton* rb : radioButtons) {
+            if (rb->isChecked()) {
+                m_proxyModel->setTypeFilter(rb->text());
+                break;
+            }
     }
         bool hasActiveFilters = false;
-    for (QCheckBox* cb : checkboxes) {
+    for (const QCheckBox* cb : checkboxes) {
         if (cb->isChecked()) {
             QString filterType = cb->property("filterType").toString();
 
