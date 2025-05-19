@@ -434,7 +434,7 @@ void LibraryWindow::setupFilterSection()
         cb->setProperty("filterType", "genre");
         cb->setProperty("filterValue", it.key());
         cb->setStyleSheet(checkboxStyle);
-        connect(cb, &QCheckBox::checkStateChanged, this, &LibraryWindow::applyFilters);
+        connect(cb, &QCheckBox::stateChanged, this, &LibraryWindow::applyFilters);
         genreLayout->addWidget(cb);
     }
     filtersLayout->addWidget(genreGroup);
@@ -450,7 +450,7 @@ void LibraryWindow::setupFilterSection()
     auto *watchedCb = new QCheckBox("Watched Only");
     watchedCb->setProperty("filterType", "watched");
     watchedCb->setStyleSheet(checkboxStyle);
-    connect(watchedCb, &QCheckBox::checkStateChanged,
+    connect(watchedCb, &QCheckBox::stateChanged,
             [this](int state)
             {
                 m_proxyModel->setWatchedFilter(state == Qt::Checked);
@@ -463,7 +463,7 @@ void LibraryWindow::setupFilterSection()
     auto *starredCb = new QCheckBox("Starred Only");
     starredCb->setProperty("filterType", "starred");
     starredCb->setStyleSheet(checkboxStyle);
-    connect(starredCb, &QCheckBox::checkStateChanged,
+    connect(starredCb, &QCheckBox::stateChanged,
             [this](int state)
             {
                 m_proxyModel->setStarredFilter(state == Qt::Checked);
