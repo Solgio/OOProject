@@ -14,13 +14,12 @@ public:
     void setTitleFilter(const QString &title);
     void setTypeFilter(const QString &type);
     void clearTypeFilter();
-    //void removeTypeFilter(const QString &type);
     void setSubgenreFilter(Subgenre subgenre);
-    void removeSubgenreFilter(Subgenre subgenre); 
+    void clearSubgenreFilter(); 
     void setWatchedFilter(bool watched);
     void setStarredFilter(bool starred);
     void clearFilters();
-    
+    bool hasActiveFilters() const;
     // Set the role to use for sorting
     void setSortRole(ContentModel::SortRole role);
     

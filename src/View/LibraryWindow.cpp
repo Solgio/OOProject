@@ -18,7 +18,8 @@
 #include <QStyle>
 #include <QEvent>
 
-LibraryWindow::LibraryWindow(QWidget *parent) : QMainWindow(parent) {
+LibraryWindow::LibraryWindow(QWidget *parent) : QMainWindow(parent)
+{
     // Initialize models first
     m_contentModel = new ContentModel(this);
     m_proxyModel = new ContentProxyModel(this);
@@ -38,12 +39,14 @@ LibraryWindow::LibraryWindow(QWidget *parent) : QMainWindow(parent) {
     updateContentDisplay(); // Initial display
 }
 
-LibraryWindow::~LibraryWindow() {
+LibraryWindow::~LibraryWindow()
+{
     // Child widgets and models are parented to this, so they will be deleted automatically.
     // Explicit deletes only for non-parented or dynamically allocated objects if any.
 }
 
-void LibraryWindow::setupUI() {
+void LibraryWindow::setupUI()
+{
     setWindowTitle("Science Fiction Library Manager");
     resize(1920, 1080);
 
@@ -68,7 +71,8 @@ void LibraryWindow::setupUI() {
     m_splitter->setStretchFactor(1, 4); // Right panel gets 4x more space
 }
 
-void LibraryWindow::createLeftPanel(QWidget* parentWidget) {
+void LibraryWindow::createLeftPanel(QWidget *parentWidget)
+{
     auto *leftLayout = new QVBoxLayout(parentWidget);
     leftLayout->setContentsMargins(5, 5, 5, 5);
 
@@ -100,7 +104,8 @@ void LibraryWindow::createLeftPanel(QWidget* parentWidget) {
     leftLayout->addStretch();
 }
 
-void LibraryWindow::createRightPanel() {
+void LibraryWindow::createRightPanel()
+{
     m_rightPanel = new QStackedWidget();
 
     // Main view (contains content preview grid)
@@ -121,7 +126,8 @@ void LibraryWindow::createRightPanel() {
     m_rightPanel->addWidget(m_detailWindow); // Index 1
 }
 
-void LibraryWindow::connectSignals() {
+void LibraryWindow::connectSignals()
+{
     // Connect LibraryToolbar signals to LibraryActionsManager slots
     connect(m_toolBar, &LibraryToolbar::importRequested, m_actionsManager, &LibraryActionsManager::importContent);
     connect(m_toolBar, &LibraryToolbar::saveRequested, m_actionsManager, &LibraryActionsManager::saveToFile);
@@ -143,9 +149,8 @@ void LibraryWindow::connectSignals() {
     connect(m_searchBar, &QLineEdit::textChanged, this, &LibraryWindow::delayedSearch);
     connect(m_searchTimer, &QTimer::timeout, this, &LibraryWindow::applySearchFilter);
     connect(m_clearSearchButton, &QToolButton::clicked, this, &LibraryWindow::clearSearch);
-    connect(m_searchBar, &QLineEdit::textChanged, this, [this](const QString &text) {
-        m_clearSearchButton->setVisible(!text.isEmpty());
-    });
+    connect(m_searchBar, &QLineEdit::textChanged, this, [this](const QString &text)
+            { m_clearSearchButton->setVisible(!text.isEmpty()); });
 
     // Connect ContentDetailWindow signals
     connect(m_detailWindow, &ContentDetailWindow::editRequested, this, &LibraryWindow::handleEditContent);
@@ -156,13 +161,14 @@ void LibraryWindow::connectSignals() {
     connect(m_contentPreviewGrid, &ContentPreviewGrid::contentDoubleClicked, this, &LibraryWindow::showDetailView);
     connect(m_contentPreviewGrid, &ContentPreviewGrid::contentSingleClicked, this, &LibraryWindow::handleContentSingleClick);
 
-
     // Setup and connect shortcuts
     m_shortcutManager->setupShortcuts(this, m_searchBar, m_detailWindow);
     connect(m_shortcutManager, &ShortcutManager::addContentShortcutActivated, this, &LibraryWindow::handleAddContentRequested);
     connect(m_shortcutManager, &ShortcutManager::importContentShortcutActivated, this, &LibraryWindow::handleImportRequested);
-    connect(m_shortcutManager, &ShortcutManager::saveJsonShortcutActivated, this, [this]() { handleSaveRequested("json"); });
-    connect(m_shortcutManager, &ShortcutManager::saveXmlShortcutActivated, this, [this]() { handleSaveRequested("xml"); });
+    connect(m_shortcutManager, &ShortcutManager::saveJsonShortcutActivated, this, [this]()
+            { handleSaveRequested("json"); });
+    connect(m_shortcutManager, &ShortcutManager::saveXmlShortcutActivated, this, [this]()
+            { handleSaveRequested("xml"); });
     connect(m_shortcutManager, &ShortcutManager::toggleFiltersShortcutActivated, m_filterSectionWidget, &FilterSectionWidget::onToggleFiltersClicked); // Directly toggle
     connect(m_shortcutManager, &ShortcutManager::clearSearchShortcutActivated, this, &LibraryWindow::clearSearch);
     connect(m_shortcutManager, &ShortcutManager::clearFiltersShortcutActivated, this, &LibraryWindow::handleClearFiltersRequested);
@@ -170,97 +176,119 @@ void LibraryWindow::connectSignals() {
     connect(m_shortcutManager, &ShortcutManager::changeSortDirectionShortcutActivated, m_sortingSectionWidget, &SortingSectionWidget::onSortDirectionButtonClicked);
     connect(m_shortcutManager, &ShortcutManager::refreshContentShortcutActivated, this, &LibraryWindow::updateContentDisplay);
 
+    // Connect ContentProxyModel signals to ContentPreviewGrid for updates
+    connect(m_proxyModel, &ContentProxyModel::layoutChanged, m_contentPreviewGrid, &ContentPreviewGrid::updatePreviews);
+    connect(m_proxyModel, &ContentProxyModel::modelReset, m_contentPreviewGrid, &ContentPreviewGrid::updatePreviews);
+    connect(m_proxyModel, &ContentProxyModel::rowsInserted, m_contentPreviewGrid, &ContentPreviewGrid::updatePreviews);
+    connect(m_proxyModel, &ContentProxyModel::rowsRemoved, m_contentPreviewGrid, &ContentPreviewGrid::updatePreviews);
 
     // Splitter resize for updating content previews
-    connect(m_splitter, &QSplitter::splitterMoved, this, [this]() {
+    connect(m_splitter, &QSplitter::splitterMoved, this, [this]()
+            {
         static QTimer *splitterTimer = nullptr;
         if (!splitterTimer) {
             splitterTimer = new QTimer(this);
             splitterTimer->setSingleShot(true);
             connect(splitterTimer, &QTimer::timeout, m_contentPreviewGrid, &ContentPreviewGrid::updatePreviews);
         }
-        splitterTimer->start(200);
-    });
+        splitterTimer->start(200); });
 }
 
-void LibraryWindow::handleImportRequested() {
+void LibraryWindow::handleImportRequested()
+{
     m_actionsManager->importContent();
 }
 
-void LibraryWindow::handleSaveRequested(const QString &extension) {
+void LibraryWindow::handleSaveRequested(const QString &extension)
+{
     m_actionsManager->saveToFile(extension);
 }
 
-void LibraryWindow::handleAddContentRequested() {
+void LibraryWindow::handleAddContentRequested()
+{
     m_actionsManager->showAddContentDialog();
 }
 
-void LibraryWindow::handleEditContent(Content* content) {
+void LibraryWindow::handleEditContent(Content *content)
+{
     m_actionsManager->editContent(content);
 }
 
-void LibraryWindow::delayedSearch() {
+void LibraryWindow::delayedSearch()
+{
     m_searchTimer->start();
 }
 
-void LibraryWindow::applySearchFilter() {
+void LibraryWindow::applySearchFilter()
+{
     m_proxyModel->setTitleFilter(m_searchBar->text());
     // updateContentPreviews() is called by m_proxyModel::layoutChanged signal
     updateOverallFilterState();
 }
 
-void LibraryWindow::clearSearch() {
+void LibraryWindow::clearSearch()
+{
     m_searchBar->clear();
     applySearchFilter(); // This will also hide the clear button and update overall filter state
 }
 
-void LibraryWindow::handleFiltersChanged() {
+void LibraryWindow::handleFiltersChanged()
+{
     // applyInternalFilters() is called within FilterSectionWidget
     // We just need to trigger a preview update and filter state update
     updateOverallFilterState();
 }
 
-void LibraryWindow::handleClearFiltersRequested() {
-    clearSearch(); // Clear search as well for "clear all"
+void LibraryWindow::handleClearFiltersRequested()
+{
+    clearSearch();                // Clear search as well for "clear all"
     m_proxyModel->clearFilters(); // Clear proxy model filters
-    updateOverallFilterState(); // Update filter counter and button state
+    updateOverallFilterState();   // Update filter counter and button state
 }
 
-void LibraryWindow::handleToggleFiltersExpanded(bool expanded) {
+void LibraryWindow::handleToggleFiltersExpanded(bool expanded)
+{
     // ContentPreviewGrid will handle its own update based on available space
     // No explicit updatePreviews() call needed here as proxy model doesn't change
 }
 
-void LibraryWindow::handleSortCriteriaChanged(ContentModel::SortRole role, Qt::SortOrder order) {
+void LibraryWindow::handleSortCriteriaChanged(ContentModel::SortRole role, Qt::SortOrder order)
+{
     m_proxyModel->setSortRole(role);
     m_proxyModel->sort(0, order);
     // updateContentPreviews() is called by m_proxyModel::layoutChanged signal
 }
 
-void LibraryWindow::updateContentDisplay() {
+void LibraryWindow::updateContentDisplay()
+{
     m_contentModel->refreshData(); // Re-fetch all data from ScienceFiction_Library
     // m_proxyModel will notify its view (ContentPreviewGrid)
     updateOverallFilterState(); // Update filter counter and button state
 }
 
-void LibraryWindow::hideDetailView() {
+void LibraryWindow::hideDetailView()
+{
     m_rightPanel->setCurrentIndex(0); // Show main view
 }
 
-void LibraryWindow::showDetailView(Content* content) {
-    if (content) {
+void LibraryWindow::showDetailView(Content *content)
+{
+    if (content)
+    {
         m_detailWindow->setContent(content);
         m_rightPanel->setCurrentIndex(1); // Show detail view
     }
 }
 
-void LibraryWindow::handleContentSingleClick(Content* content) {
+void LibraryWindow::handleContentSingleClick(Content *content)
+{
     // The ContentCardWidget already handles its own selection style
     // If you need more global handling for single clicks (e.g., enable a "Delete" button)
     // you would add that logic here.
 }
 
-void LibraryWindow::updateOverallFilterState() {
+void LibraryWindow::updateOverallFilterState()
+{
     // Check if there are any active filters (search bar, filter section)
     bool hasActiveFilters = !m_searchBar->text().isEmpty();
 
@@ -273,9 +301,12 @@ void LibraryWindow::updateOverallFilterState() {
     // A better approach would be to have FilterSectionWidget tell us if it has active filters.
 
     // A simpler way: if proxy model filters are active, then there are active filters.
-    if (m_proxyModel->hasActiveFilters() || !m_searchBar->text().isEmpty()) {
+    if (m_proxyModel->hasActiveFilters() || !m_searchBar->text().isEmpty())
+    {
         hasActiveFilters = true;
-    } else {
+    }
+    else
+    {
         hasActiveFilters = false;
     }
 
@@ -283,7 +314,8 @@ void LibraryWindow::updateOverallFilterState() {
     m_filterSectionWidget->updateFilterCounter(m_proxyModel->rowCount());
 }
 
-void LibraryWindow::resizeEvent(QResizeEvent *event) {
+void LibraryWindow::resizeEvent(QResizeEvent *event)
+{
     QMainWindow::resizeEvent(event);
     // ContentPreviewGrid already listens to its own resize events (from scroll area's viewport)
     // and uses a timer, so no explicit call needed here unless for splitter resize.

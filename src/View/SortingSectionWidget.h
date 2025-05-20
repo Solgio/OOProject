@@ -20,7 +20,7 @@ public:
 signals:
     void sortCriteriaChanged(ContentModel::SortRole role, Qt::SortOrder order);
 
-private slots:
+public slots:
     void onSortComboBoxIndexChanged(int index);
     void onSortDirectionButtonClicked();
 

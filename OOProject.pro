@@ -46,7 +46,14 @@ HEADERS += src/data_persistency/IReader.h \
            src/Model/lib/ScienceFictionLibrary.h \
            src/Model/lib/Serie.h \
            src/Model/lib/Video.h \
-           src/Model/lib/VideoGame.h
+           src/Model/lib/VideoGame.h \
+           src/View/LibraryActionsManager.h \
+           src/View/LibraryToolbar.h \
+           src/View/ContentPreviewGrid.h \
+           src/View/ContentCardWidget.h \
+           src/View/ShortCutManager.h \
+           src/View/SortingSectionWidget.h \
+           src/View/FilterSectionWidget.h 
 SOURCES += src/Model/Book.cpp \
            src/Model/Comic.cpp \
            src/Model/Content.cpp \
@@ -77,7 +84,14 @@ SOURCES += src/Model/Book.cpp \
            src/data_persistency/json/visitorJson.cpp \
            src/data_persistency/json/jsonReader.cpp \
            src/data_persistency/xml/xmlReader.cpp \
-           src/data_persistency/xml/xmlVisitor.cpp
+           src/data_persistency/xml/xmlVisitor.cpp \
+           src/View/LibraryActionsManager.cpp \
+           src/View/LibraryToolbar.cpp \
+           src/View/ContentPreviewGrid.cpp \
+           src/View/ContentCardWidget.cpp \
+           src/View/ShortCutManager.cpp \
+           src/View/SortingSectionWidget.cpp \
+           src/View/FilterSectionWidget.cpp \
 
 RESOURCES += \
     resources.qrc

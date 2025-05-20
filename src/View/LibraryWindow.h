@@ -1,6 +1,7 @@
 #ifndef LIBRARYWINDOW_H
 #define LIBRARYWINDOW_H
 
+#include "ContentModel.h"
 #include <QMainWindow>
 #include <QLineEdit>
 #include <QStackedWidget>
@@ -15,7 +16,6 @@ class ContentPreviewGrid;
 class LibraryActionsManager;
 class ShortcutManager;
 class ContentDetailWindow;
-class ContentModel;
 class ContentProxyModel;
 class Content; // For editContent slot
 

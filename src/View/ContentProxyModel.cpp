@@ -1,9 +1,9 @@
 #include "ContentProxyModel.h"
 #include "../Model/lib/Content.h"
-#include "../Model/lib/Book.h" // Include the definition of the Book class
-#include "../Model/lib/Comic.h" // Include the definition of the Comic class
-#include "../Model/lib/Film.h" // Include the definition of the ContentModel class
-#include "../Model/lib/Serie.h" // Include the definition of the Serie class
+#include "../Model/lib/Book.h"      // Include the definition of the Book class
+#include "../Model/lib/Comic.h"     // Include the definition of the Comic class
+#include "../Model/lib/Film.h"      // Include the definition of the ContentModel class
+#include "../Model/lib/Serie.h"     // Include the definition of the Serie class
 #include "../Model/lib/VideoGame.h" // Include the definition of the VideoGame class
 
 #include <QMetaType>
@@ -12,59 +12,70 @@ ContentProxyModel::ContentProxyModel(QObject *parent)
     : QSortFilterProxyModel(parent),
       m_filterWatched(false),
       m_filterStarred(false),
-      m_sortRole(ContentModel::SortRole::Title) {
-    
+      m_sortRole(ContentModel::SortRole::Title)
+{
+
     // Enable dynamic sorting
     setDynamicSortFilter(true);
     setSortCaseSensitivity(Qt::CaseInsensitive);
-    
+
     // Set initial sort
     sort(0, Qt::AscendingOrder);
 }
 
-void ContentProxyModel::setTitleFilter(const QString &title) {
+void ContentProxyModel::setTitleFilter(const QString &title)
+{
     m_titleFilter = title;
     invalidateFilter();
 }
 
-void ContentProxyModel::setTypeFilter(const QString &type) {
-    if (m_typeFilter != type) {
+void ContentProxyModel::setTypeFilter(const QString &type)
+{
+    if (m_typeFilter != type)
+    {
         m_typeFilter = type;
         invalidateFilter();
     }
 }
 
-void ContentProxyModel::clearTypeFilter() {
+void ContentProxyModel::clearTypeFilter()
+{
     m_typeFilter.clear();
     invalidateFilter();
 }
+bool ContentProxyModel::hasActiveFilters() const{
+    return !m_titleFilter.isEmpty() || !m_typeFilter.isEmpty() || !m_subgenreFilters.isEmpty() || m_filterWatched || m_filterStarred;
+}
 
-
-void ContentProxyModel::setSubgenreFilter(Subgenre subgenre) {
-    if (!m_subgenreFilters.contains(subgenre)) {
+void ContentProxyModel::setSubgenreFilter(Subgenre subgenre)
+{
+    if (!m_subgenreFilters.contains(subgenre))
+    {
         m_subgenreFilters.append(subgenre);
         invalidateFilter();
     }
 }
 
-void ContentProxyModel::removeSubgenreFilter(Subgenre subgenre) {
-    if (m_subgenreFilters.contains(subgenre)) {
-        m_subgenreFilters.removeAll(subgenre);
-        invalidateFilter();
-    }
+void ContentProxyModel::clearSubgenreFilter()
+{
+    m_subgenreFilters.clear();
+    invalidateFilter();
 }
 
-void ContentProxyModel::setWatchedFilter(bool watched) {
+void ContentProxyModel::setWatchedFilter(bool watched)
+{
     m_filterWatched = watched;
     invalidateFilter();
 }
 
-void ContentProxyModel::setStarredFilter(bool starred) {
+void ContentProxyModel::setStarredFilter(bool starred)
+{
     m_filterStarred = starred;
     invalidateFilter();
 }
 
-void ContentProxyModel::clearFilters() {
+void ContentProxyModel::clearFilters()
+{
     m_titleFilter.clear();
     clearTypeFilter();
     m_subgenreFilters.clear();
@@ -73,31 +84,28 @@ void ContentProxyModel::clearFilters() {
     invalidateFilter();
 }
 
-void ContentProxyModel::setSortRole(ContentModel::SortRole role) {
+void ContentProxyModel::setSortRole(ContentModel::SortRole role)
+{
     m_sortRole = role;
     invalidate();
     sort(0, sortOrder());
 }
 
 bool ContentProxyModel::filterAcceptsRow(int sourceRow, const QModelIndex &sourceParent) const {
-    QModelIndex index = sourceModel()->index(sourceRow, 0, sourceParent);
-    
-    // Get the Content pointer
-    auto* contentModel = qobject_cast<ContentModel*>(sourceModel());
+    ContentModel* contentModel = qobject_cast<ContentModel*>(sourceModel());
     if (!contentModel)
-        return false;
-        
+        return true; // Should not happen if sourceModel is correctly set
+
     Content* content = contentModel->getContent(sourceRow);
     if (!content)
-        return false;
-    
+        return false; // Invalid content
+
     // Apply title filter
     if (!m_titleFilter.isEmpty()) {
-        auto title = QString::fromStdString(content->getTitle());
-        if (!title.contains(m_titleFilter, Qt::CaseInsensitive))
+        if (!QString::fromStdString(content->getTitle()).contains(m_titleFilter, Qt::CaseInsensitive))
             return false;
     }
-    
+
     // Apply type filter
     bool typeFilterApplied = false;
     if (!m_typeFilter.isEmpty()) {
@@ -116,10 +124,21 @@ bool ContentProxyModel::filterAcceptsRow(int sourceRow, const QModelIndex &sourc
             return false;
         }
     }
-    
-    // Apply subgenre filter    
-    if (!m_subgenreFilters.isEmpty()) {
-        //auto subgenre = static_cast<Subgenre>(content->getSubgenre());
+
+    // Apply watched filter
+    if (m_filterWatched) {
+        if (!content->getWatched()) // Only show if watched
+            return false;
+    }
+
+    // Apply starred filter
+    if (m_filterStarred) {
+        if (!content->getStarred()) // Only show if starred
+            return false;
+    }
+
+    // Apply subgenre filters (if any are active)
+     if (!m_subgenreFilters.isEmpty()) {
         // Check if content has ALL selected subgenres (AND condition)
         for (Subgenre filter : m_subgenreFilters) {
             if (!content->hasSubgenre(filter)){  
@@ -128,43 +147,44 @@ bool ContentProxyModel::filterAcceptsRow(int sourceRow, const QModelIndex &sourc
         }
     }
 
-    // Apply watched filter
-    if (m_filterWatched && !content->getWatched())
-        return false;
-    
-    // Apply starred filter
-    if (m_filterStarred && !content->getStarred())
-        return false;
-    
-    return true;
+    return true; // Content passes all active filters
 }
 
-bool ContentProxyModel::lessThan(const QModelIndex &source_left, const QModelIndex &source_right) const {
-    ContentModel* contentModel = qobject_cast<ContentModel*>(sourceModel());
+
+bool ContentProxyModel::lessThan(const QModelIndex &source_left, const QModelIndex &source_right) const
+{
+    ContentModel *contentModel = qobject_cast<ContentModel *>(sourceModel());
     if (!contentModel)
         return QSortFilterProxyModel::lessThan(source_left, source_right);
-    
-    Content* leftContent = contentModel->getContent(source_left.row());
-    Content* rightContent = contentModel->getContent(source_right.row());
-    
+
+    Content *leftContent = contentModel->getContent(source_left.row());
+    Content *rightContent = contentModel->getContent(source_right.row());
+
     if (!leftContent || !rightContent)
         return QSortFilterProxyModel::lessThan(source_left, source_right);
-    
+
     // Use the ContentModel method to get the sort value based on the current sort role
     QVariant leftValue = contentModel->getSortValue(leftContent, m_sortRole);
     QVariant rightValue = contentModel->getSortValue(rightContent, m_sortRole);
-    
+
     // Handle special comparisons based on type
-    if (leftValue.typeId() == QMetaType::QString && rightValue.typeId() == QMetaType::QString) {
+    if (leftValue.typeId() == QMetaType::QString && rightValue.typeId() == QMetaType::QString)
+    {
         return QString::localeAwareCompare(leftValue.toString(), rightValue.toString()) < 0;
-    } else if (leftValue.typeId() == QMetaType::Int && rightValue.typeId() == QMetaType::Int) {
-        return leftValue.toInt() < rightValue.toInt();
-    } else if (leftValue.typeId() == QMetaType::Double && rightValue.typeId() == QMetaType::Double) {
-        return leftValue.toDouble() < rightValue.toDouble();
-    } else if (leftValue.typeId() == QMetaType::Int && rightValue.typeId() == QMetaType::Int) {
+    }
+    else if (leftValue.typeId() == QMetaType::Int && rightValue.typeId() == QMetaType::Int)
+    {
         return leftValue.toInt() < rightValue.toInt();
     }
-    
+    else if (leftValue.typeId() == QMetaType::Double && rightValue.typeId() == QMetaType::Double)
+    {
+        return leftValue.toDouble() < rightValue.toDouble();
+    }
+    else if (leftValue.typeId() == QMetaType::Int && rightValue.typeId() == QMetaType::Int)
+    {
+        return leftValue.toInt() < rightValue.toInt();
+    }
+
     // Default comparison
     return QSortFilterProxyModel::lessThan(source_left, source_right);
 }

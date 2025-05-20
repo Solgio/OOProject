@@ -1,10 +1,10 @@
 #include "FilterSectionWidget.h"
-#include "ContentProxyModel.h" // Assuming this path
+#include "ContentProxyModel.h" 
 #include <QVBoxLayout>
 #include <QHBoxLayout>
 #include <QMap>
 #include <QStyle>
-#include <type_traits> // For std::underlying_type_t
+#include <type_traits> 
 
 using std::underlying_type_t;
 
@@ -13,7 +13,7 @@ FilterSectionWidget::FilterSectionWidget(ContentProxyModel *proxyModel, QWidget 
     setupUI();
     connect(m_filtersToggleBtn, &QToolButton::clicked, this, &FilterSectionWidget::onToggleFiltersClicked);
     connect(m_clearFiltersBtn, &QPushButton::clicked, this, &FilterSectionWidget::clearAllFiltersUI);
-}
+    }
 
 void FilterSectionWidget::setupUI() {
     auto *mainLayout = new QVBoxLayout(this);
@@ -76,7 +76,22 @@ void FilterSectionWidget::setupUI() {
         rb->setProperty("filterType", "type");
         rb->setProperty("filterValue", type);
         rb->setStyleSheet(radioButtonStyle);
-        connect(rb, &QRadioButton::clicked, this, &FilterSectionWidget::onFilterRadioButtonClicked);
+
+        connect(rb, &QRadioButton::clicked, this, [this, rb]()
+                {
+        // Get the current type filter from the proxy model
+        QString currentFilter = m_proxyModel->getTypeFilter();
+        
+        if (currentFilter == rb->text()) {
+            rb->setAutoExclusive(false);  // Temporarily disable auto-exclusive behavior
+            rb->setChecked(false);        // Uncheck the button
+            rb->setAutoExclusive(true);   // Re-enable auto-exclusive behavior
+            m_proxyModel->clearTypeFilter();
+        } else {
+            m_proxyModel->setTypeFilter(rb->text());
+        }
+        
+        onFilterRadioButtonClicked(); });
         typeLayout->addWidget(rb);
         m_filterControls["type"].append(rb);
     }
@@ -241,6 +256,7 @@ void FilterSectionWidget::applyInternalFilters() {
             m_proxyModel->setStarredFilter(true);
         }
     }
+    emit filtersChanged();
 }
 
 void FilterSectionWidget::updateFilterCounter(int count) {

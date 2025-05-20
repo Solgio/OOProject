@@ -28,10 +28,12 @@ signals:
     void clearFiltersRequested();
     void toggleExpanded(bool expanded);
 
+public slots:
+    void onToggleFiltersClicked();
+
 private slots:
     void onFilterCheckboxStateChanged();
     void onFilterRadioButtonClicked();
-    void onToggleFiltersClicked();
 
 private:
     void setupUI();
