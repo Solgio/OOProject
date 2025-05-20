@@ -2,29 +2,22 @@
 #define LIBRARYWINDOW_H
 
 #include <QMainWindow>
-#include <QToolButton>
 #include <QLineEdit>
 #include <QStackedWidget>
-#include <QListWidgetItem>
 #include <QSplitter>
-#include <QCheckBox>
-#include <QPushButton>
-#include <QMap>
-#include <QTableView>
-#include <QGridLayout>
-#include <QScrollArea>
-#include <QComboBox>
-#include "../Model/lib/ScienceFictionLibrary.h"
+#include <QTimer>
 
-class QListWidget;
-class QLabel;
-class QLineEdit;
-class QComboBox;
-class QMenu;
+// Forward declarations for new classes
+class LibraryToolbar;
+class FilterSectionWidget;
+class SortingSectionWidget;
+class ContentPreviewGrid;
+class LibraryActionsManager;
+class ShortcutManager;
 class ContentDetailWindow;
-class QTimer;
 class ContentModel;
 class ContentProxyModel;
+class Content; // For editContent slot
 
 class LibraryWindow : public QMainWindow {
     Q_OBJECT
@@ -32,100 +25,71 @@ class LibraryWindow : public QMainWindow {
 public:
     explicit LibraryWindow(QWidget *parent = nullptr);
     ~LibraryWindow() override;
-    bool eventFilter(QObject* obj, QEvent* event) override;
 
-signals:
-    void contentDataChanged();
-
-private slots:
-    void importContent();
-    void saveToFile(const QString &extension);
-    void updateContentDisplay();
-
-    void showAddContentDialog();
-    void editContent(Content* content = nullptr);
-
-    void hideDetailView();
-    void applySearchFilter(const QString &text);
-
-    void applyFilters();
-    void clearFilters();
-    void clearSearch();
-    
-    void delayedSearch();
-    void updateFilterCounter();
-    void changeSortDirection();
-private:
-    //              ==== UI Setup ====
-    void setupUI();
-    void setupFilterSection();
-    void setupToolbar();
-    void setupPreviewWidget();
-    void setupSortingControls();
-
+protected:
     void resizeEvent(QResizeEvent* event) override;
 
-    // New method to create compact filter widget
-    QWidget* createCompactFilterWidget();
-    
-    void connectSignals();
-    void shortcutActions();
-    
-    // Helper methods
-    void createSaveMenu();
-    void createImportButton();
-    void toggleFiltersSection();
-    void updateContentPreviews();
-    QWidget* createContentPreviewCard(Content* content);
-    void updateFilterToggleButtonState();
+private slots:
+    // Slots for actions from Toolbar or Shortcuts
+    void handleImportRequested();
+    void handleSaveRequested(const QString &extension);
+    void handleAddContentRequested();
+    void handleEditContent(Content* content = nullptr);
 
-    // UI Components
-    QToolBar *m_toolBar = nullptr;
+    // Slots for search
+    void delayedSearch();
+    void applySearchFilter();
+    void clearSearch();
+
+    // Slots for filter/sort changes
+    void handleFiltersChanged();
+    void handleClearFiltersRequested();
+    void handleToggleFiltersExpanded(bool expanded);
+    void handleSortCriteriaChanged(ContentModel::SortRole role, Qt::SortOrder order);
+
+    // Slot for updating content display
+    void updateContentDisplay();
+
+    // Slot for detail view
+    void hideDetailView();
+
+    // Slot for ContentPreviewGrid interactions
+    void showDetailView(Content* content);
+    void handleContentSingleClick(Content* content);
+
+
+private:
+    // UI Setup methods
+    void setupUI();
+    void createLeftPanel(QWidget* parentWidget);
+    void createRightPanel();
+    void connectSignals();
+
+    // Helper to update overall filter state (including search)
+    void updateOverallFilterState();
+
+    // UI Components (now instances of new classes or simpler widgets)
+    LibraryToolbar *m_toolBar = nullptr;
     QSplitter *m_splitter = nullptr;
     QLineEdit *m_searchBar = nullptr;
-    QToolButton *m_importButton = nullptr;
-    QToolButton *m_saveButton = nullptr;
-    QToolButton *m_add = nullptr;
     QToolButton *m_clearSearchButton = nullptr;
-    QMenu *m_saveMenu = nullptr;
+
+    FilterSectionWidget *m_filterSectionWidget = nullptr;
+    SortingSectionWidget *m_sortingSectionWidget = nullptr;
+    ContentPreviewGrid *m_contentPreviewGrid = nullptr;
+
+    QStackedWidget *m_rightPanel = nullptr;
     ContentDetailWindow *m_detailWindow = nullptr;
-    QTimer *m_searchTimer = nullptr;
 
     // Models
     ContentModel *m_contentModel = nullptr;
     ContentProxyModel *m_proxyModel = nullptr;
-    
-    // Filters
-    QWidget* m_filtersSection = nullptr;
-    QToolButton* m_filtersToggleBtn = nullptr;
-    QPushButton* m_clearFiltersBtn = nullptr;
-    QLabel* m_filterCounter = nullptr;
-    QScrollArea* m_filtersScrollArea = nullptr;
-    
-    // New filter-related members
-    QWidget* m_compactFiltersWidget = nullptr;
-    QStackedWidget* m_filtersStackedWidget = nullptr;
-    bool m_filtersExpanded = false;
 
-    QLayout* m_sortingLayout = nullptr;
+    // Managers
+    LibraryActionsManager *m_actionsManager = nullptr;
+    ShortcutManager *m_shortcutManager = nullptr;
 
-    // Sorting controls
-    QComboBox* m_sortingComboBox = nullptr;
-    QToolButton* m_sortDirectionButton = nullptr;
-
-    // Content preview widgets
-    QWidget* m_previewWidget = nullptr;
-    QScrollArea* m_previewScrollArea = nullptr;
-    QGridLayout* m_previewLayout = nullptr;
-
-    // Stacked widgets
-    QStackedWidget *m_rightPanel = nullptr;
-    QWidget *m_mainView = nullptr;
-    QLabel *m_noResultsLabel = nullptr;
-
-    // Selected Content
-    QWidget* m_selectedCard = nullptr;
-
+    QTimer *m_searchTimer = nullptr;
     const int SEARCH_DELAY_MS = 350;
 };
 

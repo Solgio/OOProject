@@ -1,162 +1,76 @@
 #include "LibraryWindow.h"
+#include "LibraryToolbar.h"
+#include "FilterSectionWidget.h"
+#include "SortingSectionWidget.h"
+#include "ContentPreviewGrid.h"
+#include "LibraryActionsManager.h"
+#include "ShortcutManager.h"
 #include "ContentDetailWindow.h"
-#include "TypeChoiceDialog.h"
-#include "ContentEditWindow.h"
 #include "ContentModel.h"
 #include "ContentProxyModel.h"
 
-#include "../Model/lib/ScienceFictionLibrary.h"
+#include "../Model/lib/ScienceFictionLibrary.h" // For getInstance()
 #include "../Model/lib/Content.h"
-#include "../Model/lib/Book.h"
-#include "../Model/lib/Comic.h"
-#include "../Model/lib/Film.h"
-#include "../Model/lib/Serie.h"
-#include "../Model/lib/VideoGame.h"
 
-#include <QLabel>
-#include <QToolButton>
-#include <QPushButton>
 #include <QVBoxLayout>
-#include <QLineEdit>
-#include <QToolBar>
-#include <QComboBox>
-#include <QFileDialog>
-#include <QMessageBox>
-#include <QMenu>
-#include <QCheckBox>
-#include <QRadioButton>
-#include <QGroupBox>
-#include <QTimer>
 #include <QHBoxLayout>
+#include <QLabel>
 #include <QStyle>
-#include <QHeaderView>
-#include <QListWidget>
 #include <QEvent>
-#include <QShortcut>
-using std::underlying_type_t;
 
-LibraryWindow::LibraryWindow(QWidget *parent) : QMainWindow(parent)
-{
+LibraryWindow::LibraryWindow(QWidget *parent) : QMainWindow(parent) {
+    // Initialize models first
+    m_contentModel = new ContentModel(this);
+    m_proxyModel = new ContentProxyModel(this);
+    m_proxyModel->setSourceModel(m_contentModel);
+
+    // Initialize managers
+    m_actionsManager = new LibraryActionsManager(this);
+    m_shortcutManager = new ShortcutManager(this);
+
     // Initialize search timer
     m_searchTimer = new QTimer(this);
     m_searchTimer->setSingleShot(true);
     m_searchTimer->setInterval(SEARCH_DELAY_MS);
 
-    // Initialize filter toggle button
-    m_filtersToggleBtn = new QToolButton();
-    m_filtersToggleBtn->setText("Filters");
-    m_filtersToggleBtn->setCheckable(true);
-    m_filtersToggleBtn->setToolTip("Show/Hide filters");
-
     setupUI();
     connectSignals();
-    shortcutActions();
-    updateContentDisplay();
+    updateContentDisplay(); // Initial display
 }
 
-LibraryWindow::~LibraryWindow()
-{
-    delete m_detailWindow;
-    delete m_searchTimer;
+LibraryWindow::~LibraryWindow() {
+    // Child widgets and models are parented to this, so they will be deleted automatically.
+    // Explicit deletes only for non-parented or dynamically allocated objects if any.
 }
 
-bool LibraryWindow::eventFilter(QObject *obj, QEvent *event)
-{
-    if (event->type() == QEvent::MouseButtonPress)
-    {
-        if (obj->property("isCompactFilterWidget").toBool())
-        {
-            // Toggle to expanded view when clicking on compact widget
-            m_filtersExpanded = true;
-            m_filtersStackedWidget->setCurrentIndex(1);
-            m_filtersToggleBtn->setChecked(true);
-            QTimer::singleShot(100, this, &LibraryWindow::updateContentPreviews);
-            return true;
-        }
-    }
-
-    // Handle existing event filtering for content cards
-    if (event->type() == QEvent::MouseButtonDblClick)
-    {
-        if (obj->property("content_ptr").isValid())
-        {
-            Content *content = obj->property("content_ptr").value<Content *>();
-            if (content)
-            {
-                m_detailWindow->setContent(content);
-                m_rightPanel->setCurrentIndex(1); // Show detail view
-                return true;
-            }
-        }
-    }
-    else if (event->type() == QEvent::MouseButtonPress)
-    {
-        // Handle single click for selection
-        QWidget *widget = qobject_cast<QWidget *>(obj);
-        if (widget && widget->objectName() == "ContentCard")
-        {
-            Content *content = obj->property("content_ptr").value<Content *>();
-            if (content)
-            {
-                // If this card is already selected, deselect it
-                if (m_selectedCard == widget)
-                {
-                    // Deselect - reset to original style
-                    if (content->getStarred())
-                    {
-                        widget->setStyleSheet("QWidget#ContentCard { border: 2px solid #FFD700; border-radius: 5px; background-color: transparent; }");
-                    }
-                    else
-                    {
-                        widget->setStyleSheet("QWidget#ContentCard { border: 1px solid #ccc; border-radius: 5px; background-color: transparent; }");
-                    }
-                    m_selectedCard = nullptr;
-                }
-                else
-                {
-                    // Deselect previous card if any
-                    if (m_selectedCard)
-                    {
-                        // Find the content of the previously selected card
-                        Content *prevContent = m_selectedCard->property("content_ptr").value<Content *>();
-                        if (prevContent)
-                        {
-                            if (prevContent->getStarred())
-                            {
-                                m_selectedCard->setStyleSheet("QWidget#ContentCard { border: 2px solid #FFD700; border-radius: 5px; background-color: transparent; }");
-                            }
-                            else
-                            {
-                                m_selectedCard->setStyleSheet("QWidget#ContentCard { border: 1px solid #ccc; border-radius: 5px; background-color: transparent; }");
-                            }
-                        }
-                    }
-
-                    // Select this card
-                    widget->setStyleSheet("QWidget#ContentCard { border: 2px solid #00FF00; border-radius: 5px; background-color: transparent; }");
-                    m_selectedCard = widget;
-                }
-                return true;
-            }
-        }
-    }
-
-    return QMainWindow::eventFilter(obj, event);
-}
-
-void LibraryWindow::setupUI()
-{
+void LibraryWindow::setupUI() {
     setWindowTitle("Science Fiction Library Manager");
     resize(1920, 1080);
 
-    // Main structure
+    // Main splitter
     m_splitter = new QSplitter(Qt::Horizontal);
-    m_toolBar = addToolBar("Main Toolbar");
-    m_toolBar->setIconSize(QSize(28, 28));
+    setCentralWidget(m_splitter);
 
-    // Left panel (filters and sorting)
+    // Toolbar (now an instance of LibraryToolbar)
+    m_toolBar = new LibraryToolbar(this);
+    addToolBar(m_toolBar);
+
+    // Left Panel
     auto *leftPanel = new QWidget();
-    auto *leftLayout = new QVBoxLayout(leftPanel);
+    createLeftPanel(leftPanel);
+    m_splitter->addWidget(leftPanel);
+
+    // Right Panel
+    createRightPanel();
+    m_splitter->addWidget(m_rightPanel);
+
+    m_splitter->setStretchFactor(0, 1); // Left panel gets minimal space
+    m_splitter->setStretchFactor(1, 4); // Right panel gets 4x more space
+}
+
+void LibraryWindow::createLeftPanel(QWidget* parentWidget) {
+    auto *leftLayout = new QVBoxLayout(parentWidget);
+    leftLayout->setContentsMargins(5, 5, 5, 5);
 
     // Search bar with clear button
     auto *searchContainer = new QWidget();
@@ -169,1045 +83,208 @@ void LibraryWindow::setupUI()
     m_clearSearchButton->setIcon(style()->standardIcon(QStyle::SP_DialogCloseButton));
     m_clearSearchButton->setCursor(Qt::PointingHandCursor);
     m_clearSearchButton->setToolTip("Clear search");
-    m_clearSearchButton->hide();
+    m_clearSearchButton->hide(); // Hidden initially
 
     searchLayout->addWidget(m_searchBar);
     searchLayout->addWidget(m_clearSearchButton);
-
-    // Setup filter section
-    setupFilterSection();
-
-    // Setup sorting controls
-    setupSortingControls();
-
     leftLayout->addWidget(searchContainer);
-    leftLayout->addWidget(m_filtersToggleBtn);
-    leftLayout->addWidget(m_filtersStackedWidget);
 
-    auto *sortingContainer = new QWidget();
-    m_sortingLayout = new QHBoxLayout(sortingContainer);
-    leftLayout->addWidget(new QLabel("Sort by:"));
-    leftLayout->addWidget(m_sortingComboBox);
+    // Filter section (now an instance of FilterSectionWidget)
+    m_filterSectionWidget = new FilterSectionWidget(m_proxyModel);
+    leftLayout->addWidget(m_filterSectionWidget);
 
-    auto *sortDirectionLayout = new QHBoxLayout();
-    sortDirectionLayout->addWidget(new QLabel("Direction:"));
-    sortDirectionLayout->addWidget(m_sortDirectionButton);
-    sortDirectionLayout->addStretch();
+    // Sorting controls (now an instance of SortingSectionWidget)
+    m_sortingSectionWidget = new SortingSectionWidget();
+    leftLayout->addWidget(m_sortingSectionWidget);
 
-    m_sortingLayout->addWidget(m_sortingComboBox);
+    leftLayout->addStretch();
+}
 
-    auto *sortDirectionContainer = new QWidget();
-    sortDirectionContainer->setLayout(sortDirectionLayout);
-    m_sortingLayout->addWidget(sortDirectionContainer);
-    leftLayout->addWidget(sortingContainer);
-    // leftLayout->addStretch();
-
-    // Right panel - Main stack
+void LibraryWindow::createRightPanel() {
     m_rightPanel = new QStackedWidget();
-    m_mainView = new QWidget();
-    auto *rightLayout = new QVBoxLayout(m_mainView);
 
-    // Setup content preview widget
-    setupPreviewWidget();
-    rightLayout->addWidget(new QLabel("Content Library:"));
-    rightLayout->addWidget(m_previewScrollArea);
+    // Main view (contains content preview grid)
+    QWidget *mainView = new QWidget();
+    auto *mainViewLayout = new QVBoxLayout(mainView);
+    mainViewLayout->setContentsMargins(0, 0, 0, 0);
 
-    // Add button
-    auto *addButtonContainer = new QWidget();
-    auto *addButtonLayout = new QHBoxLayout(addButtonContainer);
-    addButtonLayout->addStretch();
+    mainViewLayout->addWidget(new QLabel("Content Library:"));
 
-    m_add = new QToolButton();
-    m_add->setText("Add Content");
-    m_add->setIcon(QIcon(":assets/icons/add.png"));
-    m_add->setToolTip("Add new content to the library");
-    m_add->setIconSize(QSize(32, 32));
-    addButtonLayout->addWidget(m_add);
+    // Content preview grid (now an instance of ContentPreviewGrid)
+    m_contentPreviewGrid = new ContentPreviewGrid(m_proxyModel);
+    mainViewLayout->addWidget(m_contentPreviewGrid);
 
-    rightLayout->addWidget(addButtonContainer);
+    m_rightPanel->addWidget(mainView); // Index 0
 
     // Detail window
-    m_detailWindow = new ContentDetailWindow();
-
-    // Add views to main stack
-    m_rightPanel->addWidget(m_mainView);     // Index 0
+    m_detailWindow = new ContentDetailWindow(this);
     m_rightPanel->addWidget(m_detailWindow); // Index 1
-
-    // Final setup
-    m_splitter->addWidget(leftPanel);
-    m_splitter->addWidget(m_rightPanel);
-    m_splitter->setStretchFactor(0, 1); // Left panel gets minimal space
-    m_splitter->setStretchFactor(1, 4); // Right panel gets 4x more space
-    setCentralWidget(m_splitter);
-
-    // Toolbar
-    setupToolbar();
 }
 
-void LibraryWindow::setupPreviewWidget()
-{
-    // Create the model and proxy model if not already created
-    if (!m_contentModel)
-    {
-        m_contentModel = new ContentModel(this);
-    }
+void LibraryWindow::connectSignals() {
+    // Connect LibraryToolbar signals to LibraryActionsManager slots
+    connect(m_toolBar, &LibraryToolbar::importRequested, m_actionsManager, &LibraryActionsManager::importContent);
+    connect(m_toolBar, &LibraryToolbar::saveRequested, m_actionsManager, &LibraryActionsManager::saveToFile);
+    connect(m_toolBar, &LibraryToolbar::addContentRequested, m_actionsManager, &LibraryActionsManager::showAddContentDialog);
 
-    if (!m_proxyModel)
-    {
-        m_proxyModel = new ContentProxyModel(this);
-        m_proxyModel->setSourceModel(m_contentModel);
-    }
+    // Connect LibraryActionsManager signals to LibraryWindow slots for UI updates
+    connect(m_actionsManager, &LibraryActionsManager::contentDataChanged, this, &LibraryWindow::updateContentDisplay);
+    connect(m_actionsManager, &LibraryActionsManager::contentEdited, m_detailWindow, &ContentDetailWindow::refreshContent);
 
-    // Create scroll area
-    m_previewScrollArea = new QScrollArea();
-    m_previewScrollArea->setWidgetResizable(true);
-    m_previewScrollArea->setHorizontalScrollBarPolicy(Qt::ScrollBarAsNeeded);
-    m_previewScrollArea->setFrameShape(QFrame::NoFrame);
+    // Connect FilterSectionWidget signals
+    connect(m_filterSectionWidget, &FilterSectionWidget::filtersChanged, this, &LibraryWindow::handleFiltersChanged);
+    connect(m_filterSectionWidget, &FilterSectionWidget::clearFiltersRequested, this, &LibraryWindow::handleClearFiltersRequested);
+    connect(m_filterSectionWidget, &FilterSectionWidget::toggleExpanded, this, &LibraryWindow::handleToggleFiltersExpanded);
 
-    // Create the preview widget with a grid layout
-    m_previewWidget = new QWidget();
-    m_previewLayout = new QGridLayout(m_previewWidget);
-    m_previewLayout->setAlignment(Qt::AlignTop | Qt::AlignLeft);
-    m_previewLayout->setSpacing(10); // Reduced spacing
-    m_previewLayout->setContentsMargins(5, 5, 5, 5);
+    // Connect SortingSectionWidget signals
+    connect(m_sortingSectionWidget, &SortingSectionWidget::sortCriteriaChanged, this, &LibraryWindow::handleSortCriteriaChanged);
 
-    // Add no results label
-    m_noResultsLabel = new QLabel();
-    m_noResultsLabel->setPixmap(QPixmap(":assets/icons/no-results.png"));
-    m_noResultsLabel->setAlignment(Qt::AlignCenter);
-    m_noResultsLabel->setText("<center><h2 style='color:gray;'>No results found</h2></center>");
-    m_noResultsLabel->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
-    m_noResultsLabel->hide();
+    // Connect search bar signals
+    connect(m_searchBar, &QLineEdit::textChanged, this, &LibraryWindow::delayedSearch);
+    connect(m_searchTimer, &QTimer::timeout, this, &LibraryWindow::applySearchFilter);
+    connect(m_clearSearchButton, &QToolButton::clicked, this, &LibraryWindow::clearSearch);
+    connect(m_searchBar, &QLineEdit::textChanged, this, [this](const QString &text) {
+        m_clearSearchButton->setVisible(!text.isEmpty());
+    });
 
-    m_previewLayout->addWidget(m_noResultsLabel, 0, 0, 1, 6); // Span all columns
-    m_previewScrollArea->setWidget(m_previewWidget);
-}
-
-void LibraryWindow::setupSortingControls()
-{
-    // Create sorting combo box
-    m_sortingComboBox = new QComboBox();
-    m_sortingComboBox->setToolTip("Sort by");
-    m_sortingComboBox->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed);
-    m_sortingComboBox->setMinimumWidth(120);
-    m_sortingComboBox->addItem("Title", static_cast<underlying_type_t<ContentModel::SortRole>>(ContentModel::SortRole::Title));
-    m_sortingComboBox->addItem("Release Date", static_cast<underlying_type_t<ContentModel::SortRole>>(ContentModel::SortRole::ReleaseDate));
-    m_sortingComboBox->addItem("Creator", static_cast<underlying_type_t<ContentModel::SortRole>>(ContentModel::SortRole::Creator));
-    m_sortingComboBox->addItem("Type", static_cast<underlying_type_t<ContentModel::SortRole>>(ContentModel::SortRole::Type));
-
-    // Create sort direction button
-    m_sortDirectionButton = new QToolButton();
-    m_sortDirectionButton->setIcon(QIcon(":assets/icons/ord-cresc.png"));
-    m_sortDirectionButton->setIconSize(QSize(28, 28));
-    m_sortDirectionButton->setCheckable(true);
-    m_sortDirectionButton->setToolTip("Sort Ascending/Descending");
-
-    // Connect signals
-    connect(m_sortingComboBox, QOverload<int>::of(&QComboBox::currentIndexChanged),
-            [this](int index)
-            {
-                int role = m_sortingComboBox->itemData(index).toInt();
-                m_proxyModel->setSortRole(static_cast<ContentModel::SortRole>(role));
-                updateContentPreviews();
-            });
-
-    connect(m_sortDirectionButton, &QToolButton::clicked, this, &LibraryWindow::changeSortDirection);
-}
-
-void LibraryWindow::changeSortDirection()
-{
-    bool isAscending = !m_sortDirectionButton->isChecked();
-
-    // Update the button icon
-    m_sortDirectionButton->setIcon(QIcon(isAscending ? ":assets/icons/ord-cresc.png" : ":assets/icons/ord-decresc.png"));
-
-    // Update the sort order in the proxy model
-    m_proxyModel->sort(0, isAscending ? Qt::AscendingOrder : Qt::DescendingOrder);
-
-    // Refresh the content previews
-    updateContentPreviews();
-}
-
-void LibraryWindow::setupFilterSection()
-{
-    // Create a stacked widget to handle compact/expanded states
-    m_filtersStackedWidget = new QStackedWidget();
-
-    // Create the compact filters widget (minimal view when collapsed)
-    m_compactFiltersWidget = createCompactFilterWidget();
-
-    // Create the expanded filters section (your existing code)
-    m_filtersSection = new QWidget();
-    auto *filtersLayout = new QVBoxLayout(m_filtersSection);
-    filtersLayout->setContentsMargins(0, 0, 0, 0);
-    filtersLayout->setSpacing(5);
-
-    // Define checkbox style for highlighting
-    QString checkboxStyle =
-        "QCheckBox:checked {"
-        "   border: 2px solid rgb(15, 228, 61);" // Border color
-        "   border-radius: 3px;"                 // Rounded corners
-        "   padding: 2px;"                       // Some padding
-        "}"
-        "QCheckBox:hover {"
-        "   background-color:rgb(85, 87, 86);" // Light gray on hover (unchecked)
-        "}"
-        "QCheckBox:checked:hover {"
-        "   background-color:rgb(0, 110, 59);" // Slightly darker green on hover (checked)
-        "}";
-    QString radioButtonStyle =
-        "QRadioButton:checked {"
-        "   border: 2px solid rgb(15, 228, 61);" // Border color
-        "   border-radius: 3px;"                 // Rounded corners
-        "   padding: 2px;"                       // Some padding
-        "}"
-        "QRadioButton:hover {"
-        "   background-color:rgb(85, 87, 86);" // Light gray on hover (unchecked)
-        "}"
-        "QRadioButton:checked:hover {"
-        "   background-color:rgb(0, 110, 59);" // Slightly darker green on hover (checked)
-        "}";
-
-    // Type filter section
-    auto *typeGroup = new QGroupBox("Content Types");
-    typeGroup->setFlat(true);
-    typeGroup->setStyleSheet("QGroupBox { border: 1px solid gray; border-radius: 3px; margin-top: 6px; }");
-
-    auto *typeLayout = new QVBoxLayout(typeGroup);
-    typeLayout->setContentsMargins(5, 15, 5, 5);
-
-    QStringList types = {"Book", "Comic", "Film", "Serie", "VideoGame"};
-    for (const QString &type : types)
-    {
-        auto *rb = new QRadioButton(type);
-        rb->setProperty("filterType", "type");
-        rb->setProperty("filterValue", type);
-        rb->setStyleSheet(radioButtonStyle);
-        connect(rb, &QRadioButton::clicked, this, [this, rb]()
-                {
-        // Get the current type filter from the proxy model
-        QString currentFilter = m_proxyModel->getTypeFilter();
-        
-        if (currentFilter == rb->text()) {
-            rb->setAutoExclusive(false);  // Temporarily disable auto-exclusive behavior
-            rb->setChecked(false);        // Uncheck the button
-            rb->setAutoExclusive(true);   // Re-enable auto-exclusive behavior
-            m_proxyModel->clearTypeFilter();
-        } else {
-            m_proxyModel->setTypeFilter(rb->text());
-        }
-        
-        applyFilters(); });
-        typeLayout->addWidget(rb);
-    }
-    filtersLayout->addWidget(typeGroup);
-
-    // Genre filter section
-    auto *genreGroup = new QGroupBox("Genres");
-    genreGroup->setFlat(true);
-    genreGroup->setStyleSheet("QGroupBox { border: 1px solid gray; border-radius: 3px; margin-top: 6px; }");
-
-    auto *genreLayout = new QVBoxLayout(genreGroup);
-    genreLayout->setContentsMargins(5, 15, 5, 5);
-
-    // Get all available subgenres from the Content enum
-    QMap<int, QString> genreMap;
-    genreMap[static_cast<underlying_type_t<Subgenre>>(Subgenre::NONE)] = "None";
-    genreMap[static_cast<underlying_type_t<Subgenre>>(Subgenre::ACTION)] = "Action";
-    genreMap[static_cast<underlying_type_t<Subgenre>>(Subgenre::ADVENTURE)] = "Adventure";
-    genreMap[static_cast<underlying_type_t<Subgenre>>(Subgenre::COMEDY)] = "Comedy";
-    genreMap[static_cast<underlying_type_t<Subgenre>>(Subgenre::DRAMA)] = "Drama";
-    genreMap[static_cast<underlying_type_t<Subgenre>>(Subgenre::HORROR)] = "Horror";
-    genreMap[static_cast<underlying_type_t<Subgenre>>(Subgenre::ROMANCE)] = "Romance";
-    genreMap[static_cast<underlying_type_t<Subgenre>>(Subgenre::THRILLER)] = "Thriller";
-    genreMap[static_cast<underlying_type_t<Subgenre>>(Subgenre::MYSTERY)] = "Mystery";
-    genreMap[static_cast<underlying_type_t<Subgenre>>(Subgenre::WESTERN)] = "Western";
-    genreMap[static_cast<underlying_type_t<Subgenre>>(Subgenre::WAR)] = "War";
-    genreMap[static_cast<underlying_type_t<Subgenre>>(Subgenre::MUSICAL)] = "Musical";
-    genreMap[static_cast<underlying_type_t<Subgenre>>(Subgenre::FAMILY)] = "Family";
-    genreMap[static_cast<underlying_type_t<Subgenre>>(Subgenre::SPORTS)] = "Sports";
-    genreMap[static_cast<underlying_type_t<Subgenre>>(Subgenre::SUPERHERO)] = "Superhero";
-
-    for (auto it = genreMap.begin(); it != genreMap.end(); ++it)
-    {
-        auto *cb = new QCheckBox(it.value());
-        cb->setProperty("filterType", "genre");
-        cb->setProperty("filterValue", it.key());
-        cb->setStyleSheet(checkboxStyle);
-        connect(cb, &QCheckBox::stateChanged, this, &LibraryWindow::applyFilters);
-        genreLayout->addWidget(cb);
-    }
-    filtersLayout->addWidget(genreGroup);
-
-    // Status filters (Watched/Starred)
-    auto *statusGroup = new QGroupBox("Status");
-    statusGroup->setFlat(true);
-    statusGroup->setStyleSheet("QGroupBox { border: 1px solid gray; border-radius: 3px; margin-top: 6px; }");
-
-    auto *statusLayout = new QVBoxLayout(statusGroup);
-    statusLayout->setContentsMargins(5, 15, 5, 5);
-
-    auto *watchedCb = new QCheckBox("Watched Only");
-    watchedCb->setProperty("filterType", "watched");
-    watchedCb->setStyleSheet(checkboxStyle);
-    connect(watchedCb, &QCheckBox::stateChanged,
-            [this](int state)
-            {
-                m_proxyModel->setWatchedFilter(state == Qt::Checked);
-                updateFilterCounter();
-                updateContentPreviews();
-                updateFilterToggleButtonState();
-            });
-    statusLayout->addWidget(watchedCb);
-
-    auto *starredCb = new QCheckBox("Starred Only");
-    starredCb->setProperty("filterType", "starred");
-    starredCb->setStyleSheet(checkboxStyle);
-    connect(starredCb, &QCheckBox::stateChanged,
-            [this](int state)
-            {
-                m_proxyModel->setStarredFilter(state == Qt::Checked);
-                updateFilterCounter();
-                updateContentPreviews();
-                updateFilterToggleButtonState();
-            });
-    statusLayout->addWidget(starredCb);
-
-    filtersLayout->addWidget(statusGroup);
-
-    // Clear button and counter in one row
-    auto *bottomRow = new QWidget();
-    auto *bottomLayout = new QHBoxLayout(bottomRow);
-    bottomLayout->setContentsMargins(0, 0, 0, 0);
-
-    m_clearFiltersBtn = new QPushButton("Clear All");
-    m_clearFiltersBtn->setMaximumWidth(80);
-    bottomLayout->addWidget(m_clearFiltersBtn);
-
-    m_filterCounter = new QLabel("0 items");
-    bottomLayout->addWidget(m_filterCounter);
-    bottomLayout->addStretch();
-
-    filtersLayout->addWidget(bottomRow);
-
-    // Create a scroll area for the expanded filters section
-    m_filtersScrollArea = new QScrollArea();
-    m_filtersScrollArea->setWidgetResizable(true);
-    m_filtersScrollArea->setWidget(m_filtersSection);
-    m_filtersSection->setSizePolicy(QSizePolicy::Preferred, QSizePolicy::Expanding);
-    m_filtersScrollArea->setSizePolicy(QSizePolicy::Preferred, QSizePolicy::Expanding);
-    m_filtersScrollArea->setFrameShape(QFrame::NoFrame);
-
-    // Add both widgets to the stacked widget
-    m_filtersStackedWidget->addWidget(m_compactFiltersWidget); // Index 0 - Compact
-    m_filtersStackedWidget->addWidget(m_filtersScrollArea);    // Index 1 - Expanded
-
-    // Start with compact view
-    m_filtersStackedWidget->setCurrentIndex(0);
-    m_filtersExpanded = false;
-}
-
-QWidget *LibraryWindow::createCompactFilterWidget()
-{
-    auto *compactWidget = new QWidget();
-    compactWidget->setMaximumHeight(40);
-
-    auto *layout = new QHBoxLayout(compactWidget);
-    layout->setContentsMargins(5, 5, 5, 5);
-
-    // Create a filter summary label
-    m_filterCounter = new QLabel("0 items");
-    m_filterCounter->setAlignment(Qt::AlignRight);
-
-    layout->addStretch();
-    layout->addWidget(m_filterCounter);
-
-    // Make the entire widget clickable to expand filters
-    compactWidget->setCursor(Qt::PointingHandCursor);
-    compactWidget->installEventFilter(this);
-    compactWidget->setProperty("isCompactFilterWidget", true);
-
-    return compactWidget;
-}
-
-void LibraryWindow::toggleFiltersSection()
-{
-    m_filtersExpanded = !m_filtersExpanded;
-
-    if (m_filtersExpanded)
-    {
-        m_filtersStackedWidget->setCurrentIndex(1);
-        m_filtersToggleBtn->setChecked(true);
-    }
-    else
-    {
-        m_filtersStackedWidget->setCurrentIndex(0);
-        m_filtersToggleBtn->setChecked(false);
-    }
-
-    // Update the content previews after filters visibility change
-    // This is now direct rather than using a timer
-    updateContentPreviews();
-}
-
-void LibraryWindow::setupToolbar()
-{
-    createImportButton();
-    m_toolBar->addWidget(m_importButton);
-
-    createSaveMenu();
-    m_toolBar->addWidget(m_saveButton);
-}
-
-void LibraryWindow::connectSignals()
-{
-
-    // Detail window signals
-    connect(m_detailWindow, &ContentDetailWindow::editRequested, this, &LibraryWindow::editContent);
-    connect(this, &LibraryWindow::contentDataChanged, m_detailWindow, &ContentDetailWindow::refreshContent);
+    // Connect ContentDetailWindow signals
+    connect(m_detailWindow, &ContentDetailWindow::editRequested, this, &LibraryWindow::handleEditContent);
     connect(m_detailWindow, &ContentDetailWindow::closeRequested, this, &LibraryWindow::hideDetailView);
     connect(m_detailWindow, &ContentDetailWindow::contentDeleted, this, &LibraryWindow::updateContentDisplay);
 
-    // Filter signals
-    connect(m_filtersToggleBtn, &QToolButton::clicked, this, &LibraryWindow::toggleFiltersSection);
-    connect(m_clearFiltersBtn, &QPushButton::clicked, this, &LibraryWindow::clearFilters);
+    // Connect ContentPreviewGrid signals
+    connect(m_contentPreviewGrid, &ContentPreviewGrid::contentDoubleClicked, this, &LibraryWindow::showDetailView);
+    connect(m_contentPreviewGrid, &ContentPreviewGrid::contentSingleClicked, this, &LibraryWindow::handleContentSingleClick);
 
-    // Search signals
-    connect(m_searchBar, &QLineEdit::textChanged, this, &LibraryWindow::delayedSearch);
-    connect(m_searchTimer, &QTimer::timeout, this, [this]()
-            {
-        applySearchFilter(m_searchBar->text());
-        updateFilterToggleButtonState(); });
-    connect(m_clearSearchButton, &QToolButton::clicked, this, &LibraryWindow::clearSearch);
 
-    // Visibility of clear search button
-    connect(m_searchBar, &QLineEdit::textChanged, this, [this](const QString &text)
-            { m_clearSearchButton->setVisible(!text.isEmpty()); });
+    // Setup and connect shortcuts
+    m_shortcutManager->setupShortcuts(this, m_searchBar, m_detailWindow);
+    connect(m_shortcutManager, &ShortcutManager::addContentShortcutActivated, this, &LibraryWindow::handleAddContentRequested);
+    connect(m_shortcutManager, &ShortcutManager::importContentShortcutActivated, this, &LibraryWindow::handleImportRequested);
+    connect(m_shortcutManager, &ShortcutManager::saveJsonShortcutActivated, this, [this]() { handleSaveRequested("json"); });
+    connect(m_shortcutManager, &ShortcutManager::saveXmlShortcutActivated, this, [this]() { handleSaveRequested("xml"); });
+    connect(m_shortcutManager, &ShortcutManager::toggleFiltersShortcutActivated, m_filterSectionWidget, &FilterSectionWidget::onToggleFiltersClicked); // Directly toggle
+    connect(m_shortcutManager, &ShortcutManager::clearSearchShortcutActivated, this, &LibraryWindow::clearSearch);
+    connect(m_shortcutManager, &ShortcutManager::clearFiltersShortcutActivated, this, &LibraryWindow::handleClearFiltersRequested);
+    connect(m_shortcutManager, &ShortcutManager::backToMainViewShortcutActivated, this, &LibraryWindow::hideDetailView);
+    connect(m_shortcutManager, &ShortcutManager::changeSortDirectionShortcutActivated, m_sortingSectionWidget, &SortingSectionWidget::onSortDirectionButtonClicked);
+    connect(m_shortcutManager, &ShortcutManager::refreshContentShortcutActivated, this, &LibraryWindow::updateContentDisplay);
 
-    // Add button
-    connect(m_add, &QToolButton::clicked, this, &LibraryWindow::showAddContentDialog);
 
-    // Import/Save actions
-    connect(m_importButton, &QToolButton::clicked, this, &LibraryWindow::importContent);
-
-    connect(m_splitter, &QSplitter::splitterMoved, this, [this]()
-            {
-                // Use a delayed update to prevent constant recalculation during drag
-                static QTimer *splitterTimer = nullptr;
-                if (!splitterTimer)
-                {
-                    splitterTimer = new QTimer(this);
-                    splitterTimer->setSingleShot(true);
-                    connect(splitterTimer, &QTimer::timeout, this, &LibraryWindow::updateContentPreviews);
-                }
-                splitterTimer->start(200); // 200ms delay before updating
-            });
-}
-
-void LibraryWindow::shortcutActions()
-{
-    // Add content shortcut (Ctrl+N)
-    const auto *addShortcut = new QShortcut(QKeySequence(Qt::CTRL | Qt::Key_N), this);
-    connect(addShortcut, &QShortcut::activated, this, &LibraryWindow::showAddContentDialog);
-
-    // Import content shortcut (Ctrl+I)
-    const auto *importShortcut = new QShortcut(QKeySequence(Qt::CTRL | Qt::Key_I), this);
-    connect(importShortcut, &QShortcut::activated, this, &LibraryWindow::importContent);
-
-    // Save JSON shortcut (Ctrl+S)
-    const auto *saveJsonShortcut = new QShortcut(QKeySequence(Qt::CTRL | Qt::Key_S), this);
-    connect(saveJsonShortcut, &QShortcut::activated, this, [this]()
-            { saveToFile("json"); });
-
-    // Save XML shortcut (Ctrl+Shift+S)
-    const auto *saveXmlShortcut = new QShortcut(QKeySequence(Qt::CTRL | Qt::SHIFT | Qt::Key_S), this);
-    connect(saveXmlShortcut, &QShortcut::activated, this, [this]()
-            { saveToFile("xml"); });
-
-    // Toggle filters shortcut (Ctrl+F)
-    const auto *toggleFiltersShortcut = new QShortcut(QKeySequence(Qt::CTRL | Qt::Key_F), this);
-    connect(toggleFiltersShortcut, &QShortcut::activated, this, &LibraryWindow::toggleFiltersSection);
-
-    // Focus search bar shortcut (Ctrl+K or Alt+S)
-    const auto *focusSearchShortcut1 = new QShortcut(QKeySequence(Qt::CTRL | Qt::Key_K), this);
-    const auto *focusSearchShortcut2 = new QShortcut(QKeySequence(Qt::ALT | Qt::Key_S), this);
-    connect(focusSearchShortcut1, &QShortcut::activated, m_searchBar, QOverload<>::of(&QLineEdit::setFocus));
-    connect(focusSearchShortcut2, &QShortcut::activated, m_searchBar, QOverload<>::of(&QLineEdit::setFocus));
-
-    // Clear search shortcut (Esc when search has focus)
-    const auto *clearSearchShortcut = new QShortcut(QKeySequence(Qt::Key_Escape), m_searchBar);
-    connect(clearSearchShortcut, &QShortcut::activated, this, &LibraryWindow::clearSearch);
-
-    // Clear all filters shortcut (Ctrl+Shift+F)
-    const auto *clearFiltersShortcut = new QShortcut(QKeySequence(Qt::CTRL | Qt::SHIFT | Qt::Key_F), this);
-    connect(clearFiltersShortcut, &QShortcut::activated, this, &LibraryWindow::clearFilters);
-
-    // Return to main view from detail view (Esc)
-    const auto *backToMainShortcut = new QShortcut(QKeySequence(Qt::Key_Escape), m_detailWindow);
-    connect(backToMainShortcut, &QShortcut::activated, this, &LibraryWindow::hideDetailView);
-
-    // Change sort direction shortcut (Ctrl+D)
-    const auto *sortDirectionShortcut = new QShortcut(QKeySequence(Qt::CTRL | Qt::Key_D), this);
-    connect(sortDirectionShortcut, &QShortcut::activated, this, &LibraryWindow::changeSortDirection);
-
-    // Refresh/update content display (F5)
-    const auto *refreshShortcut = new QShortcut(QKeySequence(Qt::Key_F5), this);
-    connect(refreshShortcut, &QShortcut::activated, this, &LibraryWindow::updateContentDisplay);
-}
-
-void LibraryWindow::updateFilterToggleButtonState()
-{
-    // Check if there are any active filters
-    bool hasActiveFilters = false;
-
-    // Check search filter
-    if (!m_searchBar->text().isEmpty())
-    {
-        hasActiveFilters = true;
-    }
-
-    // Check checkboxes
-    if (!hasActiveFilters)
-    {
-        auto checkboxes = m_filtersSection->findChildren<QCheckBox *>();
-        for (QCheckBox *cb : checkboxes)
-        {
-            if (cb->isChecked())
-            {
-                hasActiveFilters = true;
-                break;
-            }
+    // Splitter resize for updating content previews
+    connect(m_splitter, &QSplitter::splitterMoved, this, [this]() {
+        static QTimer *splitterTimer = nullptr;
+        if (!splitterTimer) {
+            splitterTimer = new QTimer(this);
+            splitterTimer->setSingleShot(true);
+            connect(splitterTimer, &QTimer::timeout, m_contentPreviewGrid, &ContentPreviewGrid::updatePreviews);
         }
-        auto radioButtons = m_filtersSection->findChildren<QRadioButton *>();
-        for (QRadioButton *rb : radioButtons)
-        {
-            if (rb->isChecked())
-            {
-                hasActiveFilters = true;
-                break;
-            }
-        }
-    }
-
-    // Update the filter toggle button appearance
-    if (hasActiveFilters)
-    {
-        m_filtersToggleBtn->setText("Filters (Active)");
-        m_filtersToggleBtn->setStyleSheet("QToolButton {border: 1px solid rgb(15, 228, 61); }");
-    }
-    else
-    {
-        m_filtersToggleBtn->setText("Filters");
-        m_filtersToggleBtn->setStyleSheet("");
-    }
+        splitterTimer->start(200);
+    });
 }
 
-void LibraryWindow::createSaveMenu()
-{
-    m_saveMenu = new QMenu(this);
-    // Remove the existing style sheet and set icon size directly
-    m_saveMenu->setStyleSheet("QMenu::item { padding: 5px 10px; }");
-
-    // Create actions with 28px icons
-    auto *saveJson = new QAction(QIcon(":assets/icons/w_json.png"), "Save as JSON", this);
-    saveJson->setIconText("Save as JSON"); // Ensure text is preserved
-    saveJson->setToolTip("Export library as JSON file");
-    connect(saveJson, &QAction::triggered, this, [this]()
-            { saveToFile("json"); });
-
-    auto *saveXml = new QAction(QIcon(":assets/icons/w_xml.png"), "Save as XML", this);
-    saveXml->setIconText("Save as XML"); // Ensure text is preserved
-    saveXml->setToolTip("Export library as XML file");
-    connect(saveXml, &QAction::triggered, this, [this]()
-            { saveToFile("xml"); });
-
-    // Add actions to menu
-    m_saveMenu->addAction(saveJson);
-    m_saveMenu->addAction(saveXml);
-
-    // Create the save button
-    m_saveButton = new QToolButton();
-    m_saveButton->setText("Save");
-    m_saveButton->setIcon(QIcon(":assets/icons/save.png"));
-    m_saveButton->setToolTip("Save library to file. Supported formats: JSON, XML");
-    m_saveButton->setMenu(m_saveMenu);
-    m_saveButton->setPopupMode(QToolButton::InstantPopup);
-
-    // Ensure the button's icon is also 28px
-    m_saveButton->setIconSize(QSize(28, 28));
+void LibraryWindow::handleImportRequested() {
+    m_actionsManager->importContent();
 }
 
-void LibraryWindow::createImportButton()
-{
-    m_importButton = new QToolButton();
-    m_importButton->setText("Import");
-    m_importButton->setIcon(QIcon(":assets/icons/import.png"));
-    m_importButton->setToolTip("Import content from file");
+void LibraryWindow::handleSaveRequested(const QString &extension) {
+    m_actionsManager->saveToFile(extension);
 }
 
-void LibraryWindow::updateContentDisplay()
-{
-    m_contentModel->refreshData();
-    updateContentPreviews();
-    updateFilterCounter();
-    updateFilterToggleButtonState();
+void LibraryWindow::handleAddContentRequested() {
+    m_actionsManager->showAddContentDialog();
 }
 
-void LibraryWindow::hideDetailView()
-{
-    m_rightPanel->setCurrentIndex(0); // Show main view
+void LibraryWindow::handleEditContent(Content* content) {
+    m_actionsManager->editContent(content);
 }
 
-void LibraryWindow::showAddContentDialog()
-{
-
-    TypeChoiceDialog typeDialog(this);
-    if (typeDialog.exec() == QDialog::Accepted)
-    {
-        Content *newContent = typeDialog.createSelectedContent();
-        if (newContent)
-        {
-            newContent->setId(ScienceFiction_Library::getInstance().getNewId());
-            ScienceFiction_Library::getInstance().addContent(newContent);
-            editContent(newContent);
-        }
-    }
-}
-
-void LibraryWindow::editContent(Content *content)
-{
-    if (!content)
-        return;
-
-    ContentEditWindow editWindow(content, this);
-
-    if (editWindow.exec() == QDialog::Accepted)
-    {
-        // After editing, update if it's a new content or existing
-        auto &library = ScienceFiction_Library::getInstance();
-
-        // Check if this is a new content or existing one
-        bool isNew = true;
-        for (const auto &existingContent : library.getContentList())
-        {
-            if (existingContent.get() == content)
-            {
-                isNew = false;
-                break;
-            }
-        }
-
-        if (isNew)
-        {
-            // This is a new content, add it to the library
-            library.addContent(content);
-        }
-
-        // Update the UI
-        updateContentDisplay();
-        emit contentDataChanged();
-    }
-    else if (content)
-    {
-        // If it's a new content that was canceled, we need to delete it
-        bool isNew = true;
-        auto &library = ScienceFiction_Library::getInstance();
-        for (const auto &existingContent : library.getContentList())
-        {
-            if (existingContent.get() == content)
-            {
-                isNew = false;
-                break;
-            }
-        }
-
-        if (isNew)
-        {
-            delete content;
-        }
-    }
-}
-
-void LibraryWindow::applySearchFilter(const QString &text)
-{
-    if (m_proxyModel)
-    {
-        m_proxyModel->setTitleFilter(text);
-        updateContentPreviews();
-        updateFilterCounter();
-    }
-}
-
-void LibraryWindow::delayedSearch()
-{
-    // Reset the timer each time text changes
+void LibraryWindow::delayedSearch() {
     m_searchTimer->start();
 }
 
-void LibraryWindow::updateFilterCounter()
-{
-    int count = m_proxyModel->rowCount();
-    m_filterCounter->setText(QString("%1 item%2").arg(count).arg(count == 1 ? "" : "s"));
+void LibraryWindow::applySearchFilter() {
+    m_proxyModel->setTitleFilter(m_searchBar->text());
+    // updateContentPreviews() is called by m_proxyModel::layoutChanged signal
+    updateOverallFilterState();
 }
 
-void LibraryWindow::clearSearch()
-{
+void LibraryWindow::clearSearch() {
     m_searchBar->clear();
-    m_clearSearchButton->hide();
-    applySearchFilter("");
-    updateFilterToggleButtonState();
+    applySearchFilter(); // This will also hide the clear button and update overall filter state
 }
 
-void LibraryWindow::updateContentPreviews()
-{
-    // Before clearing the layout, check if we have a selected card and save its content
-    Content *selectedContent = nullptr;
-    if (m_selectedCard)
-    {
-        selectedContent = m_selectedCard->property("content_ptr").value<Content *>();
-        m_selectedCard = nullptr; // Clear the reference as we're about to delete it
-    }
+void LibraryWindow::handleFiltersChanged() {
+    // applyInternalFilters() is called within FilterSectionWidget
+    // We just need to trigger a preview update and filter state update
+    updateOverallFilterState();
+}
 
-    // Clear existing layout first (except for no results label)
-    QLayoutItem *item;
-    while ((item = m_previewLayout->takeAt(0)) != nullptr)
-    {
-        if (item->widget() != m_noResultsLabel)
-        {
-            delete item->widget();
-        }
-        delete item;
-    }
-    // Add the no results label back
-    m_previewLayout->addWidget(m_noResultsLabel, 0, 0, 1, 6);
+void LibraryWindow::handleClearFiltersRequested() {
+    clearSearch(); // Clear search as well for "clear all"
+    m_proxyModel->clearFilters(); // Clear proxy model filters
+    updateOverallFilterState(); // Update filter counter and button state
+}
 
-    // Get filtered content count
-    int count = m_proxyModel->rowCount();
+void LibraryWindow::handleToggleFiltersExpanded(bool expanded) {
+    // ContentPreviewGrid will handle its own update based on available space
+    // No explicit updatePreviews() call needed here as proxy model doesn't change
+}
 
-    // Show or hide the no results label
-    m_noResultsLabel->setVisible(count == 0);
+void LibraryWindow::handleSortCriteriaChanged(ContentModel::SortRole role, Qt::SortOrder order) {
+    m_proxyModel->setSortRole(role);
+    m_proxyModel->sort(0, order);
+    // updateContentPreviews() is called by m_proxyModel::layoutChanged signal
+}
 
-    if (count == 0)
-    {
-        return; // No need to create cards
-    }
+void LibraryWindow::updateContentDisplay() {
+    m_contentModel->refreshData(); // Re-fetch all data from ScienceFiction_Library
+    // m_proxyModel will notify its view (ContentPreviewGrid)
+    updateOverallFilterState(); // Update filter counter and button state
+}
 
-    // Calculate number of columns based on available width
-    const int CARD_WIDTH = 200; // Fixed card width (including margins)
+void LibraryWindow::hideDetailView() {
+    m_rightPanel->setCurrentIndex(0); // Show main view
+}
 
-    // Get the actual width available for cards
-    int availableWidth = m_previewScrollArea->viewport()->width() - 20; // Use viewport width for more accuracy
-
-    // Calculate how many cards fit in a row, with at least 1 column
-    int columns = std::max(1, availableWidth / CARD_WIDTH);
-
-    // Create cards for visible content
-    int row = 0, col = 0;
-
-    // When creating new cards, check if any should be selected
-    for (int i = 0; i < count; ++i)
-    {
-        QModelIndex proxyIndex = m_proxyModel->index(i, 0);
-        if (!proxyIndex.isValid())
-            continue;
-
-        QModelIndex sourceIndex = m_proxyModel->mapToSource(proxyIndex);
-        Content *content = m_contentModel->getContent(sourceIndex.row());
-
-        if (content)
-        {
-            QWidget *card = createContentPreviewCard(content);
-            if (card)
-            {
-                // Check if this card should be selected
-                if (selectedContent && content == selectedContent)
-                {
-                    card->setStyleSheet("QWidget#ContentCard { border: 2px solid #00FF00; border-radius: 5px; background-color: transparent; }");
-                    m_selectedCard = card;
-                }
-
-                m_previewLayout->addWidget(card, row, col);
-
-                // Update grid position
-                col++;
-                if (col >= columns)
-                {
-                    col = 0;
-                    row++;
-                }
-            }
-        }
+void LibraryWindow::showDetailView(Content* content) {
+    if (content) {
+        m_detailWindow->setContent(content);
+        m_rightPanel->setCurrentIndex(1); // Show detail view
     }
 }
 
-QWidget *LibraryWindow::createContentPreviewCard(Content *content)
-{
-    if (!content)
-        return nullptr;
-
-    // Create a card widget with a nice border
-    auto *card = new QWidget();
-    card->setObjectName("ContentCard");
-
-    // Set fixed width for the card (height will adjust based on content)
-    card->setFixedWidth(180);
-
-    // Apply yellow border for starred content, or check if this card should be selected
-    if (m_selectedCard && m_selectedCard->property("content_ptr").value<Content *>() == content)
-    {
-        // This is the selected card
-        card->setStyleSheet("QWidget#ContentCard { border: 2px solid #00FF00; border-radius: 5px; background-color: transparent; }");
-    }
-    else if (content->getStarred())
-    {
-        card->setStyleSheet("QWidget#ContentCard { border: 2px solid #FFD700; border-radius: 5px; background-color: transparent; }");
-    }
-    else
-    {
-        card->setStyleSheet("QWidget#ContentCard { border: 1px solid #ccc; border-radius: 5px; background-color: transparent; }");
-    }
-
-    card->setCursor(Qt::PointingHandCursor);
-
-    // Create layout for the card
-    auto *cardLayout = new QVBoxLayout(card);
-    cardLayout->setContentsMargins(8, 8, 8, 8);
-
-    // Add cover image (using a label with colored background as placeholder)
-    auto *coverLabel = new QLabel();
-    coverLabel->setFixedSize(164, 240); // Adjusted to fit within card width
-    coverLabel->setAlignment(Qt::AlignCenter);
-    coverLabel->setStyleSheet("background-color: transparent");
-
-    // Get cover image path
-    auto coverPath = QString::fromStdString(content->getImage());
-    if (!coverPath.isEmpty() && QFile::exists(coverPath))
-    {
-        coverLabel->setPixmap(QPixmap(coverPath).scaled(164, 240, Qt::KeepAspectRatio, Qt::SmoothTransformation));
-    }
-    else
-    {
-        // Display placeholder with title text
-        coverLabel->setPixmap(QPixmap(
-            ":assets/icons/no-image.png"));
-    }
-
-    // Content details
-    auto *titleLabel = new QLabel(QString::fromStdString(content->getTitle()));
-    titleLabel->setWordWrap(true);
-    titleLabel->setAlignment(Qt::AlignCenter);
-    titleLabel->setStyleSheet("font-weight: bold; font-size: 14px;");
-
-    auto *typeLabel = new QLabel(QString::fromStdString(content->getType()));
-    typeLabel->setAlignment(Qt::AlignCenter);
-    typeLabel->setStyleSheet("background-color: transparent");
-
-    auto *genreLabel = new QLabel(QString::fromStdString(content->getSubgenreString()));
-    genreLabel->setAlignment(Qt::AlignCenter);
-    genreLabel->setStyleSheet("background-color: transparent");
-
-    // Add year label
-    auto *yearLabel = new QLabel(QString::number(content->getYear()));
-    yearLabel->setAlignment(Qt::AlignCenter);
-
-    // Watch/Star indicator
-    auto *statusLayout = new QHBoxLayout();
-    statusLayout->setAlignment(Qt::AlignCenter);
-
-    if (content->getWatched())
-    {
-        auto *watchedLabel = new QLabel("✓ Watched");
-        watchedLabel->setStyleSheet("color: green;");
-        statusLayout->addWidget(watchedLabel);
-    }
-
-    if (content->getStarred())
-    {
-        auto *starredLabel = new QLabel("★ Starred");
-        starredLabel->setStyleSheet("color: orange;");
-        statusLayout->addWidget(starredLabel);
-    }
-
-    // Add all elements to card
-    cardLayout->addWidget(coverLabel);
-    cardLayout->addWidget(titleLabel);
-    cardLayout->addWidget(typeLabel);
-    cardLayout->addWidget(genreLabel);
-    cardLayout->addWidget(yearLabel);
-    cardLayout->addLayout(statusLayout);
-
-    // Add click handler to the card
-    card->installEventFilter(this);
-    card->setProperty("content_ptr", QVariant::fromValue(content));
-
-    return card;
+void LibraryWindow::handleContentSingleClick(Content* content) {
+    // The ContentCardWidget already handles its own selection style
+    // If you need more global handling for single clicks (e.g., enable a "Delete" button)
+    // you would add that logic here.
 }
 
-void LibraryWindow::clearFilters()
-{
-    // Clear search bar
-    m_searchBar->clear();
+void LibraryWindow::updateOverallFilterState() {
+    // Check if there are any active filters (search bar, filter section)
+    bool hasActiveFilters = !m_searchBar->text().isEmpty();
 
-    // Clear all checkboxes in the filters section
-    auto checkboxes = m_filtersSection->findChildren<QCheckBox *>();
-    for (QCheckBox *cb : checkboxes)
-    {
-        cb->blockSignals(true);
-        cb->setChecked(false);
-        cb->blockSignals(false);
-    }
-    auto radioButtons = m_filtersSection->findChildren<QRadioButton *>();
-    for (QRadioButton *rb : radioButtons)
-    {
-        rb->blockSignals(true);
-        if (rb->isChecked())
-        {
-            rb->setChecked(false);
-            rb->setAutoExclusive(false); // Temporarily disable auto-exclusive behavior
-            rb->setChecked(false);       // Uncheck the button
-            rb->setAutoExclusive(true);  // Re-enable auto-exclusive behavior
-            m_proxyModel->clearTypeFilter();
-        }
-        rb->blockSignals(false);
+    // Check filters in FilterSectionWidget
+    // This part requires FilterSectionWidget to expose its active filter state
+    // For now, we can check the proxy model itself for active filters
+    // Or, FilterSectionWidget could emit a signal with a boolean indicating active filters.
+    // Let's assume for now that FilterSectionWidget updates its own toggle button state
+    // and we only need to pass the search state to it.
+    // A better approach would be to have FilterSectionWidget tell us if it has active filters.
+
+    // A simpler way: if proxy model filters are active, then there are active filters.
+    if (m_proxyModel->hasActiveFilters() || !m_searchBar->text().isEmpty()) {
+        hasActiveFilters = true;
+    } else {
+        hasActiveFilters = false;
     }
 
-    // Reset proxy model filters
-    m_proxyModel->clearFilters();
-
-    // Reset the filter toggle button
-    m_filtersToggleBtn->setText("Filters");
-    m_filtersToggleBtn->setStyleSheet("");
-
-    // Update UI
-    updateContentPreviews();
-    updateFilterCounter();
+    m_filterSectionWidget->updateToggleButtonState(hasActiveFilters);
+    m_filterSectionWidget->updateFilterCounter(m_proxyModel->rowCount());
 }
 
-void LibraryWindow::applyFilters()
-{
-    if (!m_proxyModel)
-        return;
-
-    // First clear current filters
-    m_proxyModel->clearFilters();
-
-    // Apply search filter (keep it)
-    if (!m_searchBar->text().isEmpty())
-    {
-        m_proxyModel->setTitleFilter(m_searchBar->text());
-    }
-
-    // Find all checked filters
-    auto checkboxes = m_filtersSection->findChildren<QCheckBox *>();
-    auto radioButtons = m_filtersSection->findChildren<QRadioButton *>();
-    for (const QRadioButton *rb : radioButtons)
-    {
-        if (rb->isChecked())
-        {
-            m_proxyModel->setTypeFilter(rb->text());
-            break;
-        }
-    }
-    bool hasActiveFilters = false;
-    for (const QCheckBox *cb : checkboxes)
-    {
-        if (cb->isChecked())
-        {
-            QString filterType = cb->property("filterType").toString();
-
-            if (filterType == "genre")
-            {
-                int genreValue = cb->property("filterValue").toInt();
-                m_proxyModel->setSubgenreFilter(static_cast<Subgenre>(genreValue));
-            }
-            else if (filterType == "watched")
-            {
-                m_proxyModel->setWatchedFilter(true);
-            }
-            else if (filterType == "starred")
-            {
-                m_proxyModel->setStarredFilter(true);
-            }
-        }
-    }
-
-    if (hasActiveFilters)
-    {
-        m_filtersToggleBtn->setText("Filters (Active)");
-        m_filtersToggleBtn->setStyleSheet("QToolButton { background-color: #e0f0ff; border: 1px solid #99ccff; }");
-    }
-    else
-    {
-        m_filtersToggleBtn->setText("Filters");
-        m_filtersToggleBtn->setStyleSheet("");
-    }
-
-    // Update display
-    updateContentPreviews();
-    updateFilterCounter();
-    updateFilterToggleButtonState();
-}
-
-void LibraryWindow::importContent()
-{
-    QString file = QFileDialog::getOpenFileName(
-        this,
-        "Import Content",
-        QDir::homePath(),
-        "Supported Files (*.xml *.json)");
-
-    if (!file.isEmpty())
-    {
-        bool success = ScienceFiction_Library::getInstance().loadFromFile(file.toStdString());
-        if (success)
-        {
-            updateContentDisplay();
-            QMessageBox::information(this, "Success", "Content imported successfully");
-        }
-        else
-        {
-            QMessageBox::warning(this, "Error", "Failed to import content");
-        }
-    }
-    updateContentPreviews();
-    updateFilterCounter();
-}
-
-void LibraryWindow::saveToFile(const QString &extension)
-{
-    QString file = QFileDialog::getSaveFileName(
-        this,
-        QString("Save As %1").arg(extension.toUpper()),
-        QDir::homePath(),
-        QString("%1 Files (*.%1)").arg(extension));
-
-    if (!file.isEmpty())
-    {
-        bool success = ScienceFiction_Library::getInstance().saveToFile(file.toStdString());
-        if (success)
-        {
-            QMessageBox::information(this, "Success", "Library saved successfully");
-        }
-        else
-        {
-            QMessageBox::warning(this, "Error", "Failed to save library");
-        }
-    }
-}
-
-void LibraryWindow::resizeEvent(QResizeEvent *event)
-{
+void LibraryWindow::resizeEvent(QResizeEvent *event) {
     QMainWindow::resizeEvent(event);
-
-    // Update the card layout when the window is resized
-    // Using a static timer to avoid too many updates during active resizing
-    static QTimer *resizeTimer = nullptr;
-    if (!resizeTimer)
-    {
-        resizeTimer = new QTimer(this);
-        resizeTimer->setSingleShot(true);
-        connect(resizeTimer, &QTimer::timeout, this, &LibraryWindow::updateContentPreviews);
-    }
-
-    resizeTimer->start(150); // 150ms delay - slightly longer than before
+    // ContentPreviewGrid already listens to its own resize events (from scroll area's viewport)
+    // and uses a timer, so no explicit call needed here unless for splitter resize.
 }
