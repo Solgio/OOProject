@@ -121,9 +121,26 @@ void LibraryWindow::createRightPanel()
 
     m_rightPanel->addWidget(mainView); // Index 0
 
+    QWidget *buttonContainer = new QWidget();
+    QHBoxLayout *buttonLayout = new QHBoxLayout(buttonContainer);
+    buttonLayout->setContentsMargins(0, 0, 10, 10);
+    buttonLayout->addStretch();
+    createAddButton();
+    buttonLayout->addWidget(m_addContentButton);
+    mainViewLayout->addWidget(buttonContainer);
+
     // Detail window
     m_detailWindow = new ContentDetailWindow(this);
     m_rightPanel->addWidget(m_detailWindow); // Index 1
+}
+
+void LibraryWindow::createAddButton() {
+    m_addContentButton = new QToolButton();
+    m_addContentButton->setText("Add Content");
+    m_addContentButton->setIcon(QIcon(":assets/icons/add.png"));
+    m_addContentButton->setToolTip("Add new content to the library");
+    m_addContentButton->setIconSize(QSize(32, 32));
+    connect(m_addContentButton, &QToolButton::clicked, this, &LibraryWindow::handleAddContentRequested);
 }
 
 void LibraryWindow::connectSignals()
@@ -131,7 +148,7 @@ void LibraryWindow::connectSignals()
     // Connect LibraryToolbar signals to LibraryActionsManager slots
     connect(m_toolBar, &LibraryToolbar::importRequested, m_actionsManager, &LibraryActionsManager::importContent);
     connect(m_toolBar, &LibraryToolbar::saveRequested, m_actionsManager, &LibraryActionsManager::saveToFile);
-    connect(m_toolBar, &LibraryToolbar::addContentRequested, m_actionsManager, &LibraryActionsManager::showAddContentDialog);
+    //connect(m_toolBar, &LibraryToolbar::addContentRequested, m_actionsManager, &LibraryActionsManager::showAddContentDialog);
 
     // Connect LibraryActionsManager signals to LibraryWindow slots for UI updates
     connect(m_actionsManager, &LibraryActionsManager::contentDataChanged, this, &LibraryWindow::updateContentDisplay);

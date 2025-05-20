@@ -30,6 +30,7 @@ void FilterSectionWidget::setupUI() {
 
     // Compact widget
     m_compactFiltersWidget = createCompactFilterWidget();
+    m_compactFiltersWidget->setMinimumHeight(40);
     m_filtersStackedWidget->addWidget(m_compactFiltersWidget); // Index 0
 
     // Expanded section
@@ -37,6 +38,7 @@ void FilterSectionWidget::setupUI() {
     auto *filtersLayout = new QVBoxLayout(m_expandedFiltersSection);
     filtersLayout->setContentsMargins(0, 0, 0, 0);
     filtersLayout->setSpacing(5);
+    m_expandedFiltersSection->setMinimumHeight(200);
 
     QString checkboxStyle =
         "QCheckBox:checked {"

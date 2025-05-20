@@ -13,17 +13,14 @@ public:
 signals:
     void importRequested();
     void saveRequested(const QString &extension);
-    void addContentRequested();
 
 private:
     void setupToolbar();
     void createSaveMenu();
     void createImportButton();
-    void createAddButton();
-
+    
     QToolButton *m_importButton = nullptr;
     QToolButton *m_saveButton = nullptr;
-    QToolButton *m_addContentButton = nullptr;
     QMenu *m_saveMenu = nullptr;
 };
 

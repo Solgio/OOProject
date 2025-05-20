@@ -26,13 +26,13 @@ void ShortcutManager::setupShortcuts(
     createAndConnectShortcut(QKeySequence(Qt::CTRL | Qt::Key_F), targetParent, SIGNAL(toggleFiltersShortcutActivated()));
 
     // Focus search bar shortcut (Ctrl+K or Alt+S)
-    QShortcut *focusSearchShortcut1 = new QShortcut(QKeySequence(Qt::CTRL | Qt::Key_K), searchBar);
+    auto *focusSearchShortcut1 = new QShortcut(QKeySequence(Qt::CTRL | Qt::Key_K), searchBar);
     connect(focusSearchShortcut1, &QShortcut::activated, searchBar, QOverload<>::of(&QLineEdit::setFocus));
-    QShortcut *focusSearchShortcut2 = new QShortcut(QKeySequence(Qt::ALT | Qt::Key_S), searchBar);
+    auto *focusSearchShortcut2 = new QShortcut(QKeySequence(Qt::ALT | Qt::Key_S), searchBar);
     connect(focusSearchShortcut2, &QShortcut::activated, searchBar, QOverload<>::of(&QLineEdit::setFocus));
 
     // Clear search shortcut (Esc when search has focus)
-    QShortcut *clearSearchShortcut = new QShortcut(QKeySequence(Qt::Key_Escape), searchBar);
+    auto *clearSearchShortcut = new QShortcut(QKeySequence(Qt::Key_Escape), searchBar);
     connect(clearSearchShortcut, &QShortcut::activated, this, &ShortcutManager::clearSearchShortcutActivated);
 
     // Clear all filters shortcut (Ctrl+Shift+F)
@@ -40,7 +40,7 @@ void ShortcutManager::setupShortcuts(
 
     // Return to main view from detail view (Esc)
     if (detailWindow) {
-        QShortcut *backToMainShortcut = new QShortcut(QKeySequence(Qt::Key_Escape), detailWindow);
+        auto *backToMainShortcut = new QShortcut(QKeySequence(Qt::Key_Escape), detailWindow);
         connect(backToMainShortcut, &QShortcut::activated, this, &ShortcutManager::backToMainViewShortcutActivated);
     }
 
@@ -52,7 +52,7 @@ void ShortcutManager::setupShortcuts(
 }
 
 void ShortcutManager::createAndConnectShortcut(const QKeySequence &sequence, QObject *parent, const char *signal) {
-    QShortcut *shortcut = new QShortcut(sequence, qobject_cast<QWidget*>(parent));
+    auto *shortcut = new QShortcut(sequence, qobject_cast<QWidget*>(parent));
     if (shortcut) {
         connect(shortcut, SIGNAL(activated()), this, signal);
     }

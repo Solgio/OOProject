@@ -7,6 +7,7 @@
 #include <QStackedWidget>
 #include <QSplitter>
 #include <QTimer>
+#include <QVBoxLayout>
 
 // Forward declarations for new classes
 class LibraryToolbar;
@@ -63,6 +64,7 @@ private:
     void setupUI();
     void createLeftPanel(QWidget* parentWidget);
     void createRightPanel();
+    void createAddButton();
     void connectSignals();
 
     // Helper to update overall filter state (including search)
@@ -79,7 +81,11 @@ private:
     ContentPreviewGrid *m_contentPreviewGrid = nullptr;
 
     QStackedWidget *m_rightPanel = nullptr;
+    QToolButton *m_addContentButton = nullptr;
     ContentDetailWindow *m_detailWindow = nullptr;
+
+    // Layouts
+    //QVBoxLayout *m_leftPanelLayout = nullptr;
 
     // Models
     ContentModel *m_contentModel = nullptr;

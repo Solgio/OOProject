@@ -11,9 +11,6 @@ void LibraryToolbar::setupToolbar() {
 
     createSaveMenu();
     addWidget(m_saveButton);
-
-    createAddButton();
-    addWidget(m_addContentButton);
 }
 
 void LibraryToolbar::createImportButton() {
@@ -48,13 +45,4 @@ void LibraryToolbar::createSaveMenu() {
     m_saveButton->setMenu(m_saveMenu);
     m_saveButton->setPopupMode(QToolButton::InstantPopup);
     m_saveButton->setIconSize(QSize(28, 28));
-}
-
-void LibraryToolbar::createAddButton() {
-    m_addContentButton = new QToolButton();
-    m_addContentButton->setText("Add Content");
-    m_addContentButton->setIcon(QIcon(":assets/icons/add.png"));
-    m_addContentButton->setToolTip("Add new content to the library");
-    m_addContentButton->setIconSize(QSize(32, 32));
-    connect(m_addContentButton, &QToolButton::clicked, this, &LibraryToolbar::addContentRequested);
 }
