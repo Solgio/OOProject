@@ -80,6 +80,7 @@ void LibraryWindow::createLeftPanel(QWidget *parentWidget)
     auto *searchContainer = new QWidget();
     auto *searchLayout = new QHBoxLayout(searchContainer);
     searchLayout->setContentsMargins(0, 0, 0, 0);
+    searchLayout->setSpacing(5);
 
     m_searchBar = new QLineEdit();
     m_searchBar->setPlaceholderText("Search content...");
@@ -100,8 +101,6 @@ void LibraryWindow::createLeftPanel(QWidget *parentWidget)
     // Sorting controls (now an instance of SortingSectionWidget)
     m_sortingSectionWidget = new SortingSectionWidget();
     leftLayout->addWidget(m_sortingSectionWidget);
-
-    leftLayout->addStretch();
 }
 
 void LibraryWindow::createRightPanel()

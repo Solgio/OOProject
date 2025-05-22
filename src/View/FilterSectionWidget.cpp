@@ -18,6 +18,7 @@ FilterSectionWidget::FilterSectionWidget(ContentProxyModel *proxyModel, QWidget 
 void FilterSectionWidget::setupUI() {
     auto *mainLayout = new QVBoxLayout(this);
     mainLayout->setContentsMargins(0, 0, 0, 0);
+    mainLayout->setSpacing(5);
 
     // Initialize filter toggle button
     m_filtersToggleBtn = new QToolButton();
@@ -30,16 +31,24 @@ void FilterSectionWidget::setupUI() {
 
     // Compact widget
     m_compactFiltersWidget = createCompactFilterWidget();
-    m_compactFiltersWidget->setMinimumHeight(40);
     m_filtersStackedWidget->addWidget(m_compactFiltersWidget); // Index 0
+    m_filtersStackedWidget->setSizePolicy(QSizePolicy::Preferred, QSizePolicy::Expanding);
 
-    // Expanded section
+    // Expanded section - now using a scroll area directly
+    m_filtersScrollArea = new QScrollArea();
+    m_filtersScrollArea->setWidgetResizable(true);
+    m_filtersScrollArea->setFrameShape(QFrame::NoFrame);
+    m_filtersScrollArea->setSizePolicy(QSizePolicy::Preferred, QSizePolicy::Expanding);
+    //m_filtersScrollArea->setMaximumHeight(1000); 
+
+    // Container widget for filters
     m_expandedFiltersSection = new QWidget();
     auto *filtersLayout = new QVBoxLayout(m_expandedFiltersSection);
-    filtersLayout->setContentsMargins(0, 0, 0, 0);
-    filtersLayout->setSpacing(5);
-    m_expandedFiltersSection->setMinimumHeight(200);
+    filtersLayout->setContentsMargins(5, 5, 5, 5);
+    filtersLayout->setSpacing(10); // Increased spacing between groups
+    m_expandedFiltersSection->setSizePolicy(QSizePolicy::Preferred, QSizePolicy::Expanding);
 
+    // Style sheets (unchanged)
     QString checkboxStyle =
         "QCheckBox:checked {"
         "   border: 2px solid rgb(15, 228, 61);"
@@ -69,8 +78,10 @@ void FilterSectionWidget::setupUI() {
     auto *typeGroup = new QGroupBox("Content Types");
     typeGroup->setFlat(true);
     typeGroup->setStyleSheet("QGroupBox { border: 1px solid gray; border-radius: 3px; margin-top: 6px; }");
+    typeGroup->setSizePolicy(QSizePolicy::Preferred, QSizePolicy::MinimumExpanding);
     auto *typeLayout = new QVBoxLayout(typeGroup);
     typeLayout->setContentsMargins(5, 15, 5, 5);
+    typeLayout->setSpacing(5);
 
     QStringList types = {"Book", "Comic", "Film", "Serie", "VideoGame"};
     for (const QString &type : types) {
@@ -78,34 +89,33 @@ void FilterSectionWidget::setupUI() {
         rb->setProperty("filterType", "type");
         rb->setProperty("filterValue", type);
         rb->setStyleSheet(radioButtonStyle);
-
-        connect(rb, &QRadioButton::clicked, this, [this, rb]()
-                {
-        // Get the current type filter from the proxy model
-        QString currentFilter = m_proxyModel->getTypeFilter();
-        
-        if (currentFilter == rb->text()) {
-            rb->setAutoExclusive(false);  // Temporarily disable auto-exclusive behavior
-            rb->setChecked(false);        // Uncheck the button
-            rb->setAutoExclusive(true);   // Re-enable auto-exclusive behavior
-            m_proxyModel->clearTypeFilter();
-        } else {
-            m_proxyModel->setTypeFilter(rb->text());
-        }
-        
-        onFilterRadioButtonClicked(); });
+        connect(rb, &QRadioButton::clicked, this, [this, rb]() {
+            QString currentFilter = m_proxyModel->getTypeFilter();
+            if (currentFilter == rb->text()) {
+                rb->setAutoExclusive(false);
+                rb->setChecked(false);
+                rb->setAutoExclusive(true);
+                m_proxyModel->clearTypeFilter();
+            } else {
+                m_proxyModel->setTypeFilter(rb->text());
+            }
+            onFilterRadioButtonClicked();
+        });
         typeLayout->addWidget(rb);
         m_filterControls["type"].append(rb);
     }
     filtersLayout->addWidget(typeGroup);
 
-    // Genre filter section
+    // Genre filter section - now with better size management
     auto *genreGroup = new QGroupBox("Genres");
     genreGroup->setFlat(true);
     genreGroup->setStyleSheet("QGroupBox { border: 1px solid gray; border-radius: 3px; margin-top: 6px; }");
+    genreGroup->setSizePolicy(QSizePolicy::Preferred, QSizePolicy::MinimumExpanding);
     auto *genreLayout = new QVBoxLayout(genreGroup);
     genreLayout->setContentsMargins(5, 15, 5, 5);
+    genreLayout->setSpacing(5);
 
+    // Genre map setup (unchanged)
     QMap<int, QString> genreMap;
     genreMap[static_cast<underlying_type_t<Subgenre>>(Subgenre::NONE)] = "None";
     genreMap[static_cast<underlying_type_t<Subgenre>>(Subgenre::ACTION)] = "Action";
@@ -123,23 +133,39 @@ void FilterSectionWidget::setupUI() {
     genreMap[static_cast<underlying_type_t<Subgenre>>(Subgenre::SPORTS)] = "Sports";
     genreMap[static_cast<underlying_type_t<Subgenre>>(Subgenre::SUPERHERO)] = "Superhero";
 
+    // Create a scroll area just for genres if they don't fit
+    auto *genreScrollArea = new QScrollArea();
+    genreScrollArea->setWidgetResizable(true);
+    genreScrollArea->setFrameShape(QFrame::NoFrame);
+    genreScrollArea->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
+    
+    auto *genreContainer = new QWidget();
+    auto *genreContainerLayout = new QVBoxLayout(genreContainer);
+    genreContainerLayout->setContentsMargins(0, 0, 0, 0);
+    genreContainerLayout->setSpacing(5);
+
     for (auto it = genreMap.begin(); it != genreMap.end(); ++it) {
         auto *cb = new QCheckBox(it.value());
         cb->setProperty("filterType", "genre");
         cb->setProperty("filterValue", it.key());
         cb->setStyleSheet(checkboxStyle);
         connect(cb, &QCheckBox::stateChanged, this, &FilterSectionWidget::onFilterCheckboxStateChanged);
-        genreLayout->addWidget(cb);
+        genreContainerLayout->addWidget(cb);
         m_filterControls["genre"].append(cb);
     }
+    
+    genreScrollArea->setWidget(genreContainer);
+    genreLayout->addWidget(genreScrollArea);
     filtersLayout->addWidget(genreGroup);
 
-    // Status filters (Watched/Starred)
+    // Status filters
     auto *statusGroup = new QGroupBox("Status");
     statusGroup->setFlat(true);
     statusGroup->setStyleSheet("QGroupBox { border: 1px solid gray; border-radius: 3px; margin-top: 6px; }");
+    statusGroup->setSizePolicy(QSizePolicy::Preferred, QSizePolicy::MinimumExpanding);
     auto *statusLayout = new QVBoxLayout(statusGroup);
     statusLayout->setContentsMargins(5, 15, 5, 5);
+    statusLayout->setSpacing(5);
 
     auto *watchedCb = new QCheckBox("Watched Only");
     watchedCb->setProperty("filterType", "watched");
@@ -165,21 +191,17 @@ void FilterSectionWidget::setupUI() {
     m_clearFiltersBtn->setMaximumWidth(80);
     bottomLayout->addWidget(m_clearFiltersBtn);
 
-    m_filterCounter = new QLabel("0 items"); // This label will be reused by compact widget
+    m_filterCounter = new QLabel("0 items");
     bottomLayout->addWidget(m_filterCounter);
     bottomLayout->addStretch();
     filtersLayout->addWidget(bottomRow);
 
-    m_filtersScrollArea = new QScrollArea();
-    m_filtersScrollArea->setWidgetResizable(true);
+    // Set up the scroll area
     m_filtersScrollArea->setWidget(m_expandedFiltersSection);
-    m_expandedFiltersSection->setSizePolicy(QSizePolicy::Preferred, QSizePolicy::Expanding);
-    m_filtersScrollArea->setSizePolicy(QSizePolicy::Preferred, QSizePolicy::Expanding);
-    m_filtersScrollArea->setFrameShape(QFrame::NoFrame);
-
     m_filtersStackedWidget->addWidget(m_filtersScrollArea); // Index 1
 
     mainLayout->addWidget(m_filtersStackedWidget);
+    mainLayout->setStretch(1, 1);
 }
 
 QWidget* FilterSectionWidget::createCompactFilterWidget() {
@@ -198,6 +220,7 @@ QWidget* FilterSectionWidget::createCompactFilterWidget() {
     layout->addWidget(m_filterCounter);
 
     compactWidget->setCursor(Qt::PointingHandCursor);
+    compactWidget->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed);
     return compactWidget;
 }
 

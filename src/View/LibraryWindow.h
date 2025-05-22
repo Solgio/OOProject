@@ -84,9 +84,6 @@ private:
     QToolButton *m_addContentButton = nullptr;
     ContentDetailWindow *m_detailWindow = nullptr;
 
-    // Layouts
-    //QVBoxLayout *m_leftPanelLayout = nullptr;
-
     // Models
     ContentModel *m_contentModel = nullptr;
     ContentProxyModel *m_proxyModel = nullptr;
