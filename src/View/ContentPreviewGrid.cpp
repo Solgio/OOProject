@@ -109,6 +109,7 @@ void ContentPreviewGrid::updatePreviews()
         if (content)
         {
             ContentCardWidget *card = new ContentCardWidget(content);
+            card->setStyleSheet("QWidget#ContentCard { border: 2px solid #FF0000; border-radius: 5px; background-color: transparent; }");
             m_contentToCardMap.insert(content, card);
             connect(card, &ContentCardWidget::doubleClicked, this, &ContentPreviewGrid::handleCardDoubleClick);
             connect(card, &ContentCardWidget::singleClicked, this, &ContentPreviewGrid::handleCardSingleClick);

@@ -4,9 +4,9 @@
 #include <QVariant>
 
 ContentCardWidget::ContentCardWidget(Content *content, QWidget *parent)
-    : QWidget(parent), m_content(content) {
+    : QWidget(parent), m_content(content), m_isSelected(false), m_cardFrame(nullptr) {
     setObjectName("ContentCard");
-    setFixedSize(180, 400); // Fixed size for consistency
+    setFixedSize(200, 400); // Fixed size for consistency
     setCursor(Qt::PointingHandCursor);
     installEventFilter(this); // Filter events on itself
     setProperty("content_ptr", QVariant::fromValue(m_content)); // Store content pointer
@@ -16,48 +16,67 @@ ContentCardWidget::ContentCardWidget(Content *content, QWidget *parent)
 
 void ContentCardWidget::setupUI() {
     auto *cardLayout = new QVBoxLayout(this);
-    cardLayout->setContentsMargins(8, 8, 8, 8);
-    cardLayout->setSpacing(5);
-    cardLayout->setAlignment(Qt::AlignTop | Qt::AlignHCenter);
+    //cardLayout->setContentsMargins(8, 8, 8, 8);
+    //cardLayout->setSpacing(5);
+    cardLayout->setAlignment(Qt::AlignTop );
+
+    m_cardFrame = new QFrame();
+    m_cardFrame->setObjectName("ContentCardFrame"); // Un objectName unico per il frame
+    m_cardFrame->setFrameShape(QFrame::StyledPanel); // Può essere StyledPanel, Box, NoFrame, ecc.
+    m_cardFrame->setFrameShadow(QFrame::Plain);      // Nessuna ombra per ora
+    m_cardFrame->setLineWidth(0);                   // La larghezza del bordo sarà definita dallo stylesheet
+    m_cardFrame->setMidLineWidth(0);
+ 
+     // Layout per il contenuto ALL'INTERNO del frame
+    auto *frameContentLayout = new QVBoxLayout(m_cardFrame); // Layout del frame
+    frameContentLayout->setContentsMargins(8, 8, 8, 8); // Margini interni per il contenuto della card
+    frameContentLayout->setSpacing(5);
+    frameContentLayout->setAlignment(Qt::AlignTop );
 
     m_coverLabel = new QLabel();
     m_coverLabel->setFixedSize(164, 240);
-    m_coverLabel->setAlignment(Qt::AlignCenter);
-    m_coverLabel->setStyleSheet("background-color: transparent;");
+    m_coverLabel->setAlignment(Qt::AlignCenter | Qt::AlignHCenter);
+    m_coverLabel->setStyleSheet("background-color: transparent;"); // O un colore brillante
 
     m_titleLabel = new QLabel(QString::fromStdString(m_content->getTitle()));
     m_titleLabel->setWordWrap(true);
-    m_titleLabel->setAlignment(Qt::AlignCenter);
+    m_titleLabel->setAlignment(Qt::AlignCenter| Qt::AlignHCenter);
     m_titleLabel->setStyleSheet("font-weight: bold; font-size: 14px;");
+    m_titleLabel->setStyleSheet("background-color: transparent");
+
 
     m_typeLabel = new QLabel(QString::fromStdString(m_content->getType()));
-    m_typeLabel->setAlignment(Qt::AlignCenter);
+    m_typeLabel->setAlignment(Qt::AlignCenter | Qt::AlignHCenter);
     m_typeLabel->setStyleSheet("background-color: transparent");
 
     m_genreLabel = new QLabel(QString::fromStdString(m_content->getSubgenreString()));
-    m_genreLabel->setAlignment(Qt::AlignCenter);
+    m_genreLabel->setAlignment(Qt::AlignCenter | Qt::AlignHCenter);
     m_genreLabel->setStyleSheet("background-color: transparent");
 
     m_yearLabel = new QLabel(QString::number(m_content->getYear()));
-    m_yearLabel->setAlignment(Qt::AlignCenter);
+    m_yearLabel->setAlignment(Qt::AlignCenter | Qt::AlignHCenter);
+    m_genreLabel->setStyleSheet("background-color: transparent");
 
     m_statusLayout = new QHBoxLayout();
-    m_statusLayout->setAlignment(Qt::AlignCenter);
+    m_statusLayout->setAlignment(Qt::AlignCenter | Qt::AlignHCenter);
     m_statusLayout->setSpacing(10); // Spacing between status labels
 
     // Add elements to card
-    cardLayout->addWidget(m_coverLabel);
-    cardLayout->addWidget(m_titleLabel);
-    cardLayout->addWidget(m_typeLabel);
-    cardLayout->addWidget(m_genreLabel);
-    cardLayout->addWidget(m_yearLabel);
-    cardLayout->addLayout(m_statusLayout);
-    cardLayout->addStretch(); // Push content to top
+    frameContentLayout->addWidget(m_coverLabel);
+    frameContentLayout->addWidget(m_titleLabel);
+    frameContentLayout->addWidget(m_typeLabel);
+    frameContentLayout->addWidget(m_genreLabel);
+    frameContentLayout->addWidget(m_yearLabel);
+    frameContentLayout->addLayout(m_statusLayout);
+
+    cardLayout->addWidget(m_cardFrame);
+
 
     // Set cover image
     auto coverPath = QString::fromStdString(m_content->getImage());
     if (!coverPath.isEmpty() && QFile::exists(coverPath)) {
         m_coverLabel->setPixmap(QPixmap(coverPath).scaled(m_coverLabel->size(), Qt::KeepAspectRatio, Qt::SmoothTransformation));
+        m_coverLabel->setAlignment(Qt::AlignCenter);
     } else {
         m_coverLabel->setPixmap(QPixmap(":assets/icons/no-image.png").scaled(m_coverLabel->size(), Qt::KeepAspectRatio, Qt::SmoothTransformation));
     }
@@ -84,11 +103,11 @@ void ContentCardWidget::setSelected(bool selected) {
 
 void ContentCardWidget::updateCardStyle() {
     if (m_isSelected) {
-        setStyleSheet("QWidget#ContentCard { border: 2px solid #00FF00; border-radius: 5px; background-color: transparent; }");
+        m_cardFrame->setStyleSheet("QFrame#ContentCardFrame { border: 2px solid #00FF00; border-radius: 5px; }");
     } else if (m_content->getStarred()) {
-        setStyleSheet("QWidget#ContentCard { border: 2px solid #FFD700; border-radius: 5px; background-color: transparent; }");
+        m_cardFrame->setStyleSheet("QFrame#ContentCardFrame { border: 2px solid #FFD700; border-radius: 5px; }");
     } else {
-        setStyleSheet("QWidget#ContentCard { border: 1px solid #ccc; border-radius: 5px; background-color: transparent; }");
+        m_cardFrame->setStyleSheet("QFrame#ContentCardFrame { border: 1px solid #ccc; border-radius: 5px; }");
     }
 }
 

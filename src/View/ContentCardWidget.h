@@ -3,6 +3,7 @@
 
 #include <QWidget>
 #include <QLabel>
+#include <QFrame>
 #include <QVBoxLayout>
 #include "../Model/lib/Content.h" // Assuming this path
 
@@ -28,6 +29,7 @@ private:
     Content *m_content;
     bool m_isSelected = false;
 
+    QFrame *m_cardFrame;
     QLabel *m_coverLabel = nullptr;
     QLabel *m_titleLabel = nullptr;
     QLabel *m_typeLabel = nullptr;
