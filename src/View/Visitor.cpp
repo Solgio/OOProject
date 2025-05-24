@@ -5,18 +5,38 @@
 #include "../Model/lib/Serie.h"
 #include "../Model/lib/VideoGame.h"
 
-void Visitor::visit(Book *book){
+#include "DisplayWindows/BookDisplayWindow.h"
+#include "DisplayWindows/ComicDisplayWindow.h"
+#include "DisplayWindows/FilmDisplayWindow.h"
+#include "DisplayWindows/SerieDisplayWindow.h"
+#include "DisplayWindows/VideogameDisplayWindow.h"
+
+QWidget* Visitor::visit(Book *book){
     printf("Book visited\n");
+    display = new BookDisplayWindow(book);
+    return display;
 };
-void Visitor::visit(Comic *comic){
+
+QWidget* Visitor::visit(Comic *comic){
     printf("Comic visited\n");
+    display = new ComicDisplayWindow(comic);
+    return display;
 };
-void Visitor::visit(Film *movie){
+
+QWidget* Visitor::visit(Film *movie){
     printf("Film visited\n");
+    display = new FilmDisplayWindow(movie);
+    return display;
 };
-void Visitor::visit(Serie *serie){
+
+QWidget* Visitor::visit(Serie *serie){
     printf("Serie visited\n");
+    display = new SerieDisplayWindow(serie);
+    return display;
 };
-void Visitor::visit(VideoGame *videogame){
+
+QWidget* Visitor::visit(VideoGame *videogame){
     printf("VideoGame visited\n");
+    display = new VideogameDisplayWindow(videogame);
+    return display;
 };  

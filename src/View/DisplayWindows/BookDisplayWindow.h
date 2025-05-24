@@ -1,8 +1,8 @@
 #ifndef BOOKDISPLAYWINDOW_H
 #define BOOKDISPLAYWINDOW_H
-
 #include "AttributeDisplayWindow.h"
-#include "../../Model/lib/Book.h"
+
+class Book;
 
 class BookDisplayWindow: public AttributeDisplayWindow{
 

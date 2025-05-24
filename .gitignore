@@ -36,6 +36,7 @@ Makefile
 # .vsCode
 .vscode/
 .build/
+build/
 .qmake.stash
 *.pro.user
 *.pro.user.*
