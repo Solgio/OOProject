@@ -1,4 +1,5 @@
 #include "BookDisplayWindow.h"
+#include "../../Model/lib/Book.h"
 
 BookDisplayWindow::BookDisplayWindow():
     AttributeDisplayWindow(),

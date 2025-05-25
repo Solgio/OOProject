@@ -3,6 +3,8 @@
 
 #include <QWidget>
 #include "../Model/lib/Content.h"
+#include "Visitor.h"
+
 
 class QLabel;
 class QPushButton;
@@ -32,7 +34,8 @@ private:
     void updateContentDisplay();
     
     Content* m_content;
-    QLabel *m_contentDetails;
+    AttributeDisplayWindow * contentDetails;
+    //QLabel *m_contentDetails;
     QPushButton *m_editButton;
     QPushButton *m_deleteButton;
     QPushButton *m_closeButton;

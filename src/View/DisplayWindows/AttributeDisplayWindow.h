@@ -3,21 +3,25 @@
 
 #include <QWidget>
 #include <QLabel>
-#include "../../Model/lib/Content.h"
-//#include "ContentDetailWindow.h"
+#include <QBoxLayout>
+
+class Content;
 
 class AttributeDisplayWindow: public QWidget{
     Q_OBJECT
 
 private:
-    QLabel Title;
-    //NO image
-    QLabel Year;
-    QLabel Subgenre;
-    QLabel Watched;
-    QLabel Starred;
-    QLabel Description;
-    QLabel Type; //tipo di contenuto
+    QLabel *Title;
+    QString *imgString; //path in QString di image
+    QLabel *Year;
+    QLabel *Subgenre;
+    QLabel *Watched;
+    QLabel *Starred;
+    QLabel *Description;
+    QLabel *Type; //tipo di contenuto
+
+    QHBoxLayout *bigLayout;
+    QVBoxLayout *detailLayout;
 
     void format();
 
@@ -25,7 +29,7 @@ public:
     AttributeDisplayWindow(QWidget *parent = nullptr);
     AttributeDisplayWindow(Content * content, QWidget *parent = nullptr);
 
-    virtual ~AttributeDisplayWindow() = default;
+    void update(Content *content);
 };
 
 #endif // ATTRIBUTEDISPLAYWINDOW_H

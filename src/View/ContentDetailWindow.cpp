@@ -24,6 +24,7 @@ void ContentDetailWindow::setContent(Content* content) {
 void ContentDetailWindow::updateContentDisplay() {
     if (!m_content) return;
 
+    /*
     QString html = QString(
         "<div style='margin:10px;'>"
         "<h2>%1</h2>"
@@ -48,6 +49,10 @@ void ContentDetailWindow::updateContentDisplay() {
         QString::fromStdString(m_content->getType())
     );
     m_contentDetails->setText(html);
+    */
+
+    contentDetails->update(m_content);
+
 }
 
 void ContentDetailWindow::setupUI() 
@@ -68,11 +73,15 @@ void ContentDetailWindow::setupUI()
     m_mainLayout->addLayout(topBarLayout);
 
     // Content area
-    m_contentDetails = new QLabel();
-    m_contentDetails->setAlignment(Qt::AlignTop | Qt::AlignLeft);
-    m_contentDetails->setWordWrap(true);
-    m_contentDetails->setTextFormat(Qt::RichText);
-    m_mainLayout->addWidget(m_contentDetails);
+    //m_contentDetails = new QLabel();
+    //m_contentDetails->setAlignment(Qt::AlignTop | Qt::AlignLeft);
+    //m_contentDetails->setWordWrap(true);
+    //m_contentDetails->setTextFormat(Qt::RichText);
+    //m_mainLayout->addWidget(m_contentDetails);
+    contentDetails = new AttributeDisplayWindow();
+
+    m_mainLayout->addWidget(contentDetails);
+
 
     // Edit button at bottom
     auto *editButtonLayout = new QHBoxLayout();
