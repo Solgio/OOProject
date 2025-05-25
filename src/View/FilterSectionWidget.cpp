@@ -51,7 +51,7 @@ void FilterSectionWidget::setupUI() {
     // Style sheets (unchanged)
     QString checkboxStyle =
         "QCheckBox:checked {"
-        "   border: 2px solid rgb(15, 228, 61);"
+        "   border: 2px solid #39FF14;"
         "   border-radius: 3px;"
         "   padding: 2px;"
         "}"
@@ -63,7 +63,7 @@ void FilterSectionWidget::setupUI() {
         "}";
     QString radioButtonStyle =
         "QRadioButton:checked {"
-        "   border: 2px solid rgb(15, 228, 61);"
+        "   border: 2px solid #39FF14;"
         "   border-radius: 3px;"
         "   padding: 2px;"
         "}"
@@ -311,7 +311,7 @@ void FilterSectionWidget::clearAllFiltersUI() {
 void FilterSectionWidget::updateToggleButtonState(bool hasActiveFilters) {
     if (hasActiveFilters) {
         m_filtersToggleBtn->setText("Filters (Active)");
-        m_filtersToggleBtn->setStyleSheet("QToolButton {border: 1px solid rgb(15, 228, 61); }");
+        m_filtersToggleBtn->setStyleSheet("QToolButton {border: 1px solid #39FF14; }");
     } else {
         m_filtersToggleBtn->setText("Filters");
         m_filtersToggleBtn->setStyleSheet("");

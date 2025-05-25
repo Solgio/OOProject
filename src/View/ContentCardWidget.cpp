@@ -44,7 +44,7 @@ void ContentCardWidget::setupUI() {
     m_titleLabel->setStyleSheet("font-weight: bold; font-size: 14px;");
     m_titleLabel->setStyleSheet("background-color: transparent");
 
-
+/*
     m_typeLabel = new QLabel(QString::fromStdString(m_content->getType()));
     m_typeLabel->setAlignment(Qt::AlignCenter | Qt::AlignHCenter);
     m_typeLabel->setStyleSheet("background-color: transparent");
@@ -56,7 +56,7 @@ void ContentCardWidget::setupUI() {
     m_yearLabel = new QLabel(QString::number(m_content->getYear()));
     m_yearLabel->setAlignment(Qt::AlignCenter | Qt::AlignHCenter);
     m_genreLabel->setStyleSheet("background-color: transparent");
-
+*/
     m_statusLayout = new QHBoxLayout();
     m_statusLayout->setAlignment(Qt::AlignCenter | Qt::AlignHCenter);
     m_statusLayout->setSpacing(10); // Spacing between status labels
@@ -64,9 +64,9 @@ void ContentCardWidget::setupUI() {
     // Add elements to card
     frameContentLayout->addWidget(m_coverLabel);
     frameContentLayout->addWidget(m_titleLabel);
-    frameContentLayout->addWidget(m_typeLabel);
-    frameContentLayout->addWidget(m_genreLabel);
-    frameContentLayout->addWidget(m_yearLabel);
+    //frameContentLayout->addWidget(m_typeLabel);
+    //frameContentLayout->addWidget(m_genreLabel);
+    //frameContentLayout->addWidget(m_yearLabel);
     frameContentLayout->addLayout(m_statusLayout);
 
     cardLayout->addWidget(m_cardFrame);
@@ -103,9 +103,13 @@ void ContentCardWidget::setSelected(bool selected) {
 
 void ContentCardWidget::updateCardStyle() {
     if (m_isSelected) {
-        m_cardFrame->setStyleSheet("QFrame#ContentCardFrame { border: 2px solid #00FF00; border-radius: 5px; }");
+        m_cardFrame->setStyleSheet("QFrame#ContentCardFrame { border: 2px solid #39FF14; border-radius: 5px; }");
+    } else if (m_content->getStarred() && m_content->getWatched()) {
+        m_cardFrame->setStyleSheet("QFrame#ContentCardFrame { border: 2px solid #BC13FE; border-radius: 5px; }");
     } else if (m_content->getStarred()) {
-        m_cardFrame->setStyleSheet("QFrame#ContentCardFrame { border: 2px solid #FFD700; border-radius: 5px; }");
+        m_cardFrame->setStyleSheet("QFrame#ContentCardFrame { border: 2px solid #CFFF04; border-radius: 5px; }");
+    } else if (m_content->getWatched()) {
+        m_cardFrame->setStyleSheet("QFrame#ContentCardFrame { border: 2px solid rgb(0, 182, 30); border-radius: 5px; }");
     } else {
         m_cardFrame->setStyleSheet("QFrame#ContentCardFrame { border: 1px solid #ccc; border-radius: 5px; }");
     }
