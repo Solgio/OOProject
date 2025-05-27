@@ -32,8 +32,8 @@ void Comic::setFinished(const bool& nfinished){
     //(!finished)? finished=true : finished=false;
 };
 
-void Comic::accept(Visitor* visitor){
-    visitor->visit(this);
+QWidget* Comic::accept(Visitor* visitor){
+    return visitor->visit(this);
 };
 void Comic::toXml(xmlVisitor* xvisitor, QDomDocument& doc, QDomElement& root ){
     xvisitor->toXml(this, doc, root);

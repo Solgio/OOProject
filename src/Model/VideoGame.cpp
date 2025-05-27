@@ -67,8 +67,8 @@ void VideoGame::setGameType(gameType tipo){
     gameGenre = tipo;
 }
 
-void VideoGame::accept(Visitor* visitor){
-    visitor->visit(this);
+QWidget* VideoGame::accept(Visitor* visitor){
+    return visitor->visit(this);
 }
 void VideoGame::toXml(xmlVisitor* xvisitor, QDomDocument& doc, QDomElement& root ){
     xvisitor->toXml(this, doc, root);

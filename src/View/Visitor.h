@@ -17,10 +17,10 @@ class Visitor: public QWidget{
         AttributeDisplayWindow *display;
 
     public:
-        virtual QWidget* visit(Book *book) = 0;
-        virtual QWidget* visit(Comic *comic) = 0;
-        virtual QWidget* visit(Film *movie) = 0;
-        virtual QWidget* visit(Serie *serie) = 0;
-        virtual QWidget* visit(VideoGame *videogame) = 0;
+        virtual QWidget* visit(Book *book);
+        virtual QWidget* visit(Comic *comic);
+        virtual QWidget* visit(Film *movie);
+        virtual QWidget* visit(Serie *serie);
+        virtual QWidget* visit(VideoGame *videogame);
 };
 #endif

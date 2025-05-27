@@ -34,7 +34,8 @@ private:
     void updateContentDisplay();
     
     Content* m_content;
-    AttributeDisplayWindow * contentDetails;
+    QWidget * contentDetails;
+    Visitor *view;
     //QLabel *m_contentDetails;
     QPushButton *m_editButton;
     QPushButton *m_deleteButton;

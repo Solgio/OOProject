@@ -41,8 +41,8 @@ void Serie::setFinished(const bool& nfinished){
     finished = nfinished;
 }
 
-void Serie::accept(Visitor* visitor){
-    visitor->visit(this);
+QWidget* Serie::accept(Visitor* visitor){
+    return visitor->visit(this);
 }
 void Serie::toXml(xmlVisitor* xvisitor, QDomDocument& doc, QDomElement& root ){
     xvisitor->toXml(this, doc, root);

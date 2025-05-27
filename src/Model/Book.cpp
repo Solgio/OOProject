@@ -18,8 +18,8 @@ void Book::setMainCharacter(string_view nmainCharacter){
     mainCharacter=nmainCharacter;
 };
 
-void Book::accept(Visitor* visitor){
-    visitor->visit(this);
+QWidget* Book::accept(Visitor* visitor){
+    return visitor->visit(this);
 };
 
 void Book::toXml(xmlVisitor* xvisitor, QDomDocument& doc, QDomElement& root ){

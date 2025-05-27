@@ -51,7 +51,7 @@ void ContentDetailWindow::updateContentDisplay() {
     m_contentDetails->setText(html);
     */
 
-    contentDetails->update(m_content);
+    contentDetails = m_content->accept(view);
 
 }
 

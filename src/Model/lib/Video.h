@@ -29,7 +29,7 @@ class Video : public Multimedia {
             prequel=sequel;
             sequel=tp;
         };
-        void accept(Visitor* visitor) override =0;
+        QWidget* accept(Visitor* visitor) override =0;
         void toXml(xmlVisitor* xvisitor, QDomDocument& doc, QDomElement& root ) override=0;
         void toJson(VisitorJson* vistitorJson) override=0;
         string getType() const override=0;

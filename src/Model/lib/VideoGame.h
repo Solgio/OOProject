@@ -31,7 +31,7 @@ class VideoGame : public Multimedia {
         void setExpectedHours(const unsigned int& expectedHours);
         virtual ~VideoGame()=default;
         
-        void accept(Visitor* visitor) override;
+        QWidget* accept(Visitor* visitor) override;
         void toXml(xmlVisitor* xvisitor, QDomDocument& doc, QDomElement& root ) override;
         void toJson(VisitorJson* vistitorJson) override;
         string getType() const override;

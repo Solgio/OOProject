@@ -23,7 +23,7 @@ class Multimedia : public Content {
         void setProducer(string_view producer);
         void setPlatforms(string_view platforms);
        
-        void accept(Visitor* visitor) override = 0;
+        QWidget* accept(Visitor* visitor) override = 0;
         void toXml(xmlVisitor* xvisitor, QDomDocument& doc, QDomElement& root ) override= 0;
         void toJson(VisitorJson* vistitorJson) override= 0;
         string getType() const override= 0;

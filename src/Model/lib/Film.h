@@ -23,7 +23,7 @@ class Film : public Video {
         void setDirector(string_view director);
         void setPhotoDirector(string_view producer);
         
-        void accept(Visitor* visitor) override;
+        QWidget* accept(Visitor* visitor) override;
         void toXml(xmlVisitor* xvisitor, QDomDocument& doc, QDomElement& root ) override;
         void toJson(VisitorJson* vistitorJson) override;
         string getType() const override;

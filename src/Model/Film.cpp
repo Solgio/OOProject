@@ -24,10 +24,10 @@ void Film::setDirector(string_view ndirector){
 };
 void Film::setPhotoDirector(string_view nPhotoDirector){
     photoDirector=nPhotoDirector;
-};  
+};
 
-void Film::accept(Visitor* visitor){
-    visitor->visit(this);
+QWidget* Film::accept(Visitor* visitor){
+    return visitor->visit(this);
 };
 void Film::toXml(xmlVisitor* xvisitor, QDomDocument& doc, QDomElement& root ){
     xvisitor->toXml(this, doc, root);
