@@ -108,7 +108,7 @@ void LibraryWindow::createRightPanel()
     m_rightPanel = new QStackedWidget();
 
     // Main view (contains content preview grid)
-    QWidget *mainView = new QWidget();
+    auto *mainView = new QWidget();
     auto *mainViewLayout = new QVBoxLayout(mainView);
     mainViewLayout->setContentsMargins(0, 0, 0, 0);
 
@@ -120,8 +120,8 @@ void LibraryWindow::createRightPanel()
 
     m_rightPanel->addWidget(mainView); // Index 0
 
-    QWidget *buttonContainer = new QWidget();
-    QHBoxLayout *buttonLayout = new QHBoxLayout(buttonContainer);
+    auto *buttonContainer = new QWidget();
+    auto *buttonLayout = new QHBoxLayout(buttonContainer);
     buttonLayout->setContentsMargins(0, 0, 10, 10);
     buttonLayout->addStretch();
     createAddButton();
@@ -156,7 +156,6 @@ void LibraryWindow::connectSignals()
     // Connect FilterSectionWidget signals
     connect(m_filterSectionWidget, &FilterSectionWidget::filtersChanged, this, &LibraryWindow::handleFiltersChanged);
     connect(m_filterSectionWidget, &FilterSectionWidget::clearFiltersRequested, this, &LibraryWindow::handleClearFiltersRequested);
-    connect(m_filterSectionWidget, &FilterSectionWidget::toggleExpanded, this, &LibraryWindow::handleToggleFiltersExpanded);
 
     // Connect SortingSectionWidget signals
     connect(m_sortingSectionWidget, &SortingSectionWidget::sortCriteriaChanged, this, &LibraryWindow::handleSortCriteriaChanged);
@@ -175,7 +174,6 @@ void LibraryWindow::connectSignals()
 
     // Connect ContentPreviewGrid signals
     connect(m_contentPreviewGrid, &ContentPreviewGrid::contentDoubleClicked, this, &LibraryWindow::showDetailView);
-    connect(m_contentPreviewGrid, &ContentPreviewGrid::contentSingleClicked, this, &LibraryWindow::handleContentSingleClick);
 
     // Setup and connect shortcuts
     m_shortcutManager->setupShortcuts(this, m_searchBar, m_detailWindow);
@@ -262,12 +260,6 @@ void LibraryWindow::handleClearFiltersRequested()
     updateOverallFilterState();   // Update filter counter and button state
 }
 
-void LibraryWindow::handleToggleFiltersExpanded(bool expanded)
-{
-    // ContentPreviewGrid will handle its own update based on available space
-    // No explicit updatePreviews() call needed here as proxy model doesn't change
-}
-
 void LibraryWindow::handleSortCriteriaChanged(ContentModel::SortRole role, Qt::SortOrder order)
 {
     m_proxyModel->setSortRole(role);
@@ -296,12 +288,6 @@ void LibraryWindow::showDetailView(Content *content)
     }
 }
 
-void LibraryWindow::handleContentSingleClick(Content *content)
-{
-    // The ContentCardWidget already handles its own selection style
-    // If you need more global handling for single clicks (e.g., enable a "Delete" button)
-    // you would add that logic here.
-}
 
 void LibraryWindow::updateOverallFilterState()
 {

@@ -45,7 +45,6 @@ private slots:
     // Slots for filter/sort changes
     void handleFiltersChanged();
     void handleClearFiltersRequested();
-    void handleToggleFiltersExpanded(bool expanded);
     void handleSortCriteriaChanged(ContentModel::SortRole role, Qt::SortOrder order);
 
     // Slot for updating content display
@@ -56,7 +55,6 @@ private slots:
 
     // Slot for ContentPreviewGrid interactions
     void showDetailView(Content* content);
-    void handleContentSingleClick(Content* content);
 
 
 private:
