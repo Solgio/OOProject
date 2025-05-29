@@ -10,7 +10,7 @@
 #include "ContentEditWindow.h"
 
 ContentDetailWindow::ContentDetailWindow(QWidget *parent)
-    : QWidget(parent), m_content(nullptr) 
+    : QWidget(parent), m_content(nullptr)
 {
     setupUI();
     setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
@@ -51,8 +51,8 @@ void ContentDetailWindow::updateContentDisplay() {
     m_contentDetails->setText(html);
     */
 
-    contentDetails = m_content->accept(view);
-
+    contentDetails->update(m_content);
+    contentDetails->show();
 }
 
 void ContentDetailWindow::setupUI() 

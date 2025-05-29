@@ -30,7 +30,7 @@ class Serie : public Video {
         void setCreator(string_view creator);
         void setFinished(const bool& finished);
 
-        QWidget* accept(Visitor* visitor) override;
+        AttributeDisplayWindow* accept(Visitor* visitor) override;
         void toXml(xmlVisitor* xvisitor, QDomDocument& doc, QDomElement& root ) override;
         void toJson(VisitorJson* vistitorJson) override;
         string getType() const override;

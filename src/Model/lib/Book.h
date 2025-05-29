@@ -18,7 +18,7 @@ class Book : public Paper {
         string getMainCharacter() const;
         void setMainCharacter(string_view mainCharacter);
 
-        QWidget* accept(Visitor* visitor) override;
+        AttributeDisplayWindow* accept(Visitor* visitor) override;
         void toXml(xmlVisitor* xvisitor, QDomDocument& doc, QDomElement& root) override;
         void toJson(VisitorJson* vistitorJson) override;
         string getType() const override;

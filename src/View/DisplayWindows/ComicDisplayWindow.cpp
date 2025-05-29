@@ -1,24 +1,20 @@
 #include "ComicDisplayWindow.h"
-
-ComicDisplayWindow::ComicDisplayWindow():
-    BookDisplayWindow(),
-    Illustrator("", this),
-    Serie("", this),
-    Finished("", this)
-{
-    this->format();
-}
+#include "../../Model/lib/Comic.h"
 
 ComicDisplayWindow::ComicDisplayWindow(Comic *comic):
     BookDisplayWindow(comic),
-    Illustrator(QString::fromStdString(comic->getIllustrator()), this),
-    Serie(QString::fromStdString(comic->getSerie()), this),
-    Finished(comic->getFinished() ? "Yes" : "No", this)
+    Illustrator(new QLabel(QString::fromStdString(comic->getIllustrator()))),
+    Serie(new QLabel(QString::fromStdString(comic->getSerie()))),
+    Finished(new QLabel(comic->getFinished() ? "Yes" : "No"))
 {
-    this->format();
+    format();
 }
 
 void ComicDisplayWindow::format(){
-    //(Title.setAlignment(Qt::AlignTop | Qt::AlignHCenter));
-    //Title.setAlignment(Qt::AlignTop | Qt::AlignHCenter);
+    layout = new QVBoxLayout();
+    layout->addWidget(Illustrator);
+    layout->addWidget(Serie);
+    layout->addWidget(Finished);
+
+    AttributeDisplayWindow::getDetailLayout()->addLayout(layout);
 }

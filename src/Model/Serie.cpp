@@ -41,7 +41,7 @@ void Serie::setFinished(const bool& nfinished){
     finished = nfinished;
 }
 
-QWidget* Serie::accept(Visitor* visitor){
+AttributeDisplayWindow* Serie::accept(Visitor* visitor){
     return visitor->visit(this);
 }
 void Serie::toXml(xmlVisitor* xvisitor, QDomDocument& doc, QDomElement& root ){

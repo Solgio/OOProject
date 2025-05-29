@@ -1,18 +1,8 @@
 #include "AttributeDisplayWindow.h"
 #include "../../Model/lib/Content.h"
+#include "../Visitor.h"
 
-AttributeDisplayWindow::AttributeDisplayWindow(QWidget *parent): QWidget(parent),
-    Title(new QLabel("")),
-    imgString(new QString()),
-    Year(new QLabel("")),
-    Subgenre(new QLabel("")),
-    Watched(new QLabel("False")),
-    Starred(new QLabel("False")),
-    Description(new QLabel("")),
-    Type(new QLabel(""))
-{
-    format();
-}
+AttributeDisplayWindow::AttributeDisplayWindow(QWidget *parent): QWidget(parent),view(new Visitor()){}
 
 
 AttributeDisplayWindow::AttributeDisplayWindow(Content* content, QWidget *parent): QWidget(parent),
@@ -52,13 +42,14 @@ void AttributeDisplayWindow::format(){
 }
 
 void AttributeDisplayWindow::update(Content *n_content){
-    Title->setText(QString("<h1>%1</h1>").arg(QString::fromStdString(n_content->getTitle())));
-    Year->setText(QString::number(n_content->getYear()));
-    Subgenre->setText(QString::fromStdString(n_content->getSubgenreString()));
-    Watched->setText(n_content->getWatched() ? "Yes" : "No");
-    Starred->setText(n_content->getStarred() ? "Yes" : "No");
-    Description->setText(QString::fromStdString(n_content->getDescription()));
-    Type->setText(QString::fromStdString(n_content->getType()));
+    bigLayout = n_content->accept(view)->getBigLayout();
+}
+
+QHBoxLayout* AttributeDisplayWindow::getBigLayout(){
+    return bigLayout;
+}
+QVBoxLayout* AttributeDisplayWindow::getDetailLayout(){
+    return detailLayout;
 }
 
 /*

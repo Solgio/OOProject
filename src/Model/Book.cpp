@@ -18,7 +18,7 @@ void Book::setMainCharacter(string_view nmainCharacter){
     mainCharacter=nmainCharacter;
 };
 
-QWidget* Book::accept(Visitor* visitor){
+AttributeDisplayWindow* Book::accept(Visitor* visitor){
     return visitor->visit(this);
 };
 

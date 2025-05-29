@@ -11,31 +11,31 @@
 #include "DisplayWindows/SerieDisplayWindow.h"
 #include "DisplayWindows/VideogameDisplayWindow.h"
 
-QWidget* Visitor::visit(Book *book){
+AttributeDisplayWindow* Visitor::visit(Book *book){
     printf("Book visited\n");
     display = new BookDisplayWindow(book);
     return display;
 };
 
-QWidget* Visitor::visit(Comic *comic){
+AttributeDisplayWindow* Visitor::visit(Comic *comic){
     printf("Comic visited\n");
     display = new ComicDisplayWindow(comic);
     return display;
 };
 
-QWidget* Visitor::visit(Film *movie){
+AttributeDisplayWindow* Visitor::visit(Film *movie){
     printf("Film visited\n");
     display = new FilmDisplayWindow(movie);
     return display;
 };
 
-QWidget* Visitor::visit(Serie *serie){
+AttributeDisplayWindow* Visitor::visit(Serie *serie){
     printf("Serie visited\n");
     display = new SerieDisplayWindow(serie);
     return display;
 };
 
-QWidget* Visitor::visit(VideoGame *videogame){
+AttributeDisplayWindow* Visitor::visit(VideoGame *videogame){
     printf("VideoGame visited\n");
     display = new VideogameDisplayWindow(videogame);
     return display;

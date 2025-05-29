@@ -6,6 +6,7 @@
 #include <QBoxLayout>
 
 class Content;
+class Visitor;
 
 class AttributeDisplayWindow: public QWidget{
     Q_OBJECT
@@ -20,6 +21,8 @@ private:
     QLabel *Description;
     QLabel *Type; //tipo di contenuto
 
+    Visitor *view;
+
     QHBoxLayout *bigLayout;
     QVBoxLayout *detailLayout;
 
@@ -29,7 +32,10 @@ public:
     AttributeDisplayWindow(QWidget *parent = nullptr);
     AttributeDisplayWindow(Content * content, QWidget *parent = nullptr);
 
-    void update(Content *content);
+    void update(Content *n_content);
+
+    virtual QHBoxLayout* getBigLayout();
+    virtual QVBoxLayout* getDetailLayout();
 };
 
 #endif // ATTRIBUTEDISPLAYWINDOW_H

@@ -69,7 +69,7 @@ public:
     void setImage(string_view image);
 
     virtual ~Content()=default;
-    virtual QWidget* accept(Visitor *visitor)= 0;
+    virtual AttributeDisplayWindow* accept(Visitor *visitor)= 0;
     virtual void toXml(xmlVisitor *xvisitor, QDomDocument &doc, QDomElement &root)= 0;
     virtual void toJson(VisitorJson *vistitorJson)= 0;
     virtual string getType() const = 0;

@@ -26,7 +26,7 @@ void Film::setPhotoDirector(string_view nPhotoDirector){
     photoDirector=nPhotoDirector;
 };
 
-QWidget* Film::accept(Visitor* visitor){
+AttributeDisplayWindow* Film::accept(Visitor* visitor){
     return visitor->visit(this);
 };
 void Film::toXml(xmlVisitor* xvisitor, QDomDocument& doc, QDomElement& root ){

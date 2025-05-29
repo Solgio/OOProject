@@ -92,7 +92,6 @@ void ContentProxyModel::setSortRole(ContentModel::SortRole role)
 }
 
 bool ContentProxyModel::filterAcceptsRow(int sourceRow, const QModelIndex &sourceParent) const {
-    Q_UNUSED(sourceParent); // Not used in this IMPLEMENTATION, needed for override
     ContentModel* contentModel = qobject_cast<ContentModel*>(sourceModel());
     if (!contentModel)
         return true; // Should not happen if sourceModel is correctly set

@@ -2,19 +2,19 @@
 #define COMICDISPLAYWINDOW_H
 
 #include "BookDisplayWindow.h"
-#include "../../Model/lib/Comic.h"
+class Comic;
 
 class ComicDisplayWindow: public BookDisplayWindow{
 
 private:
-    QLabel Illustrator;
-    QLabel Serie;
-    QLabel Finished;
+    QLabel *Illustrator;
+    QLabel *Serie;
+    QLabel *Finished;
+    QVBoxLayout *layout;
 
     void format();
 
 public:
-    ComicDisplayWindow();
     ComicDisplayWindow(Comic *comic);
 };
 

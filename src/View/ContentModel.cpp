@@ -26,7 +26,7 @@ int ContentModel::columnCount(const QModelIndex &parent) const
 
 QVariant ContentModel::data(const QModelIndex &index, int role) const
 {
-    if (!index.isValid() || index.row() >= static_cast<int>(m_contents.size()))
+    if (!index.isValid() || index.row() >= m_contents.size())
         return QVariant();
 
     Content *content = m_contents[index.row()];
@@ -169,14 +169,14 @@ void ContentModel::refreshData()
 
 Content *ContentModel::getContent(const QModelIndex &index) const
 {
-    if (!index.isValid() || index.row() >= static_cast<int>(m_contents.size()))
+    if (!index.isValid() || index.row() >= m_contents.size())
         return nullptr;
     return m_contents[index.row()];
 }
 
 Content *ContentModel::getContent(int row) const
 {
-    if (row < 0 || row >= static_cast<int>(m_contents.size()))
+    if (row < 0 || row >= m_contents.size())
         return nullptr;
     return m_contents[row];
 }

@@ -8,19 +8,21 @@ class BookDisplayWindow: public AttributeDisplayWindow{
 
 private:
     //Paper
-    QLabel Author;
-    QLabel Publisher;
-    QLabel Pages;
-    QLabel Volume;
+    QLabel *Author;
+    QLabel *Publisher;
+    QLabel *Pages;
+    QLabel *Volume;
 
     //Book
-    QLabel MC;
+    QLabel *MC;
+
+    QVBoxLayout *layout;
 
     void format();
 
 public:
-    BookDisplayWindow();
     BookDisplayWindow(Book *book);
+    //void update(Book *book) override;
 };
 
 #endif // BOOKDISPLAYWINDOW_H

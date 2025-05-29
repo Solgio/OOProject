@@ -1,30 +1,33 @@
 #include "BookDisplayWindow.h"
 #include "../../Model/lib/Book.h"
 
-BookDisplayWindow::BookDisplayWindow():
-    AttributeDisplayWindow(),
-    Author("", this),
-    Publisher("", this),
-    Pages("", this),
-    Volume("", this),
-    MC("", this)
-{
-    this->format();
-}
 
 
 BookDisplayWindow::BookDisplayWindow(Book *book):
     AttributeDisplayWindow(book),
-    Author(QString::fromStdString(book->getAuthor()), this),
-    Publisher(QString::fromStdString(book->getPublisher()), this),
-    Pages(QString::number(book->getPages()), this),
-    Volume(QString::number(book->getVolume()), this),
-    MC(QString::fromStdString(book->getMainCharacter()), this)
+    Author(new QLabel(QString::fromStdString(book->getAuthor()))),
+    Publisher(new QLabel((QString::fromStdString(book->getPublisher())))),
+    Pages(new QLabel(QString::number(book->getPages()))),
+    Volume(new QLabel(QString::number(book->getVolume()))),
+    MC(new QLabel(QString::fromStdString(book->getMainCharacter())))
 {
-    this->format();
+    format();
 }
 
 void BookDisplayWindow::format(){
-    //(Title.setAlignment(Qt::AlignTop | Qt::AlignHCenter));
-    //Title.setAlignment(Qt::AlignTop | Qt::AlignHCenter);
+    layout = new QVBoxLayout();
+    layout->addWidget(Author);
+    layout->addWidget(Publisher);
+    layout->addWidget(Pages);
+    layout->addWidget(Volume);
+    layout->addWidget(MC);
+    AttributeDisplayWindow::getDetailLayout()->addLayout(layout);
 }
+
+/*void BookDisplayWindow::update(Book *book){
+    Author->(QString::fromStdString(book->getAuthor()));
+    Publisher->((QString::fromStdString(book->getPublisher())));
+    Pages->(QString::number(book->getPages()));
+    Volume->(QString::number(book->getVolume()));
+    MC->(QString::fromStdString(book->getMainCharacter()));
+}*/
