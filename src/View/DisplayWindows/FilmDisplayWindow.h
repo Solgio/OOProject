@@ -2,18 +2,19 @@
 #define FILMDISPLAYWINDOW_H
 
 #include "VideoDisplayWindow.h"
-#include "../../Model/lib/Film.h"
+class Film;
 
 class FilmDisplayWindow:public VideoDisplayWindow{
 
 private:
-    QLabel Producer;
-    QLabel Photoproducer;
+    QLabel *Producer;
+    QLabel *Photoproducer;
+    QVBoxLayout *layout;
 
     void format();
 public:
-    FilmDisplayWindow();
     FilmDisplayWindow(Film *film);
+    ~FilmDisplayWindow() override;
 };
 
 #endif // FILMDISPLAYWINDOW_H

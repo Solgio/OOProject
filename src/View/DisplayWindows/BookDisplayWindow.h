@@ -22,7 +22,7 @@ private:
 
 public:
     BookDisplayWindow(Book *book);
-    //void update(Book *book) override;
+    ~BookDisplayWindow() override;
 };
 
 #endif // BOOKDISPLAYWINDOW_H

@@ -32,10 +32,10 @@ public:
     AttributeDisplayWindow(QWidget *parent = nullptr);
     AttributeDisplayWindow(Content * content, QWidget *parent = nullptr);
 
-    void update(Content *n_content);
-
     virtual QHBoxLayout* getBigLayout();
     virtual QVBoxLayout* getDetailLayout();
+
+    virtual ~AttributeDisplayWindow();
 };
 
 #endif // ATTRIBUTEDISPLAYWINDOW_H

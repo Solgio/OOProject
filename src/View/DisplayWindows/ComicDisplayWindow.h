@@ -16,6 +16,7 @@ private:
 
 public:
     ComicDisplayWindow(Comic *comic);
+    ~ComicDisplayWindow() override;
 };
 
 #endif // COMICDISPLAYWINDOW_H

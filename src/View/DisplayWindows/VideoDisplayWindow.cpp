@@ -1,22 +1,21 @@
 #include "VideoDisplayWindow.h"
-VideoDisplayWindow::VideoDisplayWindow():
-    MultimediaDisplayWindow(),
-    Duration("", this),
-    Prequel("", this),
-    Sequel("", this)
-{
-    this->format();
-}
+#include "../../Model/lib/Video.h"
 
 VideoDisplayWindow::VideoDisplayWindow(Video *video):
     MultimediaDisplayWindow(video),
-    Duration(QString::number(video->getDuration()), this),
-    Prequel(QString::number(video->getPrequel()), this),
-    Sequel(QString::number(video->getSequel()), this)
+    Duration(new QLabel(QString::number(video->getDuration()))),
+    Prequel(new QLabel(QString::number(video->getPrequel()))),
+    Sequel(new QLabel(QString::number(video->getSequel())))
 {
-    this->format();
+    format();
 }
 
 void VideoDisplayWindow::format(){
-
+    layout = new QVBoxLayout(this);
+    layout->addWidget(Duration);
+    layout->addWidget(Prequel);
+    layout->addWidget(Sequel);
+    AttributeDisplayWindow::getDetailLayout()->addLayout(layout);
 }
+
+VideoDisplayWindow::~VideoDisplayWindow(){}

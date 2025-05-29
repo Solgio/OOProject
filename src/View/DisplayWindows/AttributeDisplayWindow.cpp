@@ -29,20 +29,17 @@ void AttributeDisplayWindow::format(){
 
     detailLayout = new QVBoxLayout();
 
-    bigLayout->insertLayout(0, detailLayout);
+    bigLayout->insertLayout(1, detailLayout);
 
     Title->setAlignment(Qt::AlignTop | Qt::AlignHCenter);
     detailLayout->addWidget(Title);
     detailLayout->addWidget(Year);
     Year->setAlignment(Qt::AlignTop | Qt::AlignHCenter);
+    detailLayout->addWidget(new QLabel(QString("<h3>%1</h3>").arg("Descrizione")));
     detailLayout->addWidget(Description);
     detailLayout->addWidget(Type);
 
     //bigLayout->addWidget(Title);
-}
-
-void AttributeDisplayWindow::update(Content *n_content){
-    bigLayout = n_content->accept(view)->getBigLayout();
 }
 
 QHBoxLayout* AttributeDisplayWindow::getBigLayout(){
@@ -50,6 +47,10 @@ QHBoxLayout* AttributeDisplayWindow::getBigLayout(){
 }
 QVBoxLayout* AttributeDisplayWindow::getDetailLayout(){
     return detailLayout;
+}
+
+AttributeDisplayWindow::~AttributeDisplayWindow(){
+    delete this->findChild<QLabel*>("Title");
 }
 
 /*

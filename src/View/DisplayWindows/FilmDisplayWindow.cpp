@@ -1,21 +1,19 @@
 #include "FilmDisplayWindow.h"
-
-FilmDisplayWindow::FilmDisplayWindow():
-    VideoDisplayWindow(),
-    Producer("", this),
-    Photoproducer("", this)
-{
-    this->format();
-}
+#include "../../Model/lib/Film.h"
 
 FilmDisplayWindow::FilmDisplayWindow(Film *film):
     VideoDisplayWindow(film),
-    Producer(QString::fromStdString(film->getProducer()), this),
-    Photoproducer(QString::fromStdString(film->getPhotoDirector()), this)
+    Producer(new QLabel(QString::fromStdString(film->getProducer()))),
+    Photoproducer(new QLabel(QString::fromStdString(film->getPhotoDirector())))
 {
-    this->format();
+    format();
 }
 
 void FilmDisplayWindow::format(){
-
+    layout = new QVBoxLayout(this);
+    layout->addWidget(Producer);
+    layout->addWidget(Photoproducer);
+    AttributeDisplayWindow::getDetailLayout()->addLayout(layout);
 }
+
+FilmDisplayWindow::~FilmDisplayWindow(){}

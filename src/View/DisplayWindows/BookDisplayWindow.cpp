@@ -24,10 +24,4 @@ void BookDisplayWindow::format(){
     AttributeDisplayWindow::getDetailLayout()->addLayout(layout);
 }
 
-/*void BookDisplayWindow::update(Book *book){
-    Author->(QString::fromStdString(book->getAuthor()));
-    Publisher->((QString::fromStdString(book->getPublisher())));
-    Pages->(QString::number(book->getPages()));
-    Volume->(QString::number(book->getVolume()));
-    MC->(QString::fromStdString(book->getMainCharacter()));
-}*/
+BookDisplayWindow::~BookDisplayWindow(){}

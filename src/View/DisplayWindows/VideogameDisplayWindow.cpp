@@ -1,23 +1,21 @@
 #include "VideogameDisplayWindow.h"
-
-VideogameDisplayWindow::VideogameDisplayWindow():
-    MultimediaDisplayWindow(),
-    GameEngine("", this),
-    ExpectedHours("", this),
-    GameGenre("", this)
-{
-    this->format();
-}
+#include "../../Model/lib/VideoGame.h"
 
 VideogameDisplayWindow::VideogameDisplayWindow(VideoGame *vgame):
     MultimediaDisplayWindow(vgame),
-    GameEngine(QString::fromStdString(vgame->getGameEngine()), this),
-    ExpectedHours(QString::number(vgame->getExpectedHours()), this),
-    GameGenre(QString::fromStdString(vgame->getGameType()), this)
+    GameEngine(new QLabel(QString::fromStdString(vgame->getGameEngine()))),
+    ExpectedHours(new QLabel(QString::number(vgame->getExpectedHours()))),
+    GameGenre(new QLabel(QString::fromStdString(vgame->getGameType())))
 {
     this->format();
 }
 
 void VideogameDisplayWindow::format(){
-
+    layout = new QVBoxLayout(this);
+    layout->addWidget(GameEngine);
+    layout->addWidget(ExpectedHours);
+    layout->addWidget(GameGenre);
+    AttributeDisplayWindow::getDetailLayout()->addLayout(layout);
 }
+
+VideogameDisplayWindow::~VideogameDisplayWindow(){}

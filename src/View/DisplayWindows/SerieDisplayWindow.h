@@ -2,21 +2,22 @@
 #define SERIEDISPLAYWINDOW_H
 
 #include "VideoDisplayWindow.h"
-#include "../../Model/lib/Serie.h"
+class Serie;
 
 class SerieDisplayWindow:public VideoDisplayWindow{
 
 private:
-    QLabel Seasons;
-    QLabel Episodes;
-    QLabel Creator;
-    QLabel Finished;
+    QLabel *Seasons;
+    QLabel *Episodes;
+    QLabel *Creator;
+    QLabel *Finished;
+    QVBoxLayout *layout;
 
     void format();
 
 public:
-    SerieDisplayWindow();
     SerieDisplayWindow(Serie *serie);
+    ~SerieDisplayWindow() override;
 };
 
 #endif // SERIEDISPLAYWINDOW_H

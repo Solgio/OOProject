@@ -2,20 +2,21 @@
 #define VIDEOGAMEDISPLAYWINDOW_H
 
 #include "MultimediaDisplayWindow.h"
-#include "../../Model/lib/VideoGame.h"
+class VideoGame;
 
 class VideogameDisplayWindow:public MultimediaDisplayWindow{
 
 private:
-    QLabel GameEngine;
-    QLabel ExpectedHours;
-    QLabel GameGenre;
+    QLabel *GameEngine;
+    QLabel *ExpectedHours;
+    QLabel *GameGenre;
+    QVBoxLayout *layout;
 
     void format();
 
 public:
-    VideogameDisplayWindow();
     VideogameDisplayWindow(VideoGame *videogame);
+    ~VideogameDisplayWindow() override;
 };
 
 #endif // VIDEOGAMEDISPLAYWINDOW_H

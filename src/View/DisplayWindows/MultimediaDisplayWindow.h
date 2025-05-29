@@ -2,19 +2,20 @@
 #define MULTIMEDIADISPLAYWINDOW_H
 
 #include "AttributeDisplayWindow.h"
-#include "../../Model/lib/Multimedia.h"
+class Multimedia;
 
 class MultimediaDisplayWindow: public AttributeDisplayWindow{
 
 private:
-    QLabel Producer;
-    QLabel Platforms;
+    QLabel *Producer;
+    QLabel *Platforms;
+    QVBoxLayout *layout;
 
     void format();
 
 public:
-    MultimediaDisplayWindow();
     MultimediaDisplayWindow(Multimedia *multm);
+    ~MultimediaDisplayWindow() override;
 };
 
 #endif // MULTIMEDIADISPLAYWINDOW_H

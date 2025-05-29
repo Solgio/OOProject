@@ -10,7 +10,7 @@
 #include "ContentEditWindow.h"
 
 ContentDetailWindow::ContentDetailWindow(QWidget *parent)
-    : QWidget(parent), m_content(nullptr)
+    : QWidget(parent), m_content(nullptr), view(new Visitor())
 {
     setupUI();
     setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
@@ -51,8 +51,10 @@ void ContentDetailWindow::updateContentDisplay() {
     m_contentDetails->setText(html);
     */
 
-    contentDetails->update(m_content);
-    contentDetails->show();
+    delete(contentDetails);
+
+    contentDetails = m_content->accept(view);
+    m_mainLayout->insertWidget(1, contentDetails);
 }
 
 void ContentDetailWindow::setupUI() 
@@ -80,7 +82,8 @@ void ContentDetailWindow::setupUI()
     //m_mainLayout->addWidget(m_contentDetails);
     contentDetails = new AttributeDisplayWindow();
 
-    m_mainLayout->addWidget(contentDetails);
+    m_mainLayout->insertWidget(1, contentDetails);
+
 
 
     // Edit button at bottom
@@ -126,6 +129,7 @@ void ContentDetailWindow::onDeleteClicked() {
         emit closeRequested();
     }
 }
+
 
 void ContentDetailWindow::refreshContent() {
     if (m_content) {

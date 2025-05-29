@@ -18,3 +18,5 @@ void ComicDisplayWindow::format(){
 
     AttributeDisplayWindow::getDetailLayout()->addLayout(layout);
 }
+
+ComicDisplayWindow::~ComicDisplayWindow(){}

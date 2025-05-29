@@ -1,21 +1,19 @@
 #include "MultimediaDisplayWindow.h"
-
-MultimediaDisplayWindow::MultimediaDisplayWindow():
-    AttributeDisplayWindow(),
-    Producer("", this),
-    Platforms("", this)
-{
-    this->format();
-}
+#include "../../Model/lib/Multimedia.h"
 
 MultimediaDisplayWindow::MultimediaDisplayWindow(Multimedia *multm):
     AttributeDisplayWindow(multm),
-    Producer(QString::fromStdString(multm->getProducer()), this),
-    Platforms(QString::fromStdString(multm->getPlatforms()), this)
+    Producer(new QLabel(QString::fromStdString(multm->getProducer()))),
+    Platforms(new QLabel(QString::fromStdString(multm->getPlatforms())))
 {
-    this->format();
+    format();
 }
 
 void MultimediaDisplayWindow::format(){
-
+    layout = new QVBoxLayout(this);
+    layout->addWidget(Producer);
+    layout->addWidget(Platforms);
+    AttributeDisplayWindow::getDetailLayout()->addLayout(layout);
 }
+
+MultimediaDisplayWindow::~MultimediaDisplayWindow(){}
