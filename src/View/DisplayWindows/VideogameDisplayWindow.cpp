@@ -11,11 +11,11 @@ VideogameDisplayWindow::VideogameDisplayWindow(VideoGame *vgame):
 }
 
 void VideogameDisplayWindow::format(){
-    layout = new QVBoxLayout(this);
+    layout = AttributeDisplayWindow::getDetailLayout();
     layout->addWidget(GameEngine);
     layout->addWidget(ExpectedHours);
     layout->addWidget(GameGenre);
-    AttributeDisplayWindow::getDetailLayout()->addLayout(layout);
+    
 }
 
 VideogameDisplayWindow::~VideogameDisplayWindow(){}

@@ -11,11 +11,11 @@ VideoDisplayWindow::VideoDisplayWindow(Video *video):
 }
 
 void VideoDisplayWindow::format(){
-    layout = new QVBoxLayout(this);
+    layout = AttributeDisplayWindow::getDetailLayout();
     layout->addWidget(Duration);
     layout->addWidget(Prequel);
     layout->addWidget(Sequel);
-    AttributeDisplayWindow::getDetailLayout()->addLayout(layout);
+    
 }
 
 VideoDisplayWindow::~VideoDisplayWindow(){}

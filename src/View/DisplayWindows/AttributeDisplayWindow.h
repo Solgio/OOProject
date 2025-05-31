@@ -4,6 +4,7 @@
 #include <QWidget>
 #include <QLabel>
 #include <QBoxLayout>
+#include <QFormLayout>
 
 class Content;
 class Visitor;

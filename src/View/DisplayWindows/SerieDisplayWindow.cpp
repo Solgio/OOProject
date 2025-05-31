@@ -12,12 +12,12 @@ SerieDisplayWindow::SerieDisplayWindow(Serie *serie):
 }
 
 void SerieDisplayWindow::format(){
-    layout = new QVBoxLayout(this);
+    layout = AttributeDisplayWindow::getDetailLayout();
     layout->addWidget(Seasons);
     layout->addWidget(Episodes);
     layout->addWidget(Creator);
     layout->addWidget(Finished);
-    AttributeDisplayWindow::getDetailLayout()->addLayout(layout);
+    
 }
 
 SerieDisplayWindow::~SerieDisplayWindow(){}

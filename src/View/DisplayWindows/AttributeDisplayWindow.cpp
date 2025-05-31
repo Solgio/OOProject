@@ -20,26 +20,52 @@ AttributeDisplayWindow::AttributeDisplayWindow(Content* content, QWidget *parent
 
 void AttributeDisplayWindow::format(){
 
-    bigLayout = new QHBoxLayout(this);
+    bigLayout = new QHBoxLayout(this); //Box orizzontale che contiene a sinistra l'immagine e destra gli dettagli del content
 
     QLabel *img = new QLabel();
     img->setPixmap(QPixmap(*imgString));
 
-    bigLayout->addWidget(img);
+    bigLayout->addWidget(img); //aggiunta dell'immagine per occupare il lato sinistro
 
-    detailLayout = new QVBoxLayout();
+    detailLayout = new QVBoxLayout(); //Box verticale per gli dettagli del content
+
+    detailLayout->setSpacing(0);
+    detailLayout->setAlignment(Qt::AlignTop);
+    //detailLayout->insertSpacing(-1, 10); //aggiunge un spacer alla fine del layout per portare compattare i campi
 
     bigLayout->insertLayout(1, detailLayout);
 
+    //Ogni campo ha un suo layout
+
+    QFormLayout *titleLayout = new QFormLayout();
     Title->setAlignment(Qt::AlignTop | Qt::AlignHCenter);
-    detailLayout->addWidget(Title);
-    detailLayout->addWidget(Year);
     Year->setAlignment(Qt::AlignTop | Qt::AlignHCenter);
-    detailLayout->addWidget(new QLabel(QString("<h3>%1</h3>").arg("Descrizione")));
-    detailLayout->addWidget(Description);
-    detailLayout->addWidget(Type);
+    titleLayout->addRow(Title);
+    titleLayout->addRow(Year);
+    //detailLayout->addWidget(Title);
+    //detailLayout->addWidget(Year);
+    detailLayout->addLayout(titleLayout);
+
+    QFormLayout *descrLayout = new QFormLayout();
+    descrLayout->addRow(new QLabel(QString("<h2>%1</h2>").arg("Descrizione : ")));
+    descrLayout->addRow(Description);
+    //descrLayout->addItem(new QSpacerItem(0, 20));
+    //descrLayout->addRow(new QLabel(QString("<h3>%1</h3>").arg("Type : ")), Type);
+    detailLayout->addLayout(descrLayout);
+
+    //separatore tra i layout
+
+
+    QFormLayout *typeLayout = new QFormLayout();
+    typeLayout->addRow(new QLabel(QString("<h3>%1</h3>").arg("Type : ")), Type);
+    detailLayout->addLayout(typeLayout);
+
+    //detailLayout->addWidget(new QLabel(QString("<h3>%1</h3>").arg("Descrizione")));
+    //detailLayout->addWidget(Description);
+    //detailLayout->addWidget(Type);
 
     //bigLayout->addWidget(Title);
+    //detailLayout->addStretch(200);
 }
 
 QHBoxLayout* AttributeDisplayWindow::getBigLayout(){
@@ -50,7 +76,6 @@ QVBoxLayout* AttributeDisplayWindow::getDetailLayout(){
 }
 
 AttributeDisplayWindow::~AttributeDisplayWindow(){
-    delete this->findChild<QLabel*>("Title");
 }
 
 /*

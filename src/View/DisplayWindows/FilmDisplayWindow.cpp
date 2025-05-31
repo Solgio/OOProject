@@ -10,10 +10,10 @@ FilmDisplayWindow::FilmDisplayWindow(Film *film):
 }
 
 void FilmDisplayWindow::format(){
-    layout = new QVBoxLayout(this);
+    layout = AttributeDisplayWindow::getDetailLayout();
     layout->addWidget(Producer);
     layout->addWidget(Photoproducer);
-    AttributeDisplayWindow::getDetailLayout()->addLayout(layout);
+    
 }
 
 FilmDisplayWindow::~FilmDisplayWindow(){}

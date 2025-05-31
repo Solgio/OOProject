@@ -11,12 +11,11 @@ ComicDisplayWindow::ComicDisplayWindow(Comic *comic):
 }
 
 void ComicDisplayWindow::format(){
-    layout = new QVBoxLayout();
+    layout = AttributeDisplayWindow::getDetailLayout();
     layout->addWidget(Illustrator);
     layout->addWidget(Serie);
     layout->addWidget(Finished);
 
-    AttributeDisplayWindow::getDetailLayout()->addLayout(layout);
 }
 
 ComicDisplayWindow::~ComicDisplayWindow(){}

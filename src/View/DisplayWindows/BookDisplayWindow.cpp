@@ -15,13 +15,32 @@ BookDisplayWindow::BookDisplayWindow(Book *book):
 }
 
 void BookDisplayWindow::format(){
-    layout = new QVBoxLayout();
-    layout->addWidget(Author);
-    layout->addWidget(Publisher);
-    layout->addWidget(Pages);
-    layout->addWidget(Volume);
-    layout->addWidget(MC);
-    AttributeDisplayWindow::getDetailLayout()->addLayout(layout);
+    layout = AttributeDisplayWindow::getDetailLayout();
+
+    QFormLayout *authorLayout = new QFormLayout();
+    authorLayout->addRow(new QLabel(QString("<h3>%1</h3>").arg("Author : ")), Author);
+    layout->addLayout(authorLayout);
+    //layout->addWidget(Author);
+
+    QFormLayout *PupLayout = new QFormLayout();
+    PupLayout->addRow(new QLabel(QString("<h3>%1</h3>").arg("Publisher : ")), Publisher);
+    layout->addLayout(PupLayout);
+    //layout->addWidget(Publisher);
+
+    QFormLayout *pagesLayout = new QFormLayout();
+    pagesLayout->addRow(new QLabel(QString("<h3>%1</h3>").arg("Pages : ")), Pages);
+    layout->addLayout(pagesLayout);
+    //layout->addWidget(Pages);
+
+    QFormLayout *volumeLayout = new QFormLayout();
+    volumeLayout->addRow(new QLabel(QString("<h3>%1</h3>").arg("Volume : ")), Volume);
+    layout->addLayout(volumeLayout);
+    //layout->addWidget(Volume);
+
+    QFormLayout *mcLayout = new QFormLayout();
+    mcLayout->addRow(new QLabel(QString("<h3>%1</h3>").arg("Main Character : ")), MC);
+    layout->addLayout(mcLayout);
+    //layout->addWidget(MC);
 }
 
 BookDisplayWindow::~BookDisplayWindow(){}

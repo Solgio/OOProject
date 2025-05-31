@@ -10,10 +10,10 @@ MultimediaDisplayWindow::MultimediaDisplayWindow(Multimedia *multm):
 }
 
 void MultimediaDisplayWindow::format(){
-    layout = new QVBoxLayout(this);
+    layout = AttributeDisplayWindow::getDetailLayout();
     layout->addWidget(Producer);
     layout->addWidget(Platforms);
-    AttributeDisplayWindow::getDetailLayout()->addLayout(layout);
+    
 }
 
 MultimediaDisplayWindow::~MultimediaDisplayWindow(){}
