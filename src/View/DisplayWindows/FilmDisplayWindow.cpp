@@ -3,7 +3,7 @@
 
 FilmDisplayWindow::FilmDisplayWindow(Film *film):
     VideoDisplayWindow(film),
-    Producer(new QLabel(QString::fromStdString(film->getProducer()))),
+    Director(new QLabel(QString::fromStdString(film->getDirector()))),
     Photoproducer(new QLabel(QString::fromStdString(film->getPhotoDirector())))
 {
     format();
@@ -11,8 +11,17 @@ FilmDisplayWindow::FilmDisplayWindow(Film *film):
 
 void FilmDisplayWindow::format(){
     layout = AttributeDisplayWindow::getDetailLayout();
-    layout->addWidget(Producer);
-    layout->addWidget(Photoproducer);
+
+    QFormLayout *direcLayout = new QFormLayout();
+    direcLayout->addRow(new QLabel(QString("<h3>%1</h3>").arg("Director : ")), Director);
+    layout->addLayout(direcLayout);
+
+    QFormLayout *photoLayout = new QFormLayout();
+    photoLayout->addRow(new QLabel(QString("<h3>%1</h3>").arg("Photoproducer : ")), Photoproducer);
+    layout->addLayout(photoLayout);
+
+    //layout->addWidget(Producer);
+    //layout->addWidget(Photoproducer);
     
 }
 

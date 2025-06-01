@@ -12,9 +12,24 @@ VideoDisplayWindow::VideoDisplayWindow(Video *video):
 
 void VideoDisplayWindow::format(){
     layout = AttributeDisplayWindow::getDetailLayout();
-    layout->addWidget(Duration);
-    layout->addWidget(Prequel);
-    layout->addWidget(Sequel);
+
+    QFormLayout *durLayout = new QFormLayout();
+    durLayout->addRow(new QLabel(QString("<h3>%1</h3>").arg("Duration : ")), Duration);
+    layout->addLayout(durLayout);
+    //layout->addWidget(Pages);
+
+    QFormLayout *preLayout = new QFormLayout();
+    preLayout->addRow(new QLabel(QString("<h3>%1</h3>").arg("Prequel : ")), Prequel);
+    layout->addLayout(preLayout);
+    //layout->addWidget(Volume);
+
+    QFormLayout *seqLayout = new QFormLayout();
+    seqLayout->addRow(new QLabel(QString("<h3>%1</h3>").arg("Sequel : ")), Sequel);
+    layout->addLayout(seqLayout);
+
+    //layout->addWidget(Duration);
+    //layout->addWidget(Prequel);
+    //layout->addWidget(Sequel);
     
 }
 

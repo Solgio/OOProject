@@ -7,7 +7,7 @@ class Film;
 class FilmDisplayWindow:public VideoDisplayWindow{
 
 private:
-    QLabel *Producer;
+    QLabel *Director;
     QLabel *Photoproducer;
     QVBoxLayout *layout;
 

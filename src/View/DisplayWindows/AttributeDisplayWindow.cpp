@@ -29,7 +29,9 @@ void AttributeDisplayWindow::format(){
 
     detailLayout = new QVBoxLayout(); //Box verticale per gli dettagli del content
 
-    detailLayout->setSpacing(0);
+    detailLayout->setSpacing(15);
+    //detailLayout->setContentsMargins(5, 5, 5, 5);
+
     detailLayout->setAlignment(Qt::AlignTop);
     //detailLayout->insertSpacing(-1, 10); //aggiunge un spacer alla fine del layout per portare compattare i campi
 

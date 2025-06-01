@@ -11,8 +11,17 @@ MultimediaDisplayWindow::MultimediaDisplayWindow(Multimedia *multm):
 
 void MultimediaDisplayWindow::format(){
     layout = AttributeDisplayWindow::getDetailLayout();
-    layout->addWidget(Producer);
-    layout->addWidget(Platforms);
+
+    QFormLayout *prodLayout = new QFormLayout();
+    prodLayout->addRow(new QLabel(QString("<h3>%1</h3>").arg("Producer : ")), Producer);
+    layout->addLayout(prodLayout);
+
+    QFormLayout *platLayout = new QFormLayout();
+    platLayout->addRow(new QLabel(QString("<h3>%1</h3>").arg("Platforms : ")), Platforms);
+    layout->addLayout(platLayout);
+
+    //layout->addWidget(Producer);
+    //layout->addWidget(Platforms);
     
 }
 

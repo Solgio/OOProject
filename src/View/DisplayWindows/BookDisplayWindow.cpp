@@ -19,6 +19,10 @@ void BookDisplayWindow::format(){
 
     QFormLayout *authorLayout = new QFormLayout();
     authorLayout->addRow(new QLabel(QString("<h3>%1</h3>").arg("Author : ")), Author);
+    /*authorLayout->addRow(new QLabel(QString("<h3>%1</h3>").arg("Publisher : ")), Publisher);
+    authorLayout->addRow(new QLabel(QString("<h3>%1</h3>").arg("Pages : ")), Pages);
+    authorLayout->addRow(new QLabel(QString("<h3>%1</h3>").arg("Volume : ")), Volume);
+    authorLayout->addRow(new QLabel(QString("<h3>%1</h3>").arg("Main Character : ")), MC);*/
     layout->addLayout(authorLayout);
     //layout->addWidget(Author);
 
@@ -41,6 +45,7 @@ void BookDisplayWindow::format(){
     mcLayout->addRow(new QLabel(QString("<h3>%1</h3>").arg("Main Character : ")), MC);
     layout->addLayout(mcLayout);
     //layout->addWidget(MC);
+
 }
 
 BookDisplayWindow::~BookDisplayWindow(){}

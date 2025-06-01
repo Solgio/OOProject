@@ -12,9 +12,22 @@ ComicDisplayWindow::ComicDisplayWindow(Comic *comic):
 
 void ComicDisplayWindow::format(){
     layout = AttributeDisplayWindow::getDetailLayout();
-    layout->addWidget(Illustrator);
-    layout->addWidget(Serie);
-    layout->addWidget(Finished);
+
+    QFormLayout *illLayout = new QFormLayout();
+    illLayout->addRow(new QLabel(QString("<h3>%1</h3>").arg("Illustrator : ")), Illustrator);
+    layout->addLayout(illLayout);
+
+    QFormLayout *serieLayout = new QFormLayout();
+    serieLayout->addRow(new QLabel(QString("<h3>%1</h3>").arg("Serie : ")), Serie);
+    layout->addLayout(serieLayout);
+
+    QFormLayout *finLayout = new QFormLayout();
+    finLayout->addRow(new QLabel(QString("<h3>%1</h3>").arg("Finished : ")), Finished);
+    layout->addLayout(finLayout);
+
+    //layout->addWidget(Illustrator);
+    //layout->addWidget(Serie);
+    //layout->addWidget(Finished);
 
 }
 
