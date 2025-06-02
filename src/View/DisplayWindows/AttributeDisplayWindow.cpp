@@ -1,9 +1,7 @@
 #include "AttributeDisplayWindow.h"
 #include "../../Model/lib/Content.h"
-#include "../Visitor.h"
 
-AttributeDisplayWindow::AttributeDisplayWindow(QWidget *parent): QWidget(parent),view(new Visitor()){}
-
+AttributeDisplayWindow::AttributeDisplayWindow(QWidget *parent): QWidget(parent){};
 
 AttributeDisplayWindow::AttributeDisplayWindow(Content* content, QWidget *parent): QWidget(parent),
     Title(new QLabel(QString("<h1>%1</h1>").arg(QString::fromStdString(content->getTitle())))),

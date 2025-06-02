@@ -7,7 +7,6 @@
 #include <QFormLayout>
 
 class Content;
-class Visitor;
 
 class AttributeDisplayWindow: public QWidget{
     Q_OBJECT
@@ -21,8 +20,6 @@ private:
     QLabel *Starred;
     QLabel *Description;
     QLabel *Type; //tipo di contenuto
-
-    Visitor *view;
 
     QHBoxLayout *bigLayout;
     QVBoxLayout *detailLayout;

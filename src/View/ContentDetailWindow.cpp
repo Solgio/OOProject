@@ -5,6 +5,7 @@
 #include <QPushButton>
 #include <QSpacerItem>
 
+#include "DisplayWindows/AttributeDisplayWindow.h"
 #include "../Model/lib/ScienceFictionLibrary.h"
 #include "LibraryWindow.h"
 #include "ContentEditWindow.h"

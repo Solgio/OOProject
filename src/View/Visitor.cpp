@@ -5,11 +5,15 @@
 #include "../Model/lib/Serie.h"
 #include "../Model/lib/VideoGame.h"
 
+#include "DisplayWindows/AttributeDisplayWindow.h"
+
 #include "DisplayWindows/BookDisplayWindow.h"
 #include "DisplayWindows/ComicDisplayWindow.h"
 #include "DisplayWindows/FilmDisplayWindow.h"
 #include "DisplayWindows/SerieDisplayWindow.h"
 #include "DisplayWindows/VideogameDisplayWindow.h"
+
+Visitor::Visitor(){}
 
 AttributeDisplayWindow* Visitor::visit(Book *book){
     printf("Book visited\n");

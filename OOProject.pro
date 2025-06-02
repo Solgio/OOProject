@@ -16,6 +16,7 @@ QT+= widgets core xml
 
 # Input
 HEADERS += src/data_persistency/IReader.h \
+           src/View/EditWindows/EditWindow.h \
            src/View/Visitor.h \
            src/View/LibraryWIndow.h \
            src/View/PreviewWidget.h \
@@ -65,6 +66,7 @@ SOURCES += src/Model/Book.cpp \
            src/Model/Serie.cpp \
            src/Model/Video.cpp \
            src/Model/VideoGame.cpp \
+           src/View/EditWindows/EditWindow.cpp \
            src/View/Visitor.cpp \
            src/View/LibraryWindow.cpp \
            src/View/PreviewWidget.cpp \
@@ -81,6 +83,7 @@ SOURCES += src/Model/Book.cpp \
            src/View/DisplayWindows/SerieDisplayWindow.cpp \
            src/View/DisplayWindows/VideoDisplayWindow.cpp \
            src/View/DisplayWindows/VideogameDisplayWindow.cpp \
+           src/View/EditWindows/Edit.cpp \
            src/data_persistency/json/visitorJson.cpp \
            src/data_persistency/json/jsonReader.cpp \
            src/data_persistency/xml/xmlReader.cpp \

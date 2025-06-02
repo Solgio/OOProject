@@ -7,8 +7,7 @@ class Comic;
 class Serie;
 class Film;
 class VideoGame;
-
-#include "DisplayWindows/AttributeDisplayWindow.h"
+class AttributeDisplayWindow;
 
 class Visitor: public QWidget{
     Q_OBJECT
@@ -17,6 +16,7 @@ class Visitor: public QWidget{
         AttributeDisplayWindow *display;
 
     public:
+        Visitor();
         virtual AttributeDisplayWindow* visit(Book *book);
         virtual AttributeDisplayWindow* visit(Comic *comic);
         virtual AttributeDisplayWindow* visit(Film *movie);
