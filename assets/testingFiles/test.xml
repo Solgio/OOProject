@@ -1,0 +1,179 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ScienceFictionLibrary>
+    <Book>
+        <Id>1</Id>
+        <Title>Dune</Title>
+        <Description>A science fiction novel about a desert planet and its valuable spice.</Description>
+        <Inspiration>1</Inspiration>
+        <Starred>1</Starred>
+        <Watched>0</Watched>
+        <Year>1965</Year>
+        <Image>assets/images/dune.jpg</Image>
+        <Subgenre>5</Subgenre>
+        <Author>Frank Herbert</Author>
+        <Publisher>Chilton Books</Publisher>
+        <Pages>412</Pages>
+        <Volume>1</Volume>
+        <MainCharacter>Paul Atreides</MainCharacter>
+    </Book>
+    <Comic>
+        <Id>2</Id>
+        <Title>Blame!</Title>
+        <Description>A distopic cyberpunk manga with great focus on architecture</Description>
+        <Inspiration>1</Inspiration>
+        <Starred>1</Starred>
+        <Watched>0</Watched>
+        <Year>1997</Year>
+        <Image>assets/images/blame.jpg</Image>
+        <Subgenre>8</Subgenre>
+        <Author>Tsutomu Nihei</Author>
+        <Publisher>Kōdansha</Publisher>
+        <Pages>160</Pages>
+        <Volume>10</Volume>
+        <MainCharacter>Killy</MainCharacter>
+        <Illustrator>Tsutomu Nihei</Illustrator>
+        <Serie>Blame!</Serie>
+        <Finished>1</Finished>
+    </Comic>
+    <Film>
+        <Id>3</Id>
+        <Title>Blade Runner 2049</Title>
+        <Description>A sequel to the 1982 film Blade Runner.</Description>
+        <Inspiration>1</Inspiration>
+        <Starred>1</Starred>
+        <Watched>0</Watched>
+        <Year>2017</Year>
+        <Image>assets/images/blade_runner_2049.jpg</Image>
+        <Subgenre>1</Subgenre>
+        <Producer>Columbia Pictures</Producer>
+        <Platforms></Platforms>
+        <Duration>163</Duration>
+        <Prequel>0</Prequel>
+        <Sequel>0</Sequel>
+        <Director></Director>
+        <PhotoDirector>Roger Deakins</PhotoDirector>
+    </Film>
+    <Serie>
+        <Id>4</Id>
+        <Title>The Expanse</Title>
+        <Description>A science fiction television series based on the novels.</Description>
+        <Inspiration>1</Inspiration>
+        <Starred>0</Starred>
+        <Watched>1</Watched>
+        <Year>2015</Year>
+        <Image>assets/images/the_expanse.jpg</Image>
+        <Subgenre>1</Subgenre>
+        <Producer></Producer>
+        <Platforms></Platforms>
+        <Duration>0</Duration>
+        <Prequel>0</Prequel>
+        <Sequel>0</Sequel>
+        <Seasons>6</Seasons>
+        <Episodes>62</Episodes>
+        <Creator>Mark Fergus</Creator>
+        <Finished>1</Finished>
+    </Serie>
+    <VideoGame>
+        <Id>5</Id>
+        <Title>Mass Effect 2</Title>
+        <Description>An action role-playing game set in a science fiction universe.</Description>
+        <Inspiration>1</Inspiration>
+        <Starred>0</Starred>
+        <Watched>1</Watched>
+        <Year>2010</Year>
+        <Image>assets/images/mass_effect_2.jpg</Image>
+        <Subgenre>5</Subgenre>
+        <Producer>BioWare</Producer>
+        <Platforms>PC, Xbox 360, PlayStation 3</Platforms>
+        <GameEngine></GameEngine>
+        <GameType>0</GameType>
+        <ExpectedHours>35</ExpectedHours>
+    </VideoGame>
+    <VideoGame>
+        <Id>6</Id>
+        <Title>fghjkl</Title>
+        <Description></Description>
+        <Inspiration>0</Inspiration>
+        <Starred>0</Starred>
+        <Watched>0</Watched>
+        <Year>1900</Year>
+        <Image></Image>
+        <Subgenre>0</Subgenre>
+        <Producer></Producer>
+        <Platforms></Platforms>
+        <GameEngine></GameEngine>
+        <GameType>0</GameType>
+        <ExpectedHours>0</ExpectedHours>
+    </VideoGame>
+    <Serie>
+        <Id>7</Id>
+        <Title>vbnm,</Title>
+        <Description></Description>
+        <Inspiration>0</Inspiration>
+        <Starred>0</Starred>
+        <Watched>0</Watched>
+        <Year>1900</Year>
+        <Image></Image>
+        <Subgenre>0</Subgenre>
+        <Producer></Producer>
+        <Platforms></Platforms>
+        <Duration>0</Duration>
+        <Prequel>0</Prequel>
+        <Sequel>0</Sequel>
+        <Seasons>0</Seasons>
+        <Episodes>0</Episodes>
+        <Creator></Creator>
+        <Finished>0</Finished>
+    </Serie>
+    <Comic>
+        <Id>8</Id>
+        <Title>fghjk</Title>
+        <Description></Description>
+        <Inspiration>0</Inspiration>
+        <Starred>0</Starred>
+        <Watched>0</Watched>
+        <Year>1900</Year>
+        <Image></Image>
+        <Subgenre>0</Subgenre>
+        <Author></Author>
+        <Publisher></Publisher>
+        <Pages>0</Pages>
+        <Volume>0</Volume>
+        <MainCharacter></MainCharacter>
+        <Illustrator></Illustrator>
+        <Serie></Serie>
+        <Finished>0</Finished>
+    </Comic>
+    <Book>
+        <Id>9</Id>
+        <Title>ikm </Title>
+        <Description></Description>
+        <Inspiration>0</Inspiration>
+        <Starred>0</Starred>
+        <Watched>0</Watched>
+        <Year>1900</Year>
+        <Image></Image>
+        <Subgenre>0</Subgenre>
+        <Author></Author>
+        <Publisher></Publisher>
+        <Pages>0</Pages>
+        <Volume>0</Volume>
+        <MainCharacter></MainCharacter>
+    </Book>
+    <VideoGame>
+        <Id>10</Id>
+        <Title>yujn</Title>
+        <Description></Description>
+        <Inspiration>0</Inspiration>
+        <Starred>0</Starred>
+        <Watched>0</Watched>
+        <Year>1900</Year>
+        <Image></Image>
+        <Subgenre>0</Subgenre>
+        <Producer></Producer>
+        <Platforms></Platforms>
+        <GameEngine></GameEngine>
+        <GameType>0</GameType>
+        <ExpectedHours>0</ExpectedHours>
+    </VideoGame>
+</ScienceFictionLibrary>
