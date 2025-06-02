@@ -25,6 +25,8 @@ void AttributeDisplayWindow::format(){
     QLabel *img = new QLabel();
     img->setPixmap(QPixmap(*imgString));
 
+    img->setMaximumSize(500, 500);
+    img->setAlignment(Qt::AlignHCenter | Qt::AlignVCenter);
     bigLayout->addWidget(img); //aggiunta dell'immagine per occupare il lato sinistro
 
     detailLayout = new QVBoxLayout(); //Box verticale per gli dettagli del content
