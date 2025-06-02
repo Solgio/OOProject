@@ -85,7 +85,7 @@
         <Subgenre>5</Subgenre>
         <Producer>BioWare</Producer>
         <GameEngine>Unreal Engine 3</GameEngine>
-        <GameType>ActionRPG</GameType>
+        <GameType>ARPG</GameType>
         <Platforms>PC, Xbox 360, PlayStation 3</Platforms>
         <ExpectedHours>35</ExpectedHours>
     </VideoGame>

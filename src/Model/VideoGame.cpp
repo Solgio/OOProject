@@ -22,7 +22,30 @@ unsigned int VideoGame::getExpectedHours() const{
 }
 
 string VideoGame::getGameType() const{
-    return std::to_string(gameGenre);
+    if(gameGenre == VideoGame::gameType::FPS){ return "FPS";}
+    if(gameGenre == VideoGame::gameType::RPG ){ return "RPG";}
+    if(gameGenre == VideoGame::gameType::ARPG ){ return "ARPG";}
+    if(gameGenre == VideoGame::gameType::RTS){ return "RTS";}
+    if(gameGenre == VideoGame::gameType::MOBA){ return "MOBA";}
+    if(gameGenre == VideoGame::gameType::MMORPG){ return "MMORPG";}
+    if(gameGenre == VideoGame::gameType::SIMULATION){ return "SIMULATION";}
+    if(gameGenre == VideoGame::gameType::SPORTS){ return "SPORTS";}
+    if(gameGenre == VideoGame::gameType::PUZZLE){ return "PUZZLE";}
+    if(gameGenre == VideoGame::gameType::PLATFORMER){ return "PLATFORMER";}
+    if(gameGenre == VideoGame::gameType::RACING){ return "RACING";}
+    if(gameGenre == VideoGame::gameType::FIGHTING){ return "FIGHTING";}
+    if(gameGenre == VideoGame::gameType::SURVIVAL){ return "SURVIVAL";}
+    if(gameGenre == VideoGame::gameType::ADVENTURE){ return "ADVENTURE";}
+    if(gameGenre == VideoGame::gameType::ACTION){ return "ACTION";}
+    if(gameGenre == VideoGame::gameType::STRATEGY){ return "STRATEGY";}
+    if(gameGenre == VideoGame::gameType::SANDBOX){ return "SANDBOX";}
+    if(gameGenre == VideoGame::gameType::TOWERDEFENSE){ return "TOWERDEFENSE";}
+    if(gameGenre == VideoGame::gameType::CARDGAME){ return "CARDGAME";}
+    if(gameGenre == VideoGame::gameType::PARTYGAME){ return "PARTYGAME";}
+    if(gameGenre == VideoGame::gameType::CASUAL){ return "CASUAL";}
+    if(gameGenre == VideoGame::gameType::ARCADE){ return "ARCADE";}
+    if(gameGenre == VideoGame::gameType::VIRTUALREALITY){ return "VIRTUALREALITY";}
+    return nullptr;
 }
 
 enum VideoGame::gameType VideoGame::getGameTypeEnum() const{
@@ -32,6 +55,7 @@ enum VideoGame::gameType VideoGame::getGameTypeEnum() const{
 enum VideoGame::gameType VideoGame::stringToGametype(string_view tipo)const{
     if(tipo == "FPS"){ return VideoGame::gameType::FPS;}
     if(tipo == "RPG"){ return VideoGame::gameType::RPG;}
+    if(tipo == "ARPG"){ return VideoGame::gameType::ARPG;}
     if(tipo == "RTS"){ return VideoGame::gameType::RTS;}
     if(tipo == "MOBA"){ return VideoGame::gameType::MOBA;}
     if(tipo == "MMORPG"){ return VideoGame::gameType::MMORPG;}
@@ -52,7 +76,7 @@ enum VideoGame::gameType VideoGame::stringToGametype(string_view tipo)const{
     if(tipo == "CASUAL"){ return VideoGame::gameType::CASUAL;}
     if(tipo == "ARCADE"){ return VideoGame::gameType::ARCADE;}
     if(tipo == "VIRTUALREALITY"){ return VideoGame::gameType::VIRTUALREALITY;}
-    //throw ERROR_ENUM;
+    //TODO throw ERROR_ENUM;
     return VideoGame::gameType::FPS;
 }
 
