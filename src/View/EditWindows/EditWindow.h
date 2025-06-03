@@ -10,6 +10,7 @@
 #include <QComboBox>
 #include <QCheckBox>
 #include <QPushButton>
+#include <QFileDialog>
 
 class Content;
 
@@ -22,7 +23,8 @@ class EditWindow:public QWidget{
 
     QSpinBox *yearEdit;
 
-    QList<QCheckBox*> *subEdit;
+    QWidget *subgenreWindow;
+    QList<QCheckBox*> subEdit;
 
     QCheckBox *watchedEdit;
 
@@ -32,11 +34,29 @@ class EditWindow:public QWidget{
 
     QComboBox *typeEdit; // ! Complicato
 
+    QPushButton *searchBotton; // search bottom for image
+
+    QPushButton *saveBotton;
+    QPushButton *discardBotton;
+
     QHBoxLayout *bigLayout;
-    QVBoxLayout *detailLayout;
+    QFormLayout *imgLayout;
+    QVBoxLayout *detailEditLayout;
+
+    QVBoxLayout *childrenEditLayout;
+
+    void format();
+
+private slots:
+    void saveChanges();
+    void browseImage();
+
+    void changeType(); //cambia childrenEditLayout al figlio giusto
 
 public:
+
     EditWindow(Content *content, QWidget *parent = nullptr);
+
 };
 
 #endif // EDITWINDOW_H

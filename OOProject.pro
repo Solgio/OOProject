@@ -16,7 +16,14 @@ QT+= widgets core xml
 
 # Input
 HEADERS += src/data_persistency/IReader.h \
+           src/View/EditWindows/BookEditWindow.h \
+           src/View/EditWindows/ComicEditWindow.h \
+           src/View/EditWindows/CommonEditWindow.h \
            src/View/EditWindows/EditWindow.h \
+           src/View/EditWindows/FilmEditWindow.h \
+           src/View/EditWindows/MultimediaEditWindow.h \
+           src/View/EditWindows/VideoEditWindow.h \
+           src/View/EditWindows/VideoGameEditWindow.h \
            src/View/Visitor.h \
            src/View/LibraryWIndow.h \
            src/View/PreviewWidget.h \
@@ -29,6 +36,8 @@ HEADERS += src/data_persistency/IReader.h \
            src/View/DisplayWindows/BookDisplayWindow.h \
            src/View/DisplayWindows/ComicDisplayWindow.h \
            src/View/DisplayWindows/FilmDisplayWindow.h \
+           src/View/EditWindows/MultimediaEditWindow.h \
+           src/View/EditWindows/SerieEditWindow.h \
            src/View/DisplayWindows/MultimediaDisplayWindow.h \
            src/View/DisplayWindows/SerieDisplayWindow.h \
            src/View/DisplayWindows/VideoDisplayWindow.h \
@@ -66,7 +75,15 @@ SOURCES += src/Model/Book.cpp \
            src/Model/Serie.cpp \
            src/Model/Video.cpp \
            src/Model/VideoGame.cpp \
+           src/View/EditWindows/BookEditWindow.cpp \
+           src/View/EditWindows/ComicEditWindow.cpp \
+           src/View/EditWindows/CommonEditWindow.cpp \
            src/View/EditWindows/EditWindow.cpp \
+           src/View/EditWindows/FilmEditWindow.cpp \
+           src/View/EditWindows/MultimediaEditWindow.cpp \
+           src/View/EditWindows/SerieEditWindow.cpp \
+           src/View/EditWindows/VideoEditWindow.cpp \
+    src/View/EditWindows/VideoGameEditWindow.cpp \
            src/View/Visitor.cpp \
            src/View/LibraryWindow.cpp \
            src/View/PreviewWidget.cpp \
@@ -83,7 +100,6 @@ SOURCES += src/Model/Book.cpp \
            src/View/DisplayWindows/SerieDisplayWindow.cpp \
            src/View/DisplayWindows/VideoDisplayWindow.cpp \
            src/View/DisplayWindows/VideogameDisplayWindow.cpp \
-           src/View/EditWindows/Edit.cpp \
            src/data_persistency/json/visitorJson.cpp \
            src/data_persistency/json/jsonReader.cpp \
            src/data_persistency/xml/xmlReader.cpp \

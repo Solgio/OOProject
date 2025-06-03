@@ -21,9 +21,8 @@ void AttributeDisplayWindow::format(){
     bigLayout = new QHBoxLayout(this); //Box orizzontale che contiene a sinistra l'immagine e destra gli dettagli del content
 
     QLabel *img = new QLabel();
-    img->setPixmap(QPixmap(*imgString));
+    img->setPixmap(QPixmap(*imgString).scaled(500, 500, Qt::KeepAspectRatio, Qt::SmoothTransformation));
 
-    img->setMaximumSize(500, 500);
     img->setAlignment(Qt::AlignHCenter | Qt::AlignVCenter);
     bigLayout->addWidget(img); //aggiunta dell'immagine per occupare il lato sinistro
 
@@ -49,7 +48,8 @@ void AttributeDisplayWindow::format(){
     detailLayout->addLayout(titleLayout);
 
     QFormLayout *descrLayout = new QFormLayout();
-    descrLayout->addRow(new QLabel(QString("<h2>%1</h2>").arg("Descrizione : ")));
+    descrLayout->setSpacing(5); //riduce lo spazio tra "Description :" e la descrizione
+    descrLayout->addRow(new QLabel(QString("<h2>%1</h2>").arg("Description : ")));
     descrLayout->addRow(Description);
     //descrLayout->addItem(new QSpacerItem(0, 20));
     //descrLayout->addRow(new QLabel(QString("<h3>%1</h3>").arg("Type : ")), Type);

@@ -84,9 +84,9 @@
         <Image>assets/images/mass_effect_2.jpg</Image>
         <Subgenre>5</Subgenre>
         <Producer>BioWare</Producer>
+        <Platforms>PC, Xbox 360, PlayStation 3</Platforms>
         <GameEngine>Unreal Engine 3</GameEngine>
         <GameType>ARPG</GameType>
-        <Platforms>PC, Xbox 360, PlayStation 3</Platforms>
         <ExpectedHours>35</ExpectedHours>
     </VideoGame>
 </ScienceFictionLibrary>

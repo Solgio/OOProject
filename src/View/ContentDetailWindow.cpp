@@ -25,33 +25,6 @@ void ContentDetailWindow::setContent(Content* content) {
 void ContentDetailWindow::updateContentDisplay() {
     if (!m_content) return;
 
-    /*
-    QString html = QString(
-        "<div style='margin:10px;'>"
-        "<h2>%1</h2>"
-        "<div style='float:right; margin-left:20px;'>"
-        "<img src='%2' width='200' onerror=\"this.src=':assets/icons/default.png'\">"
-        "</div>"
-        "<p><b>Type:</b> %8</p>"
-        "<p><b>Year:</b> %3</p>"
-        "<p><b>Genre:</b> %4</p>"
-        "<p><b>Watched:</b> %5</p>"
-        "<p><b>Starred:</b> %6</p>"
-        "<p><b>Description:</b><br>%7</p>"
-        "</div>"
-    ).arg(
-        QString::fromStdString(m_content->getTitle()),
-        QString::fromStdString(m_content->getImage()),
-        QString::number(m_content->getYear()),
-        QString::fromStdString(m_content->getSubgenreString()),
-        m_content->getWatched() ? "Yes" : "No",
-        m_content->getStarred() ? "Yes" : "No",
-        QString::fromStdString(m_content->getDescription()),
-        QString::fromStdString(m_content->getType())
-    );
-    m_contentDetails->setText(html);
-    */
-
     delete(contentDetails);
 
     contentDetails = m_content->accept(view);
@@ -76,11 +49,6 @@ void ContentDetailWindow::setupUI()
     m_mainLayout->addLayout(topBarLayout);
 
     // Content area
-    //m_contentDetails = new QLabel();
-    //m_contentDetails->setAlignment(Qt::AlignTop | Qt::AlignLeft);
-    //m_contentDetails->setWordWrap(true);
-    //m_contentDetails->setTextFormat(Qt::RichText);
-    //m_mainLayout->addWidget(m_contentDetails);
     contentDetails = new AttributeDisplayWindow();
 
     m_mainLayout->insertWidget(1, contentDetails);
