@@ -2,6 +2,7 @@
 #include "../../Model/lib/Content.h"
 
 //include di tutti i concreti EditWindows
+#include "CommonEditWindow.h"
 #include "BookEditWindow.h"
 #include "ComicEditWindow.h"
 #include "FilmEditWindow.h"
@@ -9,64 +10,9 @@
 #include "VideogameEditWindow.h"
 
 
-EditWindow::EditWindow(Content *content, QWidget *parent): QWidget(parent),
-    titleEdit(new QTextEdit("<h1>" + QString::fromStdString(content->getTitle()) + "</h1>")), // ?? da testare
-    imgEdit(new QTextEdit(QString::fromStdString(content->getImage()))),
-    yearEdit(new QSpinBox()),
-    watchedEdit(new QCheckBox("Watched")),
-    starredEdit(new QCheckBox("Starred")),
-    descEdit(new QTextEdit(QString::fromStdString(content->getDescription()))),
-    typeEdit(new QComboBox())
+EditWindow::EditWindow(Content *content, QWidget *parent): QWidget(parent)
 {
-    yearEdit->setValue(content->getYear());
-    watchedEdit->setTristate(content->getWatched());
-    starredEdit->setTristate(content->getStarred());
 
-    //Creazione della finestra dei sottoGeneri
-    subgenreWindow = new QWidget();
-    QVBoxLayout *subgenreBox = new QVBoxLayout(subgenreWindow);
-    // Crea un checkbox per ogni subgenre
-    const QStringList subgenres = {
-        "Action",
-        "Comedy",
-        "Drama",
-        "Horror",
-        "Romance",
-        "Thriller",
-        "Mystery",
-        "Adventure",
-        "Western",
-        "War",
-        "Musical",
-        "Family",
-        "Sports",
-        "Superhero"
-    };
-    for (const QString &subgenre : subgenres) {
-        auto *checkbox = new QCheckBox(subgenre);
-        subEdit.append(checkbox);
-        subgenreBox->addWidget(checkbox);
-    }
-
-    //Creazione del comboBox typeEdit
-    const QStringList types = {
-        "Content", //index 0
-        "Book", //1
-        "Comic", //2
-        "Film", //3
-        "Serie", //4
-        "VideoGame" //5
-    };
-    typeEdit->addItems(types);
-    typeEdit->setEditable(false);
-    typeEdit->setInsertPolicy(QComboBox::NoInsert);
-    if(dynamic_cast<Book*>(content)){typeEdit->setCurrentText("Book");}
-    else if(dynamic_cast<Comic*>(content)){typeEdit->setCurrentText("Comic");}
-    else if(dynamic_cast<Film*>(content)){typeEdit->setCurrentText("Film");}
-    else if(dynamic_cast<Serie*>(content)){typeEdit->setCurrentText("Serie");}
-    else if(dynamic_cast<VideoGame*>(content)){typeEdit->setCurrentText("VideoGame");}
-    else {typeEdit->setCurrentText("Content");} //Se fallisce, non ha nessun tipo concreto
-    format();
 }
 
 void EditWindow::format(){
@@ -76,9 +22,8 @@ void EditWindow::format(){
     imgLayout = new QFormLayout();{
 
     QLabel *img = new QLabel();
-    img->setPixmap(QPixmap(imgEdit->toPlainText()));
+    img->setPixmap(QPixmap(imgEdit->toPlainText()).scaled(500, 500, Qt::KeepAspectRatio, Qt::SmoothTransformation));
 
-    img->setMaximumSize(500, 500);
     img->setAlignment(Qt::AlignHCenter | Qt::AlignVCenter);
     imgLayout->addRow(img);
 
@@ -122,7 +67,7 @@ void EditWindow::format(){
     //Lista di subgenre
     QFormLayout *subgenreLayout = new QFormLayout();
     subgenreLayout->setSpacing(5);
-    subgenreLayout->addRow(new QLabel(QString("<h2>%1</h2>").arg("Subgenre : ")));
+    subgenreLayout->addRow(new QLabel(QString("<h3>%1</h3>").arg("Subgenre : ")));
     subgenreLayout->addRow(subgenreWindow);
     detailEditLayout->addLayout(subgenreLayout);
 
@@ -132,7 +77,6 @@ void EditWindow::format(){
     typeLayout->addRow(new QLabel(QString("<h3>%1</h3>").arg("Type : ")), typeEdit);
     detailEditLayout->addLayout(typeLayout);
 }
-
 
 void EditWindow::browseImage() {
     QString file = QFileDialog::getOpenFileName(

@@ -13,48 +13,31 @@
 #include <QFileDialog>
 
 class Content;
+class CommonEditWindow;
 
 class EditWindow:public QWidget{
     Q_OBJECT
 
-    QTextEdit *titleEdit;
+private:
 
-    QTextEdit *imgEdit;
-
-    QSpinBox *yearEdit;
-
-    QWidget *subgenreWindow;
-    QList<QCheckBox*> subEdit;
-
-    QCheckBox *watchedEdit;
-
-    QCheckBox *starredEdit;
-
-    QTextEdit *descEdit;
-
-    QComboBox *typeEdit; // ! Complicato
-
-    QPushButton *searchBotton; // search bottom for image
+    CommonEditWindow *editLayout;
 
     QPushButton *saveBotton;
     QPushButton *discardBotton;
 
-    QHBoxLayout *bigLayout;
-    QFormLayout *imgLayout;
-    QVBoxLayout *detailEditLayout;
-
-    QVBoxLayout *childrenEditLayout;
-
     void format();
+
+    void buildChild(Content *contentPtr);
+
 
 private slots:
     void saveChanges();
     void browseImage();
 
-    void changeType(); //cambia childrenEditLayout al figlio giusto
+public slots:
+    void changeType(); //cambia il tipo del content
 
 public:
-
     EditWindow(Content *content, QWidget *parent = nullptr);
 
 };

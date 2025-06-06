@@ -94,6 +94,11 @@ void VideoGame::setGameType(gameType tipo){
 AttributeDisplayWindow* VideoGame::accept(Visitor* visitor){
     return visitor->visit(this);
 }
+
+CommonEditWindow* VideoGame::acceptEdit(EditVisitor *editVisitor){
+    return editVisitor->visit(this);
+};
+
 void VideoGame::toXml(xmlVisitor* xvisitor, QDomDocument& doc, QDomElement& root ){
     xvisitor->toXml(this, doc, root);
 };

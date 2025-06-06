@@ -6,8 +6,19 @@
 
 class ComicEditWindow: public BookEditWindow{
 
+private:
+    //comic
+    QTextEdit *illEdit;
+    QTextEdit *serieEdit;
+    QCheckBox *finishedEdit;
+
+    //per salvare le modifiche
+    Comic *comicPtr;
+
+    void setUp();
 public:
     ComicEditWindow();
+    ComicEditWindow(Comic * comic);
 
 public slots:
     void saveEdit() override;

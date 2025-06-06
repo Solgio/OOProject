@@ -5,8 +5,21 @@
 #include "../../Model/lib/Multimedia.h"
 
 class MultimediaEditWindow:public CommonEditWindow{
+
+private:
+
+    QTextEdit *prodEdit;
+    QTextEdit *platEdit;
+
+    Multimedia *multPtr;
+
+    void setUp();
+
 public:
     MultimediaEditWindow();
+    MultimediaEditWindow(Multimedia *mult);
+
+    virtual void saveEdit();
 };
 
 #endif // MULTIMEDIAEDITWINDOW_H

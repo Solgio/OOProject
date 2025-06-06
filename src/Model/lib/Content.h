@@ -1,6 +1,7 @@
 #ifndef CONTENT_H
 #define CONTENT_H
 #include <QtXml>
+#include "../../View/EditWindows/EditVisitor.h"
 #include "../../View/Visitor.h"
 #include "../../data_persistency/json/visitorJson.h"
 #include "../../data_persistency/xml/xmlVisitor.h"
@@ -70,6 +71,7 @@ public:
 
     virtual ~Content()=default;
     virtual AttributeDisplayWindow* accept(Visitor *visitor)= 0;
+    virtual CommonEditWindow* acceptEdit(EditVisitor *editVisitor)= 0;
     virtual void toXml(xmlVisitor *xvisitor, QDomDocument &doc, QDomElement &root)= 0;
     virtual void toJson(VisitorJson *vistitorJson)= 0;
     virtual string getType() const = 0;

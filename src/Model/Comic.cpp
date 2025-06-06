@@ -35,6 +35,11 @@ void Comic::setFinished(const bool& nfinished){
 AttributeDisplayWindow* Comic::accept(Visitor* visitor){
     return visitor->visit(this);
 };
+
+CommonEditWindow* Comic::acceptEdit(EditVisitor *editVisitor){
+    return editVisitor->visit(this);
+};
+
 void Comic::toXml(xmlVisitor* xvisitor, QDomDocument& doc, QDomElement& root ){
     xvisitor->toXml(this, doc, root);
 };

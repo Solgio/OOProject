@@ -24,6 +24,7 @@ class Multimedia : public Content {
         void setPlatforms(string_view platforms);
        
         AttributeDisplayWindow* accept(Visitor* visitor) override = 0;
+        CommonEditWindow* acceptEdit(EditVisitor *editVisitor) override =0;
         void toXml(xmlVisitor* xvisitor, QDomDocument& doc, QDomElement& root ) override= 0;
         void toJson(VisitorJson* vistitorJson) override= 0;
         string getType() const override= 0;

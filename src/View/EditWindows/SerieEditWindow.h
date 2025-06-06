@@ -5,8 +5,21 @@
 #include "../../Model/lib/Serie.h"
 
 class SerieEditWindow:public VideoEditWindow{
+
+private:
+
+    QSpinBox *seasonsEdit;
+    QSpinBox *episodesEdit;
+    QTextEdit *creatorEdit;
+    QCheckBox *finishedEdit;
+
+    Serie *seriePtr;
+
+    void setUp();
+
 public:
     SerieEditWindow();
+    SerieEditWindow(Serie *serie);
 
 public slots:
     void saveEdit() override;

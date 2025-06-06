@@ -44,6 +44,11 @@ void Serie::setFinished(const bool& nfinished){
 AttributeDisplayWindow* Serie::accept(Visitor* visitor){
     return visitor->visit(this);
 }
+
+CommonEditWindow* Serie::acceptEdit(EditVisitor *editVisitor){
+    return editVisitor->visit(this);
+};
+
 void Serie::toXml(xmlVisitor* xvisitor, QDomDocument& doc, QDomElement& root ){
     xvisitor->toXml(this, doc, root);
 }

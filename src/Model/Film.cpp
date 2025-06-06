@@ -29,6 +29,11 @@ void Film::setPhotoDirector(string_view nPhotoDirector){
 AttributeDisplayWindow* Film::accept(Visitor* visitor){
     return visitor->visit(this);
 };
+
+CommonEditWindow* Film::acceptEdit(EditVisitor *editVisitor){
+    return editVisitor->visit(this);
+};
+
 void Film::toXml(xmlVisitor* xvisitor, QDomDocument& doc, QDomElement& root ){
     xvisitor->toXml(this, doc, root);
 };

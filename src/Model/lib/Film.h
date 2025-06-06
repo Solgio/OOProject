@@ -24,6 +24,7 @@ class Film : public Video {
         void setPhotoDirector(string_view producer);
         
         AttributeDisplayWindow* accept(Visitor* visitor) override;
+        CommonEditWindow* acceptEdit(EditVisitor *editVisitor) override;
         void toXml(xmlVisitor* xvisitor, QDomDocument& doc, QDomElement& root ) override;
         void toJson(VisitorJson* vistitorJson) override;
         string getType() const override;

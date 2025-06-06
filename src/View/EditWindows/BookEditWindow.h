@@ -6,8 +6,24 @@
 
 class BookEditWindow: public CommonEditWindow{
 
+private:
+    //paper
+    QTextEdit *authorEdit;
+    QTextEdit *publishEdit;
+    QSpinBox *pagesEdit;
+    QSpinBox *volumeEdit;
+
+    //book
+    QTextEdit *mcEdit;
+
+    //book per salvare le modifiche
+    Book *bookPtr;
+
+    void setUp();
+
 public:
     BookEditWindow();
+    BookEditWindow(Book *book);
 
 public slots:
     void saveEdit() override;
