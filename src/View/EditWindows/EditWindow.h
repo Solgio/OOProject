@@ -20,22 +20,17 @@ class EditWindow:public QWidget{
 
 private:
 
-    CommonEditWindow *editLayout;
+    CommonEditWindow *contentEditLayout;
 
-    QPushButton *saveBotton;
-    QPushButton *discardBotton;
+    QPushButton *saveButton;
+    QPushButton *discardButton;
 
     void format();
 
     void buildChild(Content *contentPtr);
 
-
-private slots:
-    void saveChanges();
-    void browseImage();
-
 public slots:
-    void changeType(); //cambia il tipo del content
+    //void changeType(); //cambia il tipo del content
 
 public:
     EditWindow(Content *content, QWidget *parent = nullptr);

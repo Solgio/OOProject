@@ -99,7 +99,6 @@ void ContentDetailWindow::onDeleteClicked() {
     }
 }
 
-
 void ContentDetailWindow::refreshContent() {
     if (m_content) {
         updateContentDisplay();

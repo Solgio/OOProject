@@ -1,7 +1,7 @@
 #include "SerieEditWindow.h"
 
 SerieEditWindow::SerieEditWindow():
-    VideoEditWindow(serie),
+    VideoEditWindow(),
     seasonsEdit(new QSpinBox()),
     episodesEdit(new QSpinBox()),
     creatorEdit(new QTextEdit()),
