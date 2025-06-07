@@ -23,6 +23,7 @@ signals:
     void contentDataChanged();
     void contentEdited(Content* content); // Signal to update detail view
     void contentDeleted(); // When content is deleted through edit (not directly here)
+    void editContentRequested(Content* content);
 
 private:
     QWidget *m_parentWidget; // To parent dialogs

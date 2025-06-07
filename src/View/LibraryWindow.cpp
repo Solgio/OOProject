@@ -133,8 +133,7 @@ void LibraryWindow::createRightPanel()
     m_detailWindow = new ContentDetailWindow(this);
     m_rightPanel->addWidget(m_detailWindow); // Index 1
 
-        m_editWindow = new ContentEditWindow(nullptr, this);
-        m_rightPanel->addWidget(m_editWindow); // Index 2
+    m_editWindow = nullptr;
 
 }
 
@@ -173,6 +172,8 @@ void LibraryWindow::connectSignals()
             { m_clearSearchButton->setVisible(!text.isEmpty()); });
 
     // Connect ContentDetailWindow signals
+    connect(m_actionsManager, &LibraryActionsManager::editContentRequested, 
+            this, &LibraryWindow::showEditView);
     connect(m_detailWindow, &ContentDetailWindow::editRequested, this, &LibraryWindow::showEditView);
     connect(m_editWindow, &ContentEditWindow::closeRequested, this, &LibraryWindow::hideEditView);
     connect(m_detailWindow, &ContentDetailWindow::closeRequested, this, &LibraryWindow::hideDetailView);
@@ -296,15 +297,74 @@ void LibraryWindow::showDetailView(Content *content)
 
 void LibraryWindow::showEditView(Content *content)
 {
-    if (content)
-    {
-        m_rightPanel->setCurrentIndex(2); // Show edit view
+    if (!content)
+        return;
+
+    // Clean up existing edit window if it exists
+    if (m_editWindow) {
+        m_rightPanel->removeWidget(m_editWindow);
+        m_editWindow->deleteLater();
+        m_editWindow = nullptr;
     }
+
+    // Create new edit window for this content
+    m_editWindow = new ContentEditWindow(content, this);
+    
+    // Connect signals for this specific edit window
+    connect(m_editWindow, &ContentEditWindow::contentUpdated, this, [this, content]() {
+        auto &library = ScienceFiction_Library::getInstance();
+        
+        // Check if this is a new content or existing one
+        bool isNew = true;
+        for (const auto &existingContent : library.getContentList()) {
+            if (existingContent.get() == content) {
+                isNew = false;
+                break;
+            }
+        }
+
+        if (isNew) {
+            library.addContent(content); // Add new content
+        }
+        
+        emit m_actionsManager->contentDataChanged(); // Notify that data has changed
+        emit m_actionsManager->contentEdited(content); // Notify that specific content was edited
+        
+        hideEditView(); // Go back to detail view
+    });
+    
+    connect(m_editWindow, &ContentEditWindow::closeRequested, this, [this, content]() {
+        // If it's a new content that was canceled, we need to delete it
+        bool isNew = true;
+        auto &library = ScienceFiction_Library::getInstance();
+        for (const auto &existingContent : library.getContentList()) {
+            if (existingContent.get() == content) {
+                isNew = false;
+                break;
+            }
+        }
+
+        if (isNew) {
+            delete content; // Clean up unadded content
+        }
+        
+        hideEditView(); // Go back to previous view
+    });
+
+    // Add edit window to stacked widget and show it
+    int editIndex = m_rightPanel->addWidget(m_editWindow);
+    m_rightPanel->setCurrentIndex(editIndex);
 }
 
 void LibraryWindow::hideEditView()
-{   
-     m_rightPanel->setCurrentIndex(1);
+{
+    if (m_editWindow) {
+        // Remove from stacked widget
+        m_rightPanel->removeWidget(m_editWindow);
+        m_editWindow->deleteLater();
+        m_editWindow = nullptr;
+    }
+        m_rightPanel->setCurrentIndex(1); // Detail view
 }
 
 void LibraryWindow::updateOverallFilterState()
