@@ -3,7 +3,7 @@
 #include "ComicEditWindow.h"
 #include "FilmEditWindow.h"
 #include "SerieEditWindow.h"
-#include "VideogameEditWindow.h"
+#include "VideoGameEditWindow.h"
 
 EditVisitor::EditVisitor() {}
 

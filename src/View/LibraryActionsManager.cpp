@@ -58,7 +58,7 @@ void LibraryActionsManager::showAddContentDialog() {
     }
 }
 
-void LibraryActionsManager::editContent(Content *content) {
+void LibraryActionsManager::editContent(Content *content) {/*
     if (!content)
         return;
 
@@ -96,4 +96,5 @@ void LibraryActionsManager::editContent(Content *content) {
             delete content; // Clean up unadded content
         }
     }
+        */
 }

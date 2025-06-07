@@ -16,7 +16,7 @@ class QVBoxLayout;
 class CommonEditWindow;
 class EditVisitor;
 
-class ContentEditWindow : public QDialog {
+class ContentEditWindow : public QWidget {
     Q_OBJECT
 
 public:
@@ -25,9 +25,11 @@ public:
 
 signals:
     void contentUpdated();
+    void closeRequested();
 
 private slots:
     void saveChanges();
+    void cancelChanges();
 
 private:
     void setupUI();

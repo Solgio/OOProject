@@ -19,6 +19,7 @@ class ShortcutManager;
 class ContentDetailWindow;
 class ContentProxyModel;
 class Content; // For editContent slot
+class ContentEditWindow; // For editContent slot
 
 class LibraryWindow : public QMainWindow {
     Q_OBJECT
@@ -52,9 +53,11 @@ private slots:
 
     // Slot for detail view
     void hideDetailView();
+    void hideEditView();
 
     // Slot for ContentPreviewGrid interactions
     void showDetailView(Content* content);
+    void showEditView(Content* content);
 
 
 private:
@@ -81,6 +84,7 @@ private:
     QStackedWidget *m_rightPanel = nullptr;
     QToolButton *m_addContentButton = nullptr;
     ContentDetailWindow *m_detailWindow = nullptr;
+    ContentEditWindow *m_editWindow = nullptr;
 
     // Models
     ContentModel *m_contentModel = nullptr;

@@ -17,11 +17,11 @@
 #include "EditWindows/CommonEditWindow.h"
 #include "EditWindows/EditVisitor.h"
 
-ContentEditWindow::ContentEditWindow(Content* content, QWidget *parent): QDialog(parent), m_content(content), editVis()
+ContentEditWindow::ContentEditWindow(Content* content, QWidget *parent): QWidget(parent), m_content(content), editVis()
 {
     if (!content) {
         qCritical() << "Null content passed to editor!";
-        reject();
+        cancelChanges();
         return;
     }
     
@@ -111,7 +111,7 @@ void ContentEditWindow::setupUI() {
     connect(m_saveButton, &QPushButton::clicked, this, &ContentEditWindow::saveChanges);
     
     m_cancelButton = new QPushButton("Cancel");
-    connect(m_cancelButton, &QPushButton::clicked, this, &QDialog::reject);
+    connect(m_cancelButton, &QPushButton::clicked, this, &ContentEditWindow::cancelChanges);
     
     buttonLayout->addWidget(m_saveButton);
     buttonLayout->addWidget(m_cancelButton);
@@ -147,5 +147,8 @@ void ContentEditWindow::updateEditWindow(){
 void ContentEditWindow::saveChanges() {
     contentEditWindow->saveEdit();
     emit contentUpdated();
-    accept();
+}
+
+void ContentEditWindow::cancelChanges() {
+    emit closeRequested();
 }

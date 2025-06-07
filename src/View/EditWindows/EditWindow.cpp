@@ -11,7 +11,7 @@
 #include "ComicEditWindow.h"
 #include "FilmEditWindow.h"
 #include "SerieEditWindow.h"
-#include "VideogameEditWindow.h"
+#include "VideoGameEditWindow.h"
 
 
 EditWindow::EditWindow(Content *content, QWidget *parent): QWidget(parent)

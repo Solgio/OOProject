@@ -8,6 +8,7 @@
 #include "ContentDetailWindow.h"
 #include "ContentModel.h"
 #include "ContentProxyModel.h"
+#include "ContentEditWindow.h"
 
 #include "../Model/lib/ScienceFictionLibrary.h" // For getInstance()
 #include "../Model/lib/Content.h"
@@ -131,6 +132,10 @@ void LibraryWindow::createRightPanel()
     // Detail window
     m_detailWindow = new ContentDetailWindow(this);
     m_rightPanel->addWidget(m_detailWindow); // Index 1
+
+        m_editWindow = new ContentEditWindow(nullptr, this);
+        m_rightPanel->addWidget(m_editWindow); // Index 2
+
 }
 
 void LibraryWindow::createAddButton() {
@@ -168,7 +173,8 @@ void LibraryWindow::connectSignals()
             { m_clearSearchButton->setVisible(!text.isEmpty()); });
 
     // Connect ContentDetailWindow signals
-    connect(m_detailWindow, &ContentDetailWindow::editRequested, this, &LibraryWindow::handleEditContent);
+    connect(m_detailWindow, &ContentDetailWindow::editRequested, this, &LibraryWindow::showEditView);
+    connect(m_editWindow, &ContentEditWindow::closeRequested, this, &LibraryWindow::hideEditView);
     connect(m_detailWindow, &ContentDetailWindow::closeRequested, this, &LibraryWindow::hideDetailView);
     connect(m_detailWindow, &ContentDetailWindow::contentDeleted, this, &LibraryWindow::updateContentDisplay);
 
@@ -288,6 +294,18 @@ void LibraryWindow::showDetailView(Content *content)
     }
 }
 
+void LibraryWindow::showEditView(Content *content)
+{
+    if (content)
+    {
+        m_rightPanel->setCurrentIndex(2); // Show edit view
+    }
+}
+
+void LibraryWindow::hideEditView()
+{   
+     m_rightPanel->setCurrentIndex(1);
+}
 
 void LibraryWindow::updateOverallFilterState()
 {
