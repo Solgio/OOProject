@@ -14,7 +14,10 @@
 #include <QTextEdit>
 #include <QPushButton>
 
-ContentEditWindow::ContentEditWindow(Content* content, QWidget *parent): QDialog(parent), m_content(content) 
+#include "EditWindows/CommonEditWindow.h"
+#include "EditWindows/EditVisitor.h"
+
+ContentEditWindow::ContentEditWindow(Content* content, QWidget *parent): QDialog(parent), m_content(content), editVis()
 {
     if (!content) {
         qCritical() << "Null content passed to editor!";
@@ -24,11 +27,13 @@ ContentEditWindow::ContentEditWindow(Content* content, QWidget *parent): QDialog
     
     setWindowTitle("Edit Content - " + QString::fromStdString(content->getTitle()));
     setupUI();
-    loadContentData();
 }
 
 void ContentEditWindow::setupUI() {
-    auto *mainLayout = new QVBoxLayout(this);
+
+
+    mainLayout = new QVBoxLayout(this);
+    /*{
     auto *formLayout = new QFormLayout();
 
     // Type (read-only)
@@ -95,7 +100,11 @@ void ContentEditWindow::setupUI() {
     formLayout->addRow("Image Path:", imageLayout);
 
     mainLayout->addLayout(formLayout);
+    }
+    */
 
+    contentEditWindow = new CommonEditWindow;
+    mainLayout->insertWidget(0, contentEditWindow);
     // Buttons
     auto *buttonLayout = new QHBoxLayout();
     m_saveButton = new QPushButton("Save Changes");
@@ -106,9 +115,9 @@ void ContentEditWindow::setupUI() {
     
     buttonLayout->addWidget(m_saveButton);
     buttonLayout->addWidget(m_cancelButton);
-    mainLayout->addLayout(buttonLayout);
+    mainLayout->insertLayout(-1, buttonLayout);
 }
-
+/*
 void ContentEditWindow::loadContentData() {
     m_titleEdit->setText(QString::fromStdString(m_content->getTitle()));
     m_yearSpin->setValue(m_content->getYear());
@@ -124,42 +133,19 @@ void ContentEditWindow::loadContentData() {
         unsigned int bitValue = 1 << i;
         m_subgenreCheckboxes[i]->setChecked((currentSubgenres & bitValue) != 0);
     }
+}*/
+
+void ContentEditWindow::updateEditWindow(){
+    if (!m_content) return;
+
+    delete(m_content);
+
+    contentEditWindow = m_content->acceptEdit(editVis);
+    mainLayout->insertWidget(0, contentEditWindow);
 }
 
 void ContentEditWindow::saveChanges() {
-    m_content->setTitle(m_titleEdit->text().toStdString());
-    m_content->setYear(m_yearSpin->value());
-    m_content->setWatched(m_watchedCheck->isChecked());
-    m_content->setStarred(m_starredCheck->isChecked());
-    m_content->setDescription(m_descEdit->toPlainText().toStdString());
-    m_content->setImage(m_imagePathEdit->text().toStdString());
-
-    unsigned int newSubgenres = 0;
-    
-    // Usa lo stesso approccio bit a bit usato in loadContentData
-    for (int i = 0; i < m_subgenreCheckboxes.size(); i++) {
-        if (m_subgenreCheckboxes[i]->isChecked()) {
-            unsigned int bitValue = 1 << i;
-            newSubgenres |= bitValue;
-        }
-    }
-    
-    // Imposta il nuovo valore
-    m_content->setSubgenre(newSubgenres);
-
+    contentEditWindow->saveEdit();
     emit contentUpdated();
     accept();
-}
-
-void ContentEditWindow::browseImage() {
-    QString file = QFileDialog::getOpenFileName(
-        this,
-        "Select Image",
-        QDir::homePath(),
-        "Image Files (*.png *.jpg *.jpeg)"
-    );
-    
-    if(!file.isEmpty()) {
-        m_imagePathEdit->setText(file);
-    }
 }

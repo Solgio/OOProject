@@ -50,7 +50,6 @@ void ContentDetailWindow::setupUI()
 
     // Content area
     contentDetails = new AttributeDisplayWindow();
-
     m_mainLayout->insertWidget(1, contentDetails);
 
 

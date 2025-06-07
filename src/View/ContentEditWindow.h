@@ -12,6 +12,10 @@ class QTextEdit;
 class QPushButton;
 class QLabel;
 
+class QVBoxLayout;
+class CommonEditWindow;
+class EditVisitor;
+
 class ContentEditWindow : public QDialog {
     Q_OBJECT
 
@@ -24,15 +28,15 @@ signals:
 
 private slots:
     void saveChanges();
-    void browseImage();
 
 private:
     void setupUI();
-    void loadContentData();
+    void updateEditWindow();
 
     Content* m_content;
-    
+    EditVisitor *editVis;
     // UI Components
+    /*
     QLabel *m_typeLabel;
     QLineEdit *m_titleEdit;
     QSpinBox *m_yearSpin;
@@ -42,6 +46,11 @@ private:
     QCheckBox *m_starredCheck;
     QTextEdit *m_descEdit;
     QLineEdit *m_imagePathEdit;
+    */
+    QVBoxLayout *mainLayout;
+
+    CommonEditWindow *contentEditWindow;
+
     QPushButton *m_saveButton;
     QPushButton *m_cancelButton;
     QPushButton *m_browseButton;

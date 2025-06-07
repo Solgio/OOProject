@@ -60,7 +60,6 @@ public slots:
 
 private slots:
     void browseImage();
-
     void changeType(); //cambia il tipo del content
 
 
