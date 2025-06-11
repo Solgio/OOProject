@@ -1,6 +1,5 @@
 #include "CommonEditWindow.h"
 #include "../../Model/lib/Content.h"
-#include "EditWindow.h"
 
 CommonEditWindow::CommonEditWindow(QWidget *parent):
     QWidget(parent),
@@ -104,7 +103,7 @@ void CommonEditWindow::format(){
 
     //Ogni campo ha un suo layout
 
-    //Titolo
+    //Titolo e Year
     QFormLayout *titleLayout = new QFormLayout();
     titleLayout->setAlignment(Qt::AlignHCenter);
     titleLayout->addRow(new QLabel(QString("<h1>%1</h1>").arg("Title")), titleEdit);
@@ -136,7 +135,6 @@ void CommonEditWindow::format(){
     detailEditLayout->addLayout(typeLayout);
 
 }
-
 
 
 void CommonEditWindow::browseImage() {

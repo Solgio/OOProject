@@ -353,6 +353,7 @@ void LibraryWindow::showEditView(Content *content)
 
     // Add edit window to stacked widget and show it
     int editIndex = m_rightPanel->addWidget(m_editWindow);
+    m_editWindow->setContent(content);
     m_rightPanel->setCurrentIndex(editIndex);
 }
 

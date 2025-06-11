@@ -22,6 +22,7 @@ class ContentEditWindow : public QWidget {
 public:
     explicit ContentEditWindow(Content* content, QWidget *parent = nullptr);
     ~ContentEditWindow() override = default;
+    void setContent(Content *content);
 
 signals:
     void contentUpdated();

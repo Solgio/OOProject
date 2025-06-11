@@ -103,7 +103,7 @@ void ContentEditWindow::setupUI() {
     }
     */
 
-    contentEditWindow = new CommonEditWindow;
+    contentEditWindow = new CommonEditWindow();
     mainLayout->insertWidget(0, contentEditWindow);
     // Buttons
     auto *buttonLayout = new QHBoxLayout();
@@ -116,6 +116,7 @@ void ContentEditWindow::setupUI() {
     buttonLayout->addWidget(m_saveButton);
     buttonLayout->addWidget(m_cancelButton);
     mainLayout->insertLayout(-1, buttonLayout);
+    //updateEditWindow();
 }
 /*
 void ContentEditWindow::loadContentData() {
@@ -135,10 +136,15 @@ void ContentEditWindow::loadContentData() {
     }
 }*/
 
-void ContentEditWindow::updateEditWindow(){
-    if (!m_content) return;
+void ContentEditWindow::setContent(Content *content){
+    m_content = content;
+    updateEditWindow();
+}
 
-    delete(m_content);
+void ContentEditWindow::updateEditWindow(){
+    if (!contentEditWindow) return;
+
+    delete(contentEditWindow);
 
     contentEditWindow = m_content->acceptEdit(editVis);
     mainLayout->insertWidget(0, contentEditWindow);
