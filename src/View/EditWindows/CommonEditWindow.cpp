@@ -109,7 +109,7 @@ void CommonEditWindow::format(){
     typeEdit->setEditable(false);
     typeEdit->setInsertPolicy(QComboBox::NoInsert);
     //typeEdit->setCurrentText("Content");//Per default è content, cioè non è di nessun tipo concreto
-    connect(typeEdit, &QComboBox::currentIndexChanged, this, &CommonEditWindow::changeType);
+    connect(typeEdit, &MyComboBox::currentIndexChanged, this, &CommonEditWindow::changeType);
 
 
     //Ogni campo ha un suo layout
@@ -161,6 +161,10 @@ void CommonEditWindow::browseImage() {
     }
 }
 
+void CommonEditWindow::changeType() {
+    emit typeUpdated();
+}
+
 void CommonEditWindow::saveEdit(){
     if(contentPtr){
         contentPtr->setTitle(titleEdit->toPlainText().QString::toStdString());
@@ -184,8 +188,10 @@ void CommonEditWindow::saveEdit(){
     }
 }
 
-void CommonEditWindow::changeType(){}
-
 QVBoxLayout* CommonEditWindow::getLayout(){
     return detailEditLayout;
+}
+
+MyComboBox* CommonEditWindow::getTypeEditBox(){
+    return typeEdit;
 }

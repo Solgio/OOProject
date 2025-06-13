@@ -37,6 +37,8 @@ void VideoGameEditWindow::setUp(){
     QFormLayout *gameTypeLayout = new QFormLayout();
     gameTypeLayout->addRow(new QLabel(QString("<h3>%1</h3>").arg("Game Genre : ")), gameTypeEdit);
     mainLayout->addLayout(gameTypeLayout);
+
+    CommonEditWindow::getTypeEditBox()->setCurrentText("VideoGame");
 }
 
 void VideoGameEditWindow::saveEdit(){

@@ -72,7 +72,7 @@ void LibraryActionsManager::showAddContentDialog()
 }
 
 void LibraryActionsManager::editContent(Content *content)
-{/*
+{
     if (!content)
         return;
 
@@ -135,7 +135,7 @@ void LibraryActionsManager::editContent(Content *content)
     // Show the window
     editWindow->show();
     editWindow->raise();
-    editWindow->activateWindow();*/
+    editWindow->activateWindow();
        if (!content)
         return;
 

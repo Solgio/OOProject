@@ -61,6 +61,8 @@ void BookEditWindow::setUp(){
     mcLayout->addRow(new QLabel(QString("<h3>%1</h3>").arg("Main Character : ")), mcEdit);
     mainLayout->addLayout(mcLayout);
 
+    CommonEditWindow::getTypeEditBox()->setCurrentText("Book");
+
 }
 
 void BookEditWindow::saveEdit(){ //speriamo che funzioni

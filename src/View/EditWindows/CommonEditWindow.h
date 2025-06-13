@@ -44,6 +44,7 @@ private:
 
     QTextEdit *descEdit;
 
+    //Uso MyCheckBox che non riceve il segnale scrollWheel
     MyComboBox *typeEdit; // ! Complicato
 
     Content *contentPtr;
@@ -61,6 +62,7 @@ private:
 
 signals:
     void contentUpdated();
+    void typeUpdated(); //segnale emesso quando cambia il tipo
 
 public slots:
     virtual void saveEdit();
@@ -74,6 +76,7 @@ public:
     CommonEditWindow(QWidget *parent = nullptr);
     CommonEditWindow(Content *content, QWidget *parent = nullptr);
     QVBoxLayout* getLayout();
+    MyComboBox* getTypeEditBox();
 
 
 

@@ -16,7 +16,7 @@
 
 #include "EditWindows/CommonEditWindow.h"
 #include "Visitor.h"
-#include "EditWindows/BookEditWindow.h"
+#include "EditWindows/SerieEditWindow.h"
 
 ContentEditWindow::ContentEditWindow(Content* content, QWidget *parent): QWidget(parent), m_content(content)
 {
@@ -35,85 +35,22 @@ void ContentEditWindow::setupUI() {
 
 
     mainLayout = new QVBoxLayout(this);
-    /*{
-    auto *formLayout = new QFormLayout();
-
-    // Type (read-only)
-    m_typeLabel = new QLabel(QString::fromStdString(m_content->getType())); // Initialize the label
-    formLayout->addRow("Type:", m_typeLabel);
-
-    // Title
-    m_titleEdit = new QLineEdit();
-    formLayout->addRow("Title:", m_titleEdit);
-
-    // Year
-    m_yearSpin = new QSpinBox();
-    m_yearSpin->setRange(1900, QDate::currentDate().year());
-    formLayout->addRow("Year:", m_yearSpin);
-
-    // Subgenre
-    m_subgenreContainer = new QWidget();
-    auto *subgenreLayout = new QVBoxLayout(m_subgenreContainer);
-    
-    // Crea un checkbox per ogni subgenre
-    const QStringList subgenres = {
-        "Action", 
-        "Comedy",
-        "Drama",
-        "Horror",
-        "Romance",
-        "Thriller",
-        "Mystery",
-        "Adventure",
-        "Western",
-        "War",
-        "Musical",
-        "Family",
-        "Sports",
-        "Superhero"
-    };
-    for (const QString &subgenre : subgenres) {
-        auto *checkbox = new QCheckBox(subgenre);
-        m_subgenreCheckboxes.append(checkbox);
-        subgenreLayout->addWidget(checkbox);
-    }
-    
-    formLayout->addRow("Subgenres:", m_subgenreContainer);
-
-    // Watched/Starred
-    m_watchedCheck = new QCheckBox();
-    formLayout->addRow("Watched:", m_watchedCheck);
-    
-    m_starredCheck = new QCheckBox();
-    formLayout->addRow("Starred:", m_starredCheck);
-
-    // Description
-    m_descEdit = new QTextEdit();
-    formLayout->addRow("Description:", m_descEdit);
-
-    // Image path
-    m_imagePathEdit = new QLineEdit();
-    m_browseButton = new QPushButton("Browse...");
-    connect(m_browseButton, &QPushButton::clicked, this, &ContentEditWindow::browseImage);
-    
-    auto *imageLayout = new QHBoxLayout();
-    imageLayout->addWidget(m_imagePathEdit);
-    imageLayout->addWidget(m_browseButton);
-    formLayout->addRow("Image Path:", imageLayout);
-
-    mainLayout->addLayout(formLayout);
-    }
-    */
 
     //Creazione del Scroll area per Il content
     scrollAreaForEditWindow = new QScrollArea();
     scrollAreaForEditWindow->setWidgetResizable(true);
     scrollAreaForEditWindow->setFrameShape(QFrame::NoFrame);
     scrollAreaForEditWindow->setSizePolicy(QSizePolicy::Preferred, QSizePolicy::Expanding);
-    //Inizializzo il Content
-    contentEditWindow = new CommonEditWindow();
-    //Inserisco il content nella scrollArea
-    scrollAreaForEditWindow->setWidget(contentEditWindow);
+
+
+    //creazione il layout per contentEditWindow
+    contentEditLayout = new QVBoxLayout();
+    contentEditLayout->setSizeConstraint(QLayout::SetNoConstraint);
+    //creazione del widget per contenere contentEditLayout
+    scrollWidget = new QWidget;
+    scrollWidget->setLayout(contentEditLayout);
+    //Inserisco il layout nella scrollArea
+    scrollAreaForEditWindow->setWidget(scrollWidget);
     //Metto lo Scroll Area nel mainLayout nella prima posizione
     mainLayout->insertWidget(0, scrollAreaForEditWindow);
     // Buttons
@@ -127,25 +64,7 @@ void ContentEditWindow::setupUI() {
     buttonLayout->addWidget(m_saveButton);
     buttonLayout->addWidget(m_cancelButton);
     mainLayout->insertLayout(-1, buttonLayout);
-    //updateEditWindow();
 }
-/*
-void ContentEditWindow::loadContentData() {
-    m_titleEdit->setText(QString::fromStdString(m_content->getTitle()));
-    m_yearSpin->setValue(m_content->getYear());
-    //m_subgenreCombo->setCurrentText(QString::fromStdString(m_content->getSubgenreString()));
-    m_watchedCheck->setChecked(m_content->getWatched());
-    m_starredCheck->setChecked(m_content->getStarred());
-    m_descEdit->setPlainText(QString::fromStdString(m_content->getDescription()));
-    m_imagePathEdit->setText(QString::fromStdString(m_content->getImage()));
-
-    int currentSubgenres = m_content->getSubgenre();
-    for (int i = 0; i < m_subgenreCheckboxes.size(); i++) {
-        // Verifica se il bit corrispondente è attivo
-        unsigned int bitValue = 1 << i;
-        m_subgenreCheckboxes[i]->setChecked((currentSubgenres & bitValue) != 0);
-    }
-}*/
 
 void ContentEditWindow::setContent(Content *content){
     m_content = content;
@@ -153,12 +72,31 @@ void ContentEditWindow::setContent(Content *content){
 }
 
 void ContentEditWindow::updateEditWindow(){
-    if(contentEditWindow){
+    /*if(contentEditWindow){
         delete(contentEditWindow);
-    }
+    }*/
+    //Da segmentation fault
+    //Non so perchè e non so neanchè se verrà pulito con la creazione del nuovo
 
     contentEditWindow = m_content->acceptEdit(editVis);
-    scrollAreaForEditWindow->setWidget(contentEditWindow);
+    contentEditLayout->addWidget(contentEditWindow);
+    connect(contentEditWindow, &CommonEditWindow::typeUpdated, this, &ContentEditWindow::changeType);
+}
+
+void ContentEditWindow::changeType() { //TODO da modificare
+
+    if(contentTypeEditWindow == nullptr){
+        contentTypeEditWindow = new SerieEditWindow();
+        contentEditLayout->removeWidget(contentEditWindow); //rimuove dal Layout ma non lo elimina nè nasconde
+        contentEditWindow->hide(); //nascondo il widget rimosso se no fa overlap
+        contentEditLayout->addWidget(contentTypeEditWindow);
+        contentEditLayout->update();
+    }else{
+        delete(contentTypeEditWindow);
+        contentTypeEditWindow = new SerieEditWindow();
+        contentEditLayout->addWidget(contentTypeEditWindow);
+    }
+    //stessa cosa del updateEditWindow()
 }
 
 void ContentEditWindow::saveChanges() {

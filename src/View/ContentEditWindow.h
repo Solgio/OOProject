@@ -12,7 +12,6 @@ class QCheckBox;
 class QTextEdit;
 class QPushButton;
 class QLabel;
-
 class QVBoxLayout;
 class CommonEditWindow;
 class Visitor;
@@ -33,6 +32,8 @@ private slots:
     void saveChanges();
     void cancelChanges();
 
+    void changeType();
+
 private:
     void setupUI();
     void updateEditWindow();
@@ -43,7 +44,14 @@ private:
     QVBoxLayout *mainLayout;
     QScrollArea *scrollAreaForEditWindow;
 
+    //contenitore per contentEditWindow perchè il setWidget di QScrollArea da Segmentation Fault nel updateEditWindow()
+    //scrollWidget per contenere il Layout
+    QWidget *scrollWidget;
+    //contentEditLayout per contenere contentEditWindow/contentTypeEditWindow
+    QVBoxLayout *contentEditLayout;
+
     CommonEditWindow *contentEditWindow;
+    CommonEditWindow *contentTypeEditWindow = nullptr;
 
     QPushButton *m_saveButton;
     QPushButton *m_cancelButton;

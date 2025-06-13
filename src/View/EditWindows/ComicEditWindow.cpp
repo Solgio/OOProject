@@ -38,6 +38,8 @@ void ComicEditWindow::setUp(){
     finLayout->setSpacing(5);
     finLayout->addRow(new QLabel(QString("<h3>%1</h3>").arg("Pages : ")), finishedEdit);
     mainLayout->addLayout(finLayout);
+
+    CommonEditWindow::getTypeEditBox()->setCurrentText("Comic");
 }
 
 
