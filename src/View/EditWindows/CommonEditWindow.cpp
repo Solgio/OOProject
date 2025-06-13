@@ -131,6 +131,7 @@ void CommonEditWindow::format(){
     //Checkboxes per Starred e Watched
     QFormLayout *starredWatchedLayout = new QFormLayout();
     starredWatchedLayout->addRow(starredEdit, watchedEdit);
+    detailEditLayout->addLayout(starredWatchedLayout);
 
     //Lista di subgenre
     QFormLayout *subgenreLayout = new QFormLayout();
