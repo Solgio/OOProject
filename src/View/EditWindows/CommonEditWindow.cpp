@@ -9,7 +9,7 @@ CommonEditWindow::CommonEditWindow(QWidget *parent):
     watchedEdit(new QCheckBox("Watched")),
     starredEdit(new QCheckBox("Starred")),
     descEdit(new QTextEdit()),
-    typeEdit(new QComboBox())
+    typeEdit(new MyComboBox())
 {
     format();
 }
@@ -22,8 +22,10 @@ CommonEditWindow::CommonEditWindow(Content *content, QWidget *parent):
     watchedEdit(new QCheckBox("Watched")),
     starredEdit(new QCheckBox("Starred")),
     descEdit(new QTextEdit(QString::fromStdString(content->getDescription()))),
-    typeEdit(new QComboBox())
+    typeEdit(new MyComboBox()),
+    contentPtr(content)
 {
+    yearEdit->setMaximum(9999);
     yearEdit->setValue(content->getYear());
     watchedEdit->setTristate(content->getWatched());
     starredEdit->setTristate(content->getStarred());
@@ -85,6 +87,14 @@ void CommonEditWindow::format(){
         subEdit.append(checkbox);
         subgenreBox->addWidget(checkbox);
     }
+    //Caricare i subgenre
+    /*
+    int currentSubgenres = contentPtr->getSubgenre();
+    for (int i = 0; i < subEdit.size(); i++) {
+        // Verifica se il bit corrispondente è attivo
+        unsigned int bitValue = 1 << i;
+        subEdit[i]->setChecked((currentSubgenres & bitValue) != 0);
+    }*/
 
     //Creazione del comboBox typeEdit
     const QStringList types = {
@@ -98,7 +108,8 @@ void CommonEditWindow::format(){
     typeEdit->addItems(types);
     typeEdit->setEditable(false);
     typeEdit->setInsertPolicy(QComboBox::NoInsert);
-    connect(typeEdit, &QComboBox::currentIndexChanged, this, &CommonEditWindow::changeType);//typeEdit->setCurrentText("Content");//Per default è content, cioè non è di nessun tipo concreto
+    //typeEdit->setCurrentText("Content");//Per default è content, cioè non è di nessun tipo concreto
+    connect(typeEdit, &QComboBox::currentIndexChanged, this, &CommonEditWindow::changeType);
 
 
     //Ogni campo ha un suo layout
@@ -135,7 +146,6 @@ void CommonEditWindow::format(){
     detailEditLayout->addLayout(typeLayout);
 
 }
-
 
 void CommonEditWindow::browseImage() {
     QString file = QFileDialog::getOpenFileName(

@@ -3,6 +3,7 @@
 
 #include <QDialog>
 #include "../Model/lib/Content.h"
+#include <QScrollArea>
 
 class QLineEdit;
 class QSpinBox;
@@ -14,7 +15,7 @@ class QLabel;
 
 class QVBoxLayout;
 class CommonEditWindow;
-class EditVisitor;
+class Visitor;
 
 class ContentEditWindow : public QWidget {
     Q_OBJECT
@@ -37,20 +38,10 @@ private:
     void updateEditWindow();
 
     Content* m_content;
-    EditVisitor *editVis;
-    // UI Components
-    /*
-    QLabel *m_typeLabel;
-    QLineEdit *m_titleEdit;
-    QSpinBox *m_yearSpin;
-    QList<QCheckBox*> m_subgenreCheckboxes;
-    QWidget *m_subgenreContainer;
-    QCheckBox *m_watchedCheck;
-    QCheckBox *m_starredCheck;
-    QTextEdit *m_descEdit;
-    QLineEdit *m_imagePathEdit;
-    */
+    Visitor *editVis;
+
     QVBoxLayout *mainLayout;
+    QScrollArea *scrollAreaForEditWindow;
 
     CommonEditWindow *contentEditWindow;
 

@@ -80,29 +80,3 @@ QVBoxLayout* AttributeDisplayWindow::getDetailLayout(){
 AttributeDisplayWindow::~AttributeDisplayWindow(){
 }
 
-/*
- *QString("<div style='margin:10px;'>").arg()
- *
-        "<div style='margin:10px;'>"
-        "<h2>%1</h2>"
-        "<div style='float:right; margin-left:20px;'>"
-        "<img src='%2' width='200' onerror=\"this.src=':assets/icons/default.png'\">"
-        "</div>"
-        "<p><b>Type:</b> %8</p>"
-        "<p><b>Year:</b> %3</p>"
-        "<p><b>Genre:</b> %4</p>"
-        "<p><b>Watched:</b> %5</p>"
-        "<p><b>Starred:</b> %6</p>"
-        "<p><b>Description:</b><br>%7</p>"
-        "</div>"
- *
- *
-        QString::fromStdString(content->getTitle()),
-        QString::fromStdString(content->getImage()),
-        QString::number(content->getYear()),
-        QString::fromStdString(content->getSubgenreString()),
-        content->getWatched() ? "Yes" : "No",
-        content->getStarred() ? "Yes" : "No",
-        QString::fromStdString(content->getDescription()),
-        QString::fromStdString(content->getType())
-*/

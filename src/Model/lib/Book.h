@@ -19,7 +19,7 @@ class Book : public Paper {
         void setMainCharacter(string_view mainCharacter);
 
         AttributeDisplayWindow* accept(Visitor* visitor) override;
-        CommonEditWindow* acceptEdit(EditVisitor *editVisitor) override;
+        CommonEditWindow* acceptEdit(Visitor* visitor) override;
         void toXml(xmlVisitor* xvisitor, QDomDocument& doc, QDomElement& root) override;
         void toJson(VisitorJson* vistitorJson) override;
         string getType() const override;

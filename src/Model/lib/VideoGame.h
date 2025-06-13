@@ -32,7 +32,7 @@ class VideoGame : public Multimedia {
         virtual ~VideoGame()=default;
         
         AttributeDisplayWindow* accept(Visitor* visitor) override;
-        CommonEditWindow* acceptEdit(EditVisitor *editVisitor) override;
+        CommonEditWindow* acceptEdit(Visitor* visitor) override;
         void toXml(xmlVisitor* xvisitor, QDomDocument& doc, QDomElement& root ) override;
         void toJson(VisitorJson* vistitorJson) override;
         string getType() const override;

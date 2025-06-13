@@ -30,8 +30,8 @@ AttributeDisplayWindow* Film::accept(Visitor* visitor){
     return visitor->visit(this);
 };
 
-CommonEditWindow* Film::acceptEdit(EditVisitor *editVisitor){
-    return editVisitor->visit(this);
+CommonEditWindow* Film::acceptEdit(Visitor* visitor){
+    return visitor->visitEdit(this);
 };
 
 void Film::toXml(xmlVisitor* xvisitor, QDomDocument& doc, QDomElement& root ){

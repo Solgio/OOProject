@@ -29,7 +29,7 @@ class Paper : public Content {
         void setVolume(const unsigned int& volume);
        
         AttributeDisplayWindow* accept(Visitor* visitor) override = 0;
-        CommonEditWindow* acceptEdit(EditVisitor *editVisitor) override =0;
+        CommonEditWindow* acceptEdit(Visitor* visitor) override =0;
         void toXml(xmlVisitor* xvisitor, QDomDocument& doc, QDomElement& root )override = 0;
         void toJson(VisitorJson* vistitorJson) override= 0;
         string getType() const override= 0;

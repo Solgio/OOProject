@@ -1,6 +1,7 @@
 #include "MultimediaEditWindow.h"
 
 MultimediaEditWindow::MultimediaEditWindow():
+    CommonEditWindow(),
     prodEdit(new QTextEdit()),
     platEdit(new QTextEdit())
 {
@@ -9,6 +10,7 @@ MultimediaEditWindow::MultimediaEditWindow():
 
 
 MultimediaEditWindow::MultimediaEditWindow(Multimedia *mult):
+    CommonEditWindow(mult),
     prodEdit(new QTextEdit(QString::fromStdString(mult->getProducer()))),
     platEdit(new QTextEdit(QString::fromStdString(mult->getPlatforms()))),
     multPtr(mult)

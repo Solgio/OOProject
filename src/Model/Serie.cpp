@@ -45,8 +45,8 @@ AttributeDisplayWindow* Serie::accept(Visitor* visitor){
     return visitor->visit(this);
 }
 
-CommonEditWindow* Serie::acceptEdit(EditVisitor *editVisitor){
-    return editVisitor->visit(this);
+CommonEditWindow* Serie::acceptEdit(Visitor* visitor){
+    return visitor->visitEdit(this);
 };
 
 void Serie::toXml(xmlVisitor* xvisitor, QDomDocument& doc, QDomElement& root ){

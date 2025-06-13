@@ -1,6 +1,7 @@
 #include "BookEditWindow.h"
 
 BookEditWindow::BookEditWindow():
+    CommonEditWindow(),
     authorEdit(new QTextEdit()),
     publishEdit(new QTextEdit()),
     pagesEdit(new QSpinBox()),
@@ -14,6 +15,7 @@ BookEditWindow::BookEditWindow():
 }
 
 BookEditWindow::BookEditWindow(Book *book):
+    CommonEditWindow(book),
     authorEdit(new QTextEdit(QString::fromStdString(book->getAuthor()))),
     publishEdit(new QTextEdit(QString::fromStdString(book->getPublisher()))),
     pagesEdit(new QSpinBox()),

@@ -36,8 +36,8 @@ AttributeDisplayWindow* Comic::accept(Visitor* visitor){
     return visitor->visit(this);
 };
 
-CommonEditWindow* Comic::acceptEdit(EditVisitor *editVisitor){
-    return editVisitor->visit(this);
+CommonEditWindow* Comic::acceptEdit(Visitor* visitor){
+    return visitor->visitEdit(this);
 };
 
 void Comic::toXml(xmlVisitor* xvisitor, QDomDocument& doc, QDomElement& root ){

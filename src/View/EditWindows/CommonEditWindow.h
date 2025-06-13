@@ -1,6 +1,7 @@
 #ifndef COMMONEDITWINDOW_H
 #define COMMONEDITWINDOW_H
 
+
 #include <QWidget>
 #include <QLabel>
 #include <QBoxLayout>
@@ -13,9 +14,15 @@
 #include <QFileDialog>
 
 class Content;
-class CommonEditWindow;
 
-//L'oggetto ha solo il compito di contenere la funzione virtuale saveEdit() ed essere il genitore dei classi ___EditWindow eccetto EditWindow.cpp/.h
+//Creo il mio ComboBox che non riceve il segnale della rotellina del mouse
+#include <QWheelEvent>
+class MyComboBox: public QComboBox{
+    void wheelEvent( QWheelEvent * e)
+    {
+        e->ignore(); //ignora l'evento della rotellina
+    }
+};
 
 class CommonEditWindow: public QWidget{
     Q_OBJECT
@@ -37,7 +44,7 @@ private:
 
     QTextEdit *descEdit;
 
-    QComboBox *typeEdit; // ! Complicato
+    MyComboBox *typeEdit; // ! Complicato
 
     Content *contentPtr;
 

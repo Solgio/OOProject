@@ -22,8 +22,8 @@ AttributeDisplayWindow* Book::accept(Visitor* visitor){
     return visitor->visit(this);
 };
 
-CommonEditWindow* Book::acceptEdit(EditVisitor *editVisitor){
-    return editVisitor->visit(this);
+CommonEditWindow* Book::acceptEdit(Visitor* visitor){
+    return visitor->visitEdit(this);
 };
 
 void Book::toXml(xmlVisitor* xvisitor, QDomDocument& doc, QDomElement& root ){

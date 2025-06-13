@@ -19,7 +19,6 @@ HEADERS += src/data_persistency/IReader.h \
            src/View/EditWindows/BookEditWindow.h \
            src/View/EditWindows/ComicEditWindow.h \
            src/View/EditWindows/CommonEditWindow.h \
-           src/View/EditWindows/EditVisitor.h \
            src/View/EditWindows/FilmEditWindow.h \
            src/View/EditWindows/MultimediaEditWindow.h \
            src/View/EditWindows/VideoEditWindow.h \
@@ -78,7 +77,6 @@ SOURCES += src/Model/Book.cpp \
            src/View/EditWindows/BookEditWindow.cpp \
            src/View/EditWindows/ComicEditWindow.cpp \
            src/View/EditWindows/CommonEditWindow.cpp \
-    src/View/EditWindows/EditVisitor.cpp \
            src/View/EditWindows/FilmEditWindow.cpp \
            src/View/EditWindows/MultimediaEditWindow.cpp \
            src/View/EditWindows/SerieEditWindow.cpp \

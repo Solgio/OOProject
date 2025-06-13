@@ -95,8 +95,8 @@ AttributeDisplayWindow* VideoGame::accept(Visitor* visitor){
     return visitor->visit(this);
 }
 
-CommonEditWindow* VideoGame::acceptEdit(EditVisitor *editVisitor){
-    return editVisitor->visit(this);
+CommonEditWindow* VideoGame::acceptEdit(Visitor* visitor){
+    return visitor->visitEdit(this);
 };
 
 void VideoGame::toXml(xmlVisitor* xvisitor, QDomDocument& doc, QDomElement& root ){

@@ -15,9 +15,10 @@
 #include <QPushButton>
 
 #include "EditWindows/CommonEditWindow.h"
-#include "EditWindows/EditVisitor.h"
+#include "Visitor.h"
+#include "EditWindows/BookEditWindow.h"
 
-ContentEditWindow::ContentEditWindow(Content* content, QWidget *parent): QWidget(parent), m_content(content), editVis()
+ContentEditWindow::ContentEditWindow(Content* content, QWidget *parent): QWidget(parent), m_content(content)
 {
     if (!content) {
         qCritical() << "Null content passed to editor!";
@@ -26,6 +27,7 @@ ContentEditWindow::ContentEditWindow(Content* content, QWidget *parent): QWidget
     }
     
     setWindowTitle("Edit Content - " + QString::fromStdString(content->getTitle()));
+    editVis = new Visitor();
     setupUI();
 }
 
@@ -103,8 +105,17 @@ void ContentEditWindow::setupUI() {
     }
     */
 
+    //Creazione del Scroll area per Il content
+    scrollAreaForEditWindow = new QScrollArea();
+    scrollAreaForEditWindow->setWidgetResizable(true);
+    scrollAreaForEditWindow->setFrameShape(QFrame::NoFrame);
+    scrollAreaForEditWindow->setSizePolicy(QSizePolicy::Preferred, QSizePolicy::Expanding);
+    //Inizializzo il Content
     contentEditWindow = new CommonEditWindow();
-    mainLayout->insertWidget(0, contentEditWindow);
+    //Inserisco il content nella scrollArea
+    scrollAreaForEditWindow->setWidget(contentEditWindow);
+    //Metto lo Scroll Area nel mainLayout nella prima posizione
+    mainLayout->insertWidget(0, scrollAreaForEditWindow);
     // Buttons
     auto *buttonLayout = new QHBoxLayout();
     m_saveButton = new QPushButton("Save Changes");
@@ -142,12 +153,12 @@ void ContentEditWindow::setContent(Content *content){
 }
 
 void ContentEditWindow::updateEditWindow(){
-    if (!contentEditWindow) return;
-
-    delete(contentEditWindow);
+    if(contentEditWindow){
+        delete(contentEditWindow);
+    }
 
     contentEditWindow = m_content->acceptEdit(editVis);
-    mainLayout->insertWidget(0, contentEditWindow);
+    scrollAreaForEditWindow->setWidget(contentEditWindow);
 }
 
 void ContentEditWindow::saveChanges() {
