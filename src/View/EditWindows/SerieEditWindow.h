@@ -20,6 +20,7 @@ private:
 public:
     SerieEditWindow();
     SerieEditWindow(Serie *serie);
+    SerieEditWindow(Content *content);
 
 public slots:
     void saveEdit() override;

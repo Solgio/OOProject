@@ -18,6 +18,7 @@ private:
 public:
     VideoEditWindow();
     VideoEditWindow(Video *video);
+    VideoEditWindow(Content *content);
 
     virtual void saveEdit();
 };

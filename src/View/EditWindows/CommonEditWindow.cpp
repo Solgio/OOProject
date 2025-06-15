@@ -98,7 +98,6 @@ void CommonEditWindow::format(){
 
     //Creazione del comboBox typeEdit
     const QStringList types = {
-        "Content", //index 0
         "Book", //1
         "Comic", //2
         "Film", //3
@@ -161,8 +160,8 @@ void CommonEditWindow::browseImage() {
     }
 }
 
-void CommonEditWindow::changeType() {
-    emit typeUpdated();
+void CommonEditWindow::changeType(int i) {
+    emit typeUpdated(i);
 }
 
 void CommonEditWindow::saveEdit(){
@@ -188,10 +187,14 @@ void CommonEditWindow::saveEdit(){
     }
 }
 
-QVBoxLayout* CommonEditWindow::getLayout(){
+QVBoxLayout* CommonEditWindow::getLayout() const{
     return detailEditLayout;
 }
 
-MyComboBox* CommonEditWindow::getTypeEditBox(){
+MyComboBox* CommonEditWindow::getTypeEditBox() const{
     return typeEdit;
+}
+
+Content* CommonEditWindow::getContent() const{
+    return contentPtr;
 }

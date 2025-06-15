@@ -14,6 +14,7 @@ private:
 public:
     FilmEditWindow();
     FilmEditWindow(Film *film);
+    FilmEditWindow(Content *content);
 
     void setUp();
 

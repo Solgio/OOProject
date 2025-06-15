@@ -62,23 +62,24 @@ private:
 
 signals:
     void contentUpdated();
-    void typeUpdated(); //segnale emesso quando cambia il tipo
+    void typeUpdated(int index); //segnale emesso quando cambia il tipo
 
 public slots:
     virtual void saveEdit();
 
 private slots:
     void browseImage();
-    void changeType(); //cambia il tipo del content
+    void changeType(int i); //cambia il tipo del content
 
 
 public:
     CommonEditWindow(QWidget *parent = nullptr);
     CommonEditWindow(Content *content, QWidget *parent = nullptr);
-    QVBoxLayout* getLayout();
-    MyComboBox* getTypeEditBox();
 
+    QVBoxLayout* getLayout() const;
+    MyComboBox* getTypeEditBox() const;
 
+    Content* getContent() const;
 
 };
 

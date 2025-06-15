@@ -24,6 +24,7 @@ private:
 public:
     BookEditWindow();
     BookEditWindow(Book *book);
+    BookEditWindow(Content *content);
 
 public slots:
     void saveEdit() override;

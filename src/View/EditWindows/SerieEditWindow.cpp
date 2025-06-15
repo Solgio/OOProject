@@ -10,6 +10,16 @@ SerieEditWindow::SerieEditWindow():
     setUp();
 }
 
+SerieEditWindow::SerieEditWindow(Content *content):
+    VideoEditWindow(content),
+    seasonsEdit(new QSpinBox()),
+    episodesEdit(new QSpinBox()),
+    creatorEdit(new QTextEdit()),
+    finishedEdit(new QCheckBox("Finished"))
+{
+    setUp();
+}
+
 SerieEditWindow::SerieEditWindow(Serie *serie):
     VideoEditWindow(serie),
     seasonsEdit(new QSpinBox()),

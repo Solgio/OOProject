@@ -9,6 +9,15 @@ ComicEditWindow::ComicEditWindow():
     setUp();
 }
 
+ComicEditWindow::ComicEditWindow(Content *content):
+    BookEditWindow(content),
+    illEdit(new QTextEdit()),
+    serieEdit(new QTextEdit()),
+    finishedEdit(new QCheckBox("Finished"))
+{
+    setUp();
+}
+
 ComicEditWindow::ComicEditWindow(Comic *comic):
     BookEditWindow(comic),
     illEdit(new QTextEdit(QString::fromStdString(comic->getIllustrator()))),

@@ -14,6 +14,20 @@ BookEditWindow::BookEditWindow():
     setUp();
 }
 
+BookEditWindow::BookEditWindow(Content *content):
+    CommonEditWindow(content),
+    authorEdit(new QTextEdit()),
+    publishEdit(new QTextEdit()),
+    pagesEdit(new QSpinBox()),
+    volumeEdit(new QSpinBox()),
+    mcEdit(new QTextEdit())
+{
+    pagesEdit->setRange(0,1000);
+    volumeEdit->setRange(0,1000);
+
+    setUp();
+}
+
 BookEditWindow::BookEditWindow(Book *book):
     CommonEditWindow(book),
     authorEdit(new QTextEdit(QString::fromStdString(book->getAuthor()))),

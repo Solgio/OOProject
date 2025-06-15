@@ -32,7 +32,7 @@ private slots:
     void saveChanges();
     void cancelChanges();
 
-    void changeType();
+    void changeType(int index);
 
 private:
     void setupUI();

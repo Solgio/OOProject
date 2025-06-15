@@ -9,6 +9,16 @@ VideoEditWindow::VideoEditWindow():
     setUp();
 }
 
+VideoEditWindow::VideoEditWindow(Content *content):
+    MultimediaEditWindow(content),
+    durationEdit(new QTextEdit()),
+    prequelEdit(new QTextEdit()),
+    sequelEdit(new QTextEdit())
+{
+    setUp();
+}
+
+
 VideoEditWindow::VideoEditWindow(Video *video):
     MultimediaEditWindow(video),
     durationEdit(new QTextEdit(QString::number(video->getDuration()))),

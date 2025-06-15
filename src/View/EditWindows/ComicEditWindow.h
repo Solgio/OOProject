@@ -19,6 +19,7 @@ private:
 public:
     ComicEditWindow();
     ComicEditWindow(Comic * comic);
+    ComicEditWindow(Content *content);
 
 public slots:
     void saveEdit() override;

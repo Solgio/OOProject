@@ -20,6 +20,7 @@ private:
 public:
     VideoGameEditWindow();
     VideoGameEditWindow(VideoGame *videogame);
+    VideoGameEditWindow(Content *content);
 
 public slots:
     void saveEdit() override;

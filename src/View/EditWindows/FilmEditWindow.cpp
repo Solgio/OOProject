@@ -8,6 +8,14 @@ FilmEditWindow::FilmEditWindow():
     setUp();
 }
 
+FilmEditWindow::FilmEditWindow(Content *content):
+    VideoEditWindow(content),
+    dirEdit(new QTextEdit()),
+    photoDirEdit(new QTextEdit())
+{
+    setUp();
+}
+
 FilmEditWindow::FilmEditWindow(Film *film):
     VideoEditWindow(film),
     dirEdit(new QTextEdit(QString::fromStdString(film->getDirector()))),

@@ -14,9 +14,13 @@
 #include <QTextEdit>
 #include <QPushButton>
 
-#include "EditWindows/CommonEditWindow.h"
 #include "Visitor.h"
+#include "EditWindows/CommonEditWindow.h"
+#include "EditWindows/BookEditWindow.h"
+#include "EditWindows/ComicEditWindow.h"
+#include "EditWindows/FilmEditWindow.h"
 #include "EditWindows/SerieEditWindow.h"
+#include "EditWindows/VideoGameEditWindow.h"
 
 ContentEditWindow::ContentEditWindow(Content* content, QWidget *parent): QWidget(parent), m_content(content)
 {
@@ -72,31 +76,40 @@ void ContentEditWindow::setContent(Content *content){
 }
 
 void ContentEditWindow::updateEditWindow(){
-    /*if(contentEditWindow){
-        delete(contentEditWindow);
-    }*/
-    //Da segmentation fault
-    //Non so perchè e non so neanchè se verrà pulito con la creazione del nuovo
-
     contentEditWindow = m_content->acceptEdit(editVis);
     contentEditLayout->addWidget(contentEditWindow);
     connect(contentEditWindow, &CommonEditWindow::typeUpdated, this, &ContentEditWindow::changeType);
 }
 
-void ContentEditWindow::changeType() { //TODO da modificare
+void ContentEditWindow::changeType(int index) { //TODO da modificare
 
-    if(contentTypeEditWindow == nullptr){
-        contentTypeEditWindow = new SerieEditWindow();
-        contentEditLayout->removeWidget(contentEditWindow); //rimuove dal Layout ma non lo elimina nè nasconde
-        contentEditWindow->hide(); //nascondo il widget rimosso se no fa overlap
-        contentEditLayout->addWidget(contentTypeEditWindow);
-        contentEditLayout->update();
-    }else{
-        delete(contentTypeEditWindow);
-        contentTypeEditWindow = new SerieEditWindow();
-        contentEditLayout->addWidget(contentTypeEditWindow);
+    if(contentTypeEditWindow){
+        contentTypeEditWindow->deleteLater();
     }
-    //stessa cosa del updateEditWindow()
+
+    switch (index) {
+    case 0:
+        contentTypeEditWindow = new BookEditWindow(m_content);
+        break;
+    case 1:
+        contentTypeEditWindow = new ComicEditWindow(m_content);
+        break;
+    case 2:
+        contentTypeEditWindow = new FilmEditWindow(m_content);
+        break;
+    case 3:
+        contentTypeEditWindow = new SerieEditWindow(m_content);
+        break;
+    case 4:
+        contentTypeEditWindow = new VideoGameEditWindow(m_content);
+        break;
+    default:
+        break;
+    }
+    contentEditLayout->removeWidget(contentEditWindow); //rimuove dal Layout ma non lo elimina nè nasconde
+    contentEditWindow->hide(); //nascondo il widget rimosso se no fa overlap
+    contentEditLayout->addWidget(contentTypeEditWindow);
+    connect(contentTypeEditWindow, &CommonEditWindow::typeUpdated, this, &ContentEditWindow::changeType);
 }
 
 void ContentEditWindow::saveChanges() {

@@ -18,6 +18,7 @@ private:
 public:
     MultimediaEditWindow();
     MultimediaEditWindow(Multimedia *mult);
+    MultimediaEditWindow(Content *content);
 
     virtual void saveEdit();
 };

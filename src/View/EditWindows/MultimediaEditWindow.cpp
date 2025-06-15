@@ -8,6 +8,13 @@ MultimediaEditWindow::MultimediaEditWindow():
     setUp();
 }
 
+MultimediaEditWindow::MultimediaEditWindow(Content *content):
+    CommonEditWindow(content),
+    prodEdit(new QTextEdit()),
+    platEdit(new QTextEdit())
+{
+    setUp();
+}
 
 MultimediaEditWindow::MultimediaEditWindow(Multimedia *mult):
     CommonEditWindow(mult),

@@ -360,7 +360,7 @@ void LibraryWindow::showEditView(Content *content)
 void LibraryWindow::hideEditView()
 {
     if (m_editWindow) {
-        // Remove from stacked widget
+        // Remove from stacked widget and delete it
         m_rightPanel->removeWidget(m_editWindow);
         m_editWindow->deleteLater();
         m_editWindow = nullptr;

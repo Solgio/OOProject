@@ -9,6 +9,15 @@ VideoGameEditWindow::VideoGameEditWindow():
     setUp();
 }
 
+VideoGameEditWindow::VideoGameEditWindow(Content *content):
+    MultimediaEditWindow(content),
+    gameEngEdit(new QTextEdit()),
+    ExpHoursEdit(new QSpinBox()),
+    gameTypeEdit(new QTextEdit())
+{
+    setUp();
+}
+
 VideoGameEditWindow::VideoGameEditWindow(VideoGame *videogame):
     MultimediaEditWindow(videogame),
     gameEngEdit(new QTextEdit(QString::fromStdString(videogame->getGameEngine()))),
