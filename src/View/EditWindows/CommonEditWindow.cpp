@@ -87,14 +87,14 @@ void CommonEditWindow::format(){
         subEdit.append(checkbox);
         subgenreBox->addWidget(checkbox);
     }
+
     //Caricare i subgenre
-    /*
     int currentSubgenres = contentPtr->getSubgenre();
     for (int i = 0; i < subEdit.size(); i++) {
         // Verifica se il bit corrispondente è attivo
         unsigned int bitValue = 1 << i;
         subEdit[i]->setChecked((currentSubgenres & bitValue) != 0);
-    }*/
+    }
 
     //Creazione del comboBox typeEdit
     const QStringList types = {
