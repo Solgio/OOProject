@@ -31,6 +31,7 @@ signals:
 private slots:
     void saveChanges();
     void cancelChanges();
+    void restoreChanges();
 
     void changeType(int index);
 
@@ -50,9 +51,10 @@ private:
     //contentEditLayout per contenere contentEditWindow/contentTypeEditWindow
     QVBoxLayout *contentEditLayout;
 
-    CommonEditWindow *contentEditWindow;
+    CommonEditWindow *contentEditWindow = nullptr;
     CommonEditWindow *contentTypeEditWindow = nullptr;
 
+    QPushButton *m_restoreButton;
     QPushButton *m_saveButton;
     QPushButton *m_cancelButton;
     QPushButton *m_browseButton;

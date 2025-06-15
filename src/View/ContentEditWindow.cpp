@@ -57,16 +57,22 @@ void ContentEditWindow::setupUI() {
     scrollAreaForEditWindow->setWidget(scrollWidget);
     //Metto lo Scroll Area nel mainLayout nella prima posizione
     mainLayout->insertWidget(0, scrollAreaForEditWindow);
+
     // Buttons
-    auto *buttonLayout = new QHBoxLayout();
+    auto *buttonLayout = new QGridLayout();
+
+    m_restoreButton = new QPushButton("Restore");
+    connect(m_restoreButton, &QPushButton::clicked, this, &ContentEditWindow::restoreChanges);
+
     m_saveButton = new QPushButton("Save Changes");
     connect(m_saveButton, &QPushButton::clicked, this, &ContentEditWindow::saveChanges);
     
     m_cancelButton = new QPushButton("Cancel");
     connect(m_cancelButton, &QPushButton::clicked, this, &ContentEditWindow::cancelChanges);
     
-    buttonLayout->addWidget(m_saveButton);
-    buttonLayout->addWidget(m_cancelButton);
+    buttonLayout->addWidget(m_saveButton, 0 , 0, Qt::AlignRight);
+    buttonLayout->addWidget(m_restoreButton, 0, 1, Qt::AlignHCenter);
+    buttonLayout->addWidget(m_cancelButton, 0 , 2, Qt::AlignLeft);
     mainLayout->insertLayout(-1, buttonLayout);
 }
 
@@ -76,8 +82,17 @@ void ContentEditWindow::setContent(Content *content){
 }
 
 void ContentEditWindow::updateEditWindow(){
+    //se è la prima volta che viene creata allora lo aggiungo al layout
+    if(contentEditWindow){
+        contentEditWindow->deleteLater();
+    }
+
     contentEditWindow = m_content->acceptEdit(editVis);
     contentEditLayout->addWidget(contentEditWindow);
+
+    if(contentEditWindow->isHidden()){
+        contentEditWindow->show();
+    }
     connect(contentEditWindow, &CommonEditWindow::typeUpdated, this, &ContentEditWindow::changeType);
 }
 
@@ -106,10 +121,20 @@ void ContentEditWindow::changeType(int index) { //TODO da modificare
     default:
         break;
     }
-    contentEditLayout->removeWidget(contentEditWindow); //rimuove dal Layout ma non lo elimina nè nasconde
-    contentEditWindow->hide(); //nascondo il widget rimosso se no fa overlap
+    //contentEditLayout->removeWidget(contentEditWindow); //rimuove dal Layout ma non lo elimina nè nasconde //! NON SERVE RIMUOVERLO DAL LAYOUT
+    contentEditWindow->hide(); //nascondo il contentEditWindow
     contentEditLayout->addWidget(contentTypeEditWindow);
     connect(contentTypeEditWindow, &CommonEditWindow::typeUpdated, this, &ContentEditWindow::changeType);
+}
+
+void ContentEditWindow::restoreChanges() {
+    //se eseite il contentTypeEditWindow lo elimino e lo rimuovo dal contentEditLayout
+    if(contentTypeEditWindow){
+        delete(contentTypeEditWindow);
+        contentTypeEditWindow = nullptr;
+    }
+    //uso la funzione già esistente per visualizzare il content originale
+    updateEditWindow();
 }
 
 void ContentEditWindow::saveChanges() {
