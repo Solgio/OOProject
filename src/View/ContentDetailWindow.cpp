@@ -55,26 +55,27 @@ void ContentDetailWindow::setupUI()
 
 
     // Edit button at bottom
-    auto *editButtonLayout = new QHBoxLayout();
+    auto *editDeleteButtonLayout = new QHBoxLayout();
+    editDeleteButtonLayout->addStretch(1); 
+    editDeleteButtonLayout->setContentsMargins(0, 0, 0, 40);
+
     m_editButton = new QPushButton();
     m_editButton->setIcon(QIcon(":assets/icons/edit.png"));
     m_editButton->setToolTip("Edit current library content");
     m_editButton->setFixedSize(50, 50);
     connect(m_editButton, &QPushButton::clicked, this, &ContentDetailWindow::onEditClicked);
-    
-    editButtonLayout->addWidget(m_editButton);
-    m_mainLayout->addLayout(editButtonLayout);
+    editDeleteButtonLayout->addWidget(m_editButton);
 
-    auto *deleteButtonLayout = new QHBoxLayout();
     m_deleteButton = new QPushButton();
     m_deleteButton->setIcon(QIcon(":assets/icons/delete.png"));
     m_deleteButton->setToolTip("Delete current library content");
     m_deleteButton->setStyleSheet("QPushButton { color: red; }");
     m_deleteButton->setFixedSize(50, 50);
     connect(m_deleteButton, &QPushButton::clicked, this, &ContentDetailWindow::onDeleteClicked);
-    
-    deleteButtonLayout->addWidget(m_deleteButton);
-    m_mainLayout->addLayout(deleteButtonLayout);
+    editDeleteButtonLayout->addWidget(m_deleteButton);
+    editDeleteButtonLayout->addStretch(1);
+
+    m_mainLayout->addLayout(editDeleteButtonLayout);
 
     // Style
     setStyleSheet(
