@@ -21,7 +21,13 @@ void AttributeDisplayWindow::format(){
     bigLayout = new QHBoxLayout(this); //Box orizzontale che contiene a sinistra l'immagine e destra gli dettagli del content
 
     QLabel *img = new QLabel();
-    img->setPixmap(QPixmap(*imgString).scaled(500, 500, Qt::KeepAspectRatio, Qt::SmoothTransformation));
+
+    if (!imgString->isEmpty() && QFile::exists(*imgString)) {
+        img->setPixmap(QPixmap(*imgString).scaled(500,500, Qt::KeepAspectRatio, Qt::SmoothTransformation));
+        img->setAlignment(Qt::AlignCenter);
+    } else {
+        img->setPixmap(QPixmap(":assets/icons/no-image.png").scaled(500,500, Qt::KeepAspectRatio, Qt::SmoothTransformation));
+    }
 
     img->setAlignment(Qt::AlignHCenter | Qt::AlignVCenter);
     bigLayout->addWidget(img); //aggiunta dell'immagine per occupare il lato sinistro

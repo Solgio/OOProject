@@ -40,7 +40,12 @@ void CommonEditWindow::format(){
     imgLayout = new QFormLayout();{
 
         QLabel *img = new QLabel();
-        img->setPixmap(QPixmap(imgEdit->toPlainText()).scaled(500, 500, Qt::KeepAspectRatio, Qt::SmoothTransformation));
+        if (!imgEdit->toPlainText().isEmpty() && QFile::exists(imgEdit->toPlainText())) {
+            img->setPixmap(QPixmap(imgEdit->toPlainText()).scaled(500,500, Qt::KeepAspectRatio, Qt::SmoothTransformation));
+            img->setAlignment(Qt::AlignCenter);
+        } else {
+            img->setPixmap(QPixmap(":assets/icons/no-image.png").scaled(500,500, Qt::KeepAspectRatio, Qt::SmoothTransformation));
+        }
 
         img->setAlignment(Qt::AlignHCenter | Qt::AlignVCenter);
         imgLayout->addRow(img);
@@ -129,6 +134,7 @@ void CommonEditWindow::format(){
 
     //Checkboxes per Starred e Watched
     QFormLayout *starredWatchedLayout = new QFormLayout();
+    starredWatchedLayout->addRow(new QLabel(QString("<h3>%1</h3>").arg("Status : ")));
     starredWatchedLayout->addRow(starredEdit, watchedEdit);
     detailEditLayout->addLayout(starredWatchedLayout);
 

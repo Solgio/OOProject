@@ -36,6 +36,24 @@
         <Finished>1</Finished>
     </Comic>
     <Film>
+        <Id>11</Id>
+        <Title>Blade Runner</Title>
+        <Description>Bad Replicant, BAD</Description>
+        <Inspiration>1</Inspiration>
+        <Starred>1</Starred>
+        <Watched>1</Watched>
+        <Year>1982</Year>
+        <Image>assets/images/blade_runner.jpg</Image>
+        <Subgenre>1</Subgenre>
+        <Producer>Warner Bros</Producer>
+        <Platforms>Dvd, BlueRay, 4K, Streaming</Platforms>
+        <Duration>117</Duration>
+        <Prequel>0</Prequel>
+        <Sequel>3</Sequel>
+        <Director>Ridley Scott</Director>
+        <PhotoDirector>Jordan Scott Cronenweth</PhotoDirector>
+    </Film>
+    <Film>
         <Id>3</Id>
         <Title>Blade Runner 2049</Title>
         <Description>A sequel to the 1982 film Blade Runner.</Description>
@@ -46,11 +64,11 @@
         <Image>assets/images/blade_runner_2049.jpg</Image>
         <Subgenre>1</Subgenre>
         <Producer>Columbia Pictures</Producer>
-        <Platforms></Platforms>
+        <Platforms>Dvd, BlueRay, 4K, Streaming</Platforms>
         <Duration>163</Duration>
-        <Prequel>0</Prequel>
+        <Prequel>11</Prequel>
         <Sequel>0</Sequel>
-        <Director></Director>
+        <Director>Denis Villeneive</Director>
         <PhotoDirector>Roger Deakins</PhotoDirector>
     </Film>
     <Serie>
@@ -63,9 +81,9 @@
         <Year>2015</Year>
         <Image>assets/images/the_expanse.jpg</Image>
         <Subgenre>1</Subgenre>
-        <Producer></Producer>
-        <Platforms></Platforms>
-        <Duration>0</Duration>
+        <Producer>Amazon Prime</Producer>
+        <Platforms>Amazon Prime</Platforms>
+        <Duration>40</Duration>
         <Prequel>0</Prequel>
         <Sequel>0</Sequel>
         <Seasons>6</Seasons>
@@ -85,58 +103,58 @@
         <Subgenre>5</Subgenre>
         <Producer>BioWare</Producer>
         <Platforms>PC, Xbox 360, PlayStation 3</Platforms>
-        <GameEngine></GameEngine>
+        <GameEngine>Unreal Engine 3</GameEngine>
         <GameType>0</GameType>
         <ExpectedHours>35</ExpectedHours>
     </VideoGame>
     <VideoGame>
         <Id>6</Id>
         <Title>fghjkl</Title>
-        <Description></Description>
+        <Description>Placeholder bla bla bla</Description>
         <Inspiration>0</Inspiration>
         <Starred>0</Starred>
         <Watched>0</Watched>
         <Year>1900</Year>
         <Image></Image>
         <Subgenre>0</Subgenre>
-        <Producer></Producer>
-        <Platforms></Platforms>
-        <GameEngine></GameEngine>
+        <Producer>Nintendo</Producer>
+        <Platforms>GameCube</Platforms>
+        <GameEngine>Very Low Poly</GameEngine>
         <GameType>0</GameType>
         <ExpectedHours>0</ExpectedHours>
     </VideoGame>
     <Serie>
         <Id>7</Id>
         <Title>vbnm,</Title>
-        <Description></Description>
+        <Description>Placeholder bla bla bla</Description>
         <Inspiration>0</Inspiration>
         <Starred>0</Starred>
         <Watched>0</Watched>
         <Year>1900</Year>
         <Image></Image>
         <Subgenre>0</Subgenre>
-        <Producer></Producer>
-        <Platforms></Platforms>
+        <Producer>Me, The Creator</Producer>
+        <Platforms>Everywhere</Platforms>
         <Duration>0</Duration>
         <Prequel>0</Prequel>
         <Sequel>0</Sequel>
-        <Seasons>0</Seasons>
-        <Episodes>0</Episodes>
-        <Creator></Creator>
+        <Seasons>9</Seasons>
+        <Episodes>14</Episodes>
+        <Creator>Ted The Tester</Creator>
         <Finished>0</Finished>
     </Serie>
     <Comic>
         <Id>8</Id>
         <Title>fghjk</Title>
-        <Description></Description>
+        <Description>Placeholder bla bla bla</Description>
         <Inspiration>0</Inspiration>
         <Starred>0</Starred>
         <Watched>0</Watched>
         <Year>1900</Year>
         <Image></Image>
         <Subgenre>0</Subgenre>
-        <Author></Author>
-        <Publisher></Publisher>
+        <Author>The Presence behind all uuuuuuuuu</Author>
+        <Publisher>No one</Publisher>
         <Pages>0</Pages>
         <Volume>0</Volume>
         <MainCharacter></MainCharacter>
@@ -147,32 +165,32 @@
     <Book>
         <Id>9</Id>
         <Title>ikm </Title>
-        <Description></Description>
+        <Description>Placeholder bla bla bla</Description>
         <Inspiration>0</Inspiration>
         <Starred>0</Starred>
         <Watched>0</Watched>
         <Year>1900</Year>
         <Image></Image>
         <Subgenre>0</Subgenre>
-        <Author></Author>
+        <Author>Ted The Tester</Author>
         <Publisher></Publisher>
         <Pages>0</Pages>
         <Volume>0</Volume>
-        <MainCharacter></MainCharacter>
+        <MainCharacter>Lisan Al-Gahib</MainCharacter>
     </Book>
     <VideoGame>
         <Id>10</Id>
         <Title>yujn</Title>
-        <Description></Description>
+        <Description>Placeholder bla bla bla</Description>
         <Inspiration>0</Inspiration>
         <Starred>0</Starred>
         <Watched>0</Watched>
         <Year>1900</Year>
         <Image></Image>
         <Subgenre>0</Subgenre>
-        <Producer></Producer>
-        <Platforms></Platforms>
-        <GameEngine></GameEngine>
+        <Producer>Bil Gates</Producer>
+        <Platforms>Cousin PS7</Platforms>
+        <GameEngine>Real GearBox Boh</GameEngine>
         <GameType>0</GameType>
         <ExpectedHours>0</ExpectedHours>
     </VideoGame>
