@@ -8,8 +8,8 @@ class SerieEditWindow:public VideoEditWindow{
 
 private:
 
-    QSpinBox *seasonsEdit;
-    QSpinBox *episodesEdit;
+    MySpinBox *seasonsEdit;
+    MySpinBox *episodesEdit;
     QTextEdit *creatorEdit;
     QCheckBox *finishedEdit;
 

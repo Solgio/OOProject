@@ -10,7 +10,7 @@ class VideoGameEditWindow:public MultimediaEditWindow{
 private:
 
     QTextEdit *gameEngEdit;
-    QSpinBox *ExpHoursEdit;
+    MySpinBox *ExpHoursEdit;
     QTextEdit *gameTypeEdit;
 
     VideoGame *vgPtr;

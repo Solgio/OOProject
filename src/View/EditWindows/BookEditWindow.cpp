@@ -4,8 +4,8 @@ BookEditWindow::BookEditWindow():
     CommonEditWindow(),
     authorEdit(new QTextEdit()),
     publishEdit(new QTextEdit()),
-    pagesEdit(new QSpinBox()),
-    volumeEdit(new QSpinBox()),
+    pagesEdit(new MySpinBox()),
+    volumeEdit(new MySpinBox()),
     mcEdit(new QTextEdit())
 {
     pagesEdit->setRange(0,1000);
@@ -18,8 +18,8 @@ BookEditWindow::BookEditWindow(Content *content):
     CommonEditWindow(content),
     authorEdit(new QTextEdit()),
     publishEdit(new QTextEdit()),
-    pagesEdit(new QSpinBox()),
-    volumeEdit(new QSpinBox()),
+    pagesEdit(new MySpinBox()),
+    volumeEdit(new MySpinBox()),
     mcEdit(new QTextEdit())
 {
     pagesEdit->setRange(0,1000);
@@ -32,8 +32,8 @@ BookEditWindow::BookEditWindow(Book *book):
     CommonEditWindow(book),
     authorEdit(new QTextEdit(QString::fromStdString(book->getAuthor()))),
     publishEdit(new QTextEdit(QString::fromStdString(book->getPublisher()))),
-    pagesEdit(new QSpinBox()),
-    volumeEdit(new QSpinBox()),
+    pagesEdit(new MySpinBox()),
+    volumeEdit(new MySpinBox()),
     mcEdit(new QTextEdit(QString::fromStdString(book->getMainCharacter()))),
     bookPtr(book)
 {

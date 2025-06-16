@@ -1,11 +1,13 @@
 #include "CommonEditWindow.h"
 #include "../../Model/lib/Content.h"
+#include "../../Model/lib/ScienceFictionLibrary.h"
 
 CommonEditWindow::CommonEditWindow(QWidget *parent):
     QWidget(parent),
+    library(ScienceFiction_Library::getInstance()),
     titleEdit(new QTextEdit()), // ?? da testare
     imgEdit(new QTextEdit()),
-    yearEdit(new QSpinBox()),
+    yearEdit(new MySpinBox()),
     watchedEdit(new QCheckBox("Watched")),
     starredEdit(new QCheckBox("Starred")),
     descEdit(new QTextEdit()),
@@ -16,9 +18,10 @@ CommonEditWindow::CommonEditWindow(QWidget *parent):
 
 CommonEditWindow::CommonEditWindow(Content *content, QWidget *parent):
     QWidget(parent),
+    library(ScienceFiction_Library::getInstance()),
     titleEdit(new QTextEdit("<h1>" + QString::fromStdString(content->getTitle()) + "</h1>")), // ?? da testare
     imgEdit(new QTextEdit(QString::fromStdString(content->getImage()))),
-    yearEdit(new QSpinBox()),
+    yearEdit(new MySpinBox()),
     watchedEdit(new QCheckBox("Watched")),
     starredEdit(new QCheckBox("Starred")),
     descEdit(new QTextEdit(QString::fromStdString(content->getDescription()))),
@@ -27,8 +30,8 @@ CommonEditWindow::CommonEditWindow(Content *content, QWidget *parent):
 {
     yearEdit->setMaximum(9999);
     yearEdit->setValue(content->getYear());
-    watchedEdit->setTristate(content->getWatched());
-    starredEdit->setTristate(content->getStarred());
+    watchedEdit->setChecked(content->getWatched());
+    starredEdit->setChecked(content->getStarred());
 
     format();
 }
@@ -169,8 +172,8 @@ void CommonEditWindow::saveEdit(){
         contentPtr->setTitle(titleEdit->toPlainText().QString::toStdString());
         contentPtr->setImage(imgEdit->toPlainText().QString::toStdString());
         contentPtr->setYear(yearEdit->value());
-        contentPtr->setStarred(starredEdit->isTristate());
-        contentPtr->setWatched(watchedEdit->isTristate());
+        contentPtr->setStarred(starredEdit->isChecked());
+        contentPtr->setWatched(watchedEdit->isChecked());
         contentPtr->setDescription(descEdit->toPlainText().QString::toStdString());
 
         unsigned int newSubgenres = 0;
