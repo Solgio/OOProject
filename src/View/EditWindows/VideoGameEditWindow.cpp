@@ -3,7 +3,7 @@
 VideoGameEditWindow::VideoGameEditWindow():
     MultimediaEditWindow(),
     gameEngEdit(new QTextEdit()),
-    ExpHoursEdit(new QSpinBox()),
+    ExpHoursEdit(new MySpinBox()),
     gameTypeEdit(new QTextEdit())
 {
     setUp();
@@ -12,7 +12,7 @@ VideoGameEditWindow::VideoGameEditWindow():
 VideoGameEditWindow::VideoGameEditWindow(Content *content):
     MultimediaEditWindow(content),
     gameEngEdit(new QTextEdit()),
-    ExpHoursEdit(new QSpinBox()),
+    ExpHoursEdit(new MySpinBox()),
     gameTypeEdit(new QTextEdit())
 {
     setUp();
@@ -21,7 +21,7 @@ VideoGameEditWindow::VideoGameEditWindow(Content *content):
 VideoGameEditWindow::VideoGameEditWindow(VideoGame *videogame):
     MultimediaEditWindow(videogame),
     gameEngEdit(new QTextEdit(QString::fromStdString(videogame->getGameEngine()))),
-    ExpHoursEdit(new QSpinBox()),
+    ExpHoursEdit(new MySpinBox()),
     gameTypeEdit(new QTextEdit(QString::fromStdString(videogame->getGameType()))),
     vgPtr(videogame)
 {

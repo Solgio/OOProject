@@ -25,6 +25,7 @@ ComicEditWindow::ComicEditWindow(Comic *comic):
     finishedEdit(new QCheckBox("Finished")),
     comicPtr(comic)
 {
+    finishedEdit->setChecked(comic->getFinished());
     setUp();
 }
 
@@ -57,7 +58,7 @@ void ComicEditWindow::saveEdit(){
         BookEditWindow::saveEdit();
         comicPtr->setIllustrator(illEdit->toPlainText().QString::toStdString());
         comicPtr->setSerie(serieEdit->toPlainText().QString::toStdString());
-        comicPtr->setFinished(finishedEdit->isTristate());
+        comicPtr->setFinished(finishedEdit->isChecked());
     }
 }
 

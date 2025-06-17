@@ -14,10 +14,19 @@
 #include <QFileDialog>
 
 class Content;
+class ScienceFiction_Library;
 
 //Creo il mio ComboBox che non riceve il segnale della rotellina del mouse
 #include <QWheelEvent>
 class MyComboBox: public QComboBox{
+    void wheelEvent( QWheelEvent * e)
+    {
+        e->ignore(); //ignora l'evento della rotellina
+    }
+};
+
+//Creo il mio ComboBox che non riceve il segnale della rotellina del mouse
+class MySpinBox: public QSpinBox{
     void wheelEvent( QWheelEvent * e)
     {
         e->ignore(); //ignora l'evento della rotellina
@@ -29,11 +38,13 @@ class CommonEditWindow: public QWidget{
 
 private:
 
+    ScienceFiction_Library &library;
+
     QTextEdit *titleEdit;
 
     QTextEdit *imgEdit;
 
-    QSpinBox *yearEdit;
+    MySpinBox *yearEdit;
 
     QWidget *subgenreWindow;
     QList<QCheckBox*> subEdit;

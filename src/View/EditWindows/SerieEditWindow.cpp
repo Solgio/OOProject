@@ -2,8 +2,8 @@
 
 SerieEditWindow::SerieEditWindow():
     VideoEditWindow(),
-    seasonsEdit(new QSpinBox()),
-    episodesEdit(new QSpinBox()),
+    seasonsEdit(new MySpinBox()),
+    episodesEdit(new MySpinBox()),
     creatorEdit(new QTextEdit()),
     finishedEdit(new QCheckBox("Finished"))
 {
@@ -12,8 +12,8 @@ SerieEditWindow::SerieEditWindow():
 
 SerieEditWindow::SerieEditWindow(Content *content):
     VideoEditWindow(content),
-    seasonsEdit(new QSpinBox()),
-    episodesEdit(new QSpinBox()),
+    seasonsEdit(new MySpinBox()),
+    episodesEdit(new MySpinBox()),
     creatorEdit(new QTextEdit()),
     finishedEdit(new QCheckBox("Finished"))
 {
@@ -22,15 +22,15 @@ SerieEditWindow::SerieEditWindow(Content *content):
 
 SerieEditWindow::SerieEditWindow(Serie *serie):
     VideoEditWindow(serie),
-    seasonsEdit(new QSpinBox()),
-    episodesEdit(new QSpinBox()),
+    seasonsEdit(new MySpinBox()),
+    episodesEdit(new MySpinBox()),
     creatorEdit(new QTextEdit(QString::fromStdString(serie->getCreator()))),
     finishedEdit(new QCheckBox("Finished")),
     seriePtr(serie)
 {
     seasonsEdit->setValue(serie->getSeasons());
     episodesEdit->setValue(serie->getEpisodes());
-    finishedEdit->setTristate(serie->getFinished());
+    finishedEdit->setChecked(serie->getFinished());
 
     setUp();
 }
@@ -67,6 +67,6 @@ void SerieEditWindow::saveEdit(){
         seriePtr->setSeasons(seasonsEdit->value());
         seriePtr->setEpisodes(episodesEdit->value());
         seriePtr->setCreator(creatorEdit->toPlainText().QString::toStdString());
-        seriePtr->setFinished(finishedEdit->isTristate());
+        seriePtr->setFinished(finishedEdit->isChecked());
     }
 }

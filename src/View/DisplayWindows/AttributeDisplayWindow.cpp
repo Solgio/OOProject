@@ -1,9 +1,12 @@
 #include "AttributeDisplayWindow.h"
 #include "../../Model/lib/Content.h"
+#include "../../Model/lib/ScienceFictionLibrary.h"
 
-AttributeDisplayWindow::AttributeDisplayWindow(QWidget *parent): QWidget(parent){};
+AttributeDisplayWindow::AttributeDisplayWindow(QWidget *parent): QWidget(parent),
+    library(ScienceFiction_Library::getInstance()){};
 
 AttributeDisplayWindow::AttributeDisplayWindow(Content* content, QWidget *parent): QWidget(parent),
+    library(ScienceFiction_Library::getInstance()),
     Title(new QLabel(QString("<h1>%1</h1>").arg(QString::fromStdString(content->getTitle())))),
     imgString(new QString(QString::fromStdString(content->getImage()))),
     Year(new QLabel(QString::number(content->getYear()))),
@@ -11,7 +14,8 @@ AttributeDisplayWindow::AttributeDisplayWindow(Content* content, QWidget *parent
     Watched(new QLabel(content->getWatched() ? "Yes" : "No")),
     Starred(new QLabel(content->getStarred() ? "Yes" : "No")),
     Description(new QLabel(QString::fromStdString(content->getDescription()))),
-    Type(new QLabel(QString::fromStdString(content->getType())))
+    Type(new QLabel(QString::fromStdString(content->getType()))),
+    Inspiration(new QLabel(QString::fromStdString( (library.searchId(content->getInspiration()) )->getTitle() )))
 {
     format();
 }
@@ -68,6 +72,10 @@ void AttributeDisplayWindow::format(){
     typeLayout->addRow(new QLabel(QString("<h3>%1</h3>").arg("Type : ")), Type);
     detailLayout->addLayout(typeLayout);
 
+    QFormLayout *inspirationLayout = new QFormLayout();
+    inspirationLayout->addRow(new QLabel(QString("<h3>%1</h3>").arg("Inspired by: ")), Inspiration);
+    detailLayout->addLayout(inspirationLayout);
+
     //detailLayout->addWidget(new QLabel(QString("<h3>%1</h3>").arg("Descrizione")));
     //detailLayout->addWidget(Description);
     //detailLayout->addWidget(Type);
@@ -76,9 +84,6 @@ void AttributeDisplayWindow::format(){
     //detailLayout->addStretch(200);
 }
 
-QHBoxLayout* AttributeDisplayWindow::getBigLayout(){
-    return bigLayout;
-}
 QVBoxLayout* AttributeDisplayWindow::getDetailLayout(){
     return detailLayout;
 }

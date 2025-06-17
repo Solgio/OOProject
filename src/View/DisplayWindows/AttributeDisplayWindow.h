@@ -7,11 +7,14 @@
 #include <QFormLayout>
 
 class Content;
+class ScienceFiction_Library;
 
 class AttributeDisplayWindow: public QWidget{
     Q_OBJECT
 
 private:
+    ScienceFiction_Library &library;
+
     QLabel *Title;
     QString *imgString; //path in QString di image
     QLabel *Year;
@@ -20,6 +23,7 @@ private:
     QLabel *Starred;
     QLabel *Description;
     QLabel *Type; //tipo di contenuto
+    QLabel *Inspiration; //Il nome del content non il suo codice
 
     QHBoxLayout *bigLayout;
     QVBoxLayout *detailLayout;
@@ -30,7 +34,6 @@ public:
     AttributeDisplayWindow(QWidget *parent = nullptr);
     AttributeDisplayWindow(Content * content, QWidget *parent = nullptr);
 
-    virtual QHBoxLayout* getBigLayout();
     virtual QVBoxLayout* getDetailLayout();
 
     virtual ~AttributeDisplayWindow();

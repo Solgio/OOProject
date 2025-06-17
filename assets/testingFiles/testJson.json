@@ -1,0 +1,101 @@
+{
+    "Book": [
+        {
+            "Author": "Frank Herbert",
+            "Description": "A science fiction novel about a desert planet and its valuable spice.",
+            "Genres": 5,
+            "Id": 1,
+            "Image": "assets/images/dune.jpg",
+            "Inspiration": 1,
+            "Main Character": "Paul Atreides",
+            "Pages": 412,
+            "Publisher": "Chilton Books",
+            "Starred": true,
+            "Title": "Dune",
+            "Volume": 1,
+            "Watched": false,
+            "Year of Release": 1965
+        }
+    ],
+    "Comic": [
+        {
+            "Author": "Tsutomu Nihei",
+            "Description": "A distopic cyberpunk manga with great focus on architecture",
+            "Finished": true,
+            "Genres": 8,
+            "Id": 2,
+            "Illustrator": "Tsutomu Nihei",
+            "Image": "assets/images/blame.jpg",
+            "Inspiration": 1,
+            "Main Character": "Killy",
+            "Pages": 160,
+            "Publisher": "Kōdansha",
+            "Series": "Blame!",
+            "Starred": true,
+            "Title": "Blame!",
+            "Volume": 10,
+            "Watched": false,
+            "Year of Release": 1997
+        }
+    ],
+    "Film": [
+        {
+            "Description": "A sequel to the 1982 film Blade Runner.",
+            "Director": "",
+            "Duration": 0,
+            "Genres": 1,
+            "Id": 3,
+            "Image": "assets/images/blade_runner_2049.jpg",
+            "Inspiration": 1,
+            "Photo Director": "Roger Deakins",
+            "Platform": "",
+            "Prequel": 0,
+            "Producer": "Columbia Pictures",
+            "Sequel": 0,
+            "Starred": true,
+            "Title": "Blade Runner 2049",
+            "Watched": false,
+            "Year of Release": 2017
+        }
+    ],
+    "Serie": [
+        {
+            "Creator": "Mark Fergus",
+            "Description": "A science fiction television series based on the novels.",
+            "Duration": 0,
+            "Episodes": 62,
+            "Finished": true,
+            "Genres": 1,
+            "Id": 4,
+            "Image": "assets/images/the_expanse.jpg",
+            "Inspiration": 1,
+            "Platform": "",
+            "Prequel": 0,
+            "Producer": "",
+            "Seasons": 6,
+            "Sequel": 0,
+            "Starred": false,
+            "Title": "The Expanse",
+            "Watched": true,
+            "Year of Release": 2015
+        }
+    ],
+    "Videogame": [
+        {
+            "Description": "An action role-playing game set in a science fiction universe.",
+            "Expected Hours Of Play": 35,
+            "Game Engine": "Unreal Engine 3",
+            "Game Genre": "ARPG",
+            "Genres": 5,
+            "Id": 5,
+            "Image": "assets/images/mass_effect_2.jpg",
+            "Inspiration": 1,
+            "Platform": "PC, Xbox 360, PlayStation 3",
+            "Producer": "BioWare",
+            "Starred": false,
+            "Title": "Mass Effect 2",
+            "Watched": true,
+            "Year of Release": 2010
+        }
+    ]
+}

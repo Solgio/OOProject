@@ -10,8 +10,8 @@ private:
     //paper
     QTextEdit *authorEdit;
     QTextEdit *publishEdit;
-    QSpinBox *pagesEdit;
-    QSpinBox *volumeEdit;
+    MySpinBox *pagesEdit;
+    MySpinBox *volumeEdit;
 
     //book
     QTextEdit *mcEdit;
