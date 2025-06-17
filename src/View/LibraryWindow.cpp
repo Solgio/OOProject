@@ -142,6 +142,7 @@ void LibraryWindow::createAddButton() {
     m_addContentButton->setText("Add Content");
     m_addContentButton->setIcon(QIcon(":assets/icons/add.png"));
     m_addContentButton->setToolTip("Add new content to the library");
+    m_addContentButton->setFixedSize(QSize(40, 40));
     m_addContentButton->setIconSize(QSize(32, 32));
     connect(m_addContentButton, &QToolButton::clicked, this, &LibraryWindow::handleAddContentRequested);
 }

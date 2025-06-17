@@ -2,6 +2,8 @@
        <qresource prefix="/">
         <file>assets/icons/add.png</file>
         <file>assets/icons/save.png</file>
+        <file>assets/icons/save_edit.png</file>
+        <file>assets/icons/reverse.png</file>
         <file>assets/icons/w_xml.png</file>
         <file>assets/icons/w_json.png</file>
         <file>assets/icons/import.png</file>
