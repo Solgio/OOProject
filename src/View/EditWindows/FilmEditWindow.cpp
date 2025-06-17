@@ -29,12 +29,12 @@ void FilmEditWindow::setUp(){
     QVBoxLayout *mainLayout = CommonEditWindow::getLayout();
 
     //Director
-    QFormLayout *dirLayout = new QFormLayout();
+    auto *dirLayout = new QFormLayout();
     dirLayout->addRow(new QLabel(QString("<h3>%1</h3>").arg("Director : ")), dirEdit);
     mainLayout->addLayout(dirLayout);
 
     //Photodirector
-    QFormLayout *photoDirLayout = new QFormLayout();
+    auto *photoDirLayout = new QFormLayout();
     photoDirLayout->addRow(new QLabel(QString("<h3>%1</h3>").arg("Photodirector : ")), photoDirEdit);
     mainLayout->addLayout(photoDirLayout);
 

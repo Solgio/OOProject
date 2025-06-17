@@ -9,10 +9,7 @@
 #include <QMetaType>
 
 ContentProxyModel::ContentProxyModel(QObject *parent)
-    : QSortFilterProxyModel(parent),
-      m_filterWatched(false),
-      m_filterStarred(false),
-      m_sortRole(ContentModel::SortRole::Title)
+    : QSortFilterProxyModel(parent)
 {
 
     // Enable dynamic sorting
@@ -101,8 +98,7 @@ bool ContentProxyModel::filterAcceptsRow(int sourceRow, const QModelIndex &sourc
         return false; // Invalid content
 
     // Apply title filter
-    if (!m_titleFilter.isEmpty()) {
-        if (!QString::fromStdString(content->getTitle()).contains(m_titleFilter, Qt::CaseInsensitive))
+    if (!m_titleFilter.isEmpty() &&!QString::fromStdString(content->getTitle()).contains(m_titleFilter, Qt::CaseInsensitive)){
             return false;
     }
 
@@ -126,14 +122,12 @@ bool ContentProxyModel::filterAcceptsRow(int sourceRow, const QModelIndex &sourc
     }
 
     // Apply watched filter
-    if (m_filterWatched) {
-        if (!content->getWatched()) // Only show if watched
+    if (m_filterWatched && !content->getWatched()){ // Only show if watched
             return false;
     }
 
     // Apply starred filter
-    if (m_filterStarred) {
-        if (!content->getStarred()) // Only show if starred
+    if (m_filterStarred && !content->getStarred()){ // Only show if starred
             return false;
     }
 

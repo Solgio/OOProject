@@ -51,27 +51,27 @@ void BookEditWindow::setUp(){
     QVBoxLayout *mainLayout = CommonEditWindow::getLayout();
 
     //Author
-    QFormLayout *authorLayout = new QFormLayout();
+    auto *authorLayout = new QFormLayout();
     authorLayout->addRow(new QLabel(QString("<h3>%1</h3>").arg("Author : ")), authorEdit);
     mainLayout->addLayout(authorLayout);
 
     //Publisher
-    QFormLayout *publishLayout = new QFormLayout();
+    auto *publishLayout = new QFormLayout();
     publishLayout->addRow(new QLabel(QString("<h3>%1</h3>").arg("Description : ")), publishEdit);
     mainLayout->addLayout(publishLayout);
 
     //Pages
-    QFormLayout *pagesLayout = new QFormLayout();
+    auto *pagesLayout = new QFormLayout();
     pagesLayout->addRow(new QLabel(QString("<h3>%1</h3>").arg("Pages : ")), pagesEdit);
     mainLayout->addLayout(pagesLayout);
 
     //Volume
-    QFormLayout *volumeLayout = new QFormLayout();
+    auto *volumeLayout = new QFormLayout();
     volumeLayout->addRow(new QLabel(QString("<h3>%1</h3>").arg("Volume : ")), volumeEdit);
     mainLayout->addLayout(volumeLayout);
 
     //Main Character
-    QFormLayout *mcLayout = new QFormLayout();
+    auto *mcLayout = new QFormLayout();
     mcLayout->addRow(new QLabel(QString("<h3>%1</h3>").arg("Main Character : ")), mcEdit);
     mainLayout->addLayout(mcLayout);
 

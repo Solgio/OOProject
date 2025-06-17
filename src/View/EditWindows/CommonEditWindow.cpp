@@ -119,34 +119,34 @@ void CommonEditWindow::format(){
     //Ogni campo ha un suo layout
 
     //Titolo e Year
-    QFormLayout *titleLayout = new QFormLayout();
+    auto *titleLayout = new QFormLayout();
     titleLayout->setAlignment(Qt::AlignHCenter);
     titleLayout->addRow(new QLabel(QString("<h1>%1</h1>").arg("Title")), titleEdit);
     titleLayout->addRow(new QLabel(QString("<h3>%1</h3>").arg("Year")), yearEdit);
     detailEditLayout->addLayout(titleLayout);
 
     //Descrizione
-    QFormLayout *descrLayout = new QFormLayout();
+    auto *descrLayout = new QFormLayout();
     descrLayout->setSpacing(5);
     descrLayout->addRow(new QLabel(QString("<h2>%1</h2>").arg("Descrizione : ")));
     descrLayout->addRow(descEdit);
     detailEditLayout->addLayout(descrLayout);
 
     //Checkboxes per Starred e Watched
-    QFormLayout *starredWatchedLayout = new QFormLayout();
+    auto *starredWatchedLayout = new QFormLayout();
     starredWatchedLayout->addRow(new QLabel(QString("<h3>%1</h3>").arg("Status : ")));
     starredWatchedLayout->addRow(starredEdit, watchedEdit);
     detailEditLayout->addLayout(starredWatchedLayout);
 
     //Lista di subgenre
-    QFormLayout *subgenreLayout = new QFormLayout();
+    auto *subgenreLayout = new QFormLayout();
     subgenreLayout->setSpacing(5);
     subgenreLayout->addRow(new QLabel(QString("<h3>%1</h3>").arg("Subgenre : ")));
     subgenreLayout->addRow(subgenreWindow);
     detailEditLayout->addLayout(subgenreLayout);
 
     //Selezione del type
-    QFormLayout *typeLayout = new QFormLayout();
+    auto *typeLayout = new QFormLayout();
     typeLayout->setAlignment(Qt::AlignHCenter);
     typeLayout->addRow(new QLabel(QString("<h3>%1</h3>").arg("Type : ")), typeEdit);
     detailEditLayout->addLayout(typeLayout);

@@ -12,11 +12,11 @@ FilmDisplayWindow::FilmDisplayWindow(Film *film):
 void FilmDisplayWindow::format(){
     layout = AttributeDisplayWindow::getDetailLayout();
 
-    QFormLayout *direcLayout = new QFormLayout();
+    auto *direcLayout = new QFormLayout();
     direcLayout->addRow(new QLabel(QString("<h3>%1</h3>").arg("Director : ")), Director);
     layout->addLayout(direcLayout);
 
-    QFormLayout *photoLayout = new QFormLayout();
+    auto *photoLayout = new QFormLayout();
     photoLayout->addRow(new QLabel(QString("<h3>%1</h3>").arg("Photoproducer : ")), Photoproducer);
     layout->addLayout(photoLayout);
 

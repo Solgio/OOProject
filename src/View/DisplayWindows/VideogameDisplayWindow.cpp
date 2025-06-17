@@ -13,17 +13,17 @@ VideogameDisplayWindow::VideogameDisplayWindow(VideoGame *vgame):
 void VideogameDisplayWindow::format(){
     layout = AttributeDisplayWindow::getDetailLayout();
 
-    QFormLayout *GELayout = new QFormLayout();
+    auto *GELayout = new QFormLayout();
     GELayout->addRow(new QLabel(QString("<h3>%1</h3>").arg("GameEngine : ")), GameEngine);
     layout->addLayout(GELayout);
     //layout->addWidget(Pages);
 
-    QFormLayout *EHLayout = new QFormLayout();
+    auto *EHLayout = new QFormLayout();
     EHLayout->addRow(new QLabel(QString("<h3>%1</h3>").arg("ExpectedHours : ")), ExpectedHours);
     layout->addLayout(EHLayout);
     //layout->addWidget(Volume);
 
-    QFormLayout *GGLayout = new QFormLayout();
+    auto *GGLayout = new QFormLayout();
     GGLayout->addRow(new QLabel(QString("<h3>%1</h3>").arg("GameGenre : ")), GameGenre);
     layout->addLayout(GGLayout);
 

@@ -29,12 +29,12 @@ void MultimediaEditWindow::setUp(){
     QVBoxLayout *mainLayout = CommonEditWindow::getLayout();
 
     //Producer
-    QFormLayout *prodLayout = new QFormLayout();
+    auto *prodLayout = new QFormLayout();
     prodLayout->addRow(new QLabel(QString("<h3>%1</h3>").arg("Producer : ")), prodEdit);
     mainLayout->addLayout(prodLayout);
 
     //Platforms
-    QFormLayout *platLayout = new QFormLayout();
+    auto *platLayout = new QFormLayout();
     platLayout->addRow(new QLabel(QString("<h3>%1</h3>").arg("Platforms : ")), platEdit);
     mainLayout->addLayout(platLayout);
 }

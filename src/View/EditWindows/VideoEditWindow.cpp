@@ -33,17 +33,17 @@ void VideoEditWindow::setUp(){
     QVBoxLayout *mainLayout = CommonEditWindow::getLayout();
 
     //Duration
-    QFormLayout *durationLayout = new QFormLayout();
+    auto *durationLayout = new QFormLayout();
     durationLayout->addRow(new QLabel(QString("<h3>%1</h3>").arg("Duration (in minutes) : ")), durationEdit);
     mainLayout->addLayout(durationLayout);
 
     //Prequel ID
-    QFormLayout *preqLayout = new QFormLayout();
+    auto *preqLayout = new QFormLayout();
     preqLayout->addRow(new QLabel(QString("<h3>%1</h3>").arg("Prequel ID : ")), prequelEdit);
     mainLayout->addLayout(preqLayout);
 
     //Sequel ID
-    QFormLayout *seqLayout = new QFormLayout();
+    auto *seqLayout = new QFormLayout();
     seqLayout->addRow(new QLabel(QString("<h3>%1</h3>").arg("Sequel ID : ")), sequelEdit);
     mainLayout->addLayout(seqLayout);
 }
