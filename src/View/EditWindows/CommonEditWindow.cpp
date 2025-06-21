@@ -36,6 +36,22 @@ CommonEditWindow::CommonEditWindow(Content *content, QWidget *parent):
     watchedEdit->setChecked(content->getWatched());
     starredEdit->setChecked(content->getStarred());
 
+    //Creazione del comboBox per Tutti i nomi dei content della Libreria
+    QStringList allContentNames;
+    allContentNames.append(QString("No Inspiration"));
+    for(const auto &content : library.getContentList()){
+        allContentNames.append(QString::fromStdString(content->getTitle()));
+    }
+
+    inspEdit->addItems(allContentNames);
+    inspEdit->setEditable(false); //per modifica dell'indice dal testo
+    Content* temp = library.searchId(content->getInspiration());
+    if(temp){
+        inspEdit->setCurrentText(QString::fromStdString(temp->getTitle()));
+    }else{
+        inspEdit->setCurrentIndex(0); // Se non trova la inspiration del content mostra "No Inspiration"
+    }
+
     format();
 }
 
@@ -139,13 +155,6 @@ void CommonEditWindow::format(){
     descrLayout->addRow(descEdit);
     detailEditLayout->addLayout(descrLayout);
 
-
-    //Creazione del comboBox per Tutti i nomi dei content della Libreria
-    QStringList allContentNames;
-    for(const auto &content : library.getContentList()){
-        allContentNames.append(QString::fromStdString(content->getTitle()));
-    }
-    inspEdit->addItems(allContentNames);
     //Inspiration name
     QFormLayout *inspirationLayout = new QFormLayout();
     QLabel *inspLabel = new QLabel(QString("<h3>%1</h3>").arg("Inspired by: "));
