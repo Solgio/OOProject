@@ -62,7 +62,8 @@ void ContentDetailWindow::setupUI()
     m_editButton = new QPushButton();
     m_editButton->setIcon(QIcon(":assets/icons/edit.png"));
     m_editButton->setToolTip("Edit current library content");
-    m_editButton->setFixedSize(50, 50);
+    m_editButton->setFixedSize(40, 40);
+    m_editButton->setIconSize(QSize(35, 35));
     connect(m_editButton, &QPushButton::clicked, this, &ContentDetailWindow::onEditClicked);
     editDeleteButtonLayout->addWidget(m_editButton);
 
@@ -70,7 +71,8 @@ void ContentDetailWindow::setupUI()
     m_deleteButton->setIcon(QIcon(":assets/icons/delete.png"));
     m_deleteButton->setToolTip("Delete current library content");
     m_deleteButton->setStyleSheet("QPushButton { color: red; }");
-    m_deleteButton->setFixedSize(50, 50);
+    m_deleteButton->setFixedSize(40, 40);
+    m_deleteButton->setIconSize(QSize(35, 35));
     connect(m_deleteButton, &QPushButton::clicked, this, &ContentDetailWindow::onDeleteClicked);
     editDeleteButtonLayout->addWidget(m_deleteButton);
     editDeleteButtonLayout->addStretch(1);

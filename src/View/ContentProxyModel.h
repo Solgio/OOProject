@@ -37,9 +37,9 @@ private:
     QString m_titleFilter;
     QString m_typeFilter;
     QList<Subgenre> m_subgenreFilters;
-    bool m_filterWatched;
-    bool m_filterStarred;
-    ContentModel::SortRole m_sortRole;
+    bool m_filterWatched = false;
+    bool m_filterStarred = false;
+    ContentModel::SortRole m_sortRole=ContentModel::SortRole::Title;
 };
 
 #endif // CONTENTPROXYMODEL_H

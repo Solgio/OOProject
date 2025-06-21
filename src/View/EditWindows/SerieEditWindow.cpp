@@ -39,22 +39,22 @@ void SerieEditWindow::setUp(){
     QVBoxLayout *mainLayout = CommonEditWindow::getLayout();
 
     //Seasons
-    QFormLayout *seasonsLayout = new QFormLayout();
+    auto *seasonsLayout = new QFormLayout();
     seasonsLayout->addRow(new QLabel(QString("<h3>%1</h3>").arg("Seasons : ")), seasonsEdit);
     mainLayout->addLayout(seasonsLayout);
 
     //Episodes
-    QFormLayout *episodesLayout = new QFormLayout();
+    auto *episodesLayout = new QFormLayout();
     episodesLayout->addRow(new QLabel(QString("<h3>%1</h3>").arg("Episodes : ")), episodesEdit);
     mainLayout->addLayout(episodesLayout);
 
     //Creator
-    QFormLayout *creatorLayout = new QFormLayout();
+    auto *creatorLayout = new QFormLayout();
     creatorLayout->addRow(new QLabel(QString("<h3>%1</h3>").arg("Creator : ")), creatorEdit);
     mainLayout->addLayout(creatorLayout);
 
     //Finished
-    QFormLayout *finishedLayout = new QFormLayout();
+    auto *finishedLayout = new QFormLayout();
     finishedLayout->addRow(new QLabel(QString("<h3>%1</h3>").arg("Finished : ")), finishedEdit);
     mainLayout->addLayout(finishedLayout);
 

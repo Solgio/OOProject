@@ -61,13 +61,28 @@ void ContentEditWindow::setupUI() {
     // Buttons
     auto *buttonLayout = new QGridLayout();
 
-    m_restoreButton = new QPushButton("Restore");
+    m_restoreButton = new QPushButton();
+    m_restoreButton->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed);
+    m_restoreButton->setFixedSize(40,40);
+    m_restoreButton->setToolTip("Restore original content");
+    m_restoreButton->setIcon(QIcon(":assets/icons/reverse.png"));
+    m_restoreButton->setIconSize(QSize(30, 30));
     connect(m_restoreButton, &QPushButton::clicked, this, &ContentEditWindow::restoreChanges);
 
-    m_saveButton = new QPushButton("Save Changes");
+    m_saveButton = new QPushButton();
+    m_saveButton->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed);
+    m_saveButton->setFixedSize(40,40);
+    m_saveButton->setToolTip("Save changes to the content");
+    m_saveButton->setIcon(QIcon(":assets/icons/save_edit.png"));
+    m_saveButton->setIconSize(QSize(35, 35));
     connect(m_saveButton, &QPushButton::clicked, this, &ContentEditWindow::saveChanges);
     
-    m_cancelButton = new QPushButton("Cancel");
+    m_cancelButton = new QPushButton("X");
+    m_cancelButton->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed);
+    m_cancelButton->setFixedSize(40,40);
+    m_cancelButton->setStyleSheet("QPushButton { color: red; font-size: 35px }");
+    m_cancelButton->setToolTip("Cancel changes and close editor");
+    
     connect(m_cancelButton, &QPushButton::clicked, this, &ContentEditWindow::cancelChanges);
     
     buttonLayout->addWidget(m_saveButton, 0 , 0, Qt::AlignRight);

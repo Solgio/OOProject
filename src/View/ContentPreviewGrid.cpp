@@ -6,23 +6,20 @@
 #include <algorithm> // For std::max
 
 ContentPreviewGrid::ContentPreviewGrid(ContentProxyModel *proxyModel, QWidget *parent)
-    : QWidget(parent), m_proxyModel(proxyModel)
+    : QWidget(parent), m_proxyModel(proxyModel), m_previewScrollArea(new QScrollArea()), m_previewWidget(new QWidget()), m_noResultsLabel(new QLabel())
 {
     auto *mainLayout = new QVBoxLayout(this);
     mainLayout->setContentsMargins(0, 0, 0, 0);
 
-    m_previewScrollArea = new QScrollArea();
     m_previewScrollArea->setWidgetResizable(true);
     m_previewScrollArea->setHorizontalScrollBarPolicy(Qt::ScrollBarAsNeeded);
     m_previewScrollArea->setFrameShape(QFrame::NoFrame);
 
-    m_previewWidget = new QWidget();
     m_previewLayout = new QGridLayout(m_previewWidget);
     m_previewLayout->setAlignment(Qt::AlignTop | Qt::AlignLeft);
     m_previewLayout->setSpacing(10);
     m_previewLayout->setContentsMargins(5, 5, 5, 5);
 
-    m_noResultsLabel = new QLabel();
     m_noResultsLabel->setPixmap(QPixmap(":assets/icons/no-results.png"));
     m_noResultsLabel->setAlignment(Qt::AlignCenter);
     m_noResultsLabel->setText("<center><h2 style='color:gray;'>No results found</h2></center>");

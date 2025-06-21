@@ -24,7 +24,7 @@ void AttributeDisplayWindow::format(){
 
     bigLayout = new QHBoxLayout(this); //Box orizzontale che contiene a sinistra l'immagine e destra gli dettagli del content
 
-    QLabel *img = new QLabel();
+    auto *img = new QLabel();
 
     if (!imgString->isEmpty() && QFile::exists(*imgString)) {
         img->setPixmap(QPixmap(*imgString).scaled(500,500, Qt::KeepAspectRatio, Qt::SmoothTransformation));
@@ -48,7 +48,7 @@ void AttributeDisplayWindow::format(){
 
     //Ogni campo ha un suo layout
 
-    QFormLayout *titleLayout = new QFormLayout();
+    auto *titleLayout = new QFormLayout();
     Title->setAlignment(Qt::AlignTop | Qt::AlignHCenter);
     Year->setAlignment(Qt::AlignTop | Qt::AlignHCenter);
     titleLayout->addRow(Title);
@@ -57,7 +57,7 @@ void AttributeDisplayWindow::format(){
     //detailLayout->addWidget(Year);
     detailLayout->addLayout(titleLayout);
 
-    QFormLayout *descrLayout = new QFormLayout();
+    auto *descrLayout = new QFormLayout();
     descrLayout->setSpacing(5); //riduce lo spazio tra "Description :" e la descrizione
     descrLayout->addRow(new QLabel(QString("<h2>%1</h2>").arg("Description : ")));
     descrLayout->addRow(Description);
@@ -68,13 +68,17 @@ void AttributeDisplayWindow::format(){
     //separatore tra i layout
 
 
-    QFormLayout *typeLayout = new QFormLayout();
+    auto *typeLayout = new QFormLayout();
     typeLayout->addRow(new QLabel(QString("<h3>%1</h3>").arg("Type : ")), Type);
     detailLayout->addLayout(typeLayout);
 
     QFormLayout *inspirationLayout = new QFormLayout();
     inspirationLayout->addRow(new QLabel(QString("<h3>%1</h3>").arg("Inspired by: ")), Inspiration);
     detailLayout->addLayout(inspirationLayout);
+
+    auto *subgenreLayout = new QFormLayout();
+    subgenreLayout->addRow(new QLabel(QString("<h3>%1</h3>").arg("Subgenre: ")), Subgenre);
+    detailLayout->addLayout(subgenreLayout);
 
     //detailLayout->addWidget(new QLabel(QString("<h3>%1</h3>").arg("Descrizione")));
     //detailLayout->addWidget(Description);

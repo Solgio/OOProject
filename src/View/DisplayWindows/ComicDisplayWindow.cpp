@@ -13,15 +13,15 @@ ComicDisplayWindow::ComicDisplayWindow(Comic *comic):
 void ComicDisplayWindow::format(){
     layout = AttributeDisplayWindow::getDetailLayout();
 
-    QFormLayout *illLayout = new QFormLayout();
+    auto *illLayout = new QFormLayout();
     illLayout->addRow(new QLabel(QString("<h3>%1</h3>").arg("Illustrator : ")), Illustrator);
     layout->addLayout(illLayout);
 
-    QFormLayout *serieLayout = new QFormLayout();
+    auto *serieLayout = new QFormLayout();
     serieLayout->addRow(new QLabel(QString("<h3>%1</h3>").arg("Serie : ")), Serie);
     layout->addLayout(serieLayout);
 
-    QFormLayout *finLayout = new QFormLayout();
+    auto *finLayout = new QFormLayout();
     finLayout->addRow(new QLabel(QString("<h3>%1</h3>").arg("Finished : ")), Finished);
     layout->addLayout(finLayout);
 
