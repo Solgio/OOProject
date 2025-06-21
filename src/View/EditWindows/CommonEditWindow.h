@@ -49,8 +49,9 @@ private:
     QWidget *subgenreWindow;
     QList<QCheckBox*> subEdit;
 
-    QCheckBox *watchedEdit;
+    MyComboBox *inspEdit;
 
+    QCheckBox *watchedEdit;
     QCheckBox *starredEdit;
 
     QTextEdit *descEdit;

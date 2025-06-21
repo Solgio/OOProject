@@ -8,6 +8,7 @@ CommonEditWindow::CommonEditWindow(QWidget *parent):
     titleEdit(new QTextEdit()), // ?? da testare
     imgEdit(new QTextEdit()),
     yearEdit(new MySpinBox()),
+    inspEdit(new MyComboBox()),
     watchedEdit(new QCheckBox("Watched")),
     starredEdit(new QCheckBox("Starred")),
     descEdit(new QTextEdit()),
@@ -22,6 +23,8 @@ CommonEditWindow::CommonEditWindow(Content *content, QWidget *parent):
     titleEdit(new QTextEdit("<h1>" + QString::fromStdString(content->getTitle()) + "</h1>")), // ?? da testare
     imgEdit(new QTextEdit(QString::fromStdString(content->getImage()))),
     yearEdit(new MySpinBox()),
+    //inspEdit(new QTextEdit("<p align=\"center\">" + QString::fromStdString( (library.searchId(content->getInspiration()) )->getTitle() ))),
+    inspEdit(new MyComboBox()),
     watchedEdit(new QCheckBox("Watched")),
     starredEdit(new QCheckBox("Starred")),
     descEdit(new QTextEdit(QString::fromStdString(content->getDescription()))),
@@ -33,12 +36,29 @@ CommonEditWindow::CommonEditWindow(Content *content, QWidget *parent):
     watchedEdit->setChecked(content->getWatched());
     starredEdit->setChecked(content->getStarred());
 
+    //Creazione del comboBox per Tutti i nomi dei content della Libreria
+    QStringList allContentNames;
+    allContentNames.append(QString("No Inspiration"));
+    for(const auto &content : library.getContentList()){
+        allContentNames.append(QString::fromStdString(content->getTitle()));
+    }
+
+    inspEdit->addItems(allContentNames);
+    inspEdit->setEditable(false); //per modifica dell'indice dal testo
+    Content* temp = library.searchId(content->getInspiration());
+    if(temp){
+        inspEdit->setCurrentText(QString::fromStdString(temp->getTitle()));
+    }else{
+        inspEdit->setCurrentIndex(0); // Se non trova la inspiration del content mostra "No Inspiration"
+    }
+
     format();
 }
 
 void CommonEditWindow::format(){
 
     bigLayout = new QHBoxLayout(this);
+    bigLayout->setAlignment(Qt::AlignVCenter);
 
     imgLayout = new QFormLayout();{
 
@@ -135,6 +155,15 @@ void CommonEditWindow::format(){
     descrLayout->addRow(descEdit);
     detailEditLayout->addLayout(descrLayout);
 
+    //Inspiration name
+    QFormLayout *inspirationLayout = new QFormLayout();
+    QLabel *inspLabel = new QLabel(QString("<h3>%1</h3>").arg("Inspired by: "));
+    inspLabel->setBuddy(inspEdit);
+    inspEdit->setMaximumHeight(30);
+    inspEdit->setMaximumWidth(300);
+    inspirationLayout->addRow(inspLabel, inspEdit);
+    detailEditLayout->addLayout(inspirationLayout);
+
     //Checkboxes per Starred e Watched
     auto *starredWatchedLayout = new QFormLayout();
     starredWatchedLayout->addRow(new QLabel(QString("<h3>%1</h3>").arg("Status : ")));
@@ -178,6 +207,7 @@ void CommonEditWindow::saveEdit(){
         contentPtr->setTitle(titleEdit->toPlainText().QString::toStdString());
         contentPtr->setImage(imgEdit->toPlainText().QString::toStdString());
         contentPtr->setYear(yearEdit->value());
+        //contentPtr->setInspiration()
         contentPtr->setStarred(starredEdit->isChecked());
         contentPtr->setWatched(watchedEdit->isChecked());
         contentPtr->setDescription(descEdit->toPlainText().QString::toStdString());

@@ -14,9 +14,15 @@ AttributeDisplayWindow::AttributeDisplayWindow(Content* content, QWidget *parent
     Watched(new QLabel(content->getWatched() ? "Yes" : "No")),
     Starred(new QLabel(content->getStarred() ? "Yes" : "No")),
     Description(new QLabel(QString::fromStdString(content->getDescription()))),
-    Type(new QLabel(QString::fromStdString(content->getType()))),
-    Inspiration(new QLabel(QString::fromStdString( (library.searchId(content->getInspiration()) )->getTitle() )))
+    Type(new QLabel(QString::fromStdString(content->getType())))
 {
+    Content* temp = library.searchId(content->getInspiration());
+    if(temp){
+        Inspiration = new QLabel(QString::fromStdString(temp->getTitle()));
+    }else{
+        Inspiration = new QLabel("No inspiration");
+    }
+
     format();
 }
 
