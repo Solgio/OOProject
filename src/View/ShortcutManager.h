@@ -29,6 +29,7 @@ signals:
     void clearFiltersShortcutActivated();
     void backToMainViewShortcutActivated();
     void changeSortDirectionShortcutActivated();
+    void editWindowReverseChanges();
     void refreshContentShortcutActivated();
 
 private:

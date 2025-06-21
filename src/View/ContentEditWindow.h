@@ -23,16 +23,15 @@ public:
     explicit ContentEditWindow(Content* content, QWidget *parent = nullptr);
     ~ContentEditWindow() override = default;
     void setContent(Content *content);
-
+    void saveChanges();
+    void cancelChanges();
+    void restoreChanges();
+    
 signals:
     void contentUpdated();
     void closeRequested();
 
 private slots:
-    void saveChanges();
-    void cancelChanges();
-    void restoreChanges();
-
     void changeType(int index);
 
 private:

@@ -194,10 +194,17 @@ void LibraryWindow::connectSignals()
             { handleSaveRequested("xml"); });
     connect(m_shortcutManager, &ShortcutManager::toggleFiltersShortcutActivated, m_filterSectionWidget, &FilterSectionWidget::onToggleFiltersClicked); // Directly toggle
     connect(m_shortcutManager, &ShortcutManager::clearSearchShortcutActivated, this, &LibraryWindow::clearSearch);
-    connect(m_shortcutManager, &ShortcutManager::clearFiltersShortcutActivated, this, &LibraryWindow::handleClearFiltersRequested);
-    connect(m_shortcutManager, &ShortcutManager::backToMainViewShortcutActivated, this, &LibraryWindow::hideDetailView);
+    connect(m_shortcutManager, &ShortcutManager::clearFiltersShortcutActivated, m_filterSectionWidget, &FilterSectionWidget::clearAllFiltersUI);
+    connect(m_shortcutManager, &ShortcutManager::backToMainViewShortcutActivated, this, [this] () 
+            { if(m_rightPanel->currentIndex()==0) return;
+              else if(m_rightPanel->currentIndex()==1) hideDetailView();
+              else if(m_rightPanel->currentIndex()==2) m_editWindow->cancelChanges(); });
+    connect(m_shortcutManager, &ShortcutManager::editWindowReverseChanges, this, [this] ()
+            { if(m_rightPanel->currentIndex()==2) m_editWindow->restoreChanges(); });
     connect(m_shortcutManager, &ShortcutManager::changeSortDirectionShortcutActivated, m_sortingSectionWidget, &SortingSectionWidget::onSortDirectionButtonClicked);
     connect(m_shortcutManager, &ShortcutManager::refreshContentShortcutActivated, this, &LibraryWindow::updateContentDisplay);
+    //connect(m_shortcutManager, &ShortcutManager::backToMainViewShortcutActivated, this, &LibraryWindow::hideDetailView);
+
 
     // Connect ContentProxyModel signals to ContentPreviewGrid for updates
     connect(m_proxyModel, &ContentProxyModel::layoutChanged, m_contentPreviewGrid, &ContentPreviewGrid::updatePreviews);

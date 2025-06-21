@@ -25,6 +25,9 @@ void ShortcutManager::setupShortcuts(
     // Toggle filters shortcut (Ctrl+F)
     createAndConnectShortcut(QKeySequence(Qt::CTRL | Qt::Key_F), targetParent, SIGNAL(toggleFiltersShortcutActivated()));
 
+    // Reverse changes in Edit Window (Ctrl+Z)
+    createAndConnectShortcut(QKeySequence(Qt::CTRL | Qt::Key_Z), targetParent, SIGNAL(editWindowReverseChangesShortcutActivated()));
+
     // Focus search bar shortcut (Ctrl+K or Alt+S)
     auto *focusSearchShortcut1 = new QShortcut(QKeySequence(Qt::CTRL | Qt::Key_K), searchBar);
     connect(focusSearchShortcut1, &QShortcut::activated, searchBar, QOverload<>::of(&QLineEdit::setFocus));
@@ -39,11 +42,8 @@ void ShortcutManager::setupShortcuts(
     createAndConnectShortcut(QKeySequence(Qt::CTRL | Qt::SHIFT | Qt::Key_F), targetParent, SIGNAL(clearFiltersShortcutActivated()));
 
     // Return to main view from detail view (Esc)
-    if (detailWindow) {
-        auto *backToMainShortcut = new QShortcut(QKeySequence(Qt::Key_Escape), detailWindow);
-        connect(backToMainShortcut, &QShortcut::activated, this, &ShortcutManager::backToMainViewShortcutActivated);
-    }
-
+    createAndConnectShortcut(QKeySequence(Qt::Key_Escape), targetParent, SIGNAL(backToMainViewShortcutActivated()));
+    
     // Change sort direction shortcut (Ctrl+D)
     createAndConnectShortcut(QKeySequence(Qt::CTRL | Qt::Key_D), targetParent, SIGNAL(changeSortDirectionShortcutActivated()));
 
