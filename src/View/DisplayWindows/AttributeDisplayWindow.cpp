@@ -76,6 +76,10 @@ void AttributeDisplayWindow::format(){
     inspirationLayout->addRow(new QLabel(QString("<h3>%1</h3>").arg("Inspired by: ")), Inspiration);
     detailLayout->addLayout(inspirationLayout);
 
+    auto *subgenreLayout = new QFormLayout();
+    subgenreLayout->addRow(new QLabel(QString("<h3>%1</h3>").arg("Subgenre: ")), Subgenre);
+    detailLayout->addLayout(subgenreLayout);
+
     //detailLayout->addWidget(new QLabel(QString("<h3>%1</h3>").arg("Descrizione")));
     //detailLayout->addWidget(Description);
     //detailLayout->addWidget(Type);

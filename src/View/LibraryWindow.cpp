@@ -173,10 +173,11 @@ void LibraryWindow::connectSignals()
             { m_clearSearchButton->setVisible(!text.isEmpty()); });
 
     // Connect ContentDetailWindow signals
-    connect(m_actionsManager, &LibraryActionsManager::editContentRequested, 
-            this, &LibraryWindow::showEditView);
+    // Used when a new object is created
+    connect(m_actionsManager, &LibraryActionsManager::editContentRequested,  this, &LibraryWindow::showEditView);
+    // Used when an existing object is edited
     connect(m_detailWindow, &ContentDetailWindow::editRequested, this, &LibraryWindow::showEditView);
-    connect(m_editWindow, &ContentEditWindow::closeRequested, this, &LibraryWindow::hideEditView);
+    //
     connect(m_detailWindow, &ContentDetailWindow::closeRequested, this, &LibraryWindow::hideDetailView);
     connect(m_detailWindow, &ContentDetailWindow::contentDeleted, this, &LibraryWindow::updateContentDisplay);
 
@@ -334,6 +335,7 @@ void LibraryWindow::showEditView(Content *content)
         hideEditView(); // Go back to detail view
     });
     
+    // Connect close signal here so no warning is shown. In fact, if this was with the others connect it would generatte a nullptr warning of qtcore
     connect(m_editWindow, &ContentEditWindow::closeRequested, this, [this, content]() {
         // If it's a new content that was canceled, we need to delete it
         bool isNew = true;
