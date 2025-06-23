@@ -186,23 +186,23 @@ void LibraryWindow::connectSignals()
 
     // Setup and connect shortcuts
     m_shortcutManager->setupShortcuts(this, m_searchBar, m_detailWindow);
-    connect(m_shortcutManager, &ShortcutManager::addContentShortcutActivated, this, &LibraryWindow::handleAddContentRequested);
-    connect(m_shortcutManager, &ShortcutManager::importContentShortcutActivated, this, &LibraryWindow::handleImportRequested);
-    connect(m_shortcutManager, &ShortcutManager::saveJsonShortcutActivated, this, [this]()
+    connect(m_shortcutManager, &ShortcutManager::addContentShortcut, this, &LibraryWindow::handleAddContentRequested);
+    connect(m_shortcutManager, &ShortcutManager::importContentShortcut, this, &LibraryWindow::handleImportRequested);
+    connect(m_shortcutManager, &ShortcutManager::saveJsonShortcut, this, [this]()
             { handleSaveRequested("json"); });
-    connect(m_shortcutManager, &ShortcutManager::saveXmlShortcutActivated, this, [this]()
+    connect(m_shortcutManager, &ShortcutManager::saveXmlShortcut, this, [this]()
             { handleSaveRequested("xml"); });
-    connect(m_shortcutManager, &ShortcutManager::toggleFiltersShortcutActivated, m_filterSectionWidget, &FilterSectionWidget::onToggleFiltersClicked); // Directly toggle
-    connect(m_shortcutManager, &ShortcutManager::clearSearchShortcutActivated, this, &LibraryWindow::clearSearch);
-    connect(m_shortcutManager, &ShortcutManager::clearFiltersShortcutActivated, m_filterSectionWidget, &FilterSectionWidget::clearAllFiltersUI);
-    connect(m_shortcutManager, &ShortcutManager::backToMainViewShortcutActivated, this, [this] () 
+    connect(m_shortcutManager, &ShortcutManager::toggleFiltersShortcut, m_filterSectionWidget, &FilterSectionWidget::onToggleFiltersClicked); // Directly toggle
+    connect(m_shortcutManager, &ShortcutManager::clearSearchShortcut, this, &LibraryWindow::clearSearch);
+    connect(m_shortcutManager, &ShortcutManager::clearFiltersShortcut, m_filterSectionWidget, &FilterSectionWidget::clearAllFiltersUI);
+    connect(m_shortcutManager, &ShortcutManager::backToMainViewShortcut, this, [this] () 
             { if(m_rightPanel->currentIndex()==0) return;
               else if(m_rightPanel->currentIndex()==1) hideDetailView();
               else if(m_rightPanel->currentIndex()==2) m_editWindow->cancelChanges(); });
     connect(m_shortcutManager, &ShortcutManager::editWindowReverseChanges, this, [this] ()
             { if(m_rightPanel->currentIndex()==2) m_editWindow->restoreChanges(); });
-    connect(m_shortcutManager, &ShortcutManager::changeSortDirectionShortcutActivated, m_sortingSectionWidget, &SortingSectionWidget::onSortDirectionButtonClicked);
-    connect(m_shortcutManager, &ShortcutManager::refreshContentShortcutActivated, this, &LibraryWindow::updateContentDisplay);
+    connect(m_shortcutManager, &ShortcutManager::changeSortDirectionShortcut, m_sortingSectionWidget, &SortingSectionWidget::onSortDirectionButtonClicked);
+    connect(m_shortcutManager, &ShortcutManager::refreshContentShortcut, this, &LibraryWindow::updateContentDisplay);
     //connect(m_shortcutManager, &ShortcutManager::backToMainViewShortcutActivated, this, &LibraryWindow::hideDetailView);
 
 
@@ -251,6 +251,11 @@ void LibraryWindow::delayedSearch()
 
 void LibraryWindow::applySearchFilter()
 {
+    if(m_rightPanel->currentIndex()==1) // If we are in edit view, we don't apply search
+        hideDetailView();
+        else if(m_rightPanel->currentIndex()==2) // If we are in edit view, we don't apply search
+            hideEditView();
+    
     m_proxyModel->setTitleFilter(m_searchBar->text());
     // updateContentPreviews() is called by m_proxyModel::layoutChanged signal
     updateOverallFilterState();

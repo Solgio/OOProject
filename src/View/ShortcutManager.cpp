@@ -11,22 +11,22 @@ void ShortcutManager::setupShortcuts(
     ContentDetailWindow* detailWindow
 ) {
     // Add content shortcut (Ctrl+N)
-    createAndConnectShortcut(QKeySequence(Qt::CTRL | Qt::Key_N), targetParent, SIGNAL(addContentShortcutActivated()));
+    createAndConnectShortcut(QKeySequence(Qt::CTRL | Qt::Key_N), targetParent, SIGNAL(addContentShortcut()));
 
     // Import content shortcut (Ctrl+I)
-    createAndConnectShortcut(QKeySequence(Qt::CTRL | Qt::Key_I), targetParent, SIGNAL(importContentShortcutActivated()));
+    createAndConnectShortcut(QKeySequence(Qt::CTRL | Qt::Key_I), targetParent, SIGNAL(importContentShortcut()));
 
     // Save JSON shortcut (Ctrl+S)
-    createAndConnectShortcut(QKeySequence(Qt::CTRL | Qt::Key_S), targetParent, SIGNAL(saveJsonShortcutActivated()));
+    createAndConnectShortcut(QKeySequence(Qt::CTRL | Qt::Key_S), targetParent, SIGNAL(saveJsonShortcut()));
 
     // Save XML shortcut (Ctrl+Shift+S)
-    createAndConnectShortcut(QKeySequence(Qt::CTRL | Qt::SHIFT | Qt::Key_S), targetParent, SIGNAL(saveXmlShortcutActivated()));
+    createAndConnectShortcut(QKeySequence(Qt::CTRL | Qt::SHIFT | Qt::Key_S), targetParent, SIGNAL(saveXmlShortcut()));
 
     // Toggle filters shortcut (Ctrl+F)
-    createAndConnectShortcut(QKeySequence(Qt::CTRL | Qt::Key_F), targetParent, SIGNAL(toggleFiltersShortcutActivated()));
+    createAndConnectShortcut(QKeySequence(Qt::CTRL | Qt::Key_F), targetParent, SIGNAL(toggleFiltersShortcut()));
 
     // Reverse changes in Edit Window (Ctrl+Z)
-    createAndConnectShortcut(QKeySequence(Qt::CTRL | Qt::Key_Z), targetParent, SIGNAL(editWindowReverseChangesShortcutActivated()));
+    createAndConnectShortcut(QKeySequence(Qt::CTRL | Qt::Key_Z), targetParent, SIGNAL(editWindowReverseChanges()));
 
     // Focus search bar shortcut (Ctrl+K or Alt+S)
     auto *focusSearchShortcut1 = new QShortcut(QKeySequence(Qt::CTRL | Qt::Key_K), searchBar);
@@ -36,19 +36,19 @@ void ShortcutManager::setupShortcuts(
 
     // Clear search shortcut (Esc when search has focus)
     auto *clearSearchShortcut = new QShortcut(QKeySequence(Qt::Key_Escape), searchBar);
-    connect(clearSearchShortcut, &QShortcut::activated, this, &ShortcutManager::clearSearchShortcutActivated);
+    connect(clearSearchShortcut, &QShortcut::activated, this, &ShortcutManager::clearSearchShortcut);
 
     // Clear all filters shortcut (Ctrl+Shift+F)
-    createAndConnectShortcut(QKeySequence(Qt::CTRL | Qt::SHIFT | Qt::Key_F), targetParent, SIGNAL(clearFiltersShortcutActivated()));
+    createAndConnectShortcut(QKeySequence(Qt::CTRL | Qt::SHIFT | Qt::Key_F), targetParent, SIGNAL(clearFiltersShortcut()));
 
     // Return to main view from detail view (Esc)
-    createAndConnectShortcut(QKeySequence(Qt::Key_Escape), targetParent, SIGNAL(backToMainViewShortcutActivated()));
+    createAndConnectShortcut(QKeySequence(Qt::Key_Escape), targetParent, SIGNAL(backToMainViewShortcut()));
     
     // Change sort direction shortcut (Ctrl+D)
-    createAndConnectShortcut(QKeySequence(Qt::CTRL | Qt::Key_D), targetParent, SIGNAL(changeSortDirectionShortcutActivated()));
+    createAndConnectShortcut(QKeySequence(Qt::CTRL | Qt::Key_D), targetParent, SIGNAL(changeSortDirectionShortcut()));
 
     // Refresh/update content display (F5)
-    createAndConnectShortcut(QKeySequence(Qt::Key_F5), targetParent, SIGNAL(refreshContentShortcutActivated()));
+    createAndConnectShortcut(QKeySequence(Qt::Key_F5), targetParent, SIGNAL(refreshContentShortcut()));
 }
 
 void ShortcutManager::createAndConnectShortcut(const QKeySequence &sequence, QObject *parent, const char *signal) {

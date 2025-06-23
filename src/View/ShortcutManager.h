@@ -20,17 +20,17 @@ public:
     );
 
 signals:
-    void addContentShortcutActivated();
-    void importContentShortcutActivated();
-    void saveJsonShortcutActivated();
-    void saveXmlShortcutActivated();
-    void toggleFiltersShortcutActivated();
-    void clearSearchShortcutActivated();
-    void clearFiltersShortcutActivated();
-    void backToMainViewShortcutActivated();
-    void changeSortDirectionShortcutActivated();
+    void addContentShortcut();
+    void importContentShortcut();
+    void saveJsonShortcut();
+    void saveXmlShortcut();
+    void toggleFiltersShortcut();
+    void clearSearchShortcut();
+    void clearFiltersShortcut();
+    void backToMainViewShortcut();
+    void changeSortDirectionShortcut();
     void editWindowReverseChanges();
-    void refreshContentShortcutActivated();
+    void refreshContentShortcut();
 
 private:
     void createAndConnectShortcut(const QKeySequence &sequence, QObject *parent, const char *signal);

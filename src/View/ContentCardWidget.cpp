@@ -41,8 +41,7 @@ void ContentCardWidget::setupUI() {
     m_titleLabel = new QLabel(QString::fromStdString(m_content->getTitle()));
     m_titleLabel->setWordWrap(true);
     m_titleLabel->setAlignment(Qt::AlignCenter| Qt::AlignHCenter);
-    m_titleLabel->setStyleSheet("font-weight: bold; font-size: 14px;");
-    m_titleLabel->setStyleSheet("background-color: transparent");
+    m_titleLabel->setStyleSheet("font-weight: bold; font-size: 14px; background-color: transparent");
 
 /*
     m_typeLabel = new QLabel(QString::fromStdString(m_content->getType()));

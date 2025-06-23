@@ -12,6 +12,8 @@ LibraryActionsManager::LibraryActionsManager(QWidget *parent) : QObject(parent),
 
 void LibraryActionsManager::importContent()
 {
+    
+
     QString file = QFileDialog::getOpenFileName(
         m_parentWidget,
         "Import Content",
