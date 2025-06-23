@@ -309,6 +309,8 @@ void FilterSectionWidget::clearAllFiltersUI() {
 }
 
 void FilterSectionWidget::updateToggleButtonState(bool hasActiveFilters) {
+    if(!m_filtersToggleBtn) return; // Ensure the button is initialized
+
     if (hasActiveFilters) {
         m_filtersToggleBtn->setText("Filters (Active)");
         m_filtersToggleBtn->setStyleSheet("QToolButton {border: 1px solid #39FF14; }");

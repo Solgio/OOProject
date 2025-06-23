@@ -16,6 +16,7 @@ class ContentDetailWindow : public QWidget {
 public:
     explicit ContentDetailWindow(QWidget *parent = nullptr);
     void setContent(Content* content);
+    ~ContentDetailWindow();
 
 signals:
     void editRequested(Content* content);

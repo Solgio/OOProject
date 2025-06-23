@@ -17,6 +17,13 @@ ContentDetailWindow::ContentDetailWindow(QWidget *parent)
     setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
 }
 
+ContentDetailWindow::~ContentDetailWindow() {
+    if (contentDetails) {
+        contentDetails->deleteLater();
+        contentDetails = nullptr;
+    }
+}
+
 void ContentDetailWindow::setContent(Content* content) {
     m_content = content;
     updateContentDisplay();
@@ -25,10 +32,17 @@ void ContentDetailWindow::setContent(Content* content) {
 void ContentDetailWindow::updateContentDisplay() {
     if (!m_content) return;
 
-    delete(contentDetails);
+    if (contentDetails) {
+        m_mainLayout->removeWidget(contentDetails);
+        contentDetails->deleteLater();
+        contentDetails = nullptr;
+    }
 
+    // Crea il nuovo widget
     contentDetails = m_content->accept(view);
-    m_mainLayout->insertWidget(1, contentDetails);
+    if (contentDetails) {
+        m_mainLayout->insertWidget(1, contentDetails);
+    }
 }
 
 void ContentDetailWindow::setupUI() 

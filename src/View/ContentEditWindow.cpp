@@ -99,16 +99,19 @@ void ContentEditWindow::setContent(Content *content){
 void ContentEditWindow::updateEditWindow(){
     //se è la prima volta che viene creata allora lo aggiungo al layout
     if(contentEditWindow){
+        contentEditLayout->removeWidget(contentEditWindow); //rimuove dal Layout ma non lo elimina nè nasconde
         contentEditWindow->deleteLater();
+        contentEditWindow = nullptr; //resetto il puntatore
     }
 
-    contentEditWindow = m_content->acceptEdit(editVis);
-    contentEditLayout->addWidget(contentEditWindow);
-
-    if(contentEditWindow->isHidden()){
-        contentEditWindow->show();
+     contentEditWindow = m_content->acceptEdit(editVis);
+    if (contentEditWindow) {
+        contentEditLayout->addWidget(contentEditWindow);
+        if(contentEditWindow->isHidden()){
+            contentEditWindow->show();
+        }
+        connect(contentEditWindow, &CommonEditWindow::typeUpdated, this, &ContentEditWindow::changeType);
     }
-    connect(contentEditWindow, &CommonEditWindow::typeUpdated, this, &ContentEditWindow::changeType);
 }
 
 void ContentEditWindow::changeType(int index) { //TODO da modificare
@@ -143,12 +146,11 @@ void ContentEditWindow::changeType(int index) { //TODO da modificare
 }
 
 void ContentEditWindow::restoreChanges() {
-    //se eseite il contentTypeEditWindow lo elimino e lo rimuovo dal contentEditLayout
     if(contentTypeEditWindow){
-        delete(contentTypeEditWindow);
+        contentEditLayout->removeWidget(contentTypeEditWindow);
+        contentTypeEditWindow->deleteLater();
         contentTypeEditWindow = nullptr;
     }
-    //uso la funzione già esistente per visualizzare il content originale
     updateEditWindow();
 }
 

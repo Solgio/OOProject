@@ -83,64 +83,62 @@ void LibraryActionsManager::editContent(Content *content)
 
     // Make it a modal window
     editWindow->setWindowModality(Qt::ApplicationModal);
-    editWindow->setAttribute(Qt::WA_DeleteOnClose);
+    editWindow->setAttribute(Qt::WA_DeleteOnClose); // Auto-cleanup when closed
 
     // Connect signals to handle the result
-    connect(editWindow, &ContentEditWindow::contentUpdated, this, [this, content, editWindow]()
+    connect(editWindow, &ContentEditWindow::contentUpdated, this, [this, content]()
+    {
+        auto &library = ScienceFiction_Library::getInstance();
+
+        // Check if this is a new content or existing one
+        bool isNew = true;
+        for (const auto &existingContent : library.getContentList())
+        {
+            if (existingContent.get() == content)
             {
-                auto &library = ScienceFiction_Library::getInstance();
+                isNew = false;
+                break;
+            }
+        }
 
-                // Check if this is a new content or existing one
-                bool isNew = true;
-                for (const auto &existingContent : library.getContentList())
-                {
-                    if (existingContent.get() == content)
-                    {
-                        isNew = false;
-                        break;
-                    }
-                }
+        if (isNew)
+        {
+            library.addContent(content); // Add new content
+        }
 
-                if (isNew)
-                {
-                    library.addContent(content); // Add new content
-                }
+        emit contentDataChanged();   // Notify that data has changed
+        emit contentEdited(content); // Notify that specific content was edited
+        
+        // Don't call editWindow->close() here - let WA_DeleteOnClose handle it
+    });
 
-                emit contentDataChanged();   // Notify that data has changed
-                emit contentEdited(content); // Notify that specific content was edited
-
-                editWindow->close(); // Close the window
-            });
-
-    connect(editWindow, &ContentEditWindow::closeRequested, this, [this, content, editWindow]()
+    connect(editWindow, &ContentEditWindow::closeRequested, this, [this, content]()
+    {
+        // If it's a new content that was canceled, we need to delete it
+        bool isNew = true;
+        auto &library = ScienceFiction_Library::getInstance();
+        for (const auto &existingContent : library.getContentList())
+        {
+            if (existingContent.get() == content)
             {
-                // If it's a new content that was canceled, we need to delete it
-                bool isNew = true;
-                auto &library = ScienceFiction_Library::getInstance();
-                for (const auto &existingContent : library.getContentList())
-                {
-                    if (existingContent.get() == content)
-                    {
-                        isNew = false;
-                        break;
-                    }
-                }
+                isNew = false;
+                break;
+            }
+        }
 
-                if (isNew)
-                {
-                    delete content; // Clean up unadded content
-                }
-
-                editWindow->close(); // Close the window
-            });
+        if (isNew)
+        {
+            delete content; 
+        }
+        
+        // Don't call editWindow->close() here - let WA_DeleteOnClose handle it
+    });
 
     // Show the window
     editWindow->show();
     editWindow->raise();
     editWindow->activateWindow();
-       if (!content)
-        return;
-
-    // Emit signal to tell the main window to show the edit view
+    
+    // Emit signal to tell the main window to show the edit view (se necessario)
     emit editContentRequested(content);
 }
