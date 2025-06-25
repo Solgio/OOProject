@@ -59,7 +59,11 @@ void ContentEditWindow::setupUI() {
     mainLayout->insertWidget(0, scrollAreaForEditWindow);
 
     // Buttons
-    auto *buttonLayout = new QGridLayout();
+    auto *buttonContainer = new QWidget();
+    buttonContainer->setFixedHeight(60); // Fixed height to prevent cutting
+    auto *buttonLayout = new QHBoxLayout(buttonContainer);
+    buttonLayout->setContentsMargins(0, 10, 0, 10); // Top and bottom margins
+    buttonLayout->setSpacing(10); 
 
     m_restoreButton = new QPushButton();
     m_restoreButton->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed);
@@ -85,10 +89,10 @@ void ContentEditWindow::setupUI() {
 
     connect(m_cancelButton, &QPushButton::clicked, this, &ContentEditWindow::cancelChanges);
     
-    buttonLayout->addWidget(m_saveButton, 0 , 0, Qt::AlignRight);
-    buttonLayout->addWidget(m_restoreButton, 0, 1, Qt::AlignHCenter);
-    buttonLayout->addWidget(m_cancelButton, 0 , 2, Qt::AlignLeft);
-    mainLayout->insertLayout(-1, buttonLayout);
+    buttonLayout->addWidget(m_saveButton);
+    buttonLayout->addWidget(m_restoreButton);
+    buttonLayout->addWidget(m_cancelButton);
+    mainLayout->addWidget(buttonContainer);
 }
 
 void ContentEditWindow::setContent(Content *content){
