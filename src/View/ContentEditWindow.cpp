@@ -156,6 +156,15 @@ void ContentEditWindow::restoreChanges() {
         contentTypeEditWindow->deleteLater();
         contentTypeEditWindow = nullptr;
     }
+
+    if (contentEditWindow) {
+        contentEditLayout->removeWidget(contentEditWindow);
+        contentEditWindow->setParent(nullptr);
+        contentEditWindow->deleteLater();
+        contentEditWindow = nullptr;
+    }
+    QCoreApplication::processEvents();
+
     updateEditWindow();
 }
 

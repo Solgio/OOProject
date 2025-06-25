@@ -150,9 +150,8 @@ void LibraryWindow::createAddButton() {
 void LibraryWindow::connectSignals()
 {
     // Connect LibraryToolbar signals to LibraryActionsManager slots
-    connect(m_toolBar, &LibraryToolbar::importRequested, m_actionsManager, &LibraryActionsManager::importContent);
+    connect(m_toolBar, &LibraryToolbar::importRequested, this, &LibraryWindow::handleImportRequested);
     connect(m_toolBar, &LibraryToolbar::saveRequested, m_actionsManager, &LibraryActionsManager::saveToFile);
-    //connect(m_toolBar, &LibraryToolbar::addContentRequested, m_actionsManager, &LibraryActionsManager::showAddContentDialog);
 
     // Connect LibraryActionsManager signals to LibraryWindow slots for UI updates
     connect(m_actionsManager, &LibraryActionsManager::contentDataChanged, this, &LibraryWindow::updateContentDisplay);
@@ -203,7 +202,6 @@ void LibraryWindow::connectSignals()
             { if(m_rightPanel->currentIndex()==2) m_editWindow->restoreChanges(); });
     connect(m_shortcutManager, &ShortcutManager::changeSortDirectionShortcut, m_sortingSectionWidget, &SortingSectionWidget::onSortDirectionButtonClicked);
     connect(m_shortcutManager, &ShortcutManager::refreshContentShortcut, this, &LibraryWindow::updateContentDisplay);
-    //connect(m_shortcutManager, &ShortcutManager::backToMainViewShortcutActivated, this, &LibraryWindow::hideDetailView);
 
 
     // Connect ContentProxyModel signals to ContentPreviewGrid for updates
