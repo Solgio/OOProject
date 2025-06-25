@@ -44,8 +44,8 @@ CommonEditWindow::CommonEditWindow(Content *content, QWidget *parent):
 
     inspEdit->addItems(allContentNames);
     inspEdit->setEditable(false); //per modifica dell'indice dal testo
-    Content* temp = library.searchId(content->getInspiration());
-    if(temp){
+
+    if(const Content* temp = library.searchId(content->getInspiration()); temp){
         inspEdit->setCurrentText(QString::fromStdString(temp->getTitle()));
     }else{
         inspEdit->setCurrentIndex(0); // Se non trova la inspiration del content mostra "No Inspiration"
