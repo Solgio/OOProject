@@ -338,7 +338,7 @@ void LibraryWindow::showEditView(Content *content)
 {
     // salvare l'index del m_rightPanel per poi ritornarci alla chiusura dell'editWindow
     int currentIndex = m_rightPanel->currentIndex();
-    qDebug() << currentIndex;
+
     if (!content)
         return;
 
@@ -422,13 +422,8 @@ void LibraryWindow::hideEditView(int pastIndex)
         m_editWindow->deleteLater();
         m_editWindow = nullptr;
     }
-    qDebug() << pastIndex;
+
     m_rightPanel->setCurrentIndex(pastIndex);
-    /*
-    if(m_detailWindow)
-        m_rightPanel->setCurrentIndex(1); // Detail view
-    else
-        m_rightPanel->setCurrentIndex(0); // Main view*/
 }
 
 void LibraryWindow::updateOverallFilterState()
