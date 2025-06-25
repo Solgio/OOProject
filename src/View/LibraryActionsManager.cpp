@@ -32,6 +32,7 @@ void LibraryActionsManager::importContent()
         {
             QMessageBox::warning(m_parentWidget, "Error", "Failed to import content");
         }
+        
     }
 }
 

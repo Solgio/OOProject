@@ -100,6 +100,7 @@ void ContentEditWindow::updateEditWindow(){
     //se è la prima volta che viene creata allora lo aggiungo al layout
     if(contentEditWindow){
         contentEditLayout->removeWidget(contentEditWindow); //rimuove dal Layout ma non lo elimina nè nasconde
+        contentEditLayout->setParent(nullptr);
         contentEditWindow->deleteLater();
         contentEditWindow = nullptr; //resetto il puntatore
     }
@@ -117,7 +118,10 @@ void ContentEditWindow::updateEditWindow(){
 void ContentEditWindow::changeType(int index) { //TODO da modificare
 
     if(contentTypeEditWindow){
+        contentEditLayout->removeWidget(contentTypeEditWindow);
+        contentTypeEditWindow->setParent(nullptr); // Critical: unparent first
         contentTypeEditWindow->deleteLater();
+        contentTypeEditWindow = nullptr;
     }
 
     switch (index) {
@@ -148,6 +152,7 @@ void ContentEditWindow::changeType(int index) { //TODO da modificare
 void ContentEditWindow::restoreChanges() {
     if(contentTypeEditWindow){
         contentEditLayout->removeWidget(contentTypeEditWindow);
+        contentTypeEditWindow->setParent(nullptr); // Critical: unparent first
         contentTypeEditWindow->deleteLater();
         contentTypeEditWindow = nullptr;
     }

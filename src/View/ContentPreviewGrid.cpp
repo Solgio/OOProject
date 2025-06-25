@@ -37,13 +37,13 @@ ContentPreviewGrid::ContentPreviewGrid(ContentProxyModel *proxyModel, QWidget *p
 
 void ContentPreviewGrid::updatePreviews()
 {
-    // Before clearing, check if the currently selected card is still present
-    // in the *new* filtered list from the proxy model.
-    // We don't call filterAcceptsRow directly. Instead, we iterate the proxy model's data.
+    // IMPORTANT: Extract the selected content BEFORE deleting widgets
     Content *previouslySelectedContent = nullptr;
     if (m_selectedCardWidget)
     {
         previouslySelectedContent = m_selectedCardWidget->getContent();
+        // Clear the pointer since we're about to delete the widget
+        m_selectedCardWidget = nullptr;
     }
 
     // Clear existing layout (except for no results label)
@@ -71,21 +71,13 @@ void ContentPreviewGrid::updatePreviews()
 
     if (count == 0)
     {
-        // If no results, deselect any previously selected card
-        deselectCurrentCard();
+        // If no results, selection is already cleared above
         return;
     }
 
     const int CARD_WIDTH = 190; // Fixed card width + spacing
     int availableWidth = m_previewScrollArea->viewport()->width();
     int columns = std::max(1, availableWidth / CARD_WIDTH);
-
-    bool wasSelectedContentStillVisible = false; // Flag to track if the selected content is still in the filtered list
-
-    if (m_selectedCardWidget)
-    {                                                                   // Assuming m_selectedCardWidget is the QWidget* selected card
-        previouslySelectedContent = m_selectedCardWidget->getContent(); // Assuming ContentCardWidget::getContent() exists
-    }
 
     int row = 0, col = 0;
     for (int i = 0; i < count; ++i)
@@ -115,7 +107,6 @@ void ContentPreviewGrid::updatePreviews()
             {
                 card->setSelected(true);
                 m_selectedCardWidget = card; // Update reference to new widget instance
-                wasSelectedContentStillVisible = true;
             }
 
             m_previewLayout->addWidget(card, row, col);
@@ -126,12 +117,6 @@ void ContentPreviewGrid::updatePreviews()
                 row++;
             }
         }
-    }
-
-    // If the previously selected content is no longer in the filtered list, deselect it.
-    if (previouslySelectedContent && !wasSelectedContentStillVisible)
-    {
-        deselectCurrentCard();
     }
 }
 

@@ -227,6 +227,14 @@ void LibraryWindow::connectSignals()
 void LibraryWindow::handleImportRequested()
 {
     m_actionsManager->importContent();
+    if(m_rightPanel->currentIndex() != 0) // If we are in main view, update immediately
+    {
+        if(m_rightPanel->currentIndex() == 2) // If we are in detail view, refresh content
+        {
+            hideEditView();
+        }
+        hideDetailView();
+    }
 }
 
 void LibraryWindow::handleSaveRequested(const QString &extension)
@@ -251,11 +259,14 @@ void LibraryWindow::delayedSearch()
 
 void LibraryWindow::applySearchFilter()
 {
-    if(m_rightPanel->currentIndex()==1) // If we are in edit view, we don't apply search
-        hideDetailView();
-        else if(m_rightPanel->currentIndex()==2) // If we are in edit view, we don't apply search
+    if(m_rightPanel->currentIndex() != 0) // If we are in main view, update immediately
+    {
+        if(m_rightPanel->currentIndex() == 2) // If we are in detail view, refresh content
+        {
             hideEditView();
-    
+        }
+        hideDetailView();
+    }
     m_proxyModel->setTitleFilter(m_searchBar->text());
     // updateContentPreviews() is called by m_proxyModel::layoutChanged signal
     updateOverallFilterState();
@@ -271,6 +282,14 @@ void LibraryWindow::handleFiltersChanged()
 {
     // applyInternalFilters() is called within FilterSectionWidget
     // We just need to trigger a preview update and filter state update
+    if(m_rightPanel->currentIndex() != 0) // If we are in main view, update immediately
+    {
+        if(m_rightPanel->currentIndex() == 2) // If we are in detail view, refresh content
+        {
+            hideEditView();
+        }
+        hideDetailView();
+    }
     updateOverallFilterState();
 }
 
@@ -316,7 +335,9 @@ void LibraryWindow::showEditView(Content *content)
 
     // Clean up existing edit window if it exists
     if (m_editWindow) {
+        disconnect(m_editWindow, nullptr, this, nullptr); // Disconnect all signals
         m_rightPanel->removeWidget(m_editWindow);
+        m_editWindow->setParent(nullptr);
         m_editWindow->deleteLater();
         m_editWindow = nullptr;
     }
@@ -341,8 +362,8 @@ void LibraryWindow::showEditView(Content *content)
             library.addContent(content); // Add new content
         }
         
-        emit m_actionsManager->contentDataChanged(); // Notify that data has changed
-        emit m_actionsManager->contentEdited(content); // Notify that specific content was edited
+        updateContentDisplay(); // Call directly instead of emit m_actionsManager->contentDataChanged()
+        m_detailWindow->refreshContent();
         
         hideEditView(); // Go back to detail view
     });
@@ -376,11 +397,16 @@ void LibraryWindow::hideEditView()
 {
     if (m_editWindow) {
         // Remove from stacked widget and delete it
+        disconnect(m_editWindow, nullptr, this, nullptr);
         m_rightPanel->removeWidget(m_editWindow);
+        m_editWindow->setParent(nullptr);
         m_editWindow->deleteLater();
         m_editWindow = nullptr;
     }
+    if(m_detailWindow)
         m_rightPanel->setCurrentIndex(1); // Detail view
+    else
+        m_rightPanel->setCurrentIndex(0); // Main view
 }
 
 void LibraryWindow::updateOverallFilterState()

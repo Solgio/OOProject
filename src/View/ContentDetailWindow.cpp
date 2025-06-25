@@ -18,12 +18,14 @@ ContentDetailWindow::ContentDetailWindow(QWidget *parent)
 }
 
 ContentDetailWindow::~ContentDetailWindow() {
-    if (contentDetails) {
+    // Remove contentDetails from layout first before deleting
+    if (contentDetails && m_mainLayout) {
+        m_mainLayout->removeWidget(contentDetails);
+        contentDetails->setParent(nullptr); // Unparent before deletion
         contentDetails->deleteLater();
         contentDetails = nullptr;
     }
 }
-
 void ContentDetailWindow::setContent(Content* content) {
     m_content = content;
     updateContentDisplay();
@@ -34,6 +36,7 @@ void ContentDetailWindow::updateContentDisplay() {
 
     if (contentDetails) {
         m_mainLayout->removeWidget(contentDetails);
+        contentDetails->setParent(nullptr); // Unparent before deletion
         contentDetails->deleteLater();
         contentDetails = nullptr;
     }
