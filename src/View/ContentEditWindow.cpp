@@ -59,7 +59,11 @@ void ContentEditWindow::setupUI() {
     mainLayout->insertWidget(0, scrollAreaForEditWindow);
 
     // Buttons
-    auto *buttonLayout = new QGridLayout();
+    auto *buttonContainer = new QWidget();
+    buttonContainer->setFixedHeight(60); // Fixed height to prevent cutting
+    auto *buttonLayout = new QHBoxLayout(buttonContainer);
+    buttonLayout->setContentsMargins(0, 10, 0, 10); // Top and bottom margins
+    buttonLayout->setSpacing(10); 
 
     m_restoreButton = new QPushButton();
     m_restoreButton->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed);
@@ -82,13 +86,13 @@ void ContentEditWindow::setupUI() {
     m_cancelButton->setFixedSize(40,40);
     m_cancelButton->setStyleSheet("QPushButton { color: red; font-size: 35px }");
     m_cancelButton->setToolTip("Cancel changes and close editor");
-    
+
     connect(m_cancelButton, &QPushButton::clicked, this, &ContentEditWindow::cancelChanges);
     
-    buttonLayout->addWidget(m_saveButton, 0 , 0, Qt::AlignRight);
-    buttonLayout->addWidget(m_restoreButton, 0, 1, Qt::AlignHCenter);
-    buttonLayout->addWidget(m_cancelButton, 0 , 2, Qt::AlignLeft);
-    mainLayout->insertLayout(-1, buttonLayout);
+    buttonLayout->addWidget(m_saveButton);
+    buttonLayout->addWidget(m_restoreButton);
+    buttonLayout->addWidget(m_cancelButton);
+    mainLayout->addWidget(buttonContainer);
 }
 
 void ContentEditWindow::setContent(Content *content){
@@ -119,7 +123,7 @@ void ContentEditWindow::changeType(int index) {
 
     if(contentTypeEditWindow){
         contentEditLayout->removeWidget(contentTypeEditWindow);
-        contentTypeEditWindow->setParent(nullptr); // Critical: unparent first
+        contentTypeEditWindow->setParent(nullptr);
         contentTypeEditWindow->deleteLater();
         contentTypeEditWindow = nullptr;
     }
@@ -143,7 +147,7 @@ void ContentEditWindow::changeType(int index) {
     default:
         break;
     }
-    //contentEditLayout->removeWidget(contentEditWindow); //rimuove dal Layout ma non lo elimina nè nasconde //! NON SERVE RIMUOVERLO DAL LAYOUT
+
     contentEditWindow->hide(); //nascondo il contentEditWindow
     contentEditLayout->addWidget(contentTypeEditWindow);
     connect(contentTypeEditWindow, &CommonEditWindow::typeUpdated, this, &ContentEditWindow::changeType);

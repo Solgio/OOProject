@@ -15,8 +15,7 @@ public:
 
     void setupShortcuts(
         QObject* targetParent, // Usually LibraryWindow
-        QLineEdit* searchBar,
-        ContentDetailWindow* detailWindow // For 'back to main view' shortcut
+        QLineEdit* searchBar
     );
 
 signals:

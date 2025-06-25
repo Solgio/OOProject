@@ -134,10 +134,10 @@ void LibraryWindow::createRightPanel()
     m_rightPanel->addWidget(m_detailWindow); // Index 1
 
     m_editWindow = nullptr;
-
 }
 
-void LibraryWindow::createAddButton() {
+void LibraryWindow::createAddButton()
+{
     m_addContentButton = new QToolButton();
     m_addContentButton->setText("Add Content");
     m_addContentButton->setIcon(QIcon(":assets/icons/add.png"));
@@ -173,7 +173,7 @@ void LibraryWindow::connectSignals()
 
     // Connect ContentDetailWindow signals
     // Used when a new object is created
-    connect(m_actionsManager, &LibraryActionsManager::editContentRequested,  this, &LibraryWindow::showEditView);
+    connect(m_actionsManager, &LibraryActionsManager::editContentRequested, this, &LibraryWindow::showEditView);
     // Used when an existing object is edited
     connect(m_detailWindow, &ContentDetailWindow::editRequested, this, &LibraryWindow::showEditView);
     //
@@ -184,25 +184,33 @@ void LibraryWindow::connectSignals()
     connect(m_contentPreviewGrid, &ContentPreviewGrid::contentDoubleClicked, this, &LibraryWindow::showDetailView);
 
     // Setup and connect shortcuts
-    m_shortcutManager->setupShortcuts(this, m_searchBar, m_detailWindow);
+    m_shortcutManager->setupShortcuts(this, m_searchBar);
     connect(m_shortcutManager, &ShortcutManager::addContentShortcut, this, &LibraryWindow::handleAddContentRequested);
     connect(m_shortcutManager, &ShortcutManager::importContentShortcut, this, &LibraryWindow::handleImportRequested);
     connect(m_shortcutManager, &ShortcutManager::saveJsonShortcut, this, [this]()
-            { handleSaveRequested("json"); });
+            { if(m_rightPanel->currentIndex()!=2)handleSaveRequested("json");
+            else m_editWindow->saveChanges(); }); // Save JSON if not in edit view, otherwise save changes
     connect(m_shortcutManager, &ShortcutManager::saveXmlShortcut, this, [this]()
             { handleSaveRequested("xml"); });
     connect(m_shortcutManager, &ShortcutManager::toggleFiltersShortcut, m_filterSectionWidget, &FilterSectionWidget::onToggleFiltersClicked); // Directly toggle
     connect(m_shortcutManager, &ShortcutManager::clearSearchShortcut, this, &LibraryWindow::clearSearch);
     connect(m_shortcutManager, &ShortcutManager::clearFiltersShortcut, m_filterSectionWidget, &FilterSectionWidget::clearAllFiltersUI);
-    connect(m_shortcutManager, &ShortcutManager::backToMainViewShortcut, this, [this] () 
-            { if(m_rightPanel->currentIndex()==0) return;
-              else if(m_rightPanel->currentIndex()==1) hideDetailView();
-              else if(m_rightPanel->currentIndex()==2) m_editWindow->cancelChanges(); });
-    connect(m_shortcutManager, &ShortcutManager::editWindowReverseChanges, this, [this] ()
+    connect(m_shortcutManager, &ShortcutManager::backToMainViewShortcut, this, [this]()
+            { if (m_searchBar->hasFocus() && !m_searchBar->text().isEmpty()) {
+                clearSearch();
+                return;
+            }
+            if(m_rightPanel->currentIndex() == 1) {
+                hideDetailView(); // Hide detail view
+            } else if(m_rightPanel->currentIndex() == 2) {
+                m_editWindow->cancelChanges(); // Hide edit view
+            } else {
+            m_rightPanel->setCurrentIndex(0); // Ensure we are in main view
+            } });
+    connect(m_shortcutManager, &ShortcutManager::editWindowReverseChanges, this, [this]()
             { if(m_rightPanel->currentIndex()==2) m_editWindow->restoreChanges(); });
     connect(m_shortcutManager, &ShortcutManager::changeSortDirectionShortcut, m_sortingSectionWidget, &SortingSectionWidget::onSortDirectionButtonClicked);
     connect(m_shortcutManager, &ShortcutManager::refreshContentShortcut, this, &LibraryWindow::updateContentDisplay);
-
 
     // Connect ContentProxyModel signals to ContentPreviewGrid for updates
     connect(m_proxyModel, &ContentProxyModel::layoutChanged, m_contentPreviewGrid, &ContentPreviewGrid::updatePreviews);
@@ -225,9 +233,9 @@ void LibraryWindow::connectSignals()
 void LibraryWindow::handleImportRequested()
 {
     m_actionsManager->importContent();
-    if(m_rightPanel->currentIndex() != 0) // If we are in main view, update immediately
+    if (m_rightPanel->currentIndex() != 0) // If we are in main view, update immediately
     {
-        if(m_rightPanel->currentIndex() == 2) // If we are in detail view, refresh content
+        if (m_rightPanel->currentIndex() == 2) // If we are in detail view, refresh content
         {
             hideEditView();
         }
@@ -257,9 +265,9 @@ void LibraryWindow::delayedSearch()
 
 void LibraryWindow::applySearchFilter()
 {
-    if(m_rightPanel->currentIndex() != 0) // If we are in main view, update immediately
+    if (m_rightPanel->currentIndex() != 0) // If we are in main view, update immediately
     {
-        if(m_rightPanel->currentIndex() == 2) // If we are in detail view, refresh content
+        if (m_rightPanel->currentIndex() == 2) // If we are in detail view, refresh content
         {
             hideEditView();
         }
@@ -280,9 +288,9 @@ void LibraryWindow::handleFiltersChanged()
 {
     // applyInternalFilters() is called within FilterSectionWidget
     // We just need to trigger a preview update and filter state update
-    if(m_rightPanel->currentIndex() != 0) // If we are in main view, update immediately
+    if (m_rightPanel->currentIndex() != 0) // If we are in main view, update immediately
     {
-        if(m_rightPanel->currentIndex() == 2) // If we are in detail view, refresh content
+        if (m_rightPanel->currentIndex() == 2) // If we are in detail view, refresh content
         {
             hideEditView();
         }
@@ -328,14 +336,15 @@ void LibraryWindow::showDetailView(Content *content)
 
 void LibraryWindow::showEditView(Content *content)
 {
-    //salvare l'index del m_rightPanel per poi ritornarci alla chiusura dell'editWindow
+    // salvare l'index del m_rightPanel per poi ritornarci alla chiusura dell'editWindow
     int currentIndex = m_rightPanel->currentIndex();
 
     if (!content)
         return;
 
     // Clean up existing edit window if it exists
-    if (m_editWindow) {
+    if (m_editWindow)
+    {
         disconnect(m_editWindow, nullptr, this, nullptr); // Disconnect all signals
         m_rightPanel->removeWidget(m_editWindow);
         m_editWindow->setParent(nullptr);
@@ -345,48 +354,56 @@ void LibraryWindow::showEditView(Content *content)
 
     // Create new edit window for this content
     m_editWindow = new ContentEditWindow(content, this);
-    
+
     // Connect signals for this specific edit window
-    connect(m_editWindow, &ContentEditWindow::contentUpdated, this, [this, content, currentIndex]() {
-        auto &library = ScienceFiction_Library::getInstance();
-        
-        // Check if this is a new content or existing one
-        bool isNew = true;
-        for (const auto &existingContent : library.getContentList()) {
-            if (existingContent.get() == content) {
-                isNew = false;
-                break;
-            }
-        }
+    connect(m_editWindow, &ContentEditWindow::contentUpdated, this, [this, content, currentIndex]()
+            {
+                auto &library = ScienceFiction_Library::getInstance();
 
-        if (isNew) {
-            library.addContent(content); // Add new content
-        }
-        
-        updateContentDisplay(); // Call directly instead of emit m_actionsManager->contentDataChanged()
-        m_detailWindow->refreshContent();
-        
-        hideEditView(currentIndex); // Go back to previous view
-    });
-    
+                // Check if this is a new content or existing one
+                bool isNew = true;
+                for (const auto &existingContent : library.getContentList())
+                {
+                    if (existingContent.get() == content)
+                    {
+                        isNew = false;
+                        break;
+                    }
+                }
+
+                if (isNew)
+                {
+                    library.addContent(content); // Add new content
+                }
+
+                updateContentDisplay(); // Call directly instead of emit m_actionsManager->contentDataChanged()
+                m_detailWindow->refreshContent();
+
+                hideEditView(currentIndex); // Go back to previous view
+            });
+
     // Connect close signal here so no warning is shown. In fact, if this was with the others connect it would generatte a nullptr warning of qtcore
-    connect(m_editWindow, &ContentEditWindow::closeRequested, this, [this, content, currentIndex]() {
-        // If it's a new content that was canceled, we need to delete it
-        bool isNew = true;
-        auto &library = ScienceFiction_Library::getInstance();
-        for (const auto &existingContent : library.getContentList()) {
-            if (existingContent.get() == content) {
-                isNew = false;
-                break;
-            }
-        }
+    connect(m_editWindow, &ContentEditWindow::closeRequested, this, [this, content, currentIndex]()
+            {
+                // If it's a new content that was canceled, we need to delete it
+                bool isNew = true;
+                auto &library = ScienceFiction_Library::getInstance();
+                for (const auto &existingContent : library.getContentList())
+                {
+                    if (existingContent.get() == content)
+                    {
+                        isNew = false;
+                        break;
+                    }
+                }
 
-        if (isNew) {
-            delete content; // Clean up unadded content
-        }
-        
-        hideEditView(currentIndex); // Go back to previous view
-    });
+                if (isNew)
+                {
+                    delete content; // Clean up unadded content
+                }
+
+                hideEditView(currentIndex); // Go back to previous view
+            });
 
     // Add edit window to stacked widget and show it
     int editIndex = m_rightPanel->addWidget(m_editWindow);
@@ -396,7 +413,8 @@ void LibraryWindow::showEditView(Content *content)
 
 void LibraryWindow::hideEditView(int pastIndex)
 {
-    if (m_editWindow) {
+    if (m_editWindow)
+    {
         // Remove from stacked widget and delete it
         disconnect(m_editWindow, nullptr, this, nullptr);
         m_rightPanel->removeWidget(m_editWindow);

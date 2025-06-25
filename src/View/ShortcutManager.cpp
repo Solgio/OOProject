@@ -7,8 +7,7 @@ ShortcutManager::ShortcutManager(QObject *parent) : QObject(parent) {}
 
 void ShortcutManager::setupShortcuts(
     QObject* targetParent,
-    QLineEdit* searchBar,
-    ContentDetailWindow* detailWindow
+    QLineEdit* searchBar
 ) {
     // Add content shortcut (Ctrl+N)
     createAndConnectShortcut(QKeySequence(Qt::CTRL | Qt::Key_N), targetParent, SIGNAL(addContentShortcut()));
@@ -34,15 +33,20 @@ void ShortcutManager::setupShortcuts(
     auto *focusSearchShortcut2 = new QShortcut(QKeySequence(Qt::ALT | Qt::Key_S), searchBar);
     connect(focusSearchShortcut2, &QShortcut::activated, searchBar, QOverload<>::of(&QLineEdit::setFocus));
 
-    // Clear search shortcut (Esc when search has focus)
+    // Clear search shortcut (Esc when search has focus) - ONLY for search bar
     auto *clearSearchShortcut = new QShortcut(QKeySequence(Qt::Key_Escape), searchBar);
+    clearSearchShortcut->setContext(Qt::WidgetShortcut); // Only when search bar has focus
     connect(clearSearchShortcut, &QShortcut::activated, this, &ShortcutManager::clearSearchShortcut);
+
 
     // Clear all filters shortcut (Ctrl+Shift+F)
     createAndConnectShortcut(QKeySequence(Qt::CTRL | Qt::SHIFT | Qt::Key_F), targetParent, SIGNAL(clearFiltersShortcut()));
 
     // Return to main view from detail view (Esc)
-    createAndConnectShortcut(QKeySequence(Qt::Key_Escape), targetParent, SIGNAL(backToMainViewShortcut()));
+    auto *escShortcut = new QShortcut(QKeySequence(Qt::Key_Escape), qobject_cast<QWidget*>(targetParent));
+    escShortcut->setContext(Qt::ApplicationShortcut); // or Qt::WindowShortcut
+    connect(escShortcut, &QShortcut::activated, this, &ShortcutManager::backToMainViewShortcut);
+
     
     // Change sort direction shortcut (Ctrl+D)
     createAndConnectShortcut(QKeySequence(Qt::CTRL | Qt::Key_D), targetParent, SIGNAL(changeSortDirectionShortcut()));
