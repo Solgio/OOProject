@@ -36,9 +36,10 @@ class MySpinBox: public QSpinBox{
 class CommonEditWindow: public QWidget{
     Q_OBJECT
 
-private:
-
+protected:
     ScienceFiction_Library &library;
+
+private:
 
     QTextEdit *titleEdit;
 

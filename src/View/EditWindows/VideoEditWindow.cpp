@@ -1,10 +1,12 @@
+#include <QStandardItemModel>
 #include "VideoEditWindow.h"
+#include "../../Model/lib/ScienceFictionLibrary.h"
 
 VideoEditWindow::VideoEditWindow():
     MultimediaEditWindow(),
     durationEdit(new QTextEdit()),
-    prequelEdit(new QTextEdit()),
-    sequelEdit(new QTextEdit())
+    prequelEdit(new MyComboBox()),
+    sequelEdit(new MyComboBox())
 {
     setUp();
 }
@@ -12,9 +14,10 @@ VideoEditWindow::VideoEditWindow():
 VideoEditWindow::VideoEditWindow(Content *content):
     MultimediaEditWindow(content),
     durationEdit(new QTextEdit()),
-    prequelEdit(new QTextEdit()),
-    sequelEdit(new QTextEdit())
+    prequelEdit(new MyComboBox()),
+    sequelEdit(new MyComboBox())
 {
+    setUpSequelPrequelBox();
     setUp();
 }
 
@@ -22,14 +25,51 @@ VideoEditWindow::VideoEditWindow(Content *content):
 VideoEditWindow::VideoEditWindow(Video *video):
     MultimediaEditWindow(video),
     durationEdit(new QTextEdit(QString::number(video->getDuration()))),
-    prequelEdit(new QTextEdit(QString::number(video->getPrequel()))),
-    sequelEdit(new QTextEdit(QString::number(video->getSequel()))),
+    prequelEdit(new MyComboBox()),
+    sequelEdit(new MyComboBox()),
     videoPtr(video)
 {
+    setUpSequelPrequelBox();
+    if(const Content* temp = library.searchId(video->getPrequel()); temp){
+        prequelEdit->setCurrentText(QString::fromStdString(temp->getTitle()));
+    }else{
+        prequelEdit->setCurrentIndex(0); // Se non trova il prequel del content mostra "No sequel/prequel"
+    }
+    if(const Content* temp = library.searchId(video->getSequel()); temp){
+        sequelEdit->setCurrentText(QString::fromStdString(temp->getTitle()));
+    }else{
+        sequelEdit->setCurrentIndex(0); // Se non trova la inspiration del content mostra "No sequel/prequel"
+    }
+
     setUp();
 }
 
+void VideoEditWindow::setUpSequelPrequelBox(){
+
+    //stessa procedura di CommonEditWindow
+    QStandardItemModel *model = new QStandardItemModel();
+
+    QList<QStandardItem*> listaNomi;
+    QList<QStandardItem*> listaId;
+
+    listaNomi.append(new QStandardItem("No sequel/prequel"));
+    listaId.append(new QStandardItem()); //"No sequel/prequel" non ha ID
+    for(const auto &v_content : CommonEditWindow::library.getContentList()){
+        listaNomi.append(new QStandardItem(QString::fromStdString(v_content->getTitle())));
+        listaId.append(new QStandardItem(QString::number(v_content->getId())));
+    }
+
+    model->appendColumn(listaNomi);
+    model->appendColumn(listaId);
+
+    prequelEdit->setModel(model);
+    sequelEdit->setModel(model);
+    prequelEdit->setEditable(false); //per modifica dell'indice con il testo
+    sequelEdit->setEditable(false);
+}
+
 void VideoEditWindow::setUp(){
+
     QVBoxLayout *mainLayout = CommonEditWindow::getLayout();
 
     //Duration
@@ -52,7 +92,7 @@ void VideoEditWindow::saveEdit(){
     if(videoPtr){
         MultimediaEditWindow::saveEdit();
         videoPtr->setDuration(durationEdit->toPlainText().toUInt());
-        videoPtr->setPrequel(prequelEdit->toPlainText().toUInt());
-        videoPtr->setSequel(sequelEdit->toPlainText().toUInt());
+        videoPtr->setPrequel(prequelEdit->model()->itemData(prequelEdit->model()->index(prequelEdit->currentIndex(), 1)).value(0).toInt());
+        videoPtr->setSequel(sequelEdit->model()->itemData(sequelEdit->model()->index(sequelEdit->currentIndex(), 1)).value(0).toInt());
     }
 }

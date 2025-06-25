@@ -1,3 +1,4 @@
+#include <QStandardItemModel>
 #include "CommonEditWindow.h"
 #include "../../Model/lib/Content.h"
 #include "../../Model/lib/ScienceFictionLibrary.h"
@@ -35,16 +36,27 @@ CommonEditWindow::CommonEditWindow(Content *content, QWidget *parent):
     watchedEdit->setChecked(content->getWatched());
     starredEdit->setChecked(content->getStarred());
 
-    //Creazione del comboBox per Tutti i nomi dei content della Libreria
-    QStringList allContentNames;
-    allContentNames.append(QString("No Inspiration"));
+    //Creo una "tabella" di n righe e 2 colonne
+    QStandardItemModel *model = new QStandardItemModel();
+
+    QList<QStandardItem*> listaNomi;
+    QList<QStandardItem*> listaId;
+
+    //Creazione del QList<QStandardItem*> per Tutti i nomi e ID dei content della Libreria
+    listaNomi.append(new QStandardItem("No Inspiration"));
+    listaId.append(new QStandardItem()); //"No Inspiration" non ha ID
     for(const auto &v_content : library.getContentList()){
-        allContentNames.append(QString::fromStdString(v_content->getTitle()));
+        listaNomi.append(new QStandardItem(QString::fromStdString(v_content->getTitle())));
+        listaId.append(new QStandardItem(QString::number(v_content->getId())));
     }
+    model->appendColumn(listaNomi);
+    model->appendColumn(listaId);
+    //inserisco nel comboBox la "tabella"
+    inspEdit->setModel(model); //di default viene mostrato la prima colonna
 
-    inspEdit->addItems(allContentNames);
-    inspEdit->setEditable(false); //per modifica dell'indice dal testo
+    inspEdit->setEditable(false); //se non è editabile cambia l'indice in corrispondenza del testo
 
+    //cerca nella libreria il titolo del corrispondente all'ID dell'Inspiration
     if(const Content* temp = library.searchId(content->getInspiration()); temp){
         inspEdit->setCurrentText(QString::fromStdString(temp->getTitle()));
     }else{
@@ -207,6 +219,7 @@ void CommonEditWindow::saveEdit(){
         contentPtr->setTitle(titleEdit->toPlainText().QString::toStdString());
         contentPtr->setImage(imgEdit->toPlainText().QString::toStdString());
         contentPtr->setYear(yearEdit->value());
+        contentPtr->setInspiration(inspEdit->model()->itemData(inspEdit->model()->index(inspEdit->currentIndex(), 1)).value(0).toInt());
         //contentPtr->setInspiration()
         contentPtr->setStarred(starredEdit->isChecked());
         contentPtr->setWatched(watchedEdit->isChecked());

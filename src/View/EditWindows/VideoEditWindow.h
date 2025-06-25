@@ -8,12 +8,13 @@ class VideoEditWindow:public MultimediaEditWindow{
 
 private:
     QTextEdit *durationEdit;
-    QTextEdit *prequelEdit;
-    QTextEdit *sequelEdit;
+    MyComboBox *prequelEdit;
+    MyComboBox *sequelEdit;
 
     Video *videoPtr;
 
     void setUp();
+    void setUpSequelPrequelBox();
 
 public:
     VideoEditWindow();
