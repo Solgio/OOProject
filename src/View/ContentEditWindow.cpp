@@ -82,7 +82,7 @@ void ContentEditWindow::setupUI() {
     m_cancelButton->setFixedSize(40,40);
     m_cancelButton->setStyleSheet("QPushButton { color: red; font-size: 35px }");
     m_cancelButton->setToolTip("Cancel changes and close editor");
-    
+
     connect(m_cancelButton, &QPushButton::clicked, this, &ContentEditWindow::cancelChanges);
     
     buttonLayout->addWidget(m_saveButton, 0 , 0, Qt::AlignRight);
@@ -119,7 +119,7 @@ void ContentEditWindow::changeType(int index) {
 
     if(contentTypeEditWindow){
         contentEditLayout->removeWidget(contentTypeEditWindow);
-        contentTypeEditWindow->setParent(nullptr); // Critical: unparent first
+        contentTypeEditWindow->setParent(nullptr);
         contentTypeEditWindow->deleteLater();
         contentTypeEditWindow = nullptr;
     }
@@ -143,7 +143,7 @@ void ContentEditWindow::changeType(int index) {
     default:
         break;
     }
-    //contentEditLayout->removeWidget(contentEditWindow); //rimuove dal Layout ma non lo elimina nè nasconde //! NON SERVE RIMUOVERLO DAL LAYOUT
+
     contentEditWindow->hide(); //nascondo il contentEditWindow
     contentEditLayout->addWidget(contentTypeEditWindow);
     connect(contentTypeEditWindow, &CommonEditWindow::typeUpdated, this, &ContentEditWindow::changeType);
