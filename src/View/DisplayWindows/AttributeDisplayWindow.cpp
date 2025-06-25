@@ -16,8 +16,8 @@ AttributeDisplayWindow::AttributeDisplayWindow(Content* content, QWidget *parent
     Description(new QLabel(QString::fromStdString(content->getDescription()))),
     Type(new QLabel(QString::fromStdString(content->getType())))
 {
-    Content* temp = library.searchId(content->getInspiration());
-    if(temp){
+
+    if(const Content* temp = library.searchId(content->getInspiration()); temp){
         Inspiration = new QLabel(QString::fromStdString(temp->getTitle()));
     }else{
         Inspiration = new QLabel("No inspiration");
