@@ -92,7 +92,7 @@ void CommonEditWindow::format(){
 
     //Creazione della finestra dei sottoGeneri
     subgenreWindow = new QWidget();
-    QVBoxLayout *subgenreBox = new QVBoxLayout(subgenreWindow);
+    QVBoxLayout *subgenreBox = new QVBoxLayout();
     // Crea un checkbox per ogni subgenre
     const QStringList subgenres = {
         "Action",
@@ -115,6 +115,7 @@ void CommonEditWindow::format(){
         subEdit.append(checkbox);
         subgenreBox->addWidget(checkbox);
     }
+    subgenreWindow->setLayout(subgenreBox);
 
     //Caricare i subgenre
     int currentSubgenres = contentPtr->getSubgenre();

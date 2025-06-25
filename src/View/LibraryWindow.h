@@ -53,7 +53,7 @@ private slots:
 
     // Slot for detail view
     void hideDetailView();
-    void hideEditView();
+    void hideEditView(int pastIndex = 0);
 
     // Slot for ContentPreviewGrid interactions
     void showDetailView(Content* content);

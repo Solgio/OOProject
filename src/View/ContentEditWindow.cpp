@@ -115,7 +115,7 @@ void ContentEditWindow::updateEditWindow(){
     }
 }
 
-void ContentEditWindow::changeType(int index) { //TODO da modificare
+void ContentEditWindow::changeType(int index) {
 
     if(contentTypeEditWindow){
         contentEditLayout->removeWidget(contentTypeEditWindow);

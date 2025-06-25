@@ -330,6 +330,9 @@ void LibraryWindow::showDetailView(Content *content)
 
 void LibraryWindow::showEditView(Content *content)
 {
+    //salvare l'index del m_rightPanel per poi ritornarci alla chiusura dell'editWindow
+    int currentIndex = m_rightPanel->currentIndex();
+    qDebug()<<currentIndex;
     if (!content)
         return;
 
@@ -346,7 +349,7 @@ void LibraryWindow::showEditView(Content *content)
     m_editWindow = new ContentEditWindow(content, this);
     
     // Connect signals for this specific edit window
-    connect(m_editWindow, &ContentEditWindow::contentUpdated, this, [this, content]() {
+    connect(m_editWindow, &ContentEditWindow::contentUpdated, this, [this, content, currentIndex]() {
         auto &library = ScienceFiction_Library::getInstance();
         
         // Check if this is a new content or existing one
@@ -365,11 +368,11 @@ void LibraryWindow::showEditView(Content *content)
         updateContentDisplay(); // Call directly instead of emit m_actionsManager->contentDataChanged()
         m_detailWindow->refreshContent();
         
-        hideEditView(); // Go back to detail view
+        hideEditView(currentIndex); // Go back to previous view
     });
     
     // Connect close signal here so no warning is shown. In fact, if this was with the others connect it would generatte a nullptr warning of qtcore
-    connect(m_editWindow, &ContentEditWindow::closeRequested, this, [this, content]() {
+    connect(m_editWindow, &ContentEditWindow::closeRequested, this, [this, content, currentIndex]() {
         // If it's a new content that was canceled, we need to delete it
         bool isNew = true;
         auto &library = ScienceFiction_Library::getInstance();
@@ -384,7 +387,7 @@ void LibraryWindow::showEditView(Content *content)
             delete content; // Clean up unadded content
         }
         
-        hideEditView(); // Go back to previous view
+        hideEditView(currentIndex); // Go back to previous view
     });
 
     // Add edit window to stacked widget and show it
@@ -393,7 +396,7 @@ void LibraryWindow::showEditView(Content *content)
     m_rightPanel->setCurrentIndex(editIndex);
 }
 
-void LibraryWindow::hideEditView()
+void LibraryWindow::hideEditView(int pastIndex)
 {
     if (m_editWindow) {
         // Remove from stacked widget and delete it
@@ -403,10 +406,13 @@ void LibraryWindow::hideEditView()
         m_editWindow->deleteLater();
         m_editWindow = nullptr;
     }
+    qDebug()<<pastIndex;
+    m_rightPanel->setCurrentIndex(pastIndex);
+    /*
     if(m_detailWindow)
         m_rightPanel->setCurrentIndex(1); // Detail view
     else
-        m_rightPanel->setCurrentIndex(0); // Main view
+        m_rightPanel->setCurrentIndex(0); // Main view*/
 }
 
 void LibraryWindow::updateOverallFilterState()
