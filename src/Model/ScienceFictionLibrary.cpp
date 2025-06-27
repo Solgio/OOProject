@@ -5,6 +5,8 @@
 #include "../data_persistency/json/visitorJson.h"
 #include "../data_persistency/xml/xmlReader.h" // Ensure xmlReader is included
 #include "../data_persistency/json/jsonReader.h"
+#include "lib/Video.h"
+
 using std::unique_ptr, std::make_unique;
 
 ScienceFiction_Library::ScienceFiction_Library():contentList(){}
@@ -117,4 +119,18 @@ bool ScienceFiction_Library::loadFromFile(const string& filepath){
         qCritical() << "Error loading file:" << e.what();
         return false;
     }
+    if(!sequelPrequelControll()){
+        throw new IncorrectPrequelSequelLoading();
+    }
+}
+
+bool ScienceFiction_Library::sequelPrequelControll(){
+    for(auto it = contentList.begin()->get(); it != contentList.end()->get(); it++){
+        if(auto q = dynamic_cast<Video*>(it); q){
+            if(!q->controllPrequel() || !q->controllSequel()){
+                return false;
+            }
+        }
+    }
+    return true;
 }

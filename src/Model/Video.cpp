@@ -28,41 +28,43 @@ void Video::setDuration(const unsigned int& _duration){
 }
 
 void Video::setPrequel(const unsigned int& _prequelId){
-    if(_prequelId != getId()){
-        if(_prequelId == 0) {
-            prequel = 0;
-            return;
-        }
-        // Check if the prequel ID exists in the library and if it is a Video type Content
-        auto tprequel = dynamic_cast<Video*>(ScienceFiction_Library::getInstance().searchId(_prequelId));
-        if(tprequel){
-            prequel = _prequelId;
-            if(tprequel->getSequel() != this->getId()){
-                tprequel->setSequel(this->getId());
-            }
-        }
-        else{
-            qDebug() << "Prequel with this Id not found";
-        }
-    }
+    prequel = _prequelId;
 }
 
 void Video::setSequel(const unsigned int& _sequelId){
-    if(_sequelId != getId()){
-        if(_sequelId == 0) {
-            sequel = 0;
-            return;
-        }
-    //Check if the sequel ID exists in the library and if it is a Video type Content
-        auto tsequel=dynamic_cast<Video*>(ScienceFiction_Library::getInstance().searchId(_sequelId));
-        if(tsequel){
-            sequel = _sequelId;
-            if(tsequel->getPrequel() != this->getId()){
-                tsequel->setPrequel(this->getId());
+    sequel = _sequelId;
+}
+
+bool Video::controllPrequel(){
+    if(prequel != 0){
+        // Check if the prequel ID exists in the library and if it is a Video type Content
+        auto tprequel = dynamic_cast<Video*>(ScienceFiction_Library::getInstance().searchId(prequel));
+        if(tprequel){
+            if(tprequel->getSequel() != this->getId()){
+                tprequel->setSequel(this->getId());
+                return true;
             }
-        }
-        else{
-            qDebug() << "Sequel with this Id not found";
+        }else{
+            qDebug() << "Prequel with this Id not found";
+            return false;
         }
     }
+    return true;
+}
+
+bool Video::controllSequel(){
+    if(sequel != 0){
+    //Check if the sequel ID exists in the library and if it is a Video type Content
+        auto tsequel=dynamic_cast<Video*>(ScienceFiction_Library::getInstance().searchId(sequel));
+        if(tsequel){
+            if(tsequel->getPrequel() != this->getId()){
+                tsequel->setPrequel(this->getId());
+                return true;
+            }
+        }else{
+            qDebug() << "Sequel with this Id not found";
+            return false;
+        }
+    }
+    return true;
 }

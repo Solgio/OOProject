@@ -55,8 +55,10 @@ void VideoEditWindow::setUpSequelPrequelBox(){
     listaNomi.append(new QStandardItem("No sequel/prequel"));
     listaId.append(new QStandardItem()); //"No sequel/prequel" non ha ID
     for(const auto &v_content : CommonEditWindow::library.getContentList()){
-        listaNomi.append(new QStandardItem(QString::fromStdString(v_content->getTitle())));
-        listaId.append(new QStandardItem(QString::number(v_content->getId())));
+        if(dynamic_cast<Video*>(v_content.get())){
+            listaNomi.append(new QStandardItem(QString::fromStdString(v_content->getTitle())));
+            listaId.append(new QStandardItem(QString::number(v_content->getId())));
+        }
     }
 
     model->appendColumn(listaNomi);

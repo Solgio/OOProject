@@ -22,15 +22,19 @@ void LibraryActionsManager::importContent()
 
     if (!file.isEmpty())
     {
-        bool success = ScienceFiction_Library::getInstance().loadFromFile(file.toStdString());
-        if (success)
-        {
-            QMessageBox::information(m_parentWidget, "Success", "Content imported successfully");
-            emit contentDataChanged(); // Notify that data has changed
-        }
-        else
-        {
-            QMessageBox::warning(m_parentWidget, "Error", "Failed to import content");
+        try{
+            bool success = ScienceFiction_Library::getInstance().loadFromFile(file.toStdString());
+            if (success)
+            {
+                QMessageBox::information(m_parentWidget, "Success", "Content imported successfully");
+                emit contentDataChanged(); // Notify that data has changed
+            }
+            else
+            {
+                QMessageBox::warning(m_parentWidget, "Error", "Failed to import content");
+            }
+        }catch(IncorrectPrequelSequelLoading& error){
+            QMessageBox::warning(m_parentWidget, "Error", "Sequel or prequel loaded incorrectly");
         }
         
     }
