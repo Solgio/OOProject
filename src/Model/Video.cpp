@@ -28,33 +28,37 @@ void Video::setDuration(const unsigned int& _duration){
 }
 
 void Video::setPrequel(const unsigned int& _prequelId){
-    if(_prequelId == 0) {
-        prequel = 0;
-        return;
-    }
-    // Check if the prequel ID exists in the library and if it is a Video type Content
-    auto tprequel = dynamic_cast<Video*>(ScienceFiction_Library::getInstance().searchId(_prequelId));
-    if(tprequel && _prequelId != getId()){
-        prequel = _prequelId;
-        tprequel->setSequel(this->getId());
-    }
-    else{
-        qDebug() << "Prequel with this Id not found";
+    if(_prequelId != getId()){
+        if(_prequelId == 0) {
+            prequel = 0;
+            return;
+        }
+        // Check if the prequel ID exists in the library and if it is a Video type Content
+        auto tprequel = dynamic_cast<Video*>(ScienceFiction_Library::getInstance().searchId(_prequelId));
+        if(tprequel && tprequel->getSequel() != this->getId()){
+            prequel = _prequelId;
+            tprequel->setSequel(this->getId());
+        }
+        else{
+            qDebug() << "Prequel with this Id not found";
+        }
     }
 }
 
 void Video::setSequel(const unsigned int& _sequelId){
-    if(_sequelId == 0) {
-        sequel = 0;
-        return;
-    }
-    // Check if the sequel ID exists in the library and if it is a Video type Content
-    auto tsequel=dynamic_cast<Video*>(ScienceFiction_Library::getInstance().searchId(_sequelId));
-    if(tsequel && _sequelId != getId()){
-        sequel = _sequelId;
-        tsequel->setPrequel(this->getId());
-    }
-    else{
-        qDebug() << "Sequel with this Id not found";
+    if(_sequelId != getId()){
+        if(_sequelId == 0) {
+            sequel = 0;
+            return;
+        }
+    //Check if the sequel ID exists in the library and if it is a Video type Content
+        auto tsequel=dynamic_cast<Video*>(ScienceFiction_Library::getInstance().searchId(_sequelId));
+        if(tsequel && tsequel->getPrequel() != this->getId()){
+            sequel = _sequelId;
+            tsequel->setPrequel(this->getId());
+        }
+        else{
+            qDebug() << "Sequel with this Id not found";
+        }
     }
 }

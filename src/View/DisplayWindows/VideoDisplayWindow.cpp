@@ -1,12 +1,22 @@
 #include "VideoDisplayWindow.h"
 #include "../../Model/lib/Video.h"
+#include "../../Model/lib/ScienceFictionLibrary.h"
 
 VideoDisplayWindow::VideoDisplayWindow(Video *video):
     MultimediaDisplayWindow(video),
-    Duration(new QLabel(QString::number(video->getDuration()))),
-    Prequel(new QLabel(QString::number(video->getPrequel()))),
-    Sequel(new QLabel(QString::number(video->getSequel())))
+    Duration(new QLabel(QString::number(video->getDuration())))
 {
+    if(const Content* temp = AttributeDisplayWindow::library.searchId(video->getPrequel()); temp){
+        Prequel = new QLabel(QString::fromStdString(temp->getTitle()));
+    }else{
+        Prequel = new QLabel("No Prequel");
+    }
+
+    if(const Content* temp = AttributeDisplayWindow::library.searchId(video->getSequel()); temp){
+        Sequel = new QLabel(QString::fromStdString(temp->getTitle()));
+    }else{
+        Sequel = new QLabel("No Prequel");
+    }
     format();
 }
 

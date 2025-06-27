@@ -12,9 +12,10 @@ class ScienceFiction_Library;
 class AttributeDisplayWindow: public QWidget{
     Q_OBJECT
 
-private:
+protected:
     ScienceFiction_Library &library;
 
+private:
     QLabel *Title;
     QString *imgString; //path in QString di image
     QLabel *Year;
