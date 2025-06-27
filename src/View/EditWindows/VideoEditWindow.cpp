@@ -95,6 +95,8 @@ void VideoEditWindow::saveEdit(){
         MultimediaEditWindow::saveEdit();
         videoPtr->setDuration(durationEdit->toPlainText().toUInt());
         videoPtr->setPrequel(prequelEdit->model()->itemData(prequelEdit->model()->index(prequelEdit->currentIndex(), 1)).value(0).toInt());
+        videoPtr->controllPrequel();
         videoPtr->setSequel(sequelEdit->model()->itemData(sequelEdit->model()->index(sequelEdit->currentIndex(), 1)).value(0).toInt());
+        videoPtr->controllSequel();
     }
 }
