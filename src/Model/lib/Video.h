@@ -24,11 +24,16 @@ class Video : public Multimedia {
         void setDuration(const unsigned int& _duration);
         void setPrequel(const unsigned int& _prequel);
         void setSequel(const unsigned int& _sequel);
+
+        bool controllPrequel();
+        bool controllSequel();
+
         virtual ~Video(){
             unsigned int tp=prequel;
             prequel=sequel;
             sequel=tp;
         };
+
         AttributeDisplayWindow* accept(Visitor* visitor) override =0;
         CommonEditWindow* acceptEdit(Visitor* visitor) override =0;
         void toXml(xmlVisitor* xvisitor, QDomDocument& doc, QDomElement& root ) override=0;

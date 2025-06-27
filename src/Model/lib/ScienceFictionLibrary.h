@@ -6,6 +6,8 @@
 using std::vector;
 using std::unique_ptr;
 
+class IncorrectPrequelSequelLoading{};
+
 class ScienceFiction_Library{
     private:
         unsigned int newId;
@@ -27,6 +29,8 @@ class ScienceFiction_Library{
             static ScienceFiction_Library instance;
             return instance;
         }
+
+        bool sequelPrequelControll(); // controlls after loading from file that all sequel and prequel are correct
 
         bool saveToFile(const string& filepath)const; //Saves the library to a file
         bool loadFromFile(const string& filepath); //Loads the library from a file

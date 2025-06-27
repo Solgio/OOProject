@@ -6,14 +6,14 @@ VideoDisplayWindow::VideoDisplayWindow(Video *video):
     MultimediaDisplayWindow(video),
     Duration(new QLabel(QString::number(video->getDuration())))
 {
-    if(const Content* temp = AttributeDisplayWindow::library.searchId(video->getPrequel()); temp){
-        Prequel = new QLabel(QString::fromStdString(temp->getTitle()));
+    if(const Content* tempPre = AttributeDisplayWindow::library.searchId(video->getPrequel()); tempPre){
+        Prequel = new QLabel(QString::fromStdString(tempPre->getTitle()));
     }else{
         Prequel = new QLabel("No Prequel");
     }
 
-    if(const Content* temp = AttributeDisplayWindow::library.searchId(video->getSequel()); temp){
-        Sequel = new QLabel(QString::fromStdString(temp->getTitle()));
+    if(const Content* tempSeq = AttributeDisplayWindow::library.searchId(video->getSequel()); tempSeq){
+        Sequel = new QLabel(QString::fromStdString(tempSeq->getTitle()));
     }else{
         Sequel = new QLabel("No Prequel");
     }
