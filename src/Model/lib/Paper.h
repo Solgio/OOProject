@@ -33,6 +33,7 @@ class Paper : public Content {
         void toXml(xmlVisitor* xvisitor, QDomDocument& doc, QDomElement& root )override = 0;
         void toJson(VisitorJson* vistitorJson) override= 0;
         string getType() const override= 0;
+        virtual ~Paper() = default;
 };
 
 #endif

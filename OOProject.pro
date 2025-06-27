@@ -24,7 +24,7 @@ HEADERS += src/data_persistency/IReader.h \
            src/View/EditWindows/VideoEditWindow.h \
            src/View/EditWindows/VideoGameEditWindow.h \
            src/View/Visitor.h \
-           src/View/LibraryWIndow.h \
+           src/View/LibraryWindow.h \
            src/View/PreviewWidget.h \
            src/View/ContentDetailWindow.h \
            src/View/ContentEditWindow.h \
@@ -60,7 +60,7 @@ HEADERS += src/data_persistency/IReader.h \
            src/View/LibraryToolbar.h \
            src/View/ContentPreviewGrid.h \
            src/View/ContentCardWidget.h \
-           src/View/ShortCutManager.h \
+           src/View/ShortcutManager.h \
            src/View/SortingSectionWidget.h \
            src/View/FilterSectionWidget.h 
 SOURCES += src/Model/Book.cpp \
@@ -81,7 +81,7 @@ SOURCES += src/Model/Book.cpp \
            src/View/EditWindows/MultimediaEditWindow.cpp \
            src/View/EditWindows/SerieEditWindow.cpp \
            src/View/EditWindows/VideoEditWindow.cpp \
-    src/View/EditWindows/VideoGameEditWindow.cpp \
+           src/View/EditWindows/VideoGameEditWindow.cpp \
            src/View/Visitor.cpp \
            src/View/LibraryWindow.cpp \
            src/View/PreviewWidget.cpp \
@@ -106,7 +106,7 @@ SOURCES += src/Model/Book.cpp \
            src/View/LibraryToolbar.cpp \
            src/View/ContentPreviewGrid.cpp \
            src/View/ContentCardWidget.cpp \
-           src/View/ShortCutManager.cpp \
+           src/View/ShortcutManager.cpp \
            src/View/SortingSectionWidget.cpp \
            src/View/FilterSectionWidget.cpp \
 

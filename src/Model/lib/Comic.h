@@ -32,6 +32,8 @@ class Comic : public Book {
         void toXml(xmlVisitor* xvisitor, QDomDocument& doc, QDomElement& root ) override;
         void toJson(VisitorJson* vistitorJson) override;
         string getType() const override;
+
+        virtual ~Comic()  = default; 
 };
 
 #endif
