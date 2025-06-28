@@ -76,7 +76,6 @@ enum VideoGame::gameType VideoGame::stringToGametype(string_view tipo)const{
     if(tipo == "CASUAL"){ return VideoGame::gameType::CASUAL;}
     if(tipo == "ARCADE"){ return VideoGame::gameType::ARCADE;}
     if(tipo == "VIRTUALREALITY"){ return VideoGame::gameType::VIRTUALREALITY;}
-    //TODO throw ERROR_ENUM;
     return VideoGame::gameType::FPS;
 }
 
