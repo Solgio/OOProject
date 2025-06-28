@@ -31,9 +31,6 @@ signals:
     void contentUpdated();
     void closeRequested();
 
-private slots:
-    void changeType(int index);
-
 private:
     void setupUI();
     void updateEditWindow();

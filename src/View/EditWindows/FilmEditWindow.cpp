@@ -37,8 +37,6 @@ void FilmEditWindow::setUp(){
     auto *photoDirLayout = new QFormLayout();
     photoDirLayout->addRow(new QLabel(QString("<h3>%1</h3>").arg("Photodirector : ")), photoDirEdit);
     mainLayout->addLayout(photoDirLayout);
-
-    CommonEditWindow::getTypeEditBox()->setCurrentText("Film");
 }
 
 void FilmEditWindow::saveEdit(){

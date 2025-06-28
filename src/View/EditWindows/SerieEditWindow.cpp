@@ -57,8 +57,6 @@ void SerieEditWindow::setUp(){
     auto *finishedLayout = new QFormLayout();
     finishedLayout->addRow(new QLabel(QString("<h3>%1</h3>").arg("Finished : ")), finishedEdit);
     mainLayout->addLayout(finishedLayout);
-
-    CommonEditWindow::getTypeEditBox()->setCurrentText("Serie");
 }
 
 void SerieEditWindow::saveEdit(){
