@@ -16,11 +16,6 @@
 
 #include "Visitor.h"
 #include "EditWindows/CommonEditWindow.h"
-#include "EditWindows/BookEditWindow.h"
-#include "EditWindows/ComicEditWindow.h"
-#include "EditWindows/FilmEditWindow.h"
-#include "EditWindows/SerieEditWindow.h"
-#include "EditWindows/VideoGameEditWindow.h"
 
 ContentEditWindow::ContentEditWindow(Content* content, QWidget *parent): QWidget(parent), m_content(content)
 {
@@ -101,7 +96,6 @@ void ContentEditWindow::setContent(Content *content){
 }
 
 void ContentEditWindow::updateEditWindow(){
-    //se è la prima volta che viene creata allora lo aggiungo al layout
     if(contentEditWindow){
         contentEditLayout->removeWidget(contentEditWindow); //rimuove dal Layout ma non lo elimina nè nasconde
         contentEditLayout->setParent(nullptr);
@@ -109,64 +103,14 @@ void ContentEditWindow::updateEditWindow(){
         contentEditWindow = nullptr; //resetto il puntatore
     }
 
-     contentEditWindow = m_content->acceptEdit(editVis);
+    contentEditWindow = m_content->acceptEdit(editVis);
     if (contentEditWindow) {
         contentEditLayout->addWidget(contentEditWindow);
-        if(contentEditWindow->isHidden()){
-            contentEditWindow->show();
-        }
-        connect(contentEditWindow, &CommonEditWindow::typeUpdated, this, &ContentEditWindow::changeType);
     }
-}
-
-void ContentEditWindow::changeType(int index) {
-
-    if(contentTypeEditWindow){
-        contentEditLayout->removeWidget(contentTypeEditWindow);
-        contentTypeEditWindow->setParent(nullptr);
-        contentTypeEditWindow->deleteLater();
-        contentTypeEditWindow = nullptr;
-    }
-
-    switch (index) {
-    case 0:
-        contentTypeEditWindow = new BookEditWindow(m_content);
-        break;
-    case 1:
-        contentTypeEditWindow = new ComicEditWindow(m_content);
-        break;
-    case 2:
-        contentTypeEditWindow = new FilmEditWindow(m_content);
-        break;
-    case 3:
-        contentTypeEditWindow = new SerieEditWindow(m_content);
-        break;
-    case 4:
-        contentTypeEditWindow = new VideoGameEditWindow(m_content);
-        break;
-    default:
-        break;
-    }
-
-    contentEditWindow->hide(); //nascondo il contentEditWindow
-    contentEditLayout->addWidget(contentTypeEditWindow);
-    connect(contentTypeEditWindow, &CommonEditWindow::typeUpdated, this, &ContentEditWindow::changeType);
 }
 
 void ContentEditWindow::restoreChanges() {
-    if(contentTypeEditWindow){
-        contentEditLayout->removeWidget(contentTypeEditWindow);
-        contentTypeEditWindow->setParent(nullptr); // Critical: unparent first
-        contentTypeEditWindow->deleteLater();
-        contentTypeEditWindow = nullptr;
-    }
 
-    if (contentEditWindow) {
-        contentEditLayout->removeWidget(contentEditWindow);
-        contentEditWindow->setParent(nullptr);
-        contentEditWindow->deleteLater();
-        contentEditWindow = nullptr;
-    }
     QCoreApplication::processEvents();
 
     updateEditWindow();

@@ -12,8 +12,7 @@ CommonEditWindow::CommonEditWindow(QWidget *parent):
     inspEdit(new MyComboBox()),
     watchedEdit(new QCheckBox("Watched")),
     starredEdit(new QCheckBox("Starred")),
-    descEdit(new QTextEdit()),
-    typeEdit(new MyComboBox())
+    descEdit(new QTextEdit())
 {
     format();
 }
@@ -28,7 +27,6 @@ CommonEditWindow::CommonEditWindow(Content *content, QWidget *parent):
     watchedEdit(new QCheckBox("Watched")),
     starredEdit(new QCheckBox("Starred")),
     descEdit(new QTextEdit(QString::fromStdString(content->getDescription()))),
-    typeEdit(new MyComboBox()),
     contentPtr(content)
 {
     yearEdit->setMaximum(9999);
@@ -136,20 +134,6 @@ void CommonEditWindow::format(){
         subEdit[i]->setChecked((currentSubgenres & bitValue) != 0);
     }
 
-    //Creazione del comboBox typeEdit
-    const QStringList types = {
-        "Book", //0
-        "Comic", //1
-        "Film", //2
-        "Serie", //3
-        "VideoGame" //4
-    };
-    typeEdit->addItems(types);
-    typeEdit->setEditable(false);
-    typeEdit->setInsertPolicy(QComboBox::NoInsert);
-    connect(typeEdit, &MyComboBox::currentIndexChanged, this, &CommonEditWindow::changeType);
-
-
     //Ogni campo ha un suo layout
 
     //Titolo e Year
@@ -187,13 +171,6 @@ void CommonEditWindow::format(){
     subgenreLayout->addRow(new QLabel(QString("<h3>%1</h3>").arg("Subgenre : ")));
     subgenreLayout->addRow(subgenreWindow);
     detailEditLayout->addLayout(subgenreLayout);
-
-    //Selezione del type
-    auto *typeLayout = new QFormLayout();
-    typeLayout->setAlignment(Qt::AlignHCenter);
-    typeLayout->addRow(new QLabel(QString("<h3>%1</h3>").arg("Type : ")), typeEdit);
-    detailEditLayout->addLayout(typeLayout);
-
 }
 
 void CommonEditWindow::browseImage() {
@@ -207,10 +184,6 @@ void CommonEditWindow::browseImage() {
     if(!file.isEmpty()) {
         imgEdit->setText(file);
     }
-}
-
-void CommonEditWindow::changeType(int i) {
-    emit typeUpdated(i);
 }
 
 void CommonEditWindow::saveEdit(){
@@ -239,10 +212,6 @@ void CommonEditWindow::saveEdit(){
 
 QVBoxLayout* CommonEditWindow::getLayout() const{
     return detailEditLayout;
-}
-
-MyComboBox* CommonEditWindow::getTypeEditBox() const{
-    return typeEdit;
 }
 
 Content* CommonEditWindow::getContent() const{
