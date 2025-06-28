@@ -19,6 +19,6 @@ int main(int argc, char *argv[]) {
     
     LibraryWindow window;
     window.show();
-    
+
     return a.exec();
 }

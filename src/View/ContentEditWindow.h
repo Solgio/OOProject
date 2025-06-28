@@ -26,7 +26,7 @@ public:
     void saveChanges();
     void cancelChanges();
     void restoreChanges();
-    
+
 signals:
     void contentUpdated();
     void closeRequested();
@@ -48,7 +48,6 @@ private:
     QVBoxLayout *contentEditLayout;
 
     CommonEditWindow *contentEditWindow = nullptr;
-    CommonEditWindow *contentTypeEditWindow = nullptr;
 
     QPushButton *m_restoreButton;
     QPushButton *m_saveButton;

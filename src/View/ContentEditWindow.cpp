@@ -24,7 +24,7 @@ ContentEditWindow::ContentEditWindow(Content* content, QWidget *parent): QWidget
         cancelChanges();
         return;
     }
-    
+
     setWindowTitle("Edit Content - " + QString::fromStdString(content->getTitle()));
     editVis = new Visitor();
     setupUI();
@@ -58,7 +58,7 @@ void ContentEditWindow::setupUI() {
     buttonContainer->setFixedHeight(60); // Fixed height to prevent cutting
     auto *buttonLayout = new QHBoxLayout(buttonContainer);
     buttonLayout->setContentsMargins(0, 10, 0, 10); // Top and bottom margins
-    buttonLayout->setSpacing(10); 
+    buttonLayout->setSpacing(10);
 
     m_restoreButton = new QPushButton();
     m_restoreButton->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed);
@@ -75,7 +75,7 @@ void ContentEditWindow::setupUI() {
     m_saveButton->setIcon(QIcon(":assets/icons/save_edit.png"));
     m_saveButton->setIconSize(QSize(35, 35));
     connect(m_saveButton, &QPushButton::clicked, this, &ContentEditWindow::saveChanges);
-    
+
     m_cancelButton = new QPushButton("X");
     m_cancelButton->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed);
     m_cancelButton->setFixedSize(40,40);
@@ -83,7 +83,7 @@ void ContentEditWindow::setupUI() {
     m_cancelButton->setToolTip("Cancel changes and close editor");
 
     connect(m_cancelButton, &QPushButton::clicked, this, &ContentEditWindow::cancelChanges);
-    
+
     buttonLayout->addWidget(m_saveButton);
     buttonLayout->addWidget(m_restoreButton);
     buttonLayout->addWidget(m_cancelButton);
@@ -96,6 +96,7 @@ void ContentEditWindow::setContent(Content *content){
 }
 
 void ContentEditWindow::updateEditWindow(){
+    //se è la prima volta che viene creata allora lo aggiungo al layout
     if(contentEditWindow){
         contentEditLayout->removeWidget(contentEditWindow); //rimuove dal Layout ma non lo elimina nè nasconde
         contentEditLayout->setParent(nullptr);
@@ -106,11 +107,20 @@ void ContentEditWindow::updateEditWindow(){
     contentEditWindow = m_content->acceptEdit(editVis);
     if (contentEditWindow) {
         contentEditLayout->addWidget(contentEditWindow);
+        if(contentEditWindow->isHidden()){
+            contentEditWindow->show();
+        }
+        //connect(contentEditWindow, &CommonEditWindow::typeUpdated, this, &ContentEditWindow::changeType);
     }
 }
 
 void ContentEditWindow::restoreChanges() {
-
+    if (contentEditWindow) {
+        contentEditLayout->removeWidget(contentEditWindow);
+        contentEditWindow->setParent(nullptr);
+        contentEditWindow->deleteLater();
+        contentEditWindow = nullptr;
+    }
     QCoreApplication::processEvents();
 
     updateEditWindow();
