@@ -73,7 +73,7 @@ void CommonEditWindow::format(){
 
     imgLayout = new QFormLayout();{
 
-        QLabel *img = new QLabel();
+        auto *img = new QLabel();
         if (!imgEdit->toPlainText().isEmpty() && QFile::exists(imgEdit->toPlainText())) {
             img->setPixmap(QPixmap(imgEdit->toPlainText()).scaled(500,500, Qt::KeepAspectRatio, Qt::SmoothTransformation));
             img->setAlignment(Qt::AlignCenter);
@@ -84,7 +84,7 @@ void CommonEditWindow::format(){
         img->setAlignment(Qt::AlignHCenter | Qt::AlignVCenter);
         imgLayout->addRow(img);
 
-        QLabel *imagePath = new QLabel("Image Path:");
+        auto *imagePath = new QLabel("Image Path:");
         imagePath->setBuddy(imgEdit);
 
         searchBotton = new QPushButton("Browse...");
@@ -167,7 +167,7 @@ void CommonEditWindow::format(){
     detailEditLayout->addLayout(descrLayout);
 
     //Inspiration name
-    QFormLayout *inspirationLayout = new QFormLayout();
+    auto *inspirationLayout = new QFormLayout();
     QLabel *inspLabel = new QLabel(QString("<h3>%1</h3>").arg("Inspired by: "));
     inspLabel->setBuddy(inspEdit);
     inspEdit->setMaximumHeight(30);

@@ -63,7 +63,7 @@ public:
     void setSubgenre(const unsigned int &subgenre);
     void setDescription(string_view description);
     void setInspiration(const unsigned int inspiration);
-    void setStarred(const bool &starred);
+    void setStarred(const bool &starred);  
     void setWatched(const bool &watched);
     void setYear(const unsigned int &year);
     void setImage(string_view image);
