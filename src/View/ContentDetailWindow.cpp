@@ -11,7 +11,7 @@
 #include "ContentEditWindow.h"
 
 ContentDetailWindow::ContentDetailWindow(QWidget *parent)
-    : QWidget(parent), m_content(nullptr), view(new Visitor())
+    : QWidget(parent)
 {
     setupUI();
     setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);

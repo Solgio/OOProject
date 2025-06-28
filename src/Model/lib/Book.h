@@ -23,7 +23,7 @@ class Book : public Paper {
         void toXml(xmlVisitor* xvisitor, QDomDocument& doc, QDomElement& root) override;
         void toJson(VisitorJson* vistitorJson) override;
         string getType() const override;
-        virtual ~Book() = default;
+        ~Book()override = default;
     };
 
 #endif

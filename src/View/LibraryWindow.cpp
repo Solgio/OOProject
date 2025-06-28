@@ -40,12 +40,6 @@ LibraryWindow::LibraryWindow(QWidget *parent) : QMainWindow(parent)
     updateContentDisplay(); // Initial display
 }
 
-LibraryWindow::~LibraryWindow()
-{
-    // Child widgets and models are parented to this, so they will be deleted automatically.
-    // Explicit deletes only for non-parented or dynamically allocated objects if any.
-}
-
 void LibraryWindow::setupUI()
 {
     setWindowTitle("Science Fiction Library Manager");

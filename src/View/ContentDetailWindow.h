@@ -16,7 +16,7 @@ class ContentDetailWindow : public QWidget {
 public:
     explicit ContentDetailWindow(QWidget *parent = nullptr);
     void setContent(Content* content);
-    ~ContentDetailWindow();
+    ~ContentDetailWindow() override;
 
 signals:
     void editRequested(Content* content);
@@ -34,10 +34,9 @@ private:
     void setupUI();
     void updateContentDisplay();
     
-    Content* m_content;
+    Content* m_content =nullptr;
     AttributeDisplayWindow * contentDetails;
-    Visitor *view;
-    //QLabel *m_contentDetails;
+    Visitor *view = new Visitor();
     QPushButton *m_editButton;
     QPushButton *m_deleteButton;
     QPushButton *m_closeButton;

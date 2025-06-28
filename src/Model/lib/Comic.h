@@ -33,7 +33,7 @@ class Comic : public Book {
         void toJson(VisitorJson* vistitorJson) override;
         string getType() const override;
 
-        virtual ~Comic()  = default; 
+        ~Comic() override = default; 
 };
 
 #endif

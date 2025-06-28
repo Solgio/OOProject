@@ -29,7 +29,7 @@ private:
     Content *m_content;
     bool m_isSelected = false;
 
-    QFrame *m_cardFrame;
+    QFrame *m_cardFrame = nullptr;
     QLabel *m_coverLabel = nullptr;
     QLabel *m_titleLabel = nullptr;
     QLabel *m_typeLabel = nullptr;

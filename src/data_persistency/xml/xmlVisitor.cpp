@@ -92,7 +92,7 @@ void xmlVisitor::videoTags(Video *content, QDomDocument& doc, QDomElement& video
     addElement(doc, videoElem, "Sequel", QString::number(content->getSequel()));
 }
 
-void xmlVisitor::addElement(QDomDocument& doc, QDomElement& parent, const QString& name, const QString& value) {
+void xmlVisitor::addElement(QDomDocument& doc, QDomElement& parent, const QString& name, const QString& value) const {
     QDomElement elem = doc.createElement(name);
     QDomText text = doc.createTextNode(value);
     elem.appendChild(text);

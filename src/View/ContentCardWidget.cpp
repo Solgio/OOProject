@@ -4,7 +4,7 @@
 #include <QVariant>
 
 ContentCardWidget::ContentCardWidget(Content *content, QWidget *parent)
-    : QWidget(parent), m_content(content), m_isSelected(false), m_cardFrame(nullptr) {
+    : QWidget(parent), m_content(content) {
     setObjectName("ContentCard");
     setFixedSize(200, 400); // Fixed size for consistency
     setCursor(Qt::PointingHandCursor);
@@ -16,8 +16,6 @@ ContentCardWidget::ContentCardWidget(Content *content, QWidget *parent)
 
 void ContentCardWidget::setupUI() {
     auto *cardLayout = new QVBoxLayout(this);
-    //cardLayout->setContentsMargins(8, 8, 8, 8);
-    //cardLayout->setSpacing(5);
     cardLayout->setAlignment(Qt::AlignTop );
 
     m_cardFrame = new QFrame();
@@ -43,19 +41,10 @@ void ContentCardWidget::setupUI() {
     m_titleLabel->setAlignment(Qt::AlignCenter| Qt::AlignHCenter);
     m_titleLabel->setStyleSheet("font-weight: bold; font-size: 14px; background-color: transparent");
 
-/*
-    m_typeLabel = new QLabel(QString::fromStdString(m_content->getType()));
-    m_typeLabel->setAlignment(Qt::AlignCenter | Qt::AlignHCenter);
-    m_typeLabel->setStyleSheet("background-color: transparent");
-
-    m_genreLabel = new QLabel(QString::fromStdString(m_content->getSubgenreString()));
-    m_genreLabel->setAlignment(Qt::AlignCenter | Qt::AlignHCenter);
-    m_genreLabel->setStyleSheet("background-color: transparent");
 
     m_yearLabel = new QLabel(QString::number(m_content->getYear()));
     m_yearLabel->setAlignment(Qt::AlignCenter | Qt::AlignHCenter);
-    m_genreLabel->setStyleSheet("background-color: transparent");
-*/
+
     m_statusLayout = new QHBoxLayout();
     m_statusLayout->setAlignment(Qt::AlignCenter | Qt::AlignHCenter);
     m_statusLayout->setSpacing(10); // Spacing between status labels
@@ -63,9 +52,7 @@ void ContentCardWidget::setupUI() {
     // Add elements to card
     frameContentLayout->addWidget(m_coverLabel);
     frameContentLayout->addWidget(m_titleLabel);
-    //frameContentLayout->addWidget(m_typeLabel);
-    //frameContentLayout->addWidget(m_genreLabel);
-    //frameContentLayout->addWidget(m_yearLabel);
+    frameContentLayout->addWidget(m_yearLabel);
     frameContentLayout->addLayout(m_statusLayout);
 
     cardLayout->addWidget(m_cardFrame);

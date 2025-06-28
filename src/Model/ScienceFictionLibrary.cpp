@@ -120,7 +120,7 @@ bool ScienceFiction_Library::loadFromFile(const string& filepath){
         return false;
     }
     if(!sequelPrequelControll()){
-        throw new IncorrectPrequelSequelLoading();
+        throw IncorrectPrequelSequelLoading();
     }
     return true;
 }

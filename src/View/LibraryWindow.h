@@ -26,7 +26,7 @@ class LibraryWindow : public QMainWindow {
 
 public:
     explicit LibraryWindow(QWidget *parent = nullptr);
-    ~LibraryWindow() override;
+    ~LibraryWindow() override = default;
 
 protected:
     void resizeEvent(QResizeEvent* event) override;
