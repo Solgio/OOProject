@@ -138,16 +138,15 @@ void CommonEditWindow::format(){
 
     //Creazione del comboBox typeEdit
     const QStringList types = {
-        "Book", //1
-        "Comic", //2
-        "Film", //3
-        "Serie", //4
-        "VideoGame" //5
+        "Book", //0
+        "Comic", //1
+        "Film", //2
+        "Serie", //3
+        "VideoGame" //4
     };
     typeEdit->addItems(types);
     typeEdit->setEditable(false);
     typeEdit->setInsertPolicy(QComboBox::NoInsert);
-    //typeEdit->setCurrentText("Content");//Per default è content, cioè non è di nessun tipo concreto
     connect(typeEdit, &MyComboBox::currentIndexChanged, this, &CommonEditWindow::changeType);
 
 
@@ -220,7 +219,6 @@ void CommonEditWindow::saveEdit(){
         contentPtr->setImage(imgEdit->toPlainText().QString::toStdString());
         contentPtr->setYear(yearEdit->value());
         contentPtr->setInspiration(inspEdit->model()->itemData(inspEdit->model()->index(inspEdit->currentIndex(), 1)).value(0).toInt());
-        //contentPtr->setInspiration()
         contentPtr->setStarred(starredEdit->isChecked());
         contentPtr->setWatched(watchedEdit->isChecked());
         contentPtr->setDescription(descEdit->toPlainText().QString::toStdString());

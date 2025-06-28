@@ -1,10 +1,11 @@
 #include "VideoGameEditWindow.h"
 
+
 VideoGameEditWindow::VideoGameEditWindow():
     MultimediaEditWindow(),
     gameEngEdit(new QTextEdit()),
     ExpHoursEdit(new MySpinBox()),
-    gameTypeEdit(new QTextEdit())
+    gameTypeEdit(new MyComboBox())
 {
     setUp();
 }
@@ -13,8 +14,9 @@ VideoGameEditWindow::VideoGameEditWindow(Content *content):
     MultimediaEditWindow(content),
     gameEngEdit(new QTextEdit()),
     ExpHoursEdit(new MySpinBox()),
-    gameTypeEdit(new QTextEdit())
+    gameTypeEdit(new MyComboBox())
 {
+    setUpGameEditBox();
     setUp();
 }
 
@@ -22,11 +24,24 @@ VideoGameEditWindow::VideoGameEditWindow(VideoGame *videogame):
     MultimediaEditWindow(videogame),
     gameEngEdit(new QTextEdit(QString::fromStdString(videogame->getGameEngine()))),
     ExpHoursEdit(new MySpinBox()),
-    gameTypeEdit(new QTextEdit(QString::fromStdString(videogame->getGameType()))),
+    gameTypeEdit(new MyComboBox()),
     vgPtr(videogame)
 {
+    setUpGameEditBox();
+    gameTypeEdit->setCurrentText(QString::fromStdString(videogame->getGameType()));
+
     ExpHoursEdit->setValue(videogame->getExpectedHours());
     setUp();
+}
+
+void VideoGameEditWindow::setUpGameEditBox(){
+    const QStringList gameGenres = {
+        "FPS", "RPG", "ARPG", "RTS", "MOBA", "MMORPG", "SIMULATION", "SPORTS", "PUZZLE", "PLATFORMER", "RACING", "FIGHTING", "SURVIVAL", "ADVENTURE", "ACTION", "STRATEGY",
+        "SANDBOX", "TOWERDEFENSE", "CARDGAME", "PARTYGAME", "CASUAL", "ARCADE", "VIRTUALREALITY"
+    };
+    gameTypeEdit->addItems(gameGenres);
+    gameTypeEdit->setEditable(false);
+    gameTypeEdit->setInsertPolicy(QComboBox::NoInsert);
 }
 
 void VideoGameEditWindow::setUp(){
@@ -51,10 +66,10 @@ void VideoGameEditWindow::setUp(){
 }
 
 void VideoGameEditWindow::saveEdit(){
+    MultimediaEditWindow::saveEdit();
     if(vgPtr){
-        MultimediaEditWindow::saveEdit();
         vgPtr->setGameEngine(gameEngEdit->toPlainText().QString::toStdString());
         vgPtr->setExpectedHours(ExpHoursEdit->value());
-        vgPtr->stringToGametype(gameTypeEdit->toPlainText().QString::toStdString());
+        vgPtr->setGameType(vgPtr->stringToGametype(gameTypeEdit->currentText().QString::toStdString()));
     }
 }

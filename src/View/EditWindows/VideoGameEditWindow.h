@@ -11,10 +11,11 @@ private:
 
     QTextEdit *gameEngEdit;
     MySpinBox *ExpHoursEdit;
-    QTextEdit *gameTypeEdit;
+    MyComboBox *gameTypeEdit;
 
     VideoGame *vgPtr;
 
+    void setUpGameEditBox();
     void setUp();
 
 public:

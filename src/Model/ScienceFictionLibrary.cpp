@@ -122,6 +122,7 @@ bool ScienceFiction_Library::loadFromFile(const string& filepath){
     if(!sequelPrequelControll()){
         throw new IncorrectPrequelSequelLoading();
     }
+    return true;
 }
 
 bool ScienceFiction_Library::sequelPrequelControll(){
