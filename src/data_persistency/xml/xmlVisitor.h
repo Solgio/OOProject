@@ -15,10 +15,10 @@ class VideoGame;
 class xmlVisitor{
     protected:
         void addElement(QDomDocument& doc, QDomElement& parent, const QString& name, const QString& value) const;
-        void commonTags(Content *content, QDomDocument& doc, QDomElement& contentElem);
-        void paperTags(Paper *content, QDomDocument& doc, QDomElement& paperElem);
-        void multimediaTags(Multimedia *content, QDomDocument& doc, QDomElement& multimediaElem);
-        void videoTags(Video *content, QDomDocument& doc, QDomElement& videoElem);
+        void commonTags(Content *content, QDomDocument& doc, QDomElement& contentElem) const;
+        void paperTags(Paper *content, QDomDocument& doc, QDomElement& paperElem) const;
+        void multimediaTags(Multimedia *content, QDomDocument& doc, QDomElement& multimediaElem) const;
+        void videoTags(Video *content, QDomDocument& doc, QDomElement& videoElem) const;
 
     public:
         virtual ~xmlVisitor() = default;

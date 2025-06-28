@@ -65,7 +65,7 @@ void xmlVisitor::toXml(VideoGame *videogame, QDomDocument& doc, QDomElement& roo
     root.appendChild(videogameElem);
 };
 
-void xmlVisitor::commonTags(Content *content, QDomDocument& doc, QDomElement& contentElem){
+void xmlVisitor::commonTags(Content *content, QDomDocument& doc, QDomElement& contentElem)const{
     addElement(doc, contentElem, "Id", QString::number(content->getId()));
     addElement(doc, contentElem, "Title", QString::fromStdString(content->getTitle()));
     addElement(doc, contentElem, "Description", QString::fromStdString(content->getDescription()));
@@ -76,17 +76,17 @@ void xmlVisitor::commonTags(Content *content, QDomDocument& doc, QDomElement& co
     addElement(doc, contentElem, "Image", QString::fromStdString(content->getImage()));
     addElement(doc, contentElem, "Subgenre", QString::number(content->getSubgenre()));
 }
-void xmlVisitor::paperTags(Paper *content, QDomDocument& doc, QDomElement& paperElem){
+void xmlVisitor::paperTags(Paper *content, QDomDocument& doc, QDomElement& paperElem) const {
     addElement(doc, paperElem, "Author", QString::fromStdString(content->getAuthor()));
     addElement(doc, paperElem, "Publisher", QString::fromStdString(content->getPublisher()));
     addElement(doc, paperElem, "Pages", QString::number(content->getPages()));
     addElement(doc, paperElem, "Volume", QString::number(content->getVolume()));
 }
-void xmlVisitor::multimediaTags(Multimedia *content, QDomDocument& doc, QDomElement& multimediaElem){
+void xmlVisitor::multimediaTags(Multimedia *content, QDomDocument& doc, QDomElement& multimediaElem) const {
     addElement(doc, multimediaElem, "Producer", QString::fromStdString(content->getProducer()));
     addElement(doc, multimediaElem, "Platforms", QString::fromStdString(content->getPlatforms()));
 }
-void xmlVisitor::videoTags(Video *content, QDomDocument& doc, QDomElement& videoElem){
+void xmlVisitor::videoTags(Video *content, QDomDocument& doc, QDomElement& videoElem) const {
     addElement(doc, videoElem, "Duration", QString::number(content->getDuration()));
     addElement(doc, videoElem, "Prequel", QString::number(content->getPrequel()));
     addElement(doc, videoElem, "Sequel", QString::number(content->getSequel()));

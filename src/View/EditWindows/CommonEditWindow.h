@@ -78,8 +78,6 @@ public slots:
 
 private slots:
     void browseImage();
-    void changeType(int i); //cambia il tipo del content
-
 
 public:
     CommonEditWindow(QWidget *parent = nullptr);

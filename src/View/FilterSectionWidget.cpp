@@ -39,7 +39,7 @@ void FilterSectionWidget::setupUI() {
     m_filtersScrollArea->setWidgetResizable(true);
     m_filtersScrollArea->setFrameShape(QFrame::NoFrame);
     m_filtersScrollArea->setSizePolicy(QSizePolicy::Preferred, QSizePolicy::Expanding);
-    //m_filtersScrollArea->setMaximumHeight(1000); 
+
 
     // Container widget for filters
     m_expandedFiltersSection = new QWidget();
