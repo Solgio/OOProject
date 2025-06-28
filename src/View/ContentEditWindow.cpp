@@ -110,7 +110,6 @@ void ContentEditWindow::updateEditWindow(){
         if(contentEditWindow->isHidden()){
             contentEditWindow->show();
         }
-        //connect(contentEditWindow, &CommonEditWindow::typeUpdated, this, &ContentEditWindow::changeType);
     }
 }
 

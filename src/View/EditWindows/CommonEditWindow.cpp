@@ -35,7 +35,7 @@ CommonEditWindow::CommonEditWindow(Content *content, QWidget *parent):
     starredEdit->setChecked(content->getStarred());
 
     //Creo una "tabella" di n righe e 2 colonne
-    QStandardItemModel *model = new QStandardItemModel();
+    auto *model = new QStandardItemModel();
 
     QList<QStandardItem*> listaNomi;
     QList<QStandardItem*> listaId;

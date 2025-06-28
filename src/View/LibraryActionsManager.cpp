@@ -33,7 +33,7 @@ void LibraryActionsManager::importContent()
             {
                 QMessageBox::warning(m_parentWidget, "Error", "Failed to import content");
             }
-        }catch(IncorrectPrequelSequelLoading& error){
+        }catch(IncorrectPrequelSequelLoading&){
             QMessageBox::warning(m_parentWidget, "Error", "Sequel or prequel loaded incorrectly");
         }
         

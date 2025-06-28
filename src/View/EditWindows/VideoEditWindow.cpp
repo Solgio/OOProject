@@ -47,7 +47,7 @@ VideoEditWindow::VideoEditWindow(Video *video):
 void VideoEditWindow::setUpSequelPrequelBox(){
 
     //stessa procedura di CommonEditWindow
-    QStandardItemModel *model = new QStandardItemModel();
+    auto *model = new QStandardItemModel();
 
     QList<QStandardItem*> listaNomi;
     QList<QStandardItem*> listaId;

@@ -127,10 +127,8 @@ bool ScienceFiction_Library::loadFromFile(const string& filepath){
 
 bool ScienceFiction_Library::sequelPrequelControll(){
     for(auto it = contentList.begin()->get(); it != contentList.end()->get(); it++){
-        if(auto q = dynamic_cast<Video*>(it); q){
-            if(!q->controllPrequel() || !q->controllSequel()){
-                return false;
-            }
+        if(auto q = dynamic_cast<Video*>(it); q && (!q->controllPrequel() || !q->controllSequel())){
+            return false;
         }
     }
     return true;
