@@ -147,6 +147,8 @@ void CommonEditWindow::format(){
     auto *descrLayout = new QFormLayout();
     descrLayout->setSpacing(5);
     descrLayout->addRow(new QLabel(QString("<h2>%1</h2>").arg("Descrizione : ")));
+    descEdit->setMinimumHeight(100);
+    descEdit->setMaximumHeight(200);
     descrLayout->addRow(descEdit);
     detailEditLayout->addLayout(descrLayout);
 
