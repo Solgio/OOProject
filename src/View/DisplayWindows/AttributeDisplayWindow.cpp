@@ -62,13 +62,10 @@ void AttributeDisplayWindow::format(){
     auto *descrLayout = new QFormLayout();
     descrLayout->setSpacing(5); //riduce lo spazio tra "Description :" e la descrizione
     descrLayout->addRow(new QLabel(QString("<h2>%1</h2>").arg("Description : ")));
-    descrLayout->addRow(Description);
     Description->setMaximumWidth(500);
     Description->setWordWrap(true);
+    descrLayout->addRow(Description);
     detailLayout->addLayout(descrLayout);
-
-    //separatore tra i layout
-
 
     auto *typeLayout = new QFormLayout();
     typeLayout->addRow(new QLabel(QString("<h3>%1</h3>").arg("Type : ")), Type);
