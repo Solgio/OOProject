@@ -17,16 +17,14 @@ public:
         ContentPtrRole,
         CoverImageRole,
         CreatorRole,
-        RatingRole,
-        ReleaseDateRole
+
     };
     
     // Sorting roles enum
     enum class SortRole {
         Title,
         Type,
-        ReleaseDate,
-        Rating,
+        Year,
         Creator
     };
 

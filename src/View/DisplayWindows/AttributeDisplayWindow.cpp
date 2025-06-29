@@ -33,7 +33,7 @@ void AttributeDisplayWindow::format(){
     auto *img = new QLabel();
 
     if (!imgString->isEmpty() && QFile::exists(*imgString)) {
-        img->setPixmap(QPixmap(*imgString).scaled(500,500, Qt::KeepAspectRatio, Qt::SmoothTransformation));
+        img->setPixmap(QPixmap(*imgString).scaled(600,600, Qt::KeepAspectRatio, Qt::SmoothTransformation));
         img->setAlignment(Qt::AlignCenter);
     } else {
         img->setPixmap(QPixmap(":assets/icons/no-image.png").scaled(500,500, Qt::KeepAspectRatio, Qt::SmoothTransformation));
@@ -45,10 +45,8 @@ void AttributeDisplayWindow::format(){
     detailLayout = new QVBoxLayout(); //Box verticale per gli dettagli del content
 
     detailLayout->setSpacing(15);
-    //detailLayout->setContentsMargins(5, 5, 5, 5);
 
     detailLayout->setAlignment(Qt::AlignTop);
-    //detailLayout->insertSpacing(-1, 10); //aggiunge un spacer alla fine del layout per portare compattare i campi
 
     bigLayout->insertLayout(1, detailLayout);
 
@@ -59,16 +57,14 @@ void AttributeDisplayWindow::format(){
     Year->setAlignment(Qt::AlignTop | Qt::AlignHCenter);
     titleLayout->addRow(Title);
     titleLayout->addRow(Year);
-    //detailLayout->addWidget(Title);
-    //detailLayout->addWidget(Year);
     detailLayout->addLayout(titleLayout);
 
     auto *descrLayout = new QFormLayout();
     descrLayout->setSpacing(5); //riduce lo spazio tra "Description :" e la descrizione
     descrLayout->addRow(new QLabel(QString("<h2>%1</h2>").arg("Description : ")));
     descrLayout->addRow(Description);
-    //descrLayout->addItem(new QSpacerItem(0, 20));
-    //descrLayout->addRow(new QLabel(QString("<h3>%1</h3>").arg("Type : ")), Type);
+    Description->setMaximumWidth(500);
+    Description->setWordWrap(true);
     detailLayout->addLayout(descrLayout);
 
     //separatore tra i layout
@@ -85,13 +81,6 @@ void AttributeDisplayWindow::format(){
     auto *subgenreLayout = new QFormLayout();
     subgenreLayout->addRow(new QLabel(QString("<h3>%1</h3>").arg("Subgenre: ")), Subgenre);
     detailLayout->addLayout(subgenreLayout);
-
-    //detailLayout->addWidget(new QLabel(QString("<h3>%1</h3>").arg("Descrizione")));
-    //detailLayout->addWidget(Description);
-    //detailLayout->addWidget(Type);
-
-    //bigLayout->addWidget(Title);
-    //detailLayout->addStretch(200);
 }
 
 QVBoxLayout* AttributeDisplayWindow::getDetailLayout(){

@@ -115,9 +115,6 @@ QVariant ContentModel::data(const QModelIndex &index, int role) const
         else
             return "Unknown";
     }
-    case static_cast<underlying_type_t<Roles>>(Roles::ReleaseDateRole):
-        return QDate(content->getYear(), 1, 1);
-
     default:
         return QVariant();
     }
@@ -193,7 +190,6 @@ QHash<int, QByteArray> ContentModel::roleNames() const
     roles[static_cast<underlying_type_t<Roles>>(Roles::ContentPtrRole)] = "content";
     roles[static_cast<underlying_type_t<Roles>>(Roles::CoverImageRole)] = "coverImage";
     roles[static_cast<underlying_type_t<Roles>>(Roles::CreatorRole)] = "creator";
-    roles[static_cast<underlying_type_t<Roles>>(Roles::ReleaseDateRole)] = "releaseDate";
     return roles;
 }
 
@@ -221,7 +217,7 @@ QVariant ContentModel::getSortValue(Content *content, SortRole role) const
         else
             return "Unknown";
 
-    case SortRole::ReleaseDate:
+        case SortRole::Year:
         return content->getYear();
 
     case SortRole::Creator:

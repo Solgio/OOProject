@@ -54,6 +54,7 @@ void LibraryActionsManager::saveToFile(const QString &extension)
         if (success)
         {
             QMessageBox::information(m_parentWidget, "Success", "Library saved successfully");
+            emit contentSaved();
         }
         else
         {

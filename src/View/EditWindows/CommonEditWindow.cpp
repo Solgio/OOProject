@@ -71,16 +71,16 @@ void CommonEditWindow::format(){
 
     imgLayout = new QFormLayout();{
 
-        auto *img = new QLabel();
+        imageLabel = new QLabel();
         if (!imgEdit->toPlainText().isEmpty() && QFile::exists(imgEdit->toPlainText())) {
-            img->setPixmap(QPixmap(imgEdit->toPlainText()).scaled(500,500, Qt::KeepAspectRatio, Qt::SmoothTransformation));
-            img->setAlignment(Qt::AlignCenter);
+            imageLabel->setPixmap(QPixmap(imgEdit->toPlainText()).scaled(500,500, Qt::KeepAspectRatio, Qt::SmoothTransformation));
+            imageLabel->setAlignment(Qt::AlignCenter);
         } else {
-            img->setPixmap(QPixmap(":assets/icons/no-image.png").scaled(500,500, Qt::KeepAspectRatio, Qt::SmoothTransformation));
+            imageLabel->setPixmap(QPixmap(":assets/icons/no-image.png").scaled(500,500, Qt::KeepAspectRatio, Qt::SmoothTransformation));
         }
 
-        img->setAlignment(Qt::AlignHCenter | Qt::AlignVCenter);
-        imgLayout->addRow(img);
+        imageLabel->setAlignment(Qt::AlignHCenter | Qt::AlignVCenter);
+        imgLayout->addRow(imageLabel);
 
         auto *imagePath = new QLabel("Image Path:");
         imagePath->setBuddy(imgEdit);
@@ -147,6 +147,8 @@ void CommonEditWindow::format(){
     auto *descrLayout = new QFormLayout();
     descrLayout->setSpacing(5);
     descrLayout->addRow(new QLabel(QString("<h2>%1</h2>").arg("Descrizione : ")));
+    descEdit->setMinimumHeight(100);
+    descEdit->setMaximumHeight(200);
     descrLayout->addRow(descEdit);
     detailEditLayout->addLayout(descrLayout);
 
@@ -183,6 +185,8 @@ void CommonEditWindow::browseImage() {
 
     if(!file.isEmpty()) {
         imgEdit->setText(file);
+        imageLabel->setPixmap(QPixmap(file).scaled(500, 500, Qt::KeepAspectRatio, Qt::SmoothTransformation));
+        imageLabel->setAlignment(Qt::AlignCenter);
     }
 }
 

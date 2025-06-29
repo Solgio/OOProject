@@ -25,7 +25,7 @@ void SortingSectionWidget::setupUI() {
     m_sortingComboBox->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed);
     m_sortingComboBox->setMinimumWidth(120);
     m_sortingComboBox->addItem("Title", static_cast<underlying_type_t<ContentModel::SortRole>>(ContentModel::SortRole::Title));
-    m_sortingComboBox->addItem("Release Date", static_cast<underlying_type_t<ContentModel::SortRole>>(ContentModel::SortRole::ReleaseDate));
+    m_sortingComboBox->addItem("Year", static_cast<underlying_type_t<ContentModel::SortRole>>(ContentModel::SortRole::Year));
     m_sortingComboBox->addItem("Creator", static_cast<underlying_type_t<ContentModel::SortRole>>(ContentModel::SortRole::Creator));
     m_sortingComboBox->addItem("Type", static_cast<underlying_type_t<ContentModel::SortRole>>(ContentModel::SortRole::Type));
     sortControlsLayout->addWidget(m_sortingComboBox);

@@ -17,7 +17,9 @@
 #include <QHBoxLayout>
 #include <QLabel>
 #include <QStyle>
+#include <QMessageBox>
 #include <QEvent>
+#include <QCloseEvent>
 
 LibraryWindow::LibraryWindow(QWidget *parent) : QMainWindow(parent)
 {
@@ -150,6 +152,9 @@ void LibraryWindow::connectSignals()
     // Connect LibraryActionsManager signals to LibraryWindow slots for UI updates
     connect(m_actionsManager, &LibraryActionsManager::contentDataChanged, this, &LibraryWindow::updateContentDisplay);
     connect(m_actionsManager, &LibraryActionsManager::contentEdited, m_detailWindow, &ContentDetailWindow::refreshContent);
+    connect(m_actionsManager, &LibraryActionsManager::contentSaved, this, [this]() {
+        unsavedContent = false; // Reset unsaved content flag
+    });
 
     // Connect FilterSectionWidget signals
     connect(m_filterSectionWidget, &FilterSectionWidget::filtersChanged, this, &LibraryWindow::handleFiltersChanged);
@@ -204,14 +209,17 @@ void LibraryWindow::connectSignals()
     connect(m_shortcutManager, &ShortcutManager::editWindowReverseChanges, this, [this]()
             { if(m_rightPanel->currentIndex()==2) m_editWindow->restoreChanges(); });
     connect(m_shortcutManager, &ShortcutManager::changeSortDirectionShortcut, m_sortingSectionWidget, &SortingSectionWidget::onSortDirectionButtonClicked);
-    connect(m_shortcutManager, &ShortcutManager::refreshContentShortcut, this, &LibraryWindow::updateContentDisplay);
+    connect(m_shortcutManager, &ShortcutManager::refreshContentShortcut, this, [this](){
+        m_contentModel->refreshData(); 
+        updateOverallFilterState();
+    });
 
     // Connect ContentProxyModel signals to ContentPreviewGrid for updates
     connect(m_proxyModel, &ContentProxyModel::layoutChanged, m_contentPreviewGrid, &ContentPreviewGrid::updatePreviews);
     connect(m_proxyModel, &ContentProxyModel::modelReset, m_contentPreviewGrid, &ContentPreviewGrid::updatePreviews);
     connect(m_proxyModel, &ContentProxyModel::rowsInserted, m_contentPreviewGrid, &ContentPreviewGrid::updatePreviews);
     connect(m_proxyModel, &ContentProxyModel::rowsRemoved, m_contentPreviewGrid, &ContentPreviewGrid::updatePreviews);
-
+    
     // Splitter resize for updating content previews
     connect(m_splitter, &QSplitter::splitterMoved, this, [this]()
             {
@@ -268,7 +276,6 @@ void LibraryWindow::applySearchFilter()
         hideDetailView();
     }
     m_proxyModel->setTitleFilter(m_searchBar->text());
-    // updateContentPreviews() is called by m_proxyModel::layoutChanged signal
     updateOverallFilterState();
 }
 
@@ -302,13 +309,14 @@ void LibraryWindow::handleClearFiltersRequested()
 
 void LibraryWindow::handleSortCriteriaChanged(ContentModel::SortRole role, Qt::SortOrder order)
 {
+    m_rightPanel->setCurrentIndex(0); // Ensure we are in main view
     m_proxyModel->setSortRole(role);
     m_proxyModel->sort(0, order);
-    // updateContentPreviews() is called by m_proxyModel::layoutChanged signal
 }
 
 void LibraryWindow::updateContentDisplay()
 {
+    unsavedContent=true;
     m_contentModel->refreshData(); // Re-fetch all data from ScienceFiction_Library
     // m_proxyModel will notify its view (ContentPreviewGrid)
     updateOverallFilterState(); // Update filter counter and button state
@@ -330,7 +338,7 @@ void LibraryWindow::showDetailView(Content *content)
 
 void LibraryWindow::showEditView(Content *content)
 {
-    // salvare l'index del m_rightPanel per poi ritornarci alla chiusura dell'editWindow
+    // Save the index to return to that later
     int currentIndex = m_rightPanel->currentIndex();
 
     if (!content)
@@ -370,7 +378,7 @@ void LibraryWindow::showEditView(Content *content)
                     library.addContent(content); // Add new content
                 }
 
-                updateContentDisplay(); // Call directly instead of emit m_actionsManager->contentDataChanged()
+                updateContentDisplay();
                 m_detailWindow->refreshContent();
 
                 hideEditView(currentIndex); // Go back to previous view
@@ -425,15 +433,7 @@ void LibraryWindow::updateOverallFilterState()
     // Check if there are any active filters (search bar, filter section)
     bool hasActiveFilters = !m_searchBar->text().isEmpty();
 
-    // Check filters in FilterSectionWidget
-    // This part requires FilterSectionWidget to expose its active filter state
-    // For now, we can check the proxy model itself for active filters
-    // Or, FilterSectionWidget could emit a signal with a boolean indicating active filters.
-    // Let's assume for now that FilterSectionWidget updates its own toggle button state
-    // and we only need to pass the search state to it.
-    // A better approach would be to have FilterSectionWidget tell us if it has active filters.
-
-    // A simpler way: if proxy model filters are active, then there are active filters.
+    // If proxy model filters are active, then there are active filters.
     if (m_proxyModel->hasActiveFilters() || !m_searchBar->text().isEmpty())
     {
         hasActiveFilters = true;
@@ -452,4 +452,41 @@ void LibraryWindow::resizeEvent(QResizeEvent *event)
     QMainWindow::resizeEvent(event);
     // ContentPreviewGrid already listens to its own resize events (from scroll area's viewport)
     // and uses a timer, so no explicit call needed here unless for splitter resize.
+}
+
+void LibraryWindow::closeEvent(QCloseEvent *event){
+ if (unsavedContent) {
+        QMessageBox::StandardButton reply = QMessageBox::question(
+            this,
+            "Unsaved Changes",
+            "You have unsaved changes. Do you want to save before closing?",
+            QMessageBox::Save | QMessageBox::Discard | QMessageBox::Cancel,
+            QMessageBox::Save  // Default button
+        );
+
+        switch (reply) {
+        case QMessageBox::Save:
+            // Try to save - you can choose JSON or XML as default
+            m_actionsManager->saveToFile("json");
+            // Note: This is asynchronous, so we should ideally wait for the save to complete
+            // For now, we'll accept the close event assuming save succeeds
+            closeEvent(event);
+            break;
+            
+        case QMessageBox::Discard:
+            // User chose to discard changes
+            event->accept();
+            break;
+            
+        case QMessageBox::Cancel:
+        default:
+            // User chose to cancel or closed the dialog
+            event->ignore();  // This prevents the window from closing
+            break;
+        }
+    } else {
+        // No unsaved changes, allow normal close
+        event->accept();
+    }
+
 }

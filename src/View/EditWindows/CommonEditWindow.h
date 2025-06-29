@@ -44,6 +44,7 @@ private:
     QTextEdit *titleEdit;
 
     QTextEdit *imgEdit;
+    QLabel *imageLabel;
 
     MySpinBox *yearEdit;
 

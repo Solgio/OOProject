@@ -59,7 +59,6 @@ private slots:
     void showDetailView(Content* content);
     void showEditView(Content* content);
 
-
 private:
     // UI Setup methods
     void setupUI();
@@ -70,6 +69,11 @@ private:
 
     // Helper to update overall filter state (including search)
     void updateOverallFilterState();
+
+    // Override for unsaved changes purpose
+    void closeEvent(QCloseEvent *event) override;
+
+    bool unsavedContent = false; // Track if there are unsaved changes
 
     // UI Components (now instances of new classes or simpler widgets)
     LibraryToolbar *m_toolBar = nullptr;
