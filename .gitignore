@@ -30,14 +30,13 @@
 *.exe
 *.out
 *.app
-Makefile
+
 .qmake.stash
 
 # .vsCode
 .vscode/
-.build/
+
 build/
 .qmake.stash
 *.pro.user
 *.pro.user.*
-.qtc_clangd/
