@@ -1,7 +1,6 @@
 #ifndef SERIES_H
 #define SERIES_H
 #include <QCoreApplication>
-#include <QDebug>
 #include <QTextStream>
 #include "Video.h"
 

@@ -163,6 +163,14 @@ bool ContentProxyModel::lessThan(const QModelIndex &source_left, const QModelInd
     QVariant leftValue = contentModel->getSortValue(leftContent, m_sortRole);
     QVariant rightValue = contentModel->getSortValue(rightContent, m_sortRole);
 
+    // Handle null/invalid values - put them at the end
+    if (!leftValue.isValid() && !rightValue.isValid())
+        return false;
+    if (!leftValue.isValid())
+        return false; // Invalid values go to the end
+    if (!rightValue.isValid())
+        return true;
+
     // Handle special comparisons based on type
     if (leftValue.typeId() == QMetaType::QString && rightValue.typeId() == QMetaType::QString)
     {
@@ -170,17 +178,42 @@ bool ContentProxyModel::lessThan(const QModelIndex &source_left, const QModelInd
     }
     else if (leftValue.typeId() == QMetaType::Int && rightValue.typeId() == QMetaType::Int)
     {
-        return leftValue.toInt() < rightValue.toInt();
+        int leftYear = leftValue.toInt();
+        int rightYear = rightValue.toInt();
+        
+        // Handle invalid years (0 or negative) - put them at the end
+        if (leftYear <= 0 && rightYear <= 0)
+            return false;
+        if (leftYear <= 0)
+            return false; // Invalid years go to the end
+        if (rightYear <= 0)
+            return true;
+            
+        return leftYear < rightYear;
     }
     else if (leftValue.typeId() == QMetaType::Double && rightValue.typeId() == QMetaType::Double)
     {
         return leftValue.toDouble() < rightValue.toDouble();
     }
-    else if (leftValue.typeId() == QMetaType::Int && rightValue.typeId() == QMetaType::Int)
+    else if (leftValue.canConvert<int>() && rightValue.canConvert<int>())
     {
-        return leftValue.toInt() < rightValue.toInt();
+        // Fallback for numeric types that can be converted to int
+        int leftInt = leftValue.toInt();
+        int rightInt = rightValue.toInt();
+        
+        // Handle invalid values for year sorting
+        if (m_sortRole == ContentModel::SortRole::Year) {
+            if (leftInt <= 0 && rightInt <= 0)
+                return false;
+            if (leftInt <= 0)
+                return false;
+            if (rightInt <= 0)
+                return true;
+        }
+        
+        return leftInt < rightInt;
     }
 
-    // Default comparison
-    return QSortFilterProxyModel::lessThan(source_left, source_right);
+    // Default comparison - convert to strings
+    return QString::localeAwareCompare(leftValue.toString(), rightValue.toString()) < 0;
 }

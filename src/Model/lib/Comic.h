@@ -1,7 +1,6 @@
 #ifndef COMIC_H
 #define COMIC_H
 #include <QCoreApplication>
-#include <QDebug>
 #include <QTextStream>
 #include "Book.h"
 

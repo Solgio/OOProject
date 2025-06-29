@@ -1,7 +1,6 @@
 #ifndef FILM_H
 #define FILM_H
 #include <QCoreApplication>
-#include <QDebug>
 #include <QTextStream>
 #include "Video.h"
 

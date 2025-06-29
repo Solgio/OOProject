@@ -1,7 +1,6 @@
 #ifndef PAPER_H
 #define PAPER_H
 #include <QCoreApplication>
-#include <QDebug>
 #include <QTextStream>
 #include "Content.h"
 

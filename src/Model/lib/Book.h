@@ -1,7 +1,6 @@
 #ifndef BOOK_H
 #define BOOK_H
 #include <QCoreApplication>
-#include <QDebug>
 #include <QTextStream>
 #include "Paper.h"
 

@@ -105,7 +105,6 @@ bool ScienceFiction_Library::loadFromFile(const string& filepath){
         reader=make_unique<xmlReader>();
     }
     else if(extension==".json"){
-        qDebug() << "JSON" ;
         reader=make_unique<jsonReader>();
     }
     else{

@@ -1,7 +1,6 @@
 #ifndef VIDEO_H
 #define VIDEO_H
 #include <QCoreApplication>
-#include <QDebug>
 #include <QTextStream>
 #include "Multimedia.h"
 

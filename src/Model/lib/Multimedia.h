@@ -1,7 +1,6 @@
 #ifndef MULTI_H
 #define MULTI_H
 #include <QCoreApplication>
-#include <QDebug>
 #include <QTextStream>
 #include "Content.h"
 

@@ -1,6 +1,5 @@
 #include <QtCore>
 #include <QtXml>
-#include <QDebug>
 #include <vector>
 #include <stdexcept>
 #include "xmlReader.h"

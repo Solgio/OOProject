@@ -1,6 +1,5 @@
 #include <QtCore>
 #include <QtXml>
-#include <QDebug>
 #include "xmlVisitor.h"
 #include "../../Model/lib/Book.h"
 #include "../../Model/lib/Comic.h"

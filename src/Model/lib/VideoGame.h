@@ -1,7 +1,6 @@
 #ifndef GAMES_H
 #define GAMES_H
 #include <QCoreApplication>
-#include <QDebug>
 #include <QTextStream>
 #include "Multimedia.h"
 
