@@ -46,7 +46,7 @@ void ComicEditWindow::setUp(){
     //Finished
     auto *finLayout = new QFormLayout();
     finLayout->setSpacing(5);
-    finLayout->addRow(new QLabel(QString("<h3>%1</h3>").arg("Pages : ")), finishedEdit);
+    finLayout->addRow(new QLabel(QString("<h3>%1</h3>").arg("Finished : ")), finishedEdit);
     mainLayout->addLayout(finLayout);
 }
 

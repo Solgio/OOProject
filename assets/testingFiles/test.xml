@@ -39,7 +39,7 @@
         <Id>11</Id>
         <Title>Blade Runner</Title>
         <Description>Bad Replicant, BAD</Description>
-        <Inspiration>1</Inspiration>
+        <Inspiration>12</Inspiration>
         <Starred>1</Starred>
         <Watched>1</Watched>
         <Year>1982</Year>
@@ -107,22 +107,6 @@
         <GameType>0</GameType>
         <ExpectedHours>35</ExpectedHours>
     </VideoGame>
-    <VideoGame>
-        <Id>6</Id>
-        <Title>fghjkl</Title>
-        <Description>Placeholder bla bla bla</Description>
-        <Inspiration>0</Inspiration>
-        <Starred>0</Starred>
-        <Watched>0</Watched>
-        <Year>1900</Year>
-        <Image></Image>
-        <Subgenre>0</Subgenre>
-        <Producer>Nintendo</Producer>
-        <Platforms>GameCube</Platforms>
-        <GameEngine>Very Low Poly</GameEngine>
-        <GameType>0</GameType>
-        <ExpectedHours>0</ExpectedHours>
-    </VideoGame>
     <Serie>
         <Id>7</Id>
         <Title>vbnm,</Title>
@@ -143,55 +127,75 @@
         <Creator>Ted The Tester</Creator>
         <Finished>0</Finished>
     </Serie>
-    <Comic>
-        <Id>8</Id>
-        <Title>fghjk</Title>
-        <Description>Placeholder bla bla bla</Description>
+    <Serie>
+        <Id>11</Id>
+        <Title>The X Files</Title>
+        <Description></Description>
         <Inspiration>0</Inspiration>
         <Starred>0</Starred>
         <Watched>0</Watched>
-        <Year>1900</Year>
-        <Image></Image>
-        <Subgenre>0</Subgenre>
-        <Author>The Presence behind all uuuuuuuuu</Author>
-        <Publisher>No one</Publisher>
-        <Pages>0</Pages>
-        <Volume>0</Volume>
-        <MainCharacter></MainCharacter>
-        <Illustrator></Illustrator>
-        <Serie></Serie>
-        <Finished>0</Finished>
-    </Comic>
+        <Year>1993</Year>
+        <Image>/home/solgio/Desktop/OOProject/assets/images/x_files.jpg</Image>
+        <Subgenre>96</Subgenre>
+        <Producer>20th Century</Producer>
+        <Platforms>Amazon Prime, DVD</Platforms>
+        <Duration>44</Duration>
+        <Prequel>0</Prequel>
+        <Sequel>0</Sequel>
+        <Seasons>11</Seasons>
+        <Episodes>99</Episodes>
+        <Creator>Chris Carter</Creator>
+        <Finished>1</Finished>
+    </Serie>
     <Book>
-        <Id>9</Id>
-        <Title>ikm </Title>
-        <Description>Placeholder bla bla bla</Description>
+        <Id>12</Id>
+        <Title>Do android dream electric sheep?</Title>
+        <Description></Description>
         <Inspiration>0</Inspiration>
         <Starred>0</Starred>
-        <Watched>0</Watched>
-        <Year>1900</Year>
-        <Image></Image>
-        <Subgenre>0</Subgenre>
-        <Author>Ted The Tester</Author>
+        <Watched>1</Watched>
+        <Year>1968</Year>
+        <Image>/home/solgio/Desktop/OOProject/assets/images/DoAndroidsDream.png</Image>
+        <Subgenre>37</Subgenre>
+        <Author>Philip K. Dick</Author>
         <Publisher></Publisher>
-        <Pages>0</Pages>
-        <Volume>0</Volume>
-        <MainCharacter>Lisan Al-Gahib</MainCharacter>
+        <Pages>210</Pages>
+        <Volume>1</Volume>
+        <MainCharacter>Rick Deckard</MainCharacter>
     </Book>
     <VideoGame>
-        <Id>10</Id>
-        <Title>yujn</Title>
-        <Description>Placeholder bla bla bla</Description>
+        <Id>13</Id>
+        <Title>Death Stranding</Title>
+        <Description>Il protagonista, Sam Porter Bridges, è un corriere con la capacità di riemergere dopo la morte e viene incaricato di riconnettere le città isolate degli Stati Uniti, ormai frammentati dopo un evento, il Death Stranding. Questo evento ha aperto un varco tra il mondo dei vivi e quello dei morti, causando la comparsa di creature ultraterrene (BT) e piogge che accelerano il tempo (Timefall).</Description>
         <Inspiration>0</Inspiration>
-        <Starred>0</Starred>
-        <Watched>0</Watched>
-        <Year>1900</Year>
-        <Image></Image>
-        <Subgenre>0</Subgenre>
-        <Producer>Bil Gates</Producer>
-        <Platforms>Cousin PS7</Platforms>
-        <GameEngine>Real GearBox Boh</GameEngine>
-        <GameType>0</GameType>
-        <ExpectedHours>0</ExpectedHours>
+        <Starred>1</Starred>
+        <Watched>1</Watched>
+        <Year>2019</Year>
+        <Image>/home/solgio/Desktop/OOProject/assets/images/death_stranding.jpg</Image>
+        <Subgenre>233</Subgenre>
+        <Producer>Kojima Production</Producer>
+        <Platforms>Pc, Sony Playstation 4/5,  Xbox</Platforms>
+        <GameEngine>Decima Engine</GameEngine>
+        <GameType>14</GameType>
+        <ExpectedHours>99</ExpectedHours>
     </VideoGame>
+    <Comic>
+        <Id>14</Id>
+        <Title>Watchmen</Title>
+        <Description></Description>
+        <Inspiration>0</Inspiration>
+        <Starred>1</Starred>
+        <Watched>0</Watched>
+        <Year>1986</Year>
+        <Image>/home/solgio/Desktop/OOProject/assets/images/watchmen.jpeg</Image>
+        <Subgenre>8197</Subgenre>
+        <Author>Alan Moore</Author>
+        <Publisher>L'omicidio del Comico sconvolge i suoi ex-colleghi supereroi, ma l'indagine di Rorschach, Nite Owl, Silk Spectre porterà a scoprire vecchi spettri e nuove minacce.</Publisher>
+        <Pages>416</Pages>
+        <Volume>1</Volume>
+        <MainCharacter>Rorschach, </MainCharacter>
+        <Illustrator>Dave Gibbons</Illustrator>
+        <Serie></Serie>
+        <Finished>1</Finished>
+    </Comic>
 </ScienceFictionLibrary>

@@ -57,7 +57,7 @@ void BookEditWindow::setUp(){
 
     //Publisher
     auto *publishLayout = new QFormLayout();
-    publishLayout->addRow(new QLabel(QString("<h3>%1</h3>").arg("Description : ")), publishEdit);
+    publishLayout->addRow(new QLabel(QString("<h3>%1</h3>").arg("Publisher : ")), publishEdit);
     mainLayout->addLayout(publishLayout);
 
     //Pages

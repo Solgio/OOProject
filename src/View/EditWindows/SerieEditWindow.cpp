@@ -7,6 +7,8 @@ SerieEditWindow::SerieEditWindow():
     creatorEdit(new QTextEdit()),
     finishedEdit(new QCheckBox("Finished"))
 {
+    seasonsEdit->setRange(0, 100);
+    episodesEdit->setRange(0, 1000);
     setUp();
 }
 
@@ -17,6 +19,8 @@ SerieEditWindow::SerieEditWindow(Content *content):
     creatorEdit(new QTextEdit()),
     finishedEdit(new QCheckBox("Finished"))
 {
+    seasonsEdit->setRange(0, 100);
+    episodesEdit->setRange(0, 1000);
     setUp();
 }
 
@@ -32,6 +36,8 @@ SerieEditWindow::SerieEditWindow(Serie *serie):
     episodesEdit->setValue(serie->getEpisodes());
     finishedEdit->setChecked(serie->getFinished());
 
+    seasonsEdit->setRange(0, 100);
+    episodesEdit->setRange(0, 1000);
     setUp();
 }
 

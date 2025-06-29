@@ -7,6 +7,7 @@ VideoGameEditWindow::VideoGameEditWindow():
     ExpHoursEdit(new MySpinBox()),
     gameTypeEdit(new MyComboBox())
 {
+    ExpHoursEdit->setMaximum(9999);
     setUp();
 }
 
@@ -16,6 +17,7 @@ VideoGameEditWindow::VideoGameEditWindow(Content *content):
     ExpHoursEdit(new MySpinBox()),
     gameTypeEdit(new MyComboBox())
 {
+    ExpHoursEdit->setMaximum(9999);
     setUpGameEditBox();
     setUp();
 }
@@ -27,6 +29,7 @@ VideoGameEditWindow::VideoGameEditWindow(VideoGame *videogame):
     gameTypeEdit(new MyComboBox()),
     vgPtr(videogame)
 {
+    ExpHoursEdit->setMaximum(9999);
     setUpGameEditBox();
     gameTypeEdit->setCurrentText(QString::fromStdString(videogame->getGameType()));
 
