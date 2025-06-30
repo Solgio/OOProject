@@ -93,12 +93,11 @@ bool ContentProxyModel::filterAcceptsRow(int sourceRow, const QModelIndex &sourc
     
     ContentModel* contentModel = qobject_cast<ContentModel*>(sourceModel());
     if (!contentModel)
-        return true; // Should not happen if sourceModel is correctly set
+        return true; 
 
     Content* content = contentModel->getContent(sourceRow);
     if (!content)
-        return false; // Invalid content
-
+        return false; 
     // Apply title filter
     if (!m_titleFilter.isEmpty() &&!QString::fromStdString(content->getTitle()).contains(m_titleFilter, Qt::CaseInsensitive)){
             return false;
@@ -214,6 +213,5 @@ bool ContentProxyModel::lessThan(const QModelIndex &source_left, const QModelInd
         return leftInt < rightInt;
     }
 
-    // Default comparison - convert to strings
     return QString::localeAwareCompare(leftValue.toString(), rightValue.toString()) < 0;
 }

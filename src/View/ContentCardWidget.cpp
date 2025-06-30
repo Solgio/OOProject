@@ -19,22 +19,22 @@ void ContentCardWidget::setupUI() {
     cardLayout->setAlignment(Qt::AlignTop );
 
     m_cardFrame = new QFrame();
-    m_cardFrame->setObjectName("ContentCardFrame"); // Un objectName unico per il frame
-    m_cardFrame->setFrameShape(QFrame::StyledPanel); // Può essere StyledPanel, Box, NoFrame, ecc.
-    m_cardFrame->setFrameShadow(QFrame::Plain);      // Nessuna ombra per ora
-    m_cardFrame->setLineWidth(0);                   // La larghezza del bordo sarà definita dallo stylesheet
+    m_cardFrame->setObjectName("ContentCardFrame"); 
+    m_cardFrame->setFrameShape(QFrame::StyledPanel); 
+    m_cardFrame->setFrameShadow(QFrame::Plain);      
+    m_cardFrame->setLineWidth(0);                  
     m_cardFrame->setMidLineWidth(0);
  
      // Layout per il contenuto ALL'INTERNO del frame
-    auto *frameContentLayout = new QVBoxLayout(m_cardFrame); // Layout del frame
-    frameContentLayout->setContentsMargins(8, 8, 8, 8); // Margini interni per il contenuto della card
+    auto *frameContentLayout = new QVBoxLayout(m_cardFrame); 
+    frameContentLayout->setContentsMargins(8, 8, 8, 8); 
     frameContentLayout->setSpacing(5);
     frameContentLayout->setAlignment(Qt::AlignTop );
 
     m_coverLabel = new QLabel();
     m_coverLabel->setFixedSize(164, 240);
     m_coverLabel->setAlignment(Qt::AlignCenter | Qt::AlignHCenter);
-    m_coverLabel->setStyleSheet("background-color: transparent;"); // O un colore brillante
+    m_coverLabel->setStyleSheet("background-color: transparent;"); 
 
     m_titleLabel = new QLabel(QString::fromStdString(m_content->getTitle()));
     m_titleLabel->setWordWrap(true);
@@ -47,7 +47,7 @@ void ContentCardWidget::setupUI() {
 
     m_statusLayout = new QHBoxLayout();
     m_statusLayout->setAlignment(Qt::AlignCenter | Qt::AlignHCenter);
-    m_statusLayout->setSpacing(10); // Spacing between status labels
+    m_statusLayout->setSpacing(10); 
 
     // Add elements to card
     frameContentLayout->addWidget(m_coverLabel);

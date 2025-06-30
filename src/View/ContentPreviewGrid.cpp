@@ -37,16 +37,13 @@ ContentPreviewGrid::ContentPreviewGrid(ContentProxyModel *proxyModel, QWidget *p
 
 void ContentPreviewGrid::updatePreviews()
 {
-    // IMPORTANT: Extract the selected content BEFORE deleting widgets
     Content *previouslySelectedContent = nullptr;
     if (m_selectedCardWidget)
     {
         previouslySelectedContent = m_selectedCardWidget->getContent();
-        // Clear the pointer since we're about to delete the widget
         m_selectedCardWidget = nullptr;
     }
 
-    // Clear existing layout (except for no results label)
     QLayoutItem *item;
     QList<QWidget *> widgetsToDelete;
     while ((item = m_previewLayout->takeAt(0)) != nullptr)
@@ -57,13 +54,12 @@ void ContentPreviewGrid::updatePreviews()
             delete item;
         }
     }
-    // Delete widgets outside the loop to avoid iterator invalidation
     for (QWidget *w : widgetsToDelete)
     {
         m_contentToCardMap.remove(static_cast<ContentCardWidget *>(w)->getContent());
         delete w;
     }
-    // Add the no results label back to the layout (it might have been removed)
+    // Add the no results label back to the layout 
     m_previewLayout->addWidget(m_noResultsLabel, 0, 0, 1, 6);
 
     int count = m_proxyModel->rowCount();
@@ -71,11 +67,10 @@ void ContentPreviewGrid::updatePreviews()
 
     if (count == 0)
     {
-        // If no results, selection is already cleared above
         return;
     }
 
-    const int CARD_WIDTH = 190; // Fixed card width + spacing
+    const int CARD_WIDTH = 190; 
     int availableWidth = m_previewScrollArea->viewport()->width();
     int columns = std::max(1, availableWidth / CARD_WIDTH);
 
@@ -89,7 +84,6 @@ void ContentPreviewGrid::updatePreviews()
         ContentModel *contentModel = qobject_cast<ContentModel *>(m_proxyModel->sourceModel());
         if (!contentModel)
         {
-            // Gestire l'errore o continuare
             continue;
         }
         QModelIndex sourceIndex = m_proxyModel->mapToSource(proxyIndex);

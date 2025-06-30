@@ -466,10 +466,8 @@ void LibraryWindow::closeEvent(QCloseEvent *event){
 
         switch (reply) {
         case QMessageBox::Save:
-            // Try to save - you can choose JSON or XML as default
+            // Try to save 
             m_actionsManager->saveToFile("json");
-            // Note: This is asynchronous, so we should ideally wait for the save to complete
-            // For now, we'll accept the close event assuming save succeeds
             closeEvent(event);
             break;
             
@@ -481,7 +479,7 @@ void LibraryWindow::closeEvent(QCloseEvent *event){
         case QMessageBox::Cancel:
         default:
             // User chose to cancel or closed the dialog
-            event->ignore();  // This prevents the window from closing
+            event->ignore();
             break;
         }
     } else {

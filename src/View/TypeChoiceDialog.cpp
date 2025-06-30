@@ -18,11 +18,10 @@ TypeChoiceDialog::TypeChoiceDialog(QWidget *parent)
     gridLayout->setSpacing(20);
     gridLayout->setContentsMargins(20, 20, 20, 20);
 
-    // Crea un gruppo di pulsanti per la selezione esclusiva
     m_buttonGroup = new QButtonGroup(this);
-    m_buttonGroup->setExclusive(true);  // Imposta la selezione esclusiva
+    m_buttonGroup->setExclusive(true);  
 
-    // Aggiungi i tipi di contenuto disponibili
+    
     addContentType(gridLayout, "Book", ":/assets/icons/book.png", 
                   []() { return new Book(); }, 0, 0);
     addContentType(gridLayout, "Comic", ":/assets/icons/comic.png", 
@@ -49,9 +48,8 @@ void TypeChoiceDialog::addContentType(QGridLayout *layout, const QString &label,
 auto *button = new QPushButton(this);
 button->setIcon(QIcon(iconPath));
 
-// Dimensioni delle icone
 QSize normalSize(80, 80);
-QSize selectedSize(90, 90); // Leggermente più grande quando selezionato
+QSize selectedSize(90, 90);
 
 button->setIconSize(normalSize);
 button->setText(label);
@@ -73,24 +71,24 @@ sizeAnimation->setEndValue(checked ? selectedSize : normalSize);
 sizeAnimation->start();
 });
 
-// Stile CSS con solo contorno verde per la selezione
+// CSS Style for selection
 button->setStyleSheet(
 "QPushButton {"
 "   padding: 15px;"
 "   border: 2px solid transparent;"
 "   border-radius: 8px;"
 "   spacing: 5px;"
-"   background: none;" // Rimuove qualsiasi sfondo
+"   background: none;" 
 "}"
 "QPushButton:hover {"
-"   border-color: #3498db;" // Blu al passaggio del mouse
+"   border-color: #3498db;" 
 "}"
 "QPushButton:checked {"
-"   border-color: #2ecc71;" // Verde brillante quando selezionato
-"   border-width: 3px;"     // Contorno più spesso
+"   border-color: #2ecc71;" 
+"   border-width: 3px;"     
 "}"
 "QPushButton:pressed {"
-"   border-color: #27ae60;" // Verde più scuro quando cliccato
+"   border-color: #27ae60;" 
 "}"
 );
 
