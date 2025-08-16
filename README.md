@@ -135,15 +135,15 @@ The Visitor pattern enables:
 | **Total** | **70** | **95-100** |
 
 ### Task Distribution
-
-#### Lorenzo Soligo
+ 
+#### 👥 Lorenzo Soligo
 - **Logic Model**: Content hierarchy (excluding VideoGame)
 - **XML Persistence**: Complete serialization system
 - **Main Interface**: Primary window and functionality
 - **Search System**: Advanced filtering and search
 - **UI/UX**: Icons, graphics, keyboard shortcuts
 
-#### Antonio Tang
+#### 👥 Antonio Tang
 - **Logic Model**: Video hierarchy including VideoGame
 - **JSON Persistence**: Complete serialization system  
 - **Detail Views**: Dynamic content-specific interfaces
@@ -188,6 +188,9 @@ make
 - **Theme Support**: Light/Dark mode toggle
 - **Batch Operations**: Multi-select actions
 
+### ❗Minor Corrections
+- **Visitors Hierarchy**: Add a parent class to unify the Visitor calls with a single polymorphic call `accept()` instead of the specific ones.
+
 ### Extensibility
 The modular architecture supports:
 - New content types without modifying existing code
@@ -210,6 +213,7 @@ Developed for the Object-Oriented Programming course at the University of Padova
 - **Design Patterns**: Visitor, Singleton, proper abstraction
 - **GUI Development**: Qt framework mastery
 - **Software Engineering**: Version control, code quality, documentation
+Graded by prof. Zanella with almost full points (30/31)
 
 ## 📄 Documentation
 
