@@ -1,0 +1,56 @@
+Feedback Progetto di Programmazione ad Oggetti
+Studente: Soligo Lorenzo
+Valutazione del progetto: Ottimo
+
+Vincoli obbligatori
+ 8. Non utilizza il polimorfismo in maniera "non banale"
+  Errore concettuale nell'utilizzo del design pattern Visitor:
+  nel progetto sono previsti quattro Visitor distinti, tra loro
+  non relazionati, e altrettanti metodi separati nella gerarchia
+  principale. Questo limita fortemente l'estensibilità del sistema
+  in quanto ogni nuovo Visitor implementato richiede la modifica
+  alle classi della gerarchia per l'aggiunta di un nuovo metodo
+  virtuale.
+  Un Visitor risponde invece all'esigenza di estendere le funzionalità
+  di una gerarchia senza modificarla, per questo tutti i Visitor
+  devono implementare un'interfaccia comune, e le classi della
+  gerarchia esporre un singolo metodo "accept" che accetti un
+  puntatore a Visitor, in modo che il resto avvenga tramite
+  polimorfismo, come visto a lezione e nel progetto didattico
+  a disposizione su GitHub.
+  Allo stato attuale i metodi dei singoli visitor non hanno
+  motivo di essere virtuali, e le implementazioni dei vari
+  accept, pur essendo formalmente polimorfe, di fatto invocano
+  ciasuno un metodo prefissato del rispettivo Visitor, rendendoli
+  "banali".
+  Poiché è chiaro che l'approccio seguito sia orientato verso
+  un utilizzo corretto del Visitor, e il problema sia di facile
+  soluzione, il vincolo viene comunque considerato superato
+  ma viene applicata una leggera penalità.
+
+
+Orientamento ad oggetti
++ Rispetto di incapsulamento e information hiding
++ Uso corretto di ereditarietà e composizione
+
+
+Funzionalità
++ Ricerca parziale, case-insensitive e in tempo reale
++ Ricerca avanzata e configurabile
++ Scorciatoie da tastiera
++ Altre funzionalità pertinenti (gestione della memoria, Singleton...)
+
+
+GUI
++ Visualizzazione differenziata per tipo di dato
++ Corretta gestione del ridimensionamento
++ Utilizzo di icone e stili grafici
++ Utilizzo pertinente di immagini o altri elementi multimediali
+
+
+Relazione
++ Adeguata
+
+
+Suggerimenti non collegati alla valutazione
+Nessuno.
